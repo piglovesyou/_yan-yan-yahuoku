@@ -32,7 +32,11 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
+app.get('/login', routes.login);
+app.get('/auth/yahoo', require('./routes/auth').auth.yahoo);
+app.get('/auth/yahoo/callback', require('./routes/auth').auth.yahoo.callback);
 
-app.listen(3000, function(){
+
+app.listen(require('secret-strings').AUC_PRO.PORT, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });

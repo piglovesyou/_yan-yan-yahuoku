@@ -3,4 +3,10 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/closure-library/closure/goog/base.js')
+    script(src='/javascripts/app.js')
   body!= body
+  script
+    my.app()
+
+

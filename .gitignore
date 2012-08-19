@@ -2,3 +2,5 @@ node_modules
 closure-library
 closure-compiler
 Makefile
+.DS_Store
+dump.rdb

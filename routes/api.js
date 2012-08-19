@@ -20,9 +20,11 @@ var createRequestOption = function (method, path, param) {
 var requestGet = function (path, param, callback) {
   var body = '';
   http.request(createRequestOption('GET', path, param), function (res) {
-    res.on('data', function (chunk) {body += chunk});
-    res.on('error', function () { callback(true); });
-    res.on('end', function () { callback(false, body); });
+    res.on('data', function (chunk) { body += chunk });
+    res.on('error', function () { callback(true) });
+    res.on('end', function () {
+      callback(false, body.replace(/^loaded\(/, '').replace(/\)$/, ''))
+    });
   }).end();
 };
 

@@ -4,7 +4,6 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , stylus = require('stylus')
   , RedisStore = require('connect-redis')(express)
 
@@ -46,11 +45,20 @@ app.configure('production', function(){
 
 // Routes
 
+var routes = require('./routes');
 app.get('/', routes.index);
 app.get('/login', routes.login);
 app.get('/logout', routes.logout);
-app.get('/auth/yahoo', require('./routes/auth').auth.yahoo);
-app.get('/auth/yahoo/callback', require('./routes/auth').auth.yahoo.callback);
+
+var authRoutes = require('./routes/auth');
+app.get('/auth/yahoo', authRoutes.yahoo);
+app.get('/auth/yahoo/callback', authRoutes.yahoo.callback);
+
+var apiRoutes = require('./routes/api');
+app.get('/api/categoryTree', apiRoutes.categoryTree);
+
+
+
 
 
 app.listen(require('secret-strings').AUC_PRO.PORT, function(){

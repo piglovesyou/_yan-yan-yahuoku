@@ -1,8 +1,7 @@
 
 var oa = require('../sources/core/oauth.js');
 
-exports.auth = {};
-exports.auth.yahoo = function(req, res){
+exports.yahoo = function(req, res){
   oa.getOAuthRequestToken(function(error, oauth_token, oauth_token_secret, results){
     if (error) {
       res.send("didn't work.<br />" + JSON.stringify(error))
@@ -15,7 +14,7 @@ exports.auth.yahoo = function(req, res){
   });
 };
 
-exports.auth.yahoo.callback = function(req, res, next){
+exports.yahoo.callback = function(req, res, next){
   if (req.session.oauth) {
     req.session.oauth.verifier = req.query.oauth_verifier;
     var oauth = req.session.oauth;

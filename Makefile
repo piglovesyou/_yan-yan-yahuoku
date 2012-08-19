@@ -8,8 +8,6 @@ CLOSURELIB_REMOTE_DIR = http://closure-library.googlecode.com/svn/trunk/
 
 DUMMY_CLIENTSCRIPT_PATH    = public/javascripts/app.js
 
-OUT										= bookmarklet.txt
-
 setup:;
 	rm -rf $(COMPILER_DIR) && \
 	wget -P $(COMPILER_DIR) $(COMPILER_REMOTE_DIR) && \
@@ -17,5 +15,4 @@ setup:;
 	rm $(COMPILER_DIR)$(COMPILER_ZIP) && \
 	rm -rf $(CLOSURELIB_DIR) && \
 	svn checkout $(CLOSURELIB_REMOTE_DIR) $(CLOSURELIB_DIR)
-
 

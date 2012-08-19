@@ -51,11 +51,15 @@ app.get('/login', routes.login);
 app.get('/logout', routes.logout);
 
 var authRoutes = require('./routes/auth');
-app.get('/auth/yahoo', authRoutes.yahoo);
-app.get('/auth/yahoo/callback', authRoutes.yahoo.callback);
+authRoutes.getPaths().forEach(function (path) {
+  app.get('/auth/' + path, authRoutes[path]);
+});
 
 var apiRoutes = require('./routes/api');
-app.get('/api/categoryTree', apiRoutes.categoryTree);
+apiRoutes.getPaths().forEach(function (path) {
+  app.get('/api/' + path, apiRoutes[path]);
+});
+
 
 
 

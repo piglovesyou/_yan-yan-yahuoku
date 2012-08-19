@@ -1,7 +1,7 @@
 
 var oa = require('../sources/core/oauth.js');
 
-exports.yahoo = function(req, res){
+exports.auth = function(req, res){
   oa.getOAuthRequestToken(function(error, oauth_token, oauth_token_secret, results){
     if (error) {
       res.send("didn't work.<br />" + JSON.stringify(error))
@@ -14,7 +14,7 @@ exports.yahoo = function(req, res){
   });
 };
 
-exports.yahoo.callback = function(req, res, next){
+exports.callback = function(req, res, next){
   if (req.session.oauth) {
     req.session.oauth.verifier = req.query.oauth_verifier;
     var oauth = req.session.oauth;
@@ -34,14 +34,6 @@ exports.yahoo.callback = function(req, res, next){
     next(new Error("you're not supposed to be here."));
 };
 
-
-exports.index = function (req, res) {
-  if(req.session.oauth && req.session.oauth.access_token) {
-    res.render('index', {
-      screen_name: req.session.yahoo.screen_name
-    });
-  } else {
-    res.redirect("/login");
-  }
-};
+var paths = require('underscore').keys(module.exports);
+module.exports.getPaths = function () {return paths};
 

@@ -7,7 +7,7 @@ module.exports = new OAuth(
     AUC_PRO.CONSUMER_KEY,
     AUC_PRO.CONSUMER_SECRET,
     "1.0",
-    "http://auc.stakam.net/auth/yahoo/callback",
+    "http://auc.stakam.net/auth/callback",
     "HMAC-SHA1");
 
 

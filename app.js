@@ -6,7 +6,6 @@
 var express = require('express')
   , routes = require('./routes')
   , stylus = require('stylus')
-  , nib = require('nib')
   , RedisStore = require('connect-redis')(express)
 
 var app = module.exports = express.createServer();
@@ -22,7 +21,7 @@ app.configure(function(){
       return stylus(str)
         .set('filename', path)
         .set('compress', true)
-        .use(nib());
+        .use(require('nib')());
     }
   }));
   app.use(express.bodyParser());
@@ -49,6 +48,7 @@ app.configure('production', function(){
 
 app.get('/', routes.index);
 app.get('/login', routes.login);
+app.get('/logout', routes.logout);
 app.get('/auth/yahoo', require('./routes/auth').auth.yahoo);
 app.get('/auth/yahoo/callback', require('./routes/auth').auth.yahoo.callback);
 

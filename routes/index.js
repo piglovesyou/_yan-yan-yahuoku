@@ -18,6 +18,10 @@ exports.login = function (req, res) {
   }
 };
 
+exports.logout = function (req, res) {
+  req.session.destroy();
+  res.render('logout');
+};
 
 // exports.post = function (req, res) {
 //   if(req.session.oauth && req.session.oauth.access_token) {
@@ -39,7 +43,3 @@ exports.login = function (req, res) {
 //   }
 // };
 // 
-// exports.logout = function (req, res) {
-//   req.session.destroy();
-//   res.render('logout');
-// };

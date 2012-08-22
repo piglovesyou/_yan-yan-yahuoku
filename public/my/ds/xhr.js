@@ -18,12 +18,12 @@ goog.addSingletonGetter(my.ds.Xhr);
 
 /**
  * @param {string} url
- * @param {Object} content
+ * @param {!Object} content
  * @param {Function} callback
  */
 my.ds.Xhr.prototype.post = function (url, content, callback, opt_obj) {
   var query = goog.Uri.QueryData.createFromMap(content);
-  this.request_('POST', goog.Uri.parse(url), query.toString(), callback, opt_obj);
+  this.request_('POST', url, query.toString(), callback, opt_obj);
 };
 
 
@@ -36,14 +36,14 @@ my.ds.Xhr.prototype.post = function (url, content, callback, opt_obj) {
 my.ds.Xhr.prototype.get = function (url, param, callback, opt_obj) {
   var uri = goog.Uri.parse(url);
   uri.getQueryData().extend(param);
-  this.request_('GET', uri, undefined, callback, opt_obj);
+  this.request_('GET', uri.toString(), null, callback, opt_obj);
 };
 
 my.ds.Xhr.prototype.id_ = 0;
 
 /**
  * @param {string} uri
- * @param {string} opt_content
+ * @param {?string} opt_content
  *
  * @return {?string} Id. If the id is in use, return null.
  */
@@ -64,10 +64,11 @@ my.ds.Xhr.prototype.request_ = function (method, uri, content, callback, opt_obj
   var xhr = this.xhr_;
   var u = undefined;
   var isGet = method == 'GET';
+  var content_ = (content && !isGet) ? content : u;
 
   var id = this.getId_(uri, content);
   if (id) {
-    xhr.send(id, uri, method, (!isGet ? content : u), u, u, function (e) {
+    xhr.send(id, uri, method, content_, u, u, function (e) {
       var xhrio = e.target;
       if (xhrio && xhrio.isSuccess()) {
         callback.call(opt_obj, false, xhrio.getResponseJson());

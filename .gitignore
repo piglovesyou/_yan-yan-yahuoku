@@ -5,3 +5,4 @@ closure-compiler
 .DS_Store
 dump.rdb
 *.css
+public/javascripts/main-min.js

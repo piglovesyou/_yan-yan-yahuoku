@@ -6,10 +6,13 @@ goog.require('goog.events.EventType');
 goog.require('goog.ui.ThousandRows');
 
 goog.require('my.ds.Xhr');
+goog.require('my.dom.ViewportSizeMonitor');
 
 
 /**
  * @param {goog.dom.DomHelper=} opt_domHelper
+ * @constructor
+ * @extends {goog.ui.Component}
  */
 my.App = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
@@ -42,6 +45,9 @@ my.App.prototype.resetLayoutSize_ = function (size) {
       size.height - this.toolbarHeight_);
 };
 
+/**
+ * @type {?goog.ui.ThousandRows}
+ */
 my.App.prototype.thousandRows_;
 
 /** @inheritDoc */
@@ -55,6 +61,9 @@ my.App.prototype.decorateInternal = function (element) {
 
 };
 
+/**
+ * @type {?number}
+ */
 my.App.prototype.toolbarHeight_;
 my.App.prototype.initializeSize_ = function () {
   this.toolbarHeight_ = this.toolbarElement_.offsetHeight;

@@ -28,10 +28,10 @@ var requestGet = function (path, param, callback) {
   }).end();
 };
 
-
 var PATHS = [
   'categoryTree',
-  'categoryLeaf'
+  'categoryLeaf',
+  'search'
 ];
 
 PATHS.forEach(function (path) {

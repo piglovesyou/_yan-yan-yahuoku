@@ -1,0 +1,6 @@
+[submodule "public/closure-thirdparty/closure-scroller"]
+	path = public/closure-thirdparty/closure-scroller
+	url = git://github.com/piglovesyou/closure-scroller.git
+[submodule "public/closure-thirdparty/closure-thousandrows"]
+	path = public/closure-thirdparty/closure-thousandrows
+	url = git://github.com/piglovesyou/closure-thousandrows.git

@@ -1,10 +1,17 @@
+
+- var isProduction = isProduction || false
+
 !!!
 html
   head
     title title
     link(rel='stylesheet', href='/stylesheets/main.css')
 
-    include _scripts
+    - if (isProduction)
+      script(src='/javascripts/main-min.js')
+    - else
+      include _scripts
+
   body!= body
   script
     main()

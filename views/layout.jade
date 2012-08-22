@@ -4,11 +4,20 @@ html
     title title
     link(rel='stylesheet', href='/stylesheets/main.css')
     script(src='/closure-library/closure/goog/base.js')
-
     script(src='/my/require.js')
-    script(src='/my/ds/xhr.js')
 
-    script(src='/javascripts/app.js')
+    script(src='/closure-thirdparty/closure-scroller/piglovesyou/goog/ui/scroller.js')
+    script(src='/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/virtualscroller.js')
+    script(src='/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/model.js')
+    script(src='/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/row.js')
+    script(src='/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/page.js')
+    script(src='/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/thousandrows.js')
+
+    script(src='/my/dom/viewportsizemonitor.js')
+    script(src='/my/ds/xhr.js')
+    script(src='/my/app/app.js')
+
+    script(src='/javascripts/main.js')
   body!= body
   script
-    my.app()
+    main()

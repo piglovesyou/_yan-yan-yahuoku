@@ -1,4 +1,5 @@
 node_modules
+closure
 closure-library
 closure-compiler
 .DS_Store

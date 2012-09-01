@@ -3,7 +3,7 @@ goog.provide('my.App');
 
 goog.require('goog.ui.Component');
 goog.require('goog.events.EventType');
-goog.require('goog.ui.ThousandRows');
+goog.require('my.ui.ThousandRows');
 
 goog.require('my.ds.Xhr');
 goog.require('my.dom.ViewportSizeMonitor');
@@ -26,18 +26,10 @@ my.App.prototype.enterDocument = function () {
   this.getHandler()
     .listen(vsm, goog.events.EventType.RESIZE, function (e) {
       this.resetLayoutSize_(e.target.getSize());
+      this.thousandRows_.update();
     });
   this.resetLayoutSize_(vsm.getSize());
 
-
-  // test xhr
-  var container = this.containerElement_;
-  var xhr = my.ds.Xhr.getInstance();
-  xhr.get('/api/categoryTree', {
-    'category': 23336
-  }, function (err, data) {
-    goog.dom.append(container, data.toString());
-  });
 };
 
 my.App.prototype.resetLayoutSize_ = function (size) {
@@ -54,11 +46,12 @@ my.App.prototype.thousandRows_;
 my.App.prototype.decorateInternal = function (element) {
   this.initializeSize_();
 
-
-  var model = new goog.ui.thousandrows.Model('/api/search?query=garcon');
-  this.thousandRows_ = new goog.ui.ThousandRows(model, 50, 20, 20000, this.getDomHelper());
+  this.thousandRows_ = new my.ui.ThousandRows(160, 50);
+  var model = new my.ui.ThousandRows.Model(
+                  this.thousandRows_.baseName + this.thousandRows_.getId(),
+                  '/api/search?query=ベアブリック+23', 10000, true);
+  this.thousandRows_.setModel(model);
   this.thousandRows_.decorate(this.containerElement_);
-
 };
 
 /**

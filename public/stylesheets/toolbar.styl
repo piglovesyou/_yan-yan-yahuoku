@@ -1,11 +1,14 @@
 
 toolbarHeight = 32px
+tabBorderColor = #b6b6b6
 
 .toolbar
   background: linear-gradient(top, black, #444);
-  color: gray
   height: toolbarHeight
+  box-sizing: border-box
+  border-bottom: 1px tabBorderColor solid
   line-height: toolbarHeight
+  
 
   .left
     float: left
@@ -18,4 +21,43 @@ toolbarHeight = 32px
     padding: 0 3px
     display: inline-block
 
+tabHeight = 24px
+tabUnselectedStyle()
+  box-shadow 0 -16px 16px rgba(0,0,0,.1) inset
+  border-bottom: 1px tabBorderColor solid
+tabSelectedStyle()
+  box-shadow: none
+  border-bottom: 1px transparent solid
+  
+.tabs
+  clearfix()
+  padding-top: toolbarHeight - tabHeight
 
+  .tab
+    position: relative
+    float: left
+    padding: 0 15px 1px
+    margin-right: -18px
+    box-sizing: border-box
+    tabUnselectedStyle()
+    background: white
+    height: tabHeight
+    width: 18%
+    min-width: 120px
+    max-width: 240px
+    line-height: tabHeight - 1
+    background: url(../images/bg_tableft.png) left top no-repeat,
+                url(../images/bg_tabright.png) right top no-repeat;
+    text-align: center
+    color: #444
+
+    &.selected
+      tabSelectedStyle()
+      z-index: 1
+      .tab-content
+        tabSelectedStyle()
+  
+  .tab-content
+    ellipsis(true)
+    tabUnselectedStyle()
+    background: url(../images/bg_tabcenter.png) left top repeat-x;

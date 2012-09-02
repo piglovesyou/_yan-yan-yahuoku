@@ -63,6 +63,7 @@ my.app.Container.prototype.resize_ = function () {
 
 my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
   var thousandRows = new my.ui.ThousandRows(160, 50, opt_domHelper);
+  thousandRows.setMinThumbLength(30);
   var model = new my.ui.ThousandRows.Model(
                   thousandRows.baseName + thousandRows.getId(),
                   '/api/search?query=ベアブリック+23', 10000, true);
@@ -70,11 +71,13 @@ my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
   return thousandRows;
 };
 
+
 my.app.Container.prototype.decorateInternal = function (element) {
   this.thousandRows_.decorate(this.scrollerElement_);
 
   goog.base(this, 'decorateInternal', element);
 };
+
 
 my.app.Container.prototype.canDecorate = function (element) {
   if (goog.base(this, 'canDecorate', element)) {
@@ -88,5 +91,4 @@ my.app.Container.prototype.canDecorate = function (element) {
     }
   }
 };
-
 

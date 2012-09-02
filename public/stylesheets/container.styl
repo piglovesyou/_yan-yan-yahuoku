@@ -1,12 +1,8 @@
 
 
 // split pane
-
-
-
-.goog-splitpane-handle-horizontal {
+.goog-splitpane-handle-horizontal
   cursor: col-resize;
-}
 
 .goog-splitpane-handle,
 .goog-splitpane-first-container,
@@ -30,7 +26,27 @@ splitPaneHandleHeight = 100px
       background-color: rgba(40,40,40,.2)
 
 
+.detail-pane
+  background-image: url(../images/bg_swirl.png);
+  box-shadow: 3px 5px 15px rgba(0, 0, 0, .1) inset;
 
+.list-pane
+  border-right: 1px #CFCFCF solid;
+  .goog-scroller-bar
+    background: none
+    width: 20px
+  .goog-scroller-bar-thumb
+    border-radius: 1px
+    background: rgba(0,0,0,.1)
+    width: 14px
+    left: 3px !important
+  .goog-scroller-bar:hover,
+  .goog-slider-dragging
+    background: rgba(0,0,0,.02)
+    .goog-scroller-bar-thumb
+      background: rgba(0,0,0,.2)
+  .goog-slider-thumb-dragging
+    background: rgba(0,0,0,.4) !important
 
 
 

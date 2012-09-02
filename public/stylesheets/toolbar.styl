@@ -2,6 +2,8 @@
 toolbarHeight = 32px
 tabBorderColor = #b6b6b6
 
+toolbarLeftWidth = 62px
+toolbarRightWidth = 100px
 .toolbar
   background: linear-gradient(top, black, #444);
   height: toolbarHeight
@@ -11,8 +13,10 @@ tabBorderColor = #b6b6b6
   
 
   .left
+    width: toolbarLeftWidth
     float: left
   .right
+    width: toolbarRightWidth
     float: right
 
   .logo,
@@ -30,34 +34,43 @@ tabSelectedStyle()
   border-bottom: 1px transparent solid
   
 .tabs
-  clearfix()
+  margin-left: toolbarLeftWidth
+  margin-right: toolbarRightWidth
   padding-top: toolbarHeight - tabHeight
 
-  .tab
-    position: relative
-    float: left
-    padding: 0 15px 1px
-    margin-right: -18px
-    box-sizing: border-box
-    tabUnselectedStyle()
-    background: white
-    height: tabHeight
-    width: 18%
-    min-width: 120px
-    max-width: 240px
-    line-height: tabHeight - 1
-    background: url(../images/bg_tableft.png) left top no-repeat,
-                url(../images/bg_tabright.png) right top no-repeat;
-    text-align: center
-    color: #444
+.tab
+  position: relative
+  float: left
+  padding: 0 15px 1px
+  margin-right: -18px
+  box-sizing: border-box
+  tabUnselectedStyle()
+  background: white
+  height: tabHeight
+  width: 18%
+  min-width: 160px
+  max-width: 240px
+  line-height: tabHeight - 1
+  background: url(../images/bg_tableft.png) left top no-repeat,
+              url(../images/bg_tabright.png) right top no-repeat;
+  text-align: center
+  color: #444
+  cursor: default
 
-    &.selected
+  &.selected
+    tabSelectedStyle()
+    z-index: 1
+    .tab-content
       tabSelectedStyle()
-      z-index: 1
-      .tab-content
-        tabSelectedStyle()
-  
-  .tab-content
-    ellipsis(true)
-    tabUnselectedStyle()
-    background: url(../images/bg_tabcenter.png) left top repeat-x;
+
+.tab-dragging
+  top: toolbarHeight - tabHeight !important
+
+.tab-content
+  ellipsis(true)
+  tabUnselectedStyle()
+  background: url(../images/bg_tabcenter.png) left top repeat-x;
+
+.tabs-content
+  position: relative
+  clearfix()

@@ -1,10 +1,7 @@
 
 goog.provide('my.app.Tabs');
 
-<<<<<<< HEAD
-=======
 goog.require('my.events.EventCenter');
->>>>>>> sortable tabs
 goog.require('goog.ui.Component');
 goog.require('goog.fx.DragListGroup');
 goog.require('goog.asserts');
@@ -44,9 +41,6 @@ my.app.Tabs.prototype.decorateInternal = function (element) {
 my.app.Tabs.prototype.currSelectedTab_;
 
 
-<<<<<<< HEAD
-my.app.Tabs.prototype.draggingClassName_ = 'tab-dragging';
-=======
 /**
  * @return {?my.app.Tabs.Tab}
  */
@@ -59,7 +53,6 @@ my.app.Tabs.prototype.draggingClassName_ = 'tab-dragging';
 /**
  * @type {?goog.fx.DragListGroup}
  */
->>>>>>> sortable tabs
 my.app.Tabs.prototype.dragListGroup_;
 my.app.Tabs.prototype.setupDragListGroup_ = function () {
   if (this.dragListGroup_) {
@@ -94,12 +87,9 @@ my.app.Tabs.prototype.selectTab = function (tab) {
   goog.dom.classes.enable(tab.getElement(), 'selected', true);
   goog.dom.classes.enable(this.currSelectedTab_.getElement(), 'selected', false);
   this.currSelectedTab_ = tab;
-<<<<<<< HEAD
-=======
   my.events.EventCenter.getInstance().dispatch(my.events.EventCenter.EventType.TAB_CHANGED, {
     tab: tab
   });
->>>>>>> sortable tabs
 };
 
 /**
@@ -116,11 +106,7 @@ my.app.Tabs.prototype.findChildByElement_ = function (element) {
     }
     return false;
   }, this);
-<<<<<<< HEAD
-  return child;
-=======
   return /** @type {my.app.Tabs.Tab} */(child);
->>>>>>> sortable tabs
 };
 
 

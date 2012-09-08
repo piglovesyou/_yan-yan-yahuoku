@@ -17,13 +17,25 @@ toolbarRightWidth = 100px
     float: left
   .right
     width: toolbarRightWidth
+    box-sizing: border-box
+    padding-right: 6px
     float: right
+    text-align: right
 
   .logo,
   .logout,
-  .username
-    padding: 0 3px
+  .username,
+  .watch-tab
     display: inline-block
+    padding: 0 3px
+  .watch-tab
+    color: rgba(255,255,255,.4)
+    &:hover
+      color: rgba(255,255,255,.6)
+    &:focus
+      color: rgba(255,255,255,1)
+    cursor: pointer
+    text-decoration: none
 
 tabHeight = 24px
   

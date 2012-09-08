@@ -106,13 +106,7 @@ public/my/ds/xhr.js
 public/closure-library/closure/goog/dom/viewportsizemonitor.js
 public/my/dom/viewportsizemonitor.js
 public/closure-library/closure/goog/fx/draglistgroup.js
-<<<<<<< HEAD
-public/my/app/tabs.js
-public/closure-library/closure/goog/ui/splitpane.js
-public/my/app/container.js
-=======
 public/my/events/eventcenter.js
 public/my/app/tabs.js
->>>>>>> sortable tabs
 public/my/app/app.js
 public/javascripts/main.js

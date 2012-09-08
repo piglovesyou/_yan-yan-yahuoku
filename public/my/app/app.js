@@ -31,16 +31,7 @@ my.App.prototype.enterDocument = function () {
 
 /** @inheritDoc */
 my.App.prototype.decorateInternal = function (element) {
-<<<<<<< HEAD
-  
-  var tabs = new my.app.Tabs;
-  tabs.decorate(this.tabsElement_);
-
-  var container = new my.app.Container(this.getDomHelper());
-  container.decorate(this.containerElement_);
-=======
   this.initTabAndFrame_();
->>>>>>> sortable tabs
 };
 
 my.App.prototype.initTabAndFrame_ = function () {
@@ -78,21 +69,12 @@ my.App.prototype.canDecorate = function (element) {
     var dh = this.getDomHelper();
     var toolbar = dh.getElementByClass('toolbar', element);
     var tabs = dh.getElementByClass('tabs', element);
-<<<<<<< HEAD
-    var searchbar = dh.getElementByClass('searchbar', element);
-    var container = dh.getElementByClass('container', element);
-    if (toolbar && searchbar && container) {
-      this.toolbarElement_ = toolbar;
-      this.tabsElement_ = tabs;
-      this.containerElement_ = container;
-=======
     var mainFrame = dh.getElementByClass('main-frame', element);
     // var container = dh.getElementByClass('container', element);
     if (toolbar && tabs && mainFrame) {
       this.toolbarElement_ = toolbar;
       this.tabsElement_ = tabs;
       this.mainFrameElement_ = mainFrame;
->>>>>>> sortable tabs
       this.setElementInternal(element);
       return true;
     }

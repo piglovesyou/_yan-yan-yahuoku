@@ -26,6 +26,28 @@ goog.inherits(my.app.Container, goog.ui.SplitPane);
 
 
 
+my.app.Container.prototype.render = function () {
+  this.decorate(this.getElement());
+};
+
+my.app.Container.prototype.createDom = function () {
+  var dh = this.getDomHelper();
+  var element = 
+    dh.createDom('div', ['container', 'goog-splitpane'],
+      dh.createDom('div', ['list-pane', 'goog-splitpane-first-container'],
+        this.scrollerElement_ = 
+          dh.createDom('div', ['goog-scroller', 'goog-thousandrows'],
+            dh.createDom('div', 'goog-scroller-container'))),
+      this.detailPaneElement_ =
+        dh.createDom('div', ['detail-pane', 'goog-splitpane-second-container']),
+      dh.createDom('div', 'goog-splitpane-handle',
+        dh.createDom('div', 'handle',
+          dh.createDom('div', 'handle-content'))));
+  this.setElementInternal(element);
+  this.decorateInternal(element);
+};
+
+
 my.app.Container.prototype.enterDocument = function () {
   this.getHandler()
     .listen(my.dom.ViewportSizeMonitor.getInstance(), goog.events.EventType.RESIZE, function (e) {
@@ -74,21 +96,22 @@ my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
 
 my.app.Container.prototype.decorateInternal = function (element) {
   this.thousandRows_.decorate(this.scrollerElement_);
-
   goog.base(this, 'decorateInternal', element);
 };
 
 
+/** @inheritDoc */
 my.app.Container.prototype.canDecorate = function (element) {
+  console.log(goog.base(this, 'canDecorate', element));
   if (goog.base(this, 'canDecorate', element)) {
     var scrollerElement = goog.dom.getElementByClass('goog-scroller', element);
     var detailPaneElement = goog.dom.getElementByClass('detail-pane', element);
-
     if (scrollerElement) {
       this.scrollerElement_ = scrollerElement;
       this.detailPaneElement_ = detailPaneElement;
       return true;
     }
   }
+  return false;
 };
 

@@ -26,12 +26,14 @@ toolbarRightWidth = 100px
     display: inline-block
 
 tabHeight = 24px
+
+tabSelectedStyle()
+  box-shadow: 0 1px 0 #F2F2F2; // hide white border
+  border-bottom: 1px transparent solid
+
 tabUnselectedStyle()
   box-shadow 0 -16px 16px rgba(0,0,0,.1) inset
   border-bottom: 1px tabBorderColor solid
-tabSelectedStyle()
-  box-shadow: none
-  border-bottom: 1px transparent solid
   
 .tabs
   margin-left: toolbarLeftWidth

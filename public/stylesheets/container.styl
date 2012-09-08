@@ -20,18 +20,22 @@ splitPaneHandleHeight = 100px
     width: 0 !important
     .handle-content
       position: absolute
-      top: -50px
       width: 20px
       height: splitPaneHandleHeight
-      background-color: rgba(40,40,40,.2)
+      border-radius: 0 1px 1px 0
+      background-color: #f3f3f3;
+      &:hover
+        background-color: #dedede
+      top: -50px
 
 
 .detail-pane
   background-image: url(../images/bg_swirl.png);
-  box-shadow: 3px 5px 15px rgba(0, 0, 0, .1) inset;
-
+  box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.10) inset
 .list-pane
   border-right: 1px #CFCFCF solid;
+  .goog-thousandrows-page
+    background-image: url(../images/bg_fabric_plaid.png)
   .goog-scroller-bar
     background: none
     width: 20px

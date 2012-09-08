@@ -61,25 +61,37 @@ my.app.MainFrame.prototype.createFrame = function (id, render) {
 };
 
 
+/** @inheritDoc */
+my.app.MainFrame.prototype.createDom = function () {
+  goog.asserts.fail('Doesn\'t support render() method.');
+}
+
+
 my.app.MainFrame.prototype.decorateInternal = function (element) {
   goog.base(this, 'decorateInternal', element);
   var dh = this.getDomHelper();
   
   var frame = this.getChildAt(0);
   goog.asserts.assert(frame);
-  frame.decorate(this.firstFrameElement_);
-  goog.asserts.assert(goog.dom.classes.has(this.firstFrameElement_, 'selected'));
+
+  if (this.firstFrameElement_) {
+    frame.decorateInternal(this.firstFrameElement_);
+  } else {
+    frame.createDom()
+    dh.appendChild(this.getElement(), frame.getElement());
+  }
 };
 
 
 my.app.MainFrame.prototype.canDecorate = function (element) {
   if (element) {
     var dh = this.getDomHelper();
-    var firstFrame = dh.getElementByClass('frame', element);
-    if (firstFrame) {
-      this.firstFrameElement_ = firstFrame;
-      return true;
+    // can be none.
+    this.firstFrameElement_ = dh.getElementByClass('frame', element);
+    if (this.firstFrameElement_) {
+      goog.asserts.assert(goog.dom.classes.has(this.firstFrameElement_, 'selected'), 'First frame must have className selected.');
     }
+    return true;
   }
   return false;
 };

@@ -50,10 +50,10 @@ my.App.prototype.initTabAndFrame_ = function () {
   this.addChild(tabs);
   tabs.decorate(this.tabsElement_);
 
-  // var mainFrame = this.mainFrame_ =
-  //     new my.app.MainFrame(tabs.getCurrSelectedTab().getId(), dh);
-  // this.addChild(mainFrame);
-  // mainFrame.decorate(this.mainFrameElement_);
+  var mainFrame = this.mainFrame_ =
+      new my.app.MainFrame(tabs.getCurrSelectedTab().getId(), dh);
+  this.addChild(mainFrame);
+  mainFrame.decorate(this.mainFrameElement_);
 
   // goog.asserts.assert(tabs.getChildCount() > 0, 'Tab has to be more than 1.');
   // goog.asserts.assert(mainFrame.getChildCount() == 1, 'Frame has to be only one at decorating phase.');
@@ -68,7 +68,7 @@ my.App.prototype.enterDocument = function () {
 };
 
 my.App.prototype.handleTabChanged_ = function (e) {
-  // this.mainFrame_.selectFrame(e.data.tab.getId());
+  this.mainFrame_.selectFrame(e.data.tab.getId());
 };
 
 

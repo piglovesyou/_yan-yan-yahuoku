@@ -25,13 +25,10 @@ splitPaneHandleHeight = 100px
       height: splitPaneHandleHeight
       background-color: rgba(40,40,40,.2)
 
-
-.detail-pane
-  background-image: url(../images/bg_swirl.png);
-  box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.10) inset
-
-.list-pane
+.goog-splitpane-first-container
   border-right: 1px #CFCFCF solid;
+  .goog-thousandrows
+    height: 100%
   .goog-thousandrows-page
     background-image: url(../images/bg_fabric_plaid.png)
   .goog-scroller-bar
@@ -49,6 +46,12 @@ splitPaneHandleHeight = 100px
       background: rgba(0,0,0,.2)
   .goog-slider-thumb-dragging
     background: rgba(0,0,0,.4) !important
+
+.goog-splitpane-second-container
+  width: 300px
+  background-image: url(../images/bg_swirl.png);
+  box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.10) inset
+
 
 
 

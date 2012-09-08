@@ -17,17 +17,14 @@ my.app.Frame = function (opt_domHelper) {
 goog.inherits(my.app.Frame, goog.ui.Component);
 
 
-my.app.Frame.prototype.render = function () {
-  goog.base(this, 'render');
-  this.container_.render(this.getContentElement());
-};
-
 
 my.app.Frame.prototype.createDom = function () {
   var dh = this.getDomHelper();
+  this.container_.createDom();
   this.setElementInternal(dh.createDom('div', ['frame', 'selected'],
         /* TODO: Do this by SearchBar component.*/
-        dh.createDom('div', 'searchbar')));
+        dh.createDom('div', 'searchbar', 'yeah'),
+        this.container_.getElement()));
 };
 
 
@@ -35,7 +32,7 @@ my.app.Frame.prototype.createDom = function () {
 
 my.app.Frame.prototype.decorateInternal = function (element) {
   goog.base(this, 'decorateInternal', element);
-  this.container_.decorate(this.containerElement_);
+  this.container_.decorateInternal(this.containerElement_);
 };
 
 

@@ -1,6 +1,7 @@
 
 goog.provide('my.app.Frame');
 
+goog.require('my.app.Searchbar');
 goog.require('my.app.Container');
 
 
@@ -11,6 +12,8 @@ goog.require('my.app.Container');
 my.app.Frame = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
 
+  this.searchbar_ = new my.app.Searchbar(this.getDomHelper());
+  this.addChild(this.searchbar_);
   this.container_ = new my.app.Container(this.getDomHelper());
   this.addChild(this.container_);
 }
@@ -20,10 +23,10 @@ goog.inherits(my.app.Frame, goog.ui.Component);
 
 my.app.Frame.prototype.createDom = function () {
   var dh = this.getDomHelper();
+  this.searchbar_.createDom();
   this.container_.createDom();
   this.setElementInternal(dh.createDom('div', ['frame', 'selected'],
-        /* TODO: Do this by SearchBar component.*/
-        dh.createDom('div', 'searchbar', 'yeah'),
+        this.searchbar_.getElement(),
         this.container_.getElement()));
 };
 

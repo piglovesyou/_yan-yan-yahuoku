@@ -6,7 +6,8 @@ html
   head
     title title
     link(rel='stylesheet', href='/stylesheets/main.css')
-    link(rel='stylesheet', href='http://auc.stakam.net/closure-thirdparty/closure-scroller/piglovesyou/goog/css/scroller.css')
+    link(rel='stylesheet', href='/closure-thirdparty/closure-scroller/piglovesyou/goog/css/scroller.css')
+    link(rel='stylesheet', href='/closure-library/closure/goog/css/common.css')
 
     - if (isProduction)
       script(src='/javascripts/main-min.js')
@@ -14,5 +15,3 @@ html
       include _scripts
 
   body!= body
-  script
-    main()

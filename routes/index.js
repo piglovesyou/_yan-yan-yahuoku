@@ -25,6 +25,12 @@ exports.logout = function (req, res) {
   res.render('logout');
 };
 
+exports.sandbox = function(req, res){
+  res.render('sandbox', {
+    layout: false
+  });
+};
+
 // exports.post = function (req, res) {
 //   if(req.session.oauth && req.session.oauth.access_token) {
 //     var text = req.body.text;

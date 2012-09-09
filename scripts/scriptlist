@@ -100,6 +100,7 @@ public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/
 public/my/ui/thousandrows.js
 public/closure-library/closure/goog/ui/splitpane.js
 public/my/app/container.js
+public/my/app/searchbar/searchbar.js
 public/my/app/frame.js
 public/my/app/mainframe.js
 public/my/ds/xhr.js

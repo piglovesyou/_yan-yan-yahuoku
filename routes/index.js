@@ -26,9 +26,7 @@ exports.logout = function (req, res) {
 };
 
 exports.sandbox = function(req, res){
-  res.render('sandbox', {
-    layout: false
-  });
+  res.render('sandbox');
 };
 
 // exports.post = function (req, res) {

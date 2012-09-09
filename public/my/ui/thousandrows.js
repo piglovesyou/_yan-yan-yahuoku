@@ -44,15 +44,29 @@ my.ui.ThousandRows.RowRenderer = function () {
 goog.inherits(my.ui.ThousandRows.RowRenderer, goog.ui.thousandrows.RowRenderer);
 goog.addSingletonGetter(my.ui.ThousandRows.RowRenderer);
 
+
+/** @inheritDoc */
+my.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
+  return row.getDomHelper().createDom('div', {
+    className: [row.getCssName()]
+    // style: 'height: ' + this.height_ + 'px'
+  });
+};
+
+
+/** @inheritDoc */
 my.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) {
   var dh = row.getDomHelper();
-  var fragment = dh.getDocument().createDocumentFragment();
-  dh.append(fragment,
-      dh.createDom('div', 'row-col row-index', '' + record['AuctionID']),
-      dh.createDom('div', 'row-col row-title', record['Title']),
-      dh.createDom('div', 'row-col row-description', 
-        dh.createDom('img', { src: record['Image']})));
-  return fragment;
+  return dh.createDom('div', 'row',
+            dh.createDom('a', ['span3', 'goods-image'], 
+              dh.createDom('img', {
+                className: 'img-polaroid',
+                src: record['Image']
+              })),
+            dh.createDom('h4', {
+              title: record['Title']
+            }, record['Title']),
+            dh.createDom('div', 'row-col row-index', '' + record['AuctionID']));
 };
 
 

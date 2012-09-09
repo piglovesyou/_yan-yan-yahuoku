@@ -19,8 +19,14 @@ my.app.Searchbar.prototype.createDom = function () {
   var dh = this.getDomHelper();
   var element = dh.createDom('div', 'searchbar',
       dh.createDom('div', 'textsearch',
-        dh.createDom('input', { })),
+        dh.createDom('input', {
+          type:'text',
+          placeholder: 'Search by text...'
+        })),
       dh.createDom('div', 'categorysearch',
-        dh.createDom('input', {})));
+        dh.createDom('input', {
+          type:'text',
+          placeholder: 'Category search...'
+        })));
   this.setElementInternal(element);
 };

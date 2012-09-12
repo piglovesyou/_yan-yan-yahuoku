@@ -3,6 +3,7 @@ closure
 closure-library
 closure-compiler
 .DS_Store
-dump.rdb
+redis/dump.rdb
+redis/redis.log
 *.css
 public/javascripts/main-min.js

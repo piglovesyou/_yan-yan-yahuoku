@@ -186,8 +186,8 @@ my.ui.ThousandRows.Row.prototype.enterDocument = function () {
 
 my.ui.ThousandRows.Row.prototype.titleTooltip_;
 
-my.ui.ThousandRows.Row.prototype.setTitleTooltip = function (titleElm, string) {
-  this.titleTooltip_ = new goog.ui.Tooltip(titleElm, string, this.getDomHelper());
+my.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {
+  this.titleTooltip_ = new goog.ui.Tooltip(this.getElement(), string, this.getDomHelper());
   this.titleTooltip_.className += ' label label-info';
 };
 
@@ -230,7 +230,6 @@ my.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
 /** @inheritDoc */
 my.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) {
   var dh = row.getDomHelper();
-  var h4;
   var element = 
       dh.createDom('a', {
             className: 'row',
@@ -241,9 +240,9 @@ my.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) 
               className: 'img-polaroid',
               src: record['Image']
             })),
-          h4 = dh.createDom('h4', null, row.getId() + ' ' + record['Title']),
+          dh.createDom('h4', null, row.getId() + ' ' + record['Title']),
             dh.createDom('div', 'row-col row-index', '' + record['AuctionID']));
-  row.setTitleTooltip(h4, record['Title']);
+  row.setTitleTooltip(record['Title']);
   return element;
 };
 

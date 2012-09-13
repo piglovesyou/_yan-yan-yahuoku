@@ -66,10 +66,16 @@ rowHeight = 138px
   .goog-thousandrows-row
     box-sizing: border-box
     height: rowHeight !important
+
     // Override bootstrap
-    &> .row
+    .row
       padding: 14px 5px
   .goods-image
     text-align: center
   h4
     ellipsis(true)
+
+// Override bootstrap
+.nav > li > a:hover
+  background-color: rgba(0,0,0,.03)
+

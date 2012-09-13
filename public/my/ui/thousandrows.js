@@ -104,7 +104,6 @@ my.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) 
 
 
 /**
- * @param {string} id For root dataSource.
  * @param {string} uri Uri. Also used as xhr request id.
  * @param {number=} opt_totalRowCount
  * @param {boolean=} opt_updateTotalWithJson
@@ -113,8 +112,8 @@ my.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) 
  * @constructor
  * @extends {goog.ui.thousandrows.Model}
  */
-my.ui.ThousandRows.Model = function (id, uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager) {
-  goog.base(this, id, uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager);
+my.ui.ThousandRows.Model = function (uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager) {
+  goog.base(this, uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager);
 };
 goog.inherits(my.ui.ThousandRows.Model, goog.ui.thousandrows.Model);
 

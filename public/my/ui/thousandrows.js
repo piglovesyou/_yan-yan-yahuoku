@@ -29,6 +29,18 @@ my.ui.ThousandRows.Page = function (pageIndex, rowCount, rowHeight, opt_domHelpe
 };
 goog.inherits(my.ui.ThousandRows.Page, goog.ui.thousandrows.Page);
 
+/** @inheritDoc */
+my.ui.ThousandRows.Page.prototype.createDom = function () {
+  var dh = this.getDomHelper();
+  var elm = this.getDomHelper().createDom('ul', [this.getCssName(), 'nav', 'nav-list']);
+  this.setElementInternal(elm);
+
+	this.forEachChild(function (row) {
+		row.createDom();
+    dh.appendChild(this.getContentElement(), row.getElement());
+	}, this);
+};
+
 my.ui.ThousandRows.Page.prototype.createRow_ = function (id, rowHeight) {
   return new my.ui.ThousandRows.Row(id, rowHeight,
       my.ui.ThousandRows.RowRenderer.getInstance(), this.getDomHelper());
@@ -46,6 +58,10 @@ my.ui.ThousandRows.Row = function (rowIndex, height, opt_renderer, opt_domHelper
   goog.base(this, rowIndex, height, opt_renderer, opt_domHelper);
 };
 goog.inherits(my.ui.ThousandRows.Row, goog.ui.thousandrows.Row);
+
+my.ui.ThousandRows.Row.prototype.enterDocument = function () {
+  goog.base(this, 'enterDocument');
+};
 
 my.ui.ThousandRows.Row.prototype.titleTooltip_;
 
@@ -79,7 +95,7 @@ goog.addSingletonGetter(my.ui.ThousandRows.RowRenderer);
 
 /** @inheritDoc */
 my.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
-  return row.getDomHelper().createDom('div', {
+  return row.getDomHelper().createDom('li', {
     className: [row.getCssName()]
     // style: 'height: ' + this.height_ + 'px'
   });
@@ -90,14 +106,18 @@ my.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
 my.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) {
   var dh = row.getDomHelper();
   var h4;
-  var element = dh.createDom('div', 'row',
-            dh.createDom('a', ['span3', 'goods-image'], 
-              dh.createDom('img', {
-                className: 'img-polaroid',
-                src: record['Image']
-              })),
-            h4 = dh.createDom('h4', null, record['Title']),
-              dh.createDom('div', 'row-col row-index', '' + record['AuctionID']));
+  var element = 
+      dh.createDom('a', {
+            className: 'row',
+            href: 'javascript:void(0)'
+          },
+          dh.createDom('a', ['span3', 'goods-image'], 
+            dh.createDom('img', {
+              className: 'img-polaroid',
+              src: record['Image']
+            })),
+          h4 = dh.createDom('h4', null, record['Title']),
+            dh.createDom('div', 'row-col row-index', '' + record['AuctionID']));
   row.setTitleTooltip(h4, record['Title']);
   return element;
 };

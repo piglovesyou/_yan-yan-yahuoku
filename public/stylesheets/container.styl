@@ -60,12 +60,15 @@ splitPaneHandleHeight = 100px
 
 
 
+rowHeight = 138px
 .goog-splitpane-first-container
   position: relative
   .goog-thousandrows-row
     box-sizing: border-box
-    padding: 10px 0
-    height: 128px !important
+    height: rowHeight !important
+    // Override bootstrap
+    &> .row
+      padding: 14px 5px
   .goods-image
     text-align: center
   h4

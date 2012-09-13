@@ -81,7 +81,7 @@ my.app.Container.prototype.resize_ = function () {
 
 
 my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
-  var thousandRows = new my.ui.ThousandRows(128, 50, opt_domHelper);
+  var thousandRows = new my.ui.ThousandRows(138, 50, opt_domHelper);
   thousandRows.setMinThumbLength(30);
   var model = new my.ui.ThousandRows.Model('/api/search?query=ベアブリック+23', 10000, true);
   thousandRows.setModel(model)

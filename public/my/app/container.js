@@ -25,14 +25,10 @@ my.app.Container = function (opt_domHelper) {
 
   goog.base(this, thousandRows, detail, opt_domHelper);
   this.setHandleSize(0);
+
 }
 goog.inherits(my.app.Container, goog.ui.SplitPane);
 
-
-
-// my.app.Container.prototype.render = function () {
-//   this.decorate(this.getElement());
-// };
 
 my.app.Container.prototype.createDom = function () {
   goog.base(this, 'createDom');
@@ -49,7 +45,8 @@ my.app.Container.prototype.enterDocument = function () {
     .listen(my.dom.ViewportSizeMonitor.getInstance(), goog.events.EventType.RESIZE, function (e) {
       this.resize_();
       this.thousandRows_.update();
-    });
+    })
+    .listen(this, my.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_);
   this.resize_();
   goog.base(this, 'enterDocument');
 };
@@ -58,6 +55,13 @@ my.app.Container.prototype.enterDocument = function () {
  * @type {?number}
  */
 my.app.Container.prototype.offsetTopCache_;
+
+my.app.Container.prototype.handleRowClicked_ = function (e) {
+  var id = e.row.getAuctionId();
+  if (id) {
+    console.log(id);
+  }
+};
 
 /**
  * @return {number}

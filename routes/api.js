@@ -4,6 +4,7 @@ var yapi = require('../sources/net/yahooapi');
 var PATHS = [
   'categoryTree',
   'categoryLeaf',
+  'auctionItem',
   'search'
 ];
 

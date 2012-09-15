@@ -13,7 +13,6 @@ goog.require('goog.ui.Tooltip');
  */
 my.ui.ThousandRows = function (rowHeight, rowCountInPage, opt_domHelper) {
   goog.base(this, rowHeight, rowCountInPage, opt_domHelper);
-  this.eventDelegate_ = new goog.events.EventTarget;
 };
 goog.inherits(my.ui.ThousandRows, goog.ui.ThousandRows)
 
@@ -77,7 +76,7 @@ my.ui.ThousandRows.prototype.findSelectedRow_ = function () {
 /** @inheritDoc */
 my.ui.ThousandRows.prototype.enterDocument = function () {
   this.getHandler()
-    .listen(this.eventDelegate_, my.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowSelected_);
+    .listen(this, my.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowSelected_);
   goog.base(this, 'enterDocument');
 };
 
@@ -100,16 +99,12 @@ my.ui.ThousandRows.prototype.makeRowSelected_ = function (row, enable) {
 };
 
 my.ui.ThousandRows.prototype.createPage_ = function (pageIndex) {
-  return new my.ui.ThousandRows.Page(this.eventDelegate_, pageIndex,
+  return new my.ui.ThousandRows.Page(pageIndex,
         this.rowCountInPage_, this.rowHeight_, this.getDomHelper());
 };
 
 /** @inheritDoc */
 my.ui.ThousandRows.prototype.disposeInternal = function () {
-  if (this.eventDelegate_) {
-    this.eventDelegate_.dispose();
-    this.eventDelegate_ = null;
-  }
   this.selectedRow_ = null;
   goog.base(this, 'disposeInternal');
 };
@@ -119,8 +114,7 @@ my.ui.ThousandRows.prototype.disposeInternal = function () {
  * @constructor
  * @extends {goog.ui.thousandrows.Page}
  */
-my.ui.ThousandRows.Page = function (eventDelegate, pageIndex, rowCount, rowHeight, opt_domHelper) {
-  this.eventDelegate_ = eventDelegate;
+my.ui.ThousandRows.Page = function (pageIndex, rowCount, rowHeight, opt_domHelper) {
   goog.base(this, pageIndex, rowCount, rowHeight, opt_domHelper);
 };
 goog.inherits(my.ui.ThousandRows.Page, goog.ui.thousandrows.Page);
@@ -140,7 +134,7 @@ my.ui.ThousandRows.Page.prototype.createDom = function () {
 
 /** @inheritDoc */
 my.ui.ThousandRows.Page.prototype.createRow_ = function (id, rowHeight) {
-  return new my.ui.ThousandRows.Row(this.eventDelegate_, id, rowHeight,
+  return new my.ui.ThousandRows.Row(id, rowHeight,
       my.ui.ThousandRows.RowRenderer.getInstance(), this.getDomHelper());
 };
 
@@ -152,8 +146,7 @@ my.ui.ThousandRows.Page.prototype.createRow_ = function (id, rowHeight) {
  * @constructor
  * @extends {goog.ui.Component}
  */
-my.ui.ThousandRows.Row = function (eventDelegate, rowIndex, height, opt_renderer, opt_domHelper) {
-  this.eventDelegate_ = eventDelegate;
+my.ui.ThousandRows.Row = function (rowIndex, height, opt_renderer, opt_domHelper) {
   goog.base(this, rowIndex, height, opt_renderer, opt_domHelper);
 };
 goog.inherits(my.ui.ThousandRows.Row, goog.ui.thousandrows.Row);
@@ -176,7 +169,7 @@ my.ui.ThousandRows.Row.prototype.enterDocument = function () {
     .listen(this.getElement(), goog.events.EventType.CLICK, function (e) {
       // TODO: check whether the row's content rendered.
       // if (this.hasContentRendered_) {
-      this.eventDelegate_.dispatchEvent({
+      this.dispatchEvent({
         type: my.ui.ThousandRows.EventType.ROW_CLICKED,
         row: this
       });
@@ -189,6 +182,27 @@ my.ui.ThousandRows.Row.prototype.titleTooltip_;
 my.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {
   this.titleTooltip_ = new goog.ui.Tooltip(this.getElement(), string, this.getDomHelper());
   this.titleTooltip_.className += ' label label-info';
+};
+
+/**
+ * @type {?string}
+ */
+my.ui.ThousandRows.Row.prototype.auctionId_;
+
+
+/**
+ * @return {?string}
+ */
+my.ui.ThousandRows.Row.prototype.getAuctionId = function () {
+  return this.auctionId_;
+};
+
+/** @inheritDoc */
+my.ui.ThousandRows.Row.prototype.renderContent = function (record) {
+  goog.base(this, 'renderContent', record);
+  if (record) {
+    this.auctionId_ = record['AuctionID'];
+  }
 };
 
 my.ui.ThousandRows.Row.prototype.disposeInternal = function () {

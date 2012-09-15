@@ -38,6 +38,7 @@ my.app.Container.prototype.createDom = function () {
   dh.appendChild(this.getElementByClass('goog-splitpane-handle'),
       dh.createDom('div', 'handle',
         dh.createDom('div', 'handle-content')));
+  // this.thousandRows_.createDom();
 };
 
 
@@ -61,8 +62,8 @@ my.app.Container.prototype.handleRowClicked_ = function (e) {
   var id = e.row.getAuctionId();
   if (id) {
     my.Model.getInstance().getAuctionItem(id, function (err, data) {
-      // console.log('yeah', data);
-    });
+      if (!err) this.detail_.renderContent(data);
+    }, this);
   }
 };
 
@@ -98,26 +99,4 @@ my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
   thousandRows.setModel(model)
   return thousandRows;
 };
-
-
-// my.app.Container.prototype.decorateInternal = function (element) {
-//   this.thousandRows_.decorate(this.scrollerElement_);
-//   goog.base(this, 'decorateInternal', element);
-// };
-
-
-/** @inheritDoc */
-// my.app.Container.prototype.canDecorate = function (element) {
-//   console.log(goog.base(this, 'canDecorate', element));
-//   if (goog.base(this, 'canDecorate', element)) {
-//     var scrollerElement = goog.dom.getElementByClass('goog-scroller', element);
-//     var detailPaneElement = goog.dom.getElementByClass('detail-pane', element);
-//     if (scrollerElement) {
-//       this.scrollerElement_ = scrollerElement;
-//       this.detailPaneElement_ = detailPaneElement;
-//       return true;
-//     }
-//   }
-//   return false;
-// };
 

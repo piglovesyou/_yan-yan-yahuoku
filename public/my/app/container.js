@@ -4,6 +4,7 @@ goog.provide('my.app.Container');
 goog.require('goog.ui.SplitPane');
 goog.require('goog.style');
 goog.require('my.ui.ThousandRows');
+goog.require('my.app.Detail');
 
 
 /**
@@ -12,15 +13,18 @@ goog.require('my.ui.ThousandRows');
  */
 my.app.Container = function (opt_domHelper) {
 
-  var thousandRows = this.createThousandRows_(opt_domHelper);
-
-  goog.base(this, thousandRows, new goog.ui.Component(), opt_domHelper);
-  this.setHandleSize(0);
+  /**
+   * @type {my.ui.ThousandRows}
+   */
+  var thousandRows = this.thousandRows_ = this.createThousandRows_(opt_domHelper);
 
   /**
    * @type {my.ui.ThousandRows}
    */
-  this.thousandRows_ = thousandRows;
+  var detail = this.detail_ = new my.app.Detail(opt_domHelper);
+
+  goog.base(this, thousandRows, detail, opt_domHelper);
+  this.setHandleSize(0);
 }
 goog.inherits(my.app.Container, goog.ui.SplitPane);
 
@@ -83,7 +87,7 @@ my.app.Container.prototype.resize_ = function () {
 my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
   var thousandRows = new my.ui.ThousandRows(138, 50, opt_domHelper);
   thousandRows.setMinThumbLength(30);
-  var model = new my.ui.ThousandRows.Model('/api/search?query=ベアブリック+23', 10000, true);
+  var model = new my.ui.ThousandRows.Model('/api/search?query=ケイトスペード', null, true);
   thousandRows.setModel(model)
   return thousandRows;
 };

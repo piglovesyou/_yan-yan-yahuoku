@@ -241,7 +241,10 @@ my.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) 
               src: record['Image']
             })),
           dh.createDom('h4', null, row.getId() + ' ' + record['Title']),
-            dh.createDom('div', 'row-col row-index', '' + record['AuctionID']));
+          dh.createDom('div', '', '' + record['AuctionID']),
+          dh.createDom('div', '', record['BidOrBuy'])
+          
+          );
   row.setTitleTooltip(record['Title']);
   return element;
 };

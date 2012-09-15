@@ -151,7 +151,10 @@ my.ui.ThousandRows.Row = function (rowIndex, height, opt_renderer, opt_domHelper
 };
 goog.inherits(my.ui.ThousandRows.Row, goog.ui.thousandrows.Row);
 
-/** @inheritDoc */
+/** 
+ * @param {boolean} selected
+ * @override
+ */
 my.ui.ThousandRows.Row.prototype.createDom = function (selected) {
   goog.base(this, 'createDom');
   if (selected) this.asSelected(true);
@@ -174,6 +177,9 @@ my.ui.ThousandRows.Row.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
 };
 
+/**
+ * @type {?goog.ui.Tooltip}
+ */
 my.ui.ThousandRows.Row.prototype.titleTooltip_;
 
 my.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {

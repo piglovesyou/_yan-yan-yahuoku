@@ -29,10 +29,10 @@ my.app.MainFrame.prototype.renderFrame = function (id) {
 my.app.MainFrame.prototype.selectFrame = function (id) {
   this.currSelectedFrame_.exitDocument();
   goog.dom.classes.enable(this.currSelectedFrame_.getElement(), 'selected', false);
-  var frame = this.getChild(id);
+  var frame = /** @type {?my.app.Frame} */(this.getChild(id));
   if (!frame) {
-    frame = this.createFrame(id);
-    frame.render(this.getContentElement());
+    // When it rendered, always be selected state.
+    frame = this.createFrame(id, true);
   } else {
     goog.dom.classes.enable(frame.getElement(), 'selected', true);
     frame.enterDocument();

@@ -30,6 +30,11 @@ my.Model.getAuctionItemKey_ = function (id) {
   return 'auctionitem:' + id;
 };
 
+/**
+ * @param {string} id
+ * @param {Function} callback
+ * @param {Object=} opt_obj
+ */
 my.Model.prototype.getAuctionItem = function (id, callback, opt_obj) {
   var storage = this.sessionStore_;
   var key = my.Model.getAuctionItemKey_(id);

@@ -61,7 +61,7 @@ my.app.Container.prototype.handleRowClicked_ = function (e) {
   var id = e.row.getAuctionId();
   if (id) {
     my.Model.getInstance().getAuctionItem(id, function (err, data) {
-      console.log('yeah', data);
+      // console.log('yeah', data);
     });
   }
 };

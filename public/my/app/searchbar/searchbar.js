@@ -9,8 +9,7 @@ goog.require('goog.ui.Component');
  * @extends {goog.ui.Component}
  */
 my.app.Searchbar = function (opt_domHelper) {
-  var u = undefined;
-  goog.base(this, u, u, opt_domHelper);
+  goog.base(this, opt_domHelper);
 }
 goog.inherits(my.app.Searchbar, goog.ui.Component);
 

@@ -31,7 +31,7 @@ my.app.MainFrame.prototype.selectFrame = function (id) {
   goog.dom.classes.enable(this.currSelectedFrame_.getElement(), 'selected', false);
   var frame = this.getChild(id);
   if (!frame) {
-    var frame = this.createFrame(id);
+    frame = this.createFrame(id);
     frame.render(this.getContentElement());
   } else {
     goog.dom.classes.enable(frame.getElement(), 'selected', true);
@@ -41,9 +41,15 @@ my.app.MainFrame.prototype.selectFrame = function (id) {
 };
 
 
+/**
+ * @type {?my.app.Frame}
+ */
 my.app.MainFrame.prototype.currSelectedFrame_;
 
 
+/**
+ * @return {my.app.Frame}
+ */
 my.app.MainFrame.prototype.getCurrSelectedFrame = function () {
   return this.currSelectedFrame_;
 };
@@ -52,9 +58,10 @@ my.app.MainFrame.prototype.getCurrSelectedFrame = function () {
 /**
  * @param {string} id Tab id the frame belonging to.
  * @param {boolean} render
+ * @return {my.app.Frame}
  */
 my.app.MainFrame.prototype.createFrame = function (id, render) {
-  frame = new my.app.Frame(this.getDomHelper());
+  var frame = new my.app.Frame(this.getDomHelper());
   frame.setId(id);
   this.addChild(frame, render);
   return frame;

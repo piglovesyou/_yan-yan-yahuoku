@@ -5,6 +5,7 @@ goog.require('goog.ui.SplitPane');
 goog.require('goog.style');
 goog.require('my.ui.ThousandRows');
 goog.require('my.app.Detail');
+goog.require('my.Model');
 
 
 /**
@@ -16,14 +17,14 @@ my.app.Container = function (opt_domHelper) {
   /**
    * @type {my.ui.ThousandRows}
    */
-  var thousandRows = this.thousandRows_ = this.createThousandRows_(opt_domHelper);
+  this.thousandRows_ = this.createThousandRows_(opt_domHelper);
 
   /**
-   * @type {my.ui.ThousandRows}
+   * @type {my.app.Detail}
    */
-  var detail = this.detail_ = new my.app.Detail(opt_domHelper);
+  this.detail_ = new my.app.Detail(opt_domHelper);
 
-  goog.base(this, thousandRows, detail, opt_domHelper);
+  goog.base(this, this.thousandRows_, this.detail_, opt_domHelper);
   this.setHandleSize(0);
 
 }
@@ -59,7 +60,9 @@ my.app.Container.prototype.offsetTopCache_;
 my.app.Container.prototype.handleRowClicked_ = function (e) {
   var id = e.row.getAuctionId();
   if (id) {
-    console.log(id);
+    my.Model.getInstance().getAuctionItem(id, function (err, data) {
+      console.log('yeah', data);
+    });
   }
 };
 
@@ -91,7 +94,7 @@ my.app.Container.prototype.resize_ = function () {
 my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
   var thousandRows = new my.ui.ThousandRows(138, 50, opt_domHelper);
   thousandRows.setMinThumbLength(30);
-  var model = new my.ui.ThousandRows.Model('/api/search?query=ケイトスペード', null, true);
+  var model = new my.ui.ThousandRows.Model('/api/search?query=kate+spade', undefined, true);
   thousandRows.setModel(model)
   return thousandRows;
 };

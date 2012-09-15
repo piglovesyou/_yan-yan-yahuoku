@@ -109,6 +109,17 @@ public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/
 public/closure-library/closure/goog/math/range.js
 public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/thousandrows.js
 public/my/ui/thousandrows.js
+public/my/model/xhr.js
+public/closure-library/closure/goog/storage/errorcode.js
+public/closure-library/closure/goog/storage/mechanism/mechanism.js
+public/closure-library/closure/goog/storage/storage.js
+public/closure-library/closure/goog/storage/richstorage.js
+public/closure-library/closure/goog/storage/expiringstorage.js
+public/closure-library/closure/goog/storage/mechanism/iterablemechanism.js
+public/closure-library/closure/goog/storage/mechanism/errorcode.js
+public/closure-library/closure/goog/storage/mechanism/html5webstorage.js
+public/closure-library/closure/goog/storage/mechanism/html5sessionstorage.js
+public/my/model/model.js
 public/closure-library/closure/goog/ui/splitpane.js
 public/my/app/document.js
 public/my/app/container.js

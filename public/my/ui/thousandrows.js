@@ -29,7 +29,7 @@ my.ui.ThousandRows.EventType = {
 my.ui.ThousandRows.prototype.selectedRowId_;
 
 /**
- * @return {string}
+ * @return {?string}
  */
 my.ui.ThousandRows.prototype.getSelectedRowId = function () {
   return this.selectedRowId_;
@@ -59,7 +59,7 @@ my.ui.ThousandRows.prototype.findSelectedRow_ = function () {
   goog.array.find(this.getChildIds(), function (pageId) {
     var page = this.getChild(pageId);
     if (page) {
-      return goog.array.find(page.getChildIds(), function (rowId) {
+      return !!goog.array.find(page.getChildIds(), function (rowId) {
         var row = page.getChild(rowId);
         if (row && row.getId() == selectedRowId) {
           return !!(foundRow = row);
@@ -144,17 +144,14 @@ my.ui.ThousandRows.Page.prototype.createRow_ = function (id, rowHeight) {
  * @param {number} height
  * @param {goog.dom.DomHelper} opt_domHelper
  * @constructor
- * @extends {goog.ui.Component}
+ * @extends {goog.ui.thousandrows.Row}
  */
 my.ui.ThousandRows.Row = function (rowIndex, height, opt_renderer, opt_domHelper) {
   goog.base(this, rowIndex, height, opt_renderer, opt_domHelper);
 };
 goog.inherits(my.ui.ThousandRows.Row, goog.ui.thousandrows.Row);
 
-/**
- * @param {boolean} selected
- * @override
- */
+/** @inheritDoc */
 my.ui.ThousandRows.Row.prototype.createDom = function (selected) {
   goog.base(this, 'createDom');
   if (selected) this.asSelected(true);

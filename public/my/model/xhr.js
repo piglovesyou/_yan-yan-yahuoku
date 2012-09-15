@@ -1,4 +1,4 @@
-goog.provide('my.ds.Xhr');
+goog.provide('my.model.Xhr');
 
 goog.require('goog.net.XhrManager');
 goog.require('goog.Uri');
@@ -9,19 +9,19 @@ goog.require('goog.Disposable');
  * @constructor
  * @extends {goog.Disposable}
  */
-my.ds.Xhr = function () {
+my.model.Xhr = function () {
   goog.base(this);
   this.xhr_ = new goog.net.XhrManager;
 };
-goog.inherits(my.ds.Xhr, goog.Disposable);
-goog.addSingletonGetter(my.ds.Xhr);
+goog.inherits(my.model.Xhr, goog.Disposable);
+goog.addSingletonGetter(my.model.Xhr);
 
 /**
  * @param {string} url
  * @param {!Object} content
  * @param {Function} callback
  */
-my.ds.Xhr.prototype.post = function (url, content, callback, opt_obj) {
+my.model.Xhr.prototype.post = function (url, content, callback, opt_obj) {
   var query = goog.Uri.QueryData.createFromMap(content);
   this.request_('POST', url, query.toString(), callback, opt_obj);
 };
@@ -33,13 +33,13 @@ my.ds.Xhr.prototype.post = function (url, content, callback, opt_obj) {
  * @param {Function} callback
  * @param {Object=} opt_obj
  */
-my.ds.Xhr.prototype.get = function (url, param, callback, opt_obj) {
+my.model.Xhr.prototype.get = function (url, param, callback, opt_obj) {
   var uri = goog.Uri.parse(url);
   uri.getQueryData().extend(param);
   this.request_('GET', uri.toString(), null, callback, opt_obj);
 };
 
-my.ds.Xhr.prototype.id_ = 0;
+my.model.Xhr.prototype.id_ = 0;
 
 /**
  * @param {string} uri
@@ -47,7 +47,7 @@ my.ds.Xhr.prototype.id_ = 0;
  *
  * @return {?string} Id. If the id is in use, return null.
  */
-my.ds.Xhr.prototype.getId_ = function (uri, opt_content) {
+my.model.Xhr.prototype.getId_ = function (uri, opt_content) {
   var id = uri + opt_content;
   var ids = this.xhr_.getOutstandingRequestIds();
   return !goog.array.contains(ids, id) ? id : null
@@ -60,7 +60,7 @@ my.ds.Xhr.prototype.getId_ = function (uri, opt_content) {
  * @param {Function} callback
  * @param {Object=} opt_obj
  */
-my.ds.Xhr.prototype.request_ = function (method, uri, content, callback, opt_obj) {
+my.model.Xhr.prototype.request_ = function (method, uri, content, callback, opt_obj) {
   var xhr = this.xhr_;
   var u = undefined;
   var isGet = method == 'GET';

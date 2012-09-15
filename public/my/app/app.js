@@ -6,7 +6,6 @@ goog.require('goog.events.EventType');
 goog.require('my.ui.ThousandRows');
 
 goog.require('my.events.EventCenter');
-goog.require('my.ds.Xhr');
 goog.require('my.app.MainFrame');
 goog.require('my.app.Container');
 goog.require('my.app.Tabs');

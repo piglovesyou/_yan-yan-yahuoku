@@ -20,6 +20,19 @@ my.app.Frame = function (opt_domHelper) {
 goog.inherits(my.app.Frame, goog.ui.Component);
 
 
+my.app.Frame.prototype.enterDocument = function () {
+  goog.base(this, 'enterDocument');
+  console.log(my.app.Searchbar.EventType.SEARCH);
+
+  this.getHandler()
+    .listen(this, my.app.Searchbar.EventType.SEARCH, function (e) {
+      var query = e.target.getQuery();
+      if (query) {
+        this.container_.refreshByQuery(query);
+      }
+    });
+};
+
 
 my.app.Frame.prototype.createDom = function () {
   var dh = this.getDomHelper();
@@ -29,8 +42,6 @@ my.app.Frame.prototype.createDom = function () {
         this.searchbar_.getElement(),
         this.container_.getElement()));
 };
-
-
 
 
 my.app.Frame.prototype.decorateInternal = function (element) {

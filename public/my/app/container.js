@@ -17,7 +17,7 @@ my.app.Container = function (opt_domHelper) {
   /**
    * @type {my.ui.ThousandRows}
    */
-  this.thousandRows_ = this.createThousandRows_(opt_domHelper);
+  this.thousandRows_ = my.app.Container.createThousandRows_(opt_domHelper);
 
   /**
    * @type {my.app.Detail}
@@ -31,6 +31,14 @@ my.app.Container = function (opt_domHelper) {
 goog.inherits(my.app.Container, goog.ui.SplitPane);
 
 
+my.app.Container.prototype.refreshByQuery = function (query) {
+  var old = this.thousandRows_.getModel();
+  old.dispose(); // TODO: Enable it to be used again.
+  var model = my.app.Container.createNewModel_(query);
+  this.thousandRows_.setModel(model);
+};
+
+
 my.app.Container.prototype.createDom = function () {
   goog.base(this, 'createDom');
   var dh = this.getDomHelper();
@@ -38,7 +46,6 @@ my.app.Container.prototype.createDom = function () {
   dh.appendChild(this.getElementByClass('goog-splitpane-handle'),
       dh.createDom('div', 'handle',
         dh.createDom('div', 'handle-content')));
-  // this.thousandRows_.createDom();
 };
 
 
@@ -92,11 +99,22 @@ my.app.Container.prototype.resize_ = function () {
 };
 
 
-my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
+/**
+ * @type {my.ui.ThousandRows.Model}
+ */
+my.app.Container.prototype.thousandRowsModel_;
+
+
+my.app.Container.createThousandRows_ = function (opt_domHelper) {
   var thousandRows = new my.ui.ThousandRows(138, 50, opt_domHelper);
   thousandRows.setMinThumbLength(30);
-  var model = new my.ui.ThousandRows.Model('/api/search?query=kate+spade', undefined, true);
+  var model = my.app.Container.createNewModel_('kate+spade'); // TODO: What to do?
   thousandRows.setModel(model)
   return thousandRows;
+};
+
+
+my.app.Container.createNewModel_ = function (query) {
+  return new my.ui.ThousandRows.Model('/api/search?query=' + query, undefined, true);
 };
 

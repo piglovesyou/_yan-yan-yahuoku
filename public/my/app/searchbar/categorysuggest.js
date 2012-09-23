@@ -42,11 +42,10 @@ my.app.searchbar.CategorySuggest.prototype.enterDocument = function () {
 my.app.searchbar.CategorySuggest.prototype.createDom = function () {
   var dh = this.getDomHelper();
   var element = 
-      dh.createDom('div', 'span4',
-        this.inputElement_ = 
-          dh.createDom('input', {
-            type:'text',
-            placeholder: 'Category search...'
-          }));
+      this.inputElement_ = 
+        dh.createDom('input', {
+          type:'text',
+          placeholder: 'Category search...'
+        });
   this.setElementInternal(element);
 };

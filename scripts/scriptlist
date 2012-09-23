@@ -123,6 +123,15 @@ public/my/model/model.js
 public/closure-library/closure/goog/ui/splitpane.js
 public/my/app/detail.js
 public/my/app/container.js
+public/closure-library/closure/goog/ui/ac/remotearraymatcher.js
+public/closure-library/closure/goog/ui/ac/autocomplete.js
+public/closure-library/closure/goog/ui/labelinput.js
+public/closure-library/closure/goog/ui/ac/renderer.js
+public/closure-library/closure/goog/dom/selection.js
+public/closure-library/closure/goog/useragent/product.js
+public/closure-library/closure/goog/ui/ac/inputhandler.js
+public/my/ui/suggest/suggest.js
+public/my/app/searchbar/categorysuggest.js
 public/my/app/searchbar/searchbar.js
 public/my/app/frame.js
 public/my/app/mainframe.js

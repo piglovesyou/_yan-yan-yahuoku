@@ -55,7 +55,10 @@ my.app.Container.prototype.enterDocument = function () {
       this.resize_();
       this.thousandRows_.update();
     })
-    .listen(this, my.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_);
+    .listen(this, my.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
+    .listen(this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, function (e) {
+      this.detail_.update();
+    });
   this.resize_();
   goog.base(this, 'enterDocument');
 };

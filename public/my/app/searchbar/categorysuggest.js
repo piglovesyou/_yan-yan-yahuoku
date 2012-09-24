@@ -34,7 +34,6 @@ my.app.searchbar.CategorySuggest.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.suggest_ = new my.ui.Suggest('/api/categorySuggest', 
       this.inputElement_, this.getDomHelper());
-  console.log(this.suggest_);
 };
 
 

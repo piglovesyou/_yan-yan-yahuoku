@@ -22,7 +22,6 @@ goog.inherits(my.app.Frame, goog.ui.Component);
 
 my.app.Frame.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
-  console.log(my.app.Searchbar.EventType.SEARCH);
 
   this.getHandler()
     .listen(this, my.app.Searchbar.EventType.SEARCH, function (e) {

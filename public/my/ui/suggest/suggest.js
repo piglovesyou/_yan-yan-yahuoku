@@ -6,6 +6,7 @@ goog.require('goog.ui.ac.AutoComplete');
 goog.require('goog.ui.ac.Renderer');
 goog.require('goog.ui.ac.InputHandler');
 goog.require('goog.ui.LabelInput');
+goog.require('goog.ui.Tooltip');
 
 
 /**
@@ -18,17 +19,99 @@ my.ui.Suggest = function (url, inputElement, opt_domHelper) {
   var matcher = new goog.ui.ac.RemoteArrayMatcher(url, false);
   var customRenderer = new my.ui.Suggest.CustomRenderer;
   var renderer = new goog.ui.ac.Renderer(u, customRenderer);
-  var inputHandler = new goog.ui.ac.InputHandler(null, null, true, 300);
+  var inputHandler = new my.ui.Suggest.InputHandler(null, null, false, 300);
 
   goog.base(this, matcher, renderer, inputHandler);
 
   inputHandler.attachAutoComplete(this);
-  inputHandler.attachInputs(inputElement);
+  inputHandler.attachInput(inputElement);
 
-  var labelInput = new goog.ui.LabelInput;
+  var labelText = '全てのカテゴリから';
+
+  var labelInput;
+  /**
+   * @type {goog.ui.LabelInput}
+   */
+  this.labelInput_ = labelInput = new goog.ui.LabelInput(labelText);
   labelInput.decorate(inputElement);
+
+  var tooltip;
+  /**
+   * @type {goog.ui.Tooltip}
+   */
+  this.tooltip_ = tooltip = new goog.ui.Tooltip(inputElement, labelText);;
+  tooltip.className += ' label';
+
+  var eh = new goog.events.EventHandler(this);
+  eh.listen(this, goog.ui.ac.AutoComplete.EventType.UPDATE, this.handleSelected);
+
 }
 goog.inherits(my.ui.Suggest, goog.ui.ac.AutoComplete);
+
+
+/**
+ * @type {?string}
+ */
+my.ui.Suggest.prototype.currCategoryId_;
+
+
+/**
+ * @return {?string}
+ */
+my.ui.Suggest.prototype.getCurrCategoryId = function () {return this.currCategoryId_;};
+
+
+/**
+ * @enum {string}
+ */
+my.ui.Suggest.EventType = {
+  UPDATE_CATEGORY: 'updatecategory'
+};
+
+
+/**
+ * @param {goog.events.Event} e
+ */
+my.ui.Suggest.prototype.handleSelected = function (e) {
+  var row = e.row;
+  if (row) {
+    this.tooltip_.setText(row.path);
+    this.currCategoryId_ = row.id;
+    this.dispatchEvent(my.ui.Suggest.EventType.UPDATE_CATEGORY);
+  }
+};
+
+
+my.ui.Suggest.prototype.disposeInternal = function () {
+  if (this.labelInput_) {
+    this.labelInput_.dispose();
+    this.labelInput_ = null;
+  }
+  if (this.tooltip_) {
+    this.tooltip_.dispose();
+    this.tooltip_ = null;
+  }
+  goog.base(this, 'disposeInternal');
+};
+
+
+
+/**
+ * @constructor
+ * @extends {goog.ui.ac.InputHandler}
+ */
+my.ui.Suggest.InputHandler = function (opt_separators, opt_literals, opt_multi, opt_throttleTime) {
+  goog.base(this, opt_separators, opt_literals, opt_multi, opt_throttleTime);
+};
+goog.inherits(my.ui.Suggest.InputHandler, goog.ui.ac.InputHandler);
+
+my.ui.Suggest.InputHandler.prototype.selectRow = function (row, opt_multi) {
+  this.setTokenText(row['path'], opt_multi);
+  // var suggest = /** @type {my.ui.Suggest} */(this.getAutoComplete());
+  return false;
+};
+
+
 
 
 /**
@@ -42,7 +125,6 @@ my.ui.Suggest.CustomRenderer.prototype.render = function (renderer, element, row
   token = goog.string.htmlEscape(token);
   goog.array.forEach(rows, function (row) {
     var content = my.ui.Suggest.CustomRenderer.hiliteMatchingText(row.data.path, token);
-    console.log(content);
     var a = dh.createDom('a', { 'href': 'javascript:void(0)' });
     a.innerHTML = content;
     renderer.hiliteMatchingText_(a, token);

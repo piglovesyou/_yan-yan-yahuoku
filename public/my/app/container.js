@@ -54,6 +54,7 @@ my.app.Container.prototype.enterDocument = function () {
     .listen(my.dom.ViewportSizeMonitor.getInstance(), goog.events.EventType.RESIZE, function (e) {
       this.resize_();
       this.thousandRows_.update();
+      this.detail_.update();
     })
     .listen(this, my.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
     .listen(this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, function (e) {

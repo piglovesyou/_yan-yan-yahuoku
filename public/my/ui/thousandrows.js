@@ -183,6 +183,9 @@ my.ui.ThousandRows.Row.prototype.enterDocument = function () {
 my.ui.ThousandRows.Row.prototype.titleTooltip_;
 
 my.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {
+  if (this.titleTooltip_) {
+    this.titleTooltip_.dispose();
+  }
   this.titleTooltip_ = new goog.ui.Tooltip(this.getElement(), string, this.getDomHelper());
   this.titleTooltip_.className += ' label label-info';
 };
@@ -237,10 +240,15 @@ my.ui.ThousandRows.RowRenderer.prototype.asSelected = function (row, selected) {
 
 /** @inheritDoc */
 my.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
-  return row.getDomHelper().createDom('li', {
+  var dh = row.getDomHelper()
+  return dh.createDom('li', {
     className: [row.getCssName()]
     // style: 'height: ' + this.height_ + 'px'
-  });
+  }, dh.createDom('span', ['span3', 'goods-image'],
+    dh.createDom('img', {
+      className: 'img-polaroid',
+      src: 'https://raw.github.com/piglovesyou/spacer.gif/master/spacer.gif'
+    })));
 };
 
 

@@ -39,7 +39,7 @@ goog.addSingletonGetter(my.ui.ButtonRenderer);
 my.ui.ButtonRenderer.prototype.createDom = function (button) {
   var dh = button.getDomHelper();
   var element = dh.createDom(this.tagName, {
-    className: 'btn btn-primary'
+    className: 'btn'
   }, button.getContent());
 
   var tooltip = button.getTooltip();

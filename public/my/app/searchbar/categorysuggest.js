@@ -22,6 +22,7 @@ my.app.category.Suggest = function (url, inputElement, opt_domHelper) {
   var inputHandler = new my.app.category.Suggest.InputHandler(null, null, false, 300);
 
   goog.base(this, matcher, renderer, inputHandler);
+  this.setAutoHilite(false);
 
   inputHandler.attachAutoComplete(this);
   inputHandler.attachInput(inputElement);
@@ -63,12 +64,52 @@ my.app.category.Suggest.EventType = {
 my.app.category.Suggest.DefaultCategory = 0;
 
 
+my.app.category.Suggest.DefaultRow = {
+  'id': my.app.category.Suggest.DefaultCategory,
+  'path': ''
+};
+
+
+/**
+ * @type {Object}
+ */
+my.app.category.Suggest.prototype.lastSelectedRow_ = my.app.category.Suggest.DefaultRow;
+
+
+my.app.category.Suggest.prototype.processBeforeInputBlur = function (inputHandler) {
+  this.getBackInputTextIfNeeded_(inputHandler);
+};
+
+
+my.app.category.Suggest.prototype.clearSelection = function (inputHandler) {
+  if (inputHandler.getActiveElement()) inputHandler.setValue('');
+  this.tooltip_.setText('全てのカテゴリから');
+  this.lastSelectedRow_ = my.app.category.Suggest.DefaultRow;
+  this.dispatchUpdate_(my.app.category.Suggest.DefaultCategory);
+};
+
+
+my.app.category.Suggest.prototype.getBackInputTextIfNeeded_ = function (inputHandler) {
+  var value = inputHandler.getActiveElement() && inputHandler.getValue();
+  if (goog.isString(value) && this.lastSelectedRow_.path !== value) {
+    if (goog.string.isEmpty(value)) {
+      // If an empty value, just clear all.
+      this.clearSelection(inputHandler);
+    } else {
+      // Else, get back input value.
+      inputHandler.setValue(this.lastSelectedRow_.path);
+    }
+  }
+};
+
+
 /**
  * @param {goog.events.Event} e
  */
 my.app.category.Suggest.prototype.handleSelected = function (e) {
   var row = e.row;
   if (row) {
+    this.lastSelectedRow_ = row;
     this.tooltip_.setText(row.path);
     this.dispatchUpdate_(row.id);
   }
@@ -111,9 +152,15 @@ my.app.category.Suggest.InputHandler = function (opt_separators, opt_literals, o
 goog.inherits(my.app.category.Suggest.InputHandler, goog.ui.ac.InputHandler);
 
 
+my.app.category.Suggest.InputHandler.prototype.handleBlur = function (e) {
+  this.getAutoComplete().processBeforeInputBlur(this);
+  goog.base(this, 'handleBlur', e);
+};
+
+
 my.app.category.Suggest.InputHandler.prototype.handleKeyUp = function (e) {
   if (e.target == this.activeElement_ && e.target.value == '') {
-    this.getAutoComplete().dispatchUpdate_(my.app.category.Suggest.DefaultCategory);
+    this.getAutoComplete().clearSelection(this);
   }
 };
 

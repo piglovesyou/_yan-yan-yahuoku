@@ -1,9 +1,8 @@
 
 goog.provide('my.app.Searchbar');
 
-goog.require('my.app.searchbar.CategorySuggest');
+goog.require('my.app.searchbar.Category');
 goog.require('goog.ui.Component');
-goog.require('my.ui.Suggest');
 goog.require('goog.ui.Button');
 goog.require('my.ui.ButtonRenderer');
 goog.require('goog.string');
@@ -17,7 +16,7 @@ my.app.Searchbar = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
   var dh = this.getDomHelper();
 
-  this.categorySuggest_ = new my.app.searchbar.CategorySuggest(dh);
+  this.categorySuggest_ = new my.app.searchbar.Category(dh);
   this.addChild(this.categorySuggest_);
   
   this.button_ = new goog.ui.Button('search', 

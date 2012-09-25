@@ -25,7 +25,7 @@ my.app.Frame.prototype.enterDocument = function () {
 
   this.getHandler()
     .listen(this, my.app.Searchbar.EventType.SEARCH, this.handleSearch_)
-    .listen(this, my.ui.Suggest.EventType.UPDATE_CATEGORY, this.handleUpdateCategory_);
+    .listen(this, my.app.category.Suggest.EventType.UPDATE_CATEGORY, this.handleUpdateCategory_);
 };
 
 
@@ -86,5 +86,5 @@ my.app.Frame.prototype.canDecorate = function (element) {
 
 my.app.Frame.Model = function () {
   this.query = '';
-  this.category = my.ui.Suggest.DefaultCategory;
+  this.category = my.app.category.Suggest.DefaultCategory;
 };

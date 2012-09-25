@@ -2,9 +2,10 @@
 goog.provide('my.app.Searchbar');
 
 goog.require('my.app.searchbar.Category');
-goog.require('goog.ui.Component');
+goog.require('my.app.searchbar.QueryInput');
 goog.require('goog.ui.Button');
 goog.require('my.ui.ButtonRenderer');
+goog.require('goog.ui.Component');
 goog.require('goog.string');
 
 
@@ -18,9 +19,12 @@ my.app.Searchbar = function (opt_domHelper) {
 
   this.categorySuggest_ = new my.app.searchbar.Category(dh);
   this.addChild(this.categorySuggest_);
+
+  this.queryInput_ = new my.app.searchbar.QueryInput(dh);
+  this.addChild(this.queryInput_);
   
   this.button_ = new goog.ui.Button('search', 
-      my.ui.NativeButtonRenderer.getInstance());
+      my.ui.NativeButtonRenderer.getInstance(), dh);
 }
 goog.inherits(my.app.Searchbar, goog.ui.Component);
 
@@ -43,18 +47,17 @@ my.app.Searchbar.prototype.enterDocument = function () {
 my.app.Searchbar.prototype.formElement_;
 
 
-my.app.Searchbar.prototype.queryElement_;
-
-
 my.app.Searchbar.prototype.getQuery = function () {
-  return goog.string.trim(this.queryElement_.value);
+  return this.queryInput_.getValue();
 };
 
 
 my.app.Searchbar.prototype.createDom = function () {
   var dh = this.getDomHelper();
 
+  // Prepare to append
   this.categorySuggest_.createDom();
+  this.queryInput_.createDom();
   this.button_.createDom();
 
   var element = dh.createDom('div', 'searchbar',
@@ -63,11 +66,7 @@ my.app.Searchbar.prototype.createDom = function () {
             className: 'form-inline',
             action: ''
           },
-          this.queryElement_ = 
-            dh.createDom('input', {
-              type:'text',
-              placeholder: 'Search by text...'
-            }),
+          this.queryInput_.getElement(),
           dh.createTextNode('\n'),
           this.categorySuggest_.getElement(),
           dh.createTextNode('\n'),

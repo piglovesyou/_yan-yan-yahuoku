@@ -127,6 +127,8 @@ public/closure-library/closure/goog/ui/buttonside.js
 public/closure-library/closure/goog/ui/buttonrenderer.js
 public/closure-library/closure/goog/ui/nativebuttonrenderer.js
 public/closure-library/closure/goog/ui/button.js
+public/closure-library/closure/goog/events/inputhandler.js
+public/my/app/searchbar/queryinput.js
 public/closure-library/closure/goog/ui/ac/autocomplete.js
 public/closure-library/closure/goog/dom/selection.js
 public/closure-library/closure/goog/useragent/product.js

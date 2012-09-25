@@ -91,13 +91,13 @@ my.app.category.Suggest.prototype.clearSelection = function (inputHandler) {
 
 my.app.category.Suggest.prototype.getBackInputTextIfNeeded_ = function (inputHandler) {
   var value = inputHandler.getActiveElement() && inputHandler.getValue();
-  if (goog.isString(value) && this.lastSelectedRow_.path !== value) {
+  if (goog.isString(value) && this.lastSelectedRow_['path'] !== value) {
     if (goog.string.isEmpty(value)) {
       // If an empty value, just clear all.
       this.clearSelection(inputHandler);
     } else {
       // Else, get back input value.
-      inputHandler.setValue(this.lastSelectedRow_.path);
+      inputHandler.setValue(this.lastSelectedRow_['path']);
     }
   }
 };
@@ -110,8 +110,8 @@ my.app.category.Suggest.prototype.handleSelected = function (e) {
   var row = e.row;
   if (row) {
     this.lastSelectedRow_ = row;
-    this.tooltip_.setText(row.path);
-    this.dispatchUpdate_(row.id);
+    this.tooltip_.setText(row['path']);
+    this.dispatchUpdate_(row['id']);
   }
 };
 
@@ -121,8 +121,8 @@ my.app.category.Suggest.prototype.handleSelected = function (e) {
  */
 my.app.category.Suggest.prototype.dispatchUpdate_ = function (id) {
   this.dispatchEvent({
-    'type': my.app.category.Suggest.EventType.UPDATE_CATEGORY,
-    'categoryId': id
+    type: my.app.category.Suggest.EventType.UPDATE_CATEGORY,
+    categoryId: id
   });
 };
 

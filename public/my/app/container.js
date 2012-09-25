@@ -31,10 +31,10 @@ my.app.Container = function (opt_domHelper) {
 goog.inherits(my.app.Container, goog.ui.SplitPane);
 
 
-my.app.Container.prototype.refreshByQuery = function (query) {
+my.app.Container.prototype.refreshByQuery = function (query, categoryId) {
   var old = this.thousandRows_.getModel();
   old.dispose(); // TODO: Enable it to be used again.
-  var model = my.app.Container.createNewModel_(query);
+  var model = my.app.Container.createNewModel_(query, categoryId);
   this.thousandRows_.setModel(model);
 };
 
@@ -118,7 +118,14 @@ my.app.Container.createThousandRows_ = function (opt_domHelper) {
 };
 
 
-my.app.Container.createNewModel_ = function (query) {
-  return new my.ui.ThousandRows.Model('/api/search?query=' + query, undefined, true);
+my.app.Container.createNewModel_ = function (query, opt_categoryId) {
+  var uri = new goog.Uri('/api/search'); // goog.Uri.create escape its argument.. Why?
+  var q = uri.getQueryData();
+  q.set('query', goog.isString(query) ? query : '');
+  if (goog.isDefAndNotNull(opt_categoryId)) {
+    q.set('category', opt_categoryId);
+  }
+  console.log(uri.toString())
+  return new my.ui.ThousandRows.Model(uri.toString(), undefined, true);
 };
 

@@ -32,8 +32,9 @@ my.app.searchbar.CategorySuggest.prototype.inputElement_;
 /** @inheritDoc */
 my.app.searchbar.CategorySuggest.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
-  this.suggest_ = new my.ui.Suggest('/api/categorySuggest', 
+  var suggest = this.suggest_ = new my.ui.Suggest('/api/categorySuggest', 
       this.inputElement_, this.getDomHelper());
+  suggest.setParentEventTarget(this);
 };
 
 

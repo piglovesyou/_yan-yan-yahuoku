@@ -24,12 +24,31 @@ my.app.Frame.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
 
   this.getHandler()
-    .listen(this, my.app.Searchbar.EventType.SEARCH, function (e) {
-      var query = e.target.getQuery();
-      if (query) {
-        this.container_.refreshByQuery(query);
-      }
-    });
+    .listen(this, my.app.Searchbar.EventType.SEARCH, this.handleSearch_)
+    .listen(this, my.ui.Suggest.EventType.UPDATE_CATEGORY, this.handleUpdateCategory_);
+};
+
+
+my.app.Frame.prototype.handleSearch_ = function (e) {
+  var searchbar = e.target;
+  var query = searchbar.getQuery();
+  if (query) {
+    this.container_.refreshByQuery(query, this.currCategoryId_);
+  }
+};
+
+
+/**
+ * @type {?string}
+ */
+my.app.Frame.prototype.currCategoryId_;
+
+
+my.app.Frame.prototype.handleUpdateCategory_ = function (e) {
+  var id = e.categoryId;
+  if (goog.isDefAndNotNull(id)) {
+    this.currCategoryId_ = id;
+  }
 };
 
 
@@ -60,4 +79,12 @@ my.app.Frame.prototype.canDecorate = function (element) {
     }
   }
   return false;
+};
+
+
+
+
+my.app.Frame.Model = function () {
+  this.query = '';
+  this.category = my.ui.Suggest.DefaultCategory;
 };

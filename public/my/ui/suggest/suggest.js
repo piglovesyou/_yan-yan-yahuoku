@@ -50,23 +50,14 @@ goog.inherits(my.ui.Suggest, goog.ui.ac.AutoComplete);
 
 
 /**
- * @type {?string}
- */
-my.ui.Suggest.prototype.currCategoryId_;
-
-
-/**
- * @return {?string}
- */
-my.ui.Suggest.prototype.getCurrCategoryId = function () {return this.currCategoryId_;};
-
-
-/**
  * @enum {string}
  */
 my.ui.Suggest.EventType = {
   UPDATE_CATEGORY: 'updatecategory'
 };
+
+
+my.ui.Suggest.DefaultCategory = 0;
 
 
 /**
@@ -76,10 +67,15 @@ my.ui.Suggest.prototype.handleSelected = function (e) {
   var row = e.row;
   if (row) {
     this.tooltip_.setText(row.path);
-    this.currCategoryId_ = row.id;
-    this.dispatchEvent(my.ui.Suggest.EventType.UPDATE_CATEGORY);
+    this.dispatchEvent({
+      'type': my.ui.Suggest.EventType.UPDATE_CATEGORY,
+      'categoryId': row.id
+    });
   }
 };
+
+
+my.ui.Suggest.prototype.dispatchUpdate_ = function () {};
 
 
 my.ui.Suggest.prototype.disposeInternal = function () {
@@ -105,9 +101,24 @@ my.ui.Suggest.InputHandler = function (opt_separators, opt_literals, opt_multi, 
 };
 goog.inherits(my.ui.Suggest.InputHandler, goog.ui.ac.InputHandler);
 
+
+my.ui.Suggest.InputHandler.prototype.handleKeyUp = function (e) {
+  if (e.target == this.activeElement_ && e.target.value == '') {
+    this.getAutoComplete().dispatchEvent({
+      'type': my.ui.Suggest.EventType.UPDATE_CATEGORY,
+      'categoryId': my.ui.Suggest.DefaultCategory
+    });
+  }
+};
+
+
+my.ui.Suggest.InputHandler.prototype.needKeyUpListener = function (e) {
+  return true;
+};
+
+
 my.ui.Suggest.InputHandler.prototype.selectRow = function (row, opt_multi) {
   this.setTokenText(row['path'], opt_multi);
-  // var suggest = /** @type {my.ui.Suggest} */(this.getAutoComplete());
   return false;
 };
 

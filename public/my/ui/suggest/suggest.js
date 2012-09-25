@@ -57,6 +57,9 @@ my.ui.Suggest.EventType = {
 };
 
 
+/**
+ * @type {string|nubmer}
+ */
 my.ui.Suggest.DefaultCategory = 0;
 
 
@@ -67,17 +70,23 @@ my.ui.Suggest.prototype.handleSelected = function (e) {
   var row = e.row;
   if (row) {
     this.tooltip_.setText(row.path);
-    this.dispatchEvent({
-      'type': my.ui.Suggest.EventType.UPDATE_CATEGORY,
-      'categoryId': row.id
-    });
+    this.dispatchUpdate_(row.id);
   }
 };
 
 
-my.ui.Suggest.prototype.dispatchUpdate_ = function () {};
+/**
+ * @param {string|number} id
+ */
+my.ui.Suggest.prototype.dispatchUpdate_ = function (id) {
+  this.dispatchEvent({
+    'type': my.ui.Suggest.EventType.UPDATE_CATEGORY,
+    'categoryId': id
+  });
+};
 
 
+/** @inheritDoc */
 my.ui.Suggest.prototype.disposeInternal = function () {
   if (this.labelInput_) {
     this.labelInput_.dispose();
@@ -104,10 +113,7 @@ goog.inherits(my.ui.Suggest.InputHandler, goog.ui.ac.InputHandler);
 
 my.ui.Suggest.InputHandler.prototype.handleKeyUp = function (e) {
   if (e.target == this.activeElement_ && e.target.value == '') {
-    this.getAutoComplete().dispatchEvent({
-      'type': my.ui.Suggest.EventType.UPDATE_CATEGORY,
-      'categoryId': my.ui.Suggest.DefaultCategory
-    });
+    this.getAutoComplete().dispatchUpdate_(my.ui.Suggest.DefaultCategory);
   }
 };
 

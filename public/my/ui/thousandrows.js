@@ -167,12 +167,12 @@ my.ui.ThousandRows.Row.prototype.asSelected = function (selected) {
 my.ui.ThousandRows.Row.prototype.enterDocument = function () {
   this.getHandler()
     .listen(this.getElement(), goog.events.EventType.CLICK, function (e) {
-      // TODO: check whether the row's content rendered.
-      // if (this.hasContentRendered_) {
-      this.dispatchEvent({
-        type: my.ui.ThousandRows.EventType.ROW_CLICKED,
-        row: this
-      });
+      if (this.hasContent()) {
+        this.dispatchEvent({
+          type: my.ui.ThousandRows.EventType.ROW_CLICKED,
+          row: this
+        });
+      }
     });
   goog.base(this, 'enterDocument');
 };
@@ -244,11 +244,12 @@ my.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
   return dh.createDom('li', {
     className: [row.getCssName()]
     // style: 'height: ' + this.height_ + 'px'
-  }, dh.createDom('span', ['span3', 'goods-image'],
-    dh.createDom('img', {
-      className: 'img-polaroid',
-      src: 'https://raw.github.com/piglovesyou/spacer.gif/master/spacer.gif'
-    })));
+  }, dh.createDom('a', 'row',
+        dh.createDom('span', ['span3', 'goods-image'],
+          dh.createDom('img', {
+            className: 'img-polaroid',
+            src: 'https://raw.github.com/piglovesyou/spacer.gif/master/spacer.gif'
+          }))));
 };
 
 

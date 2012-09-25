@@ -38,11 +38,23 @@ my.app.Detail.prototype.renderContent = function (data) {
   container.appendChild(images);
 };
 
+
+/**
+ * @param {boolean=} isFirst If FALSE, unrender and update.
+ */
+my.app.Detail.prototype.clearContent = function (isFirst) {
+  var dh = this.getDomHelper();
+  var content = this.getContentElement();
+
+  if (!isFirst) dh.removeChildren(content);
+  content.appendChild(
+      dh.createDom('h2', { 'style': 'color:lightgray;text-align:center' },
+        'アイテムを選択してください'));
+  if (!isFirst) this.update();
+};
+
+
 my.app.Detail.prototype.createDom = function () {
   goog.base(this, 'createDom');
-  var dh = this.getDomHelper();
-  this.getContentElement().appendChild(
-          dh.createDom('h2', {
-            'style': 'color:lightgray;text-align:center'
-          }, 'アイテムを選択してください'));
+  this.clearContent(true);
 };

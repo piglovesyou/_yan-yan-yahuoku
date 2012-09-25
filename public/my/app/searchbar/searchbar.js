@@ -75,9 +75,17 @@ my.app.Searchbar.prototype.createDom = function () {
 };
 
 my.app.Searchbar.prototype.disposeInternal = function () {
-  if (this.suggest_) {
-    this.suggest_.dispose();
-    this.suggest_ = null;
+  if (this.categorySuggest_) {
+    this.categorySuggest_.dispose();
+    this.categorySuggest_ = null;
+  }
+  if (this.queryInput_) {
+    this.queryInput_.dispose();
+    this.queryInput_ = null;
+  }
+  if (this.button_) {
+    this.button_.dispose();
+    this.button_ = null;
   }
   goog.base(this, 'disposeInternal');
 };

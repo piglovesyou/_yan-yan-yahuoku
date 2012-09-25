@@ -16,6 +16,7 @@ my.ui.ThousandRows = function (rowHeight, rowCountInPage, opt_domHelper) {
 };
 goog.inherits(my.ui.ThousandRows, goog.ui.ThousandRows)
 
+
 /**
  * @enum {string}
  */
@@ -23,10 +24,12 @@ my.ui.ThousandRows.EventType = {
   ROW_CLICKED: 'rowclicked'
 };
 
+
 /**
  * @type {?string}
  */
 my.ui.ThousandRows.prototype.selectedRowId_;
+
 
 /**
  * @return {?string}
@@ -35,11 +38,20 @@ my.ui.ThousandRows.prototype.getSelectedRowId = function () {
   return this.selectedRowId_;
 };
 
+
 /**
  * This is only cache.
  * @type {?my.ui.ThousandRows.Row}
  */
 my.ui.ThousandRows.prototype.selectedRow_;
+
+
+/** @inheritDoc */
+my.ui.ThousandRows.prototype.setModel = function (model) {
+  this.selectedRowId_ = null;
+  goog.base(this, 'setModel', model);
+};
+
 
 /**
  * This can be null when scroll back, because it has already gone..
@@ -73,12 +85,14 @@ my.ui.ThousandRows.prototype.findSelectedRow_ = function () {
   return foundRow;
 };
 
+
 /** @inheritDoc */
 my.ui.ThousandRows.prototype.enterDocument = function () {
   this.getHandler()
     .listen(this, my.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowSelected_);
   goog.base(this, 'enterDocument');
 };
+
 
 my.ui.ThousandRows.prototype.handleRowSelected_ = function (e) {
   var row = e.row;
@@ -94,20 +108,25 @@ my.ui.ThousandRows.prototype.handleRowSelected_ = function (e) {
   row.asSelected(true);
 };
 
+
 my.ui.ThousandRows.prototype.makeRowSelected_ = function (row, enable) {
   goog.dom.classes.enable(row.getElement(), 'active', enable);
 };
+
 
 my.ui.ThousandRows.prototype.createPage_ = function (pageIndex) {
   return new my.ui.ThousandRows.Page(pageIndex,
         this.rowCountInPage_, this.rowHeight_, this.getDomHelper());
 };
 
+
 /** @inheritDoc */
 my.ui.ThousandRows.prototype.disposeInternal = function () {
   this.selectedRow_ = null;
   goog.base(this, 'disposeInternal');
 };
+
+
 
 
 /**
@@ -118,6 +137,7 @@ my.ui.ThousandRows.Page = function (pageIndex, rowCount, rowHeight, opt_domHelpe
   goog.base(this, pageIndex, rowCount, rowHeight, opt_domHelper);
 };
 goog.inherits(my.ui.ThousandRows.Page, goog.ui.thousandrows.Page);
+
 
 /** @inheritDoc */
 my.ui.ThousandRows.Page.prototype.createDom = function () {
@@ -132,11 +152,14 @@ my.ui.ThousandRows.Page.prototype.createDom = function () {
 	}, this);
 };
 
+
 /** @inheritDoc */
 my.ui.ThousandRows.Page.prototype.createRow_ = function (id, rowHeight) {
   return new my.ui.ThousandRows.Row(id, rowHeight,
       my.ui.ThousandRows.RowRenderer.getInstance(), this.getDomHelper());
 };
+
+
 
 
 /**
@@ -151,6 +174,7 @@ my.ui.ThousandRows.Row = function (rowIndex, height, opt_renderer, opt_domHelper
 };
 goog.inherits(my.ui.ThousandRows.Row, goog.ui.thousandrows.Row);
 
+
 /** 
  * @param {boolean} selected
  * @override
@@ -160,9 +184,11 @@ my.ui.ThousandRows.Row.prototype.createDom = function (selected) {
   if (selected) this.asSelected(true);
 };
 
+
 my.ui.ThousandRows.Row.prototype.asSelected = function (selected) {
   this.renderer_.asSelected(this, selected);
 };
+
 
 my.ui.ThousandRows.Row.prototype.enterDocument = function () {
   this.getHandler()
@@ -177,10 +203,12 @@ my.ui.ThousandRows.Row.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
 };
 
+
 /**
  * @type {?goog.ui.Tooltip}
  */
 my.ui.ThousandRows.Row.prototype.titleTooltip_;
+
 
 my.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {
   if (this.titleTooltip_) {
@@ -189,6 +217,7 @@ my.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {
   this.titleTooltip_ = new goog.ui.Tooltip(this.getElement(), string, this.getDomHelper());
   this.titleTooltip_.className += ' label label-info';
 };
+
 
 /**
  * @type {?string}
@@ -203,6 +232,7 @@ my.ui.ThousandRows.Row.prototype.getAuctionId = function () {
   return this.auctionId_;
 };
 
+
 /** @inheritDoc */
 my.ui.ThousandRows.Row.prototype.renderContent = function (record) {
   goog.base(this, 'renderContent', record);
@@ -211,6 +241,7 @@ my.ui.ThousandRows.Row.prototype.renderContent = function (record) {
   }
 };
 
+
 my.ui.ThousandRows.Row.prototype.disposeInternal = function () {
   if (this.titleTooltip_) {
     this.titleTooltip_.dispose();
@@ -218,7 +249,6 @@ my.ui.ThousandRows.Row.prototype.disposeInternal = function () {
   }
   goog.base(this, 'disposeInternal');
 };
-
 
 
 
@@ -237,6 +267,7 @@ goog.addSingletonGetter(my.ui.ThousandRows.RowRenderer);
 my.ui.ThousandRows.RowRenderer.prototype.asSelected = function (row, selected) {
   goog.dom.classes.enable(row.getElement(), 'active', selected);
 };
+
 
 /** @inheritDoc */
 my.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
@@ -276,6 +307,8 @@ my.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) 
 };
 
 
+
+
 /**
  * @param {string} uri Uri. Also used as xhr request id.
  * @param {number=} opt_totalRowCount
@@ -290,9 +323,11 @@ my.ui.ThousandRows.Model = function (uri, opt_totalRowCount, opt_updateTotalWith
 };
 goog.inherits(my.ui.ThousandRows.Model, goog.ui.thousandrows.Model);
 
+
 my.ui.ThousandRows.Model.prototype.extractTotalFromJson = function (json) {
   return json['ResultSet']['@attributes']['totalResultsAvailable'];
 };
+
 
 my.ui.ThousandRows.Model.prototype.extractRowsDataFromJson = function (json) {
   return json['ResultSet']['Result']['Item'];

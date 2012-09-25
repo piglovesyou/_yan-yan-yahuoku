@@ -36,6 +36,7 @@ my.app.Container.prototype.refreshByQuery = function (query, categoryId) {
   old.dispose(); // TODO: Enable it to be used again.
   var model = my.app.Container.createNewModel_(query, categoryId);
   this.thousandRows_.setModel(model);
+  this.detail_.clearContent();
 };
 
 

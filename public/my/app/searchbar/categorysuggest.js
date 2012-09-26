@@ -27,18 +27,20 @@ my.app.category.Suggest = function (url, inputElement, lastCategory, opt_domHelp
   inputHandler.attachAutoComplete(this);
   inputHandler.attachInput(inputElement);
 
+  var defaultLabel = '全てのカテゴリから'
   var labelInput;
   /**
    * @type {goog.ui.LabelInput}
    */
-  this.labelInput_ = labelInput = new goog.ui.LabelInput('全てのカテゴリから');
+  this.labelInput_ = labelInput = new goog.ui.LabelInput(defaultLabel);
   labelInput.decorate(inputElement);
 
   var tooltip;
   /**
    * @type {goog.ui.Tooltip}
    */
-  this.tooltip_ = tooltip = new goog.ui.Tooltip(inputElement, lastCategory['path']);;
+  this.tooltip_ = tooltip = new goog.ui.Tooltip(inputElement,
+      !goog.string.isEmpty(lastCategory['path']) ? lastCategory['path'] : defaultLabel);
   tooltip.className += ' label';
 
   var eh = new goog.events.EventHandler(this);

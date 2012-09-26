@@ -59,7 +59,6 @@ my.app.searchbar.Category.prototype.createDom = function () {
       this.inputElement_ = 
         dh.createDom('input', {
           type:'text',
-          placeholder: '全てのカテゴリから',
           value: condition['category']['path']
         });
   this.setElementInternal(element);

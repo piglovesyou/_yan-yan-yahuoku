@@ -64,10 +64,10 @@ my.app.category.Suggest.EventType = {
 my.app.category.Suggest.DefaultCategory = 0;
 
 
-my.app.category.Suggest.DefaultRow = {
+my.app.category.Suggest.DefaultRow = goog.object.createImmutableView({
   'id': my.app.category.Suggest.DefaultCategory,
   'path': ''
-};
+});
 
 
 /**

@@ -5,6 +5,7 @@ goog.require('my.events.EventCenter');
 goog.require('goog.ui.Component');
 goog.require('goog.fx.DragListGroup');
 goog.require('goog.asserts');
+goog.require('my.string');
 
 
 /**
@@ -18,14 +19,33 @@ my.app.Tabs = function (opt_domHelper) {
 goog.inherits(my.app.Tabs, goog.ui.Component);
 
 
-my.app.Tabs.prototype.tabElements_ = [];
-
 my.app.Tabs.prototype.decorateInternal = function (element) {
   var dh = this.getDomHelper();
-  goog.array.forEach(dh.getChildren(this.contentElement_), function (tabElm) {
-    var tab = new my.app.Tabs.Tab(dh);
+
+  var tabIds = my.Model.getInstance().getTabIds();
+  goog.asserts.assert(tabIds, 'We have to have tab ids.');
+
+  // Basically, element to decorate supposed to be only 1.
+  var tabElms = dh.getChildren(this.contentElement_);
+  goog.asserts.assert(tabIds.length >= tabElms.length, 'Too many tab elements.');
+
+  goog.array.forEach(tabIds, function (tabId, index) {
+    var tab = new my.app.Tabs.Tab(tabId, dh);
     this.addChild(tab);
-    tab.decorate(tabElm);
+
+    var tabElm = tabElms[index];
+    if (tabElm) {
+      var canDecorate = tab.canDecorate(tabElm);
+      goog.asserts.assert(canDecorate, 'cannot decorate');
+      tab.decorateInternal(tabElm);
+    } else {
+      tab.createDom();
+
+      // TODO: Implement this.insertTab_
+      // this.insertTab_(tab);
+    }
+    tab.renderContent();
+
     if (goog.dom.classes.has(tabElm, 'selected')) {
       goog.asserts.assert(!this.currSelectedTab_, 'Two or more selected tab element.');
       this.currSelectedTab_ = tab;
@@ -50,10 +70,26 @@ my.app.Tabs.prototype.getCurrSelectedTab = function () {
 
 
 my.app.Tabs.prototype.draggingClassName_ = 'tab-dragging';
+
+
 /**
  * @type {?goog.fx.DragListGroup}
  */
 my.app.Tabs.prototype.dragListGroup_;
+
+
+/**
+ * @type {Element}
+ */
+my.app.Tabs.prototype.contentElement_;
+
+
+/** @inheritDoc */
+my.app.Tabs.prototype.getContentElement = function () {
+  return this.contentElement_;
+};
+
+
 my.app.Tabs.prototype.setupDragListGroup_ = function () {
   if (this.dragListGroup_) {
     this.dragListGroup_.dispose();
@@ -132,10 +168,45 @@ my.app.Tabs.prototype.canDecorate = function (element) {
  * @constructor
  * @extends {goog.ui.Component}
  */
-my.app.Tabs.Tab = function (opt_domHelper) {
+my.app.Tabs.Tab = function (id, opt_domHelper) {
   goog.base(this, opt_domHelper);
+  this.setId(id);
 };
 goog.inherits(my.app.Tabs.Tab, goog.ui.Component);
+
+
+my.app.Tabs.Tab.prototype.renderContent = function () {
+  var model = my.Model.getInstance().getTabQuery(this.getId());
+  goog.asserts.assert(model, 'Model should have data here.');
+
+  var result = my.string.getCategoryNameByPath(model['category']['path']);
+  if (!result || 'オークション') {
+    result = '';
+  } else {
+    result = '[' + result + ']';
+  }
+  var result = model['query'];
+  if (!result) {
+    result = '全てのアイテム';
+  }
+  goog.dom.setTextContent(this.getContentElement(), result);
+};
+
+
+/**
+ * @type {Element}
+ */
+my.app.Tabs.Tab.prototype.contentElement_;
+
+
+/**
+ * @return {Element}
+ */
+my.app.Tabs.Tab.prototype.getContentElement = function () {
+  console.log(this.contentElement_)
+  return this.contentElement_;
+};
+
 
 /** @inheritDoc */
 my.app.Tabs.Tab.prototype.decorateInternal = function (element) {
@@ -143,11 +214,14 @@ my.app.Tabs.Tab.prototype.decorateInternal = function (element) {
   goog.style.setUnselectable(element, true, true);
 };
 
+
 /** @inheritDoc */
 my.app.Tabs.Tab.prototype.canDecorate = function (element) {
+  console.log('yeah');
   if (element) {
     var dh = this.getDomHelper();
     var content = dh.getElementByClass('tab-content', element);
+    console.log(content);
     if (content) {
       this.contentElement_ = content;
       return true;

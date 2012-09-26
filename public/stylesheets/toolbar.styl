@@ -62,8 +62,7 @@ tabUnselectedStyle()
   background: white
   height: tabHeight
   width: 18%
-  min-width: 160px
-  max-width: 240px
+  min-width: 180px
   line-height: tabHeight - 1
   background: url(../images/bg_tableft.png) left top no-repeat,
               url(../images/bg_tabright.png) right top no-repeat;
@@ -76,6 +75,7 @@ tabUnselectedStyle()
     z-index: 1
     .tab-content
       tabSelectedStyle()
+      height: 100%
 
 .tab-dragging
   top: toolbarHeight - tabHeight !important

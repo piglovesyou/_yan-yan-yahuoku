@@ -170,9 +170,10 @@ my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
 
 
 my.app.Container.createNewModel_ = function (query, categoryId) {
-  var uri = new goog.Uri('/api/search'); // goog.Uri.create escape its argument.. Why?
+  var endPoint = query ? '/api/search' : '/api/categoryLeaf';
+  var uri = new goog.Uri(endPoint); // goog.Uri.create escape its argument.. Why?
   var q = uri.getQueryData();
-  q.set('query', goog.isString(query) ? query : '');
+  if (query) q.set('query', query);
   if (goog.isDefAndNotNull(categoryId)) {
     q.set('category', categoryId);
   }

@@ -9,8 +9,9 @@ goog.require('my.app.Container');
  * @constructor
  * @extends {goog.ui.Component}
  */
-my.app.Frame = function (opt_domHelper) {
+my.app.Frame = function (id, opt_domHelper) {
   goog.base(this, opt_domHelper);
+  this.setId(id);
 
   this.searchbar_ = new my.app.Searchbar(this.getDomHelper());
   this.addChild(this.searchbar_);
@@ -32,22 +33,34 @@ my.app.Frame.prototype.enterDocument = function () {
 my.app.Frame.prototype.handleSearch_ = function (e) {
   var searchbar = e.target;
   var query = searchbar.getQuery();
-  if (query) {
-    this.container_.refreshByQuery(query, this.currCategoryId_);
+  if (goog.isString(query)) {
+    my.Model.getInstance().setTabQuery(this.getId(), {
+      'query': query,
+      'category': this.currCategory_
+    });
+    this.container_.refreshByQuery(query, this.currCategory_['id']);
+
   }
 };
 
 
 /**
- * @type {?string}
+ * {
+ *   'id': categoryId,
+ *   'path': categoryPath
+ * }
+ * @type {?Object}
  */
-my.app.Frame.prototype.currCategoryId_;
+my.app.Frame.prototype.currCategory_ = {
+  'id': 0,
+  'path': ''
+};
 
 
 my.app.Frame.prototype.handleUpdateCategory_ = function (e) {
-  var id = e.categoryId;
-  if (goog.isDefAndNotNull(id)) {
-    this.currCategoryId_ = id;
+  var category = /** @type {Object} */(e.category);
+  if (category) {
+    this.currCategory_ = category;
   }
 };
 

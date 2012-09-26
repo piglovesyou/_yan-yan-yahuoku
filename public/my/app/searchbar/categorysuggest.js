@@ -85,7 +85,7 @@ my.app.category.Suggest.prototype.clearSelection = function (inputHandler) {
   if (inputHandler.getActiveElement()) inputHandler.setValue('');
   this.tooltip_.setText('全てのカテゴリから');
   this.lastSelectedRow_ = my.app.category.Suggest.DefaultRow;
-  this.dispatchUpdate_(my.app.category.Suggest.DefaultCategory);
+  this.dispatchUpdate_(my.app.category.Suggest.DefaultRow);
 };
 
 
@@ -111,18 +111,18 @@ my.app.category.Suggest.prototype.handleSelected = function (e) {
   if (row) {
     this.lastSelectedRow_ = row;
     this.tooltip_.setText(row['path']);
-    this.dispatchUpdate_(row['id']);
+    this.dispatchUpdate_(row);
   }
 };
 
 
 /**
- * @param {string|number} id
+ * @param {Object}
  */
-my.app.category.Suggest.prototype.dispatchUpdate_ = function (id) {
+my.app.category.Suggest.prototype.dispatchUpdate_ = function (row) {
   this.dispatchEvent({
     type: my.app.category.Suggest.EventType.UPDATE_CATEGORY,
-    categoryId: id
+    category: row
   });
 };
 

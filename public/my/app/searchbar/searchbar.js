@@ -37,16 +37,20 @@ my.app.Searchbar.EventType = {
 my.app.Searchbar.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler()
-    .listen(this.formElement_, goog.events.EventType.SUBMIT, function (e) {
-      this.dispatchEvent(my.app.Searchbar.EventType.SEARCH);
-      e.preventDefault();
-    });
+    .listen(this.formElement_, goog.events.EventType.SUBMIT, this.handleSubmit_);
 };
 
 
 my.app.Searchbar.prototype.formElement_;
 
 
+my.app.Searchbar.prototype.handleSubmit_ = function (e) {
+  this.dispatchEvent(my.app.Searchbar.EventType.SEARCH);
+  e.preventDefault();
+  return false;
+};
+
+  
 my.app.Searchbar.prototype.getQuery = function () {
   return this.queryInput_.getValue();
 };

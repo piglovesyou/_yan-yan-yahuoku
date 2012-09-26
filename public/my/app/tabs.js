@@ -44,7 +44,7 @@ my.app.Tabs.prototype.decorateInternal = function (element) {
       // TODO: Implement this.insertTab_
       // this.insertTab_(tab);
     }
-    tab.renderContent();
+    // tab.renderContent();
 
     if (goog.dom.classes.has(tabElm, 'selected')) {
       goog.asserts.assert(!this.currSelectedTab_, 'Two or more selected tab element.');
@@ -175,21 +175,48 @@ my.app.Tabs.Tab = function (id, opt_domHelper) {
 goog.inherits(my.app.Tabs.Tab, goog.ui.Component);
 
 
-my.app.Tabs.Tab.prototype.renderContent = function () {
-  var model = my.Model.getInstance().getTabQuery(this.getId());
-  goog.asserts.assert(model, 'Model should have data here.');
+my.app.Tabs.Tab.prototype.enterDocument = function () {
+  this.getHandler().listen(
+      my.Model.getInstance(), 
+      my.Model.EventType.UPDATE_TABQUERY, function (e) {
+        this.renderContent();
+      });
+  this.renderContent();
+  goog.base(this, 'enterDocument');
+};
 
-  var result = my.string.getCategoryNameByPath(model['category']['path']);
-  if (!result || 'オークション') {
+
+my.app.Tabs.Tab.prototype.renderContent = function () {
+  var data = my.Model.getInstance().getTabQuery(this.getId());
+  goog.asserts.assert(data, 'Model should have data here.');
+
+  var result = my.string.getCategoryNameByPath(data['category']['path']);
+  if (!result || result == 'オークション') {
     result = '';
   } else {
     result = '[' + result + ']';
   }
-  var result = model['query'];
+  result += data['query'];
   if (!result) {
-    result = '全てのアイテム';
+    result += '全てのアイテム';
   }
   goog.dom.setTextContent(this.getContentElement(), result);
+  this.setTooltip_(result);
+};
+
+
+/**
+ * @type {?goog.ui.Tooltip}
+ */
+my.app.Tabs.Tab.prototype.tooltip_;
+
+
+my.app.Tabs.Tab.prototype.setTooltip_ = function (text) {
+  if (!this.tooltip_) {
+    this.tooltip_ = new goog.ui.Tooltip(this.getElement(), null, this.getDomHelper());
+    this.tooltip_.className += ' label';
+  }
+  this.tooltip_.setText(text);
 };
 
 
@@ -203,7 +230,6 @@ my.app.Tabs.Tab.prototype.contentElement_;
  * @return {Element}
  */
 my.app.Tabs.Tab.prototype.getContentElement = function () {
-  console.log(this.contentElement_)
   return this.contentElement_;
 };
 
@@ -217,15 +243,22 @@ my.app.Tabs.Tab.prototype.decorateInternal = function (element) {
 
 /** @inheritDoc */
 my.app.Tabs.Tab.prototype.canDecorate = function (element) {
-  console.log('yeah');
   if (element) {
     var dh = this.getDomHelper();
     var content = dh.getElementByClass('tab-content', element);
-    console.log(content);
     if (content) {
       this.contentElement_ = content;
       return true;
     }
   }
   return false;
+};
+
+
+my.app.Tabs.Tab.prototype.disposeInternal = function () {
+  if (this.tooltip_) {
+    this.tooltip_.dispose();
+    this.tooltip_ = null;
+  }
+  goog.base(this, 'disposeInternal')
 };

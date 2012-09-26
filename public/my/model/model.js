@@ -5,12 +5,12 @@ goog.require('goog.storage.ExpiringStorage');
 goog.require('goog.storage.mechanism.HTML5SessionStorage');
 goog.require('goog.storage.mechanism.HTML5LocalStorage');
 goog.require('my.model.Xhr');
-goog.require('goog.Disposable');
+goog.require('goog.events.EventTarget');
 
 
 /**
  * @constructor
- * @extends {goog.Disposable}
+ * @extends {goog.events.EventTarget}
  */
 my.Model = function () {
   goog.base(this);
@@ -18,11 +18,21 @@ my.Model = function () {
   this.sessionStore_ = new goog.storage.ExpiringStorage(new goog.storage.mechanism.HTML5SessionStorage());
   this.localStore_ = new goog.storage.ExpiringStorage(new goog.storage.mechanism.HTML5LocalStorage());
 };
-goog.inherits(my.Model, goog.Disposable);
+goog.inherits(my.Model, goog.events.EventTarget);
 goog.addSingletonGetter(my.Model);
 
 
 my.Model.EXPIRE_AUCTION_ITEM = 30 * 60 * 1000;
+
+
+/**
+ * @enum {string}
+ */
+my.Model.EventType = {
+  UPDATE_TABQUERY: 'updatetabquery',
+  UPDATE_TABIDS: 'updatetabids',
+  UPDATE_ITEMCACHE: 'updateitemcache'
+};
 
 
 my.Model.getLifeTime_ = function () {
@@ -63,6 +73,7 @@ my.Model.prototype.setTabIds = function (ids) {
     return goog.isString(id) && !goog.string.isEmpty(id);
   }), 'Wrong value to store');
   this.localStore_.set(my.Model.Key.TAB_IDS, ids);
+  this.dispatchEvent(my.Model.EventType.UPDATE_TABIDS);
 };
 
 
@@ -72,7 +83,17 @@ my.Model.prototype.getTabQuery = function (tabId) {
 
 
 my.Model.prototype.setTabQuery = function (tabId, data) {
+  goog.asserts.assert(
+      goog.isString(data['query']) &&
+      goog.isObject(data['category']) &&
+      (goog.isString(data['category']['id']) || goog.isNumber(data['category']['id'])) &&
+      goog.isString(data['category']['path']),
+      'Wrong data to store');
   this.localStore_.set(my.Model.KeyPrefix.TAB_ + tabId, data);
+  this.dispatchEvent({
+    type: my.Model.EventType.UPDATE_TABQUERY,
+    id: tabId
+  });
 };
 
 

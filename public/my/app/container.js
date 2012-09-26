@@ -6,6 +6,7 @@ goog.require('goog.style');
 goog.require('my.ui.ThousandRows');
 goog.require('my.app.Detail');
 goog.require('my.Model');
+goog.require('goog.Timer');
 
 
 /**
@@ -17,7 +18,7 @@ my.app.Container = function (opt_domHelper) {
   /**
    * @type {my.ui.ThousandRows}
    */
-  this.thousandRows_ = my.app.Container.createThousandRows_(opt_domHelper);
+  this.thousandRows_ = this.createThousandRows_(opt_domHelper);
 
   /**
    * @type {my.app.Detail}
@@ -33,7 +34,9 @@ goog.inherits(my.app.Container, goog.ui.SplitPane);
 
 my.app.Container.prototype.refreshByQuery = function (query, categoryId) {
   var old = this.thousandRows_.getModel();
-  old.dispose(); // TODO: Enable it to be used again.
+  if (old) {
+    old.dispose(); // TODO: Enable it to be used again.
+  }
   var model = my.app.Container.createNewModel_(query, categoryId);
   this.thousandRows_.setModel(model);
   this.detail_.clearContent();
@@ -60,9 +63,17 @@ my.app.Container.prototype.enterDocument = function () {
     .listen(this, my.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
     .listen(this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, function (e) {
       this.detail_.update();
-    });
+    })
+    .listen(this.resizeTimer_, goog.Timer.TICK, this.handleResizeTimerTick_);
+
   this.resize_();
   goog.base(this, 'enterDocument');
+
+  // First request by thousand rows.
+  var frame = this.getParent();
+  goog.asserts.assert(frame instanceof my.app.Frame, 'Wrong Parent to container!!');
+  var tab = my.Model.getInstance().getTabQuery(frame.getId());
+  this.refreshByQuery(tab['query'], tab['category']['id']);
 };
 
 /**
@@ -93,14 +104,55 @@ my.app.Container.prototype.resize = function () {
 
 
 /**
+ * @type {goog.Timer}
+ */
+my.app.Container.prototype.resizeTimer_ = new goog.Timer(100);
+
+
+/**
+ * Resize splitPane layout on delay.
  * We don't use setSize() because we want to resize 
  *    based on this.detailPaneElement_.offsetWidth.
  */
 my.app.Container.prototype.resize_ = function () {
+  if (this.resizeTimer_.enabled) {
+    this.resizeTimer_.stop();
+  }
+  this.resizeTimer_.start();
+};
+
+
+my.app.Container.prototype.handleResizeTimerTick_ = function (e) {
+  this.resizeTimer_.stop();
   var size = my.dom.ViewportSizeMonitor.getInstance().getSize();
   size.height -= this.getOffsetTop_();
   goog.style.setBorderBoxSize(this.getElement(), size);
   this.setFirstComponentSize(size.width - this.detailPaneElement_.offsetWidth);
+  
+  var iframeOverlay = this.getIframeOverlay_();
+  if (iframeOverlay) {
+    goog.style.setBorderBoxSize(iframeOverlay, size);
+  }
+};
+
+
+/**
+ * He is private.. So we grab and cache him.
+ * @type {?Element}
+ */
+my.app.Container.prototype.iframeOverlayCache_;
+
+
+/**
+ * @return {?Element}
+ */
+my.app.Container.prototype.getIframeOverlay_ = function () {
+  if (this.iframeOverlayCache_) return this.iframeOverlayCache_;
+
+  var last = goog.dom.getLastElementChild(this.getElement());
+  if (!last.className) return this.iframeOverlayCache_ = last; // He must be..
+
+  return  null;
 };
 
 
@@ -110,23 +162,20 @@ my.app.Container.prototype.resize_ = function () {
 my.app.Container.prototype.thousandRowsModel_;
 
 
-my.app.Container.createThousandRows_ = function (opt_domHelper) {
+my.app.Container.prototype.createThousandRows_ = function (opt_domHelper) {
   var thousandRows = new my.ui.ThousandRows(138, 50, opt_domHelper);
   thousandRows.setMinThumbLength(30);
-  var model = my.app.Container.createNewModel_('kate+spade'); // TODO: What to do?
-  thousandRows.setModel(model)
   return thousandRows;
 };
 
 
-my.app.Container.createNewModel_ = function (query, opt_categoryId) {
+my.app.Container.createNewModel_ = function (query, categoryId) {
   var uri = new goog.Uri('/api/search'); // goog.Uri.create escape its argument.. Why?
   var q = uri.getQueryData();
   q.set('query', goog.isString(query) ? query : '');
-  if (goog.isDefAndNotNull(opt_categoryId)) {
-    q.set('category', opt_categoryId);
+  if (goog.isDefAndNotNull(categoryId)) {
+    q.set('category', categoryId);
   }
-  console.log(uri.toString())
   return new my.ui.ThousandRows.Model(uri.toString(), undefined, true);
 };
 

@@ -63,10 +63,8 @@ tabUnselectedStyle()
   height: tabHeight
   width: 18%
   min-width: 180px
-  line-height: tabHeight - 1
   background: url(../images/bg_tableft.png) left top no-repeat,
               url(../images/bg_tabright.png) right top no-repeat;
-  text-align: center
   color: #444
   cursor: default
 
@@ -76,6 +74,8 @@ tabUnselectedStyle()
     .tab-content
       tabSelectedStyle()
       height: 100%
+      padding: 3px 0 0 3px
+      line-height: tabHeight - 4px
 
 .tab-dragging
   top: toolbarHeight - tabHeight !important

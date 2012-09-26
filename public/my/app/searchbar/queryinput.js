@@ -33,6 +33,13 @@ my.app.searchbar.QueryInput.prototype.getValue = function () {
 };
 
 
+my.app.searchbar.QueryInput.prototype.enterDocument = function () {
+  var frame = this.getParent().getParent();
+  goog.asserts.assert(frame instanceof my.app.Frame, 'Wrong parent for QueryInput!!!');
+  goog.base(this, 'enterDocument');
+};
+
+
 my.app.searchbar.QueryInput.prototype.createDom = function () {
   var element = this.getDomHelper().createDom('input', {
     type: 'text',

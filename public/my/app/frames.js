@@ -61,8 +61,7 @@ my.app.Frames.prototype.getCurrSelectedFrame = function () {
  * @return {my.app.Frame}
  */
 my.app.Frames.prototype.createFrame = function (id, render) {
-  var frame = new my.app.Frame(this.getDomHelper());
-  frame.setId(id);
+  var frame = new my.app.Frame(id, this.getDomHelper());
   this.addChild(frame, render);
   return frame;
 };

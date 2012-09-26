@@ -41,9 +41,15 @@ my.app.searchbar.QueryInput.prototype.enterDocument = function () {
 
 
 my.app.searchbar.QueryInput.prototype.createDom = function () {
+  var frame = this.getParent().getParent();
+  goog.asserts.assert(frame instanceof my.app.Frame, 'Wrong parent for queryInput!!');
+  var condition = my.Model.getInstance().getTabQuery(frame.getId());
+  goog.asserts.assert(condition, 'Model must have data for queryInput!');
+
   var element = this.getDomHelper().createDom('input', {
     type: 'text',
-    placeholder: my.app.searchbar.QueryInput.DefaultValue
+    placeholder: my.app.searchbar.QueryInput.DefaultValue,
+    value: condition['query']
   });
   this.setElementInternal(element);
   this.inputHandler_ = new goog.events.InputHandler(element);

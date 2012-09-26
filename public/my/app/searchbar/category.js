@@ -34,20 +34,33 @@ my.app.searchbar.Category.prototype.inputElement_;
 /** @inheritDoc */
 my.app.searchbar.Category.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
+
+  var condition = this.getCondition_();
   var suggest = this.suggest_ = new my.app.category.Suggest('/api/categorySuggest', 
-      this.inputElement_, this.getDomHelper());
+      this.inputElement_, condition['category'], this.getDomHelper());
   suggest.setParentEventTarget(this);
+};
+
+
+my.app.searchbar.Category.prototype.getCondition_ = function () {
+  var frame = this.getParent().getParent();
+  goog.asserts.assert(frame instanceof my.app.Frame, 'Wrong parent for category!');
+  var condition = my.Model.getInstance().getTabQuery(frame.getId());
+  goog.asserts.assert(condition, 'Model must have data for category.');
+  return condition;
 };
 
 
 /** @inheritDoc */
 my.app.searchbar.Category.prototype.createDom = function () {
+  var condition = this.getCondition_();
   var dh = this.getDomHelper();
   var element = 
       this.inputElement_ = 
         dh.createDom('input', {
           type:'text',
-          placeholder: 'Category search...'
+          placeholder: '全てのカテゴリから',
+          value: condition['category']['path']
         });
   this.setElementInternal(element);
 };

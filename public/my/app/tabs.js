@@ -190,16 +190,15 @@ my.app.Tabs.Tab.prototype.renderContent = function () {
   var data = my.Model.getInstance().getTabQuery(this.getId());
   goog.asserts.assert(data, 'Model should have data here.');
 
-  var result = my.string.getCategoryNameByPath(data['category']['path']);
-  if (!result || result == 'オークション') {
-    result = '';
-  } else {
-    result = '[' + result + ']';
+  // TODO: I want renderer for him
+  var query = data['query'];
+  if (!query) {
+    query = '全てのアイテム';
   }
-  result += data['query'];
-  if (!result) {
-    result += '全てのアイテム';
-  }
+  var category = my.string.getCategoryNameByPath(data['category']['path']);
+  category = (!category || category == 'オークション') ?
+      '' : '[' + category + ']';
+  var result = query + ' ' + category;
   goog.dom.setTextContent(this.getContentElement(), result);
   this.setTooltip_(result);
 };

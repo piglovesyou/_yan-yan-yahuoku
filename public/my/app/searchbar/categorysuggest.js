@@ -13,7 +13,7 @@ goog.require('goog.ui.Tooltip');
  * @constructor
  * @extends {goog.ui.ac.AutoComplete}
  */
-my.app.category.Suggest = function (url, inputElement, opt_domHelper) {
+my.app.category.Suggest = function (url, inputElement, lastCategory, opt_domHelper) {
   var u = undefined;
 
   var matcher = new goog.ui.ac.RemoteArrayMatcher(url, false);
@@ -27,25 +27,28 @@ my.app.category.Suggest = function (url, inputElement, opt_domHelper) {
   inputHandler.attachAutoComplete(this);
   inputHandler.attachInput(inputElement);
 
-  var labelText = '全てのカテゴリから';
-
   var labelInput;
   /**
    * @type {goog.ui.LabelInput}
    */
-  this.labelInput_ = labelInput = new goog.ui.LabelInput(labelText);
+  this.labelInput_ = labelInput = new goog.ui.LabelInput('全てのカテゴリから');
   labelInput.decorate(inputElement);
 
   var tooltip;
   /**
    * @type {goog.ui.Tooltip}
    */
-  this.tooltip_ = tooltip = new goog.ui.Tooltip(inputElement, labelText);;
+  this.tooltip_ = tooltip = new goog.ui.Tooltip(inputElement, lastCategory['path']);;
   tooltip.className += ' label';
 
   var eh = new goog.events.EventHandler(this);
   eh.listen(this, goog.ui.ac.AutoComplete.EventType.UPDATE, this.handleSelected);
 
+  /**
+   * Set saved condition as last category.
+   * @type {Object}
+   */
+  this.lastSelectedRow_ = lastCategory;
 }
 goog.inherits(my.app.category.Suggest, goog.ui.ac.AutoComplete);
 
@@ -59,21 +62,12 @@ my.app.category.Suggest.EventType = {
 
 
 /**
- * @type {string|nubmer}
- */
-my.app.category.Suggest.DefaultCategory = 0;
-
-
-my.app.category.Suggest.DefaultRow = goog.object.createImmutableView({
-  'id': my.app.category.Suggest.DefaultCategory,
-  'path': ''
-});
-
-
-/**
  * @type {Object}
  */
-my.app.category.Suggest.prototype.lastSelectedRow_ = my.app.category.Suggest.DefaultRow;
+my.app.category.Suggest.DefaultRow = {
+  'id': 0,
+  'path': ''
+};
 
 
 my.app.category.Suggest.prototype.processBeforeInputBlur = function (inputHandler) {

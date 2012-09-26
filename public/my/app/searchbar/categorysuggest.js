@@ -186,7 +186,7 @@ my.app.category.Suggest.CustomRenderer.prototype.render = function (renderer, el
     var a = dh.createDom('a', { 'href': 'javascript:void(0)' });
     a.innerHTML = content;
     renderer.hiliteMatchingText_(a, token);
-    var li = dh.createDom('li', null, a);
+    var li = dh.createDom('li', renderer.rowClassName, a);
     renderer.rowDivs_.push(li);
     ul.appendChild(li);
   });

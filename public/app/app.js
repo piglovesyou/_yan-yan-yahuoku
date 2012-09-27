@@ -1,16 +1,16 @@
 
-goog.provide('my.App');
+goog.provide('App');
 
 goog.require('goog.ui.Component');
 goog.require('goog.events.EventType');
-goog.require('my.ui.ThousandRows');
+goog.require('app.ui.ThousandRows');
 
-goog.require('my.events.EventCenter');
-goog.require('my.app.Frames');
-goog.require('my.app.Container');
-goog.require('my.app.Tabs');
-goog.require('my.dom.ViewportSizeMonitor');
-goog.require('my.Model');
+goog.require('app.events.EventCenter');
+goog.require('app.controller.Frames');
+goog.require('app.controller.Container');
+goog.require('app.controller.Tabs');
+goog.require('app.dom.ViewportSizeMonitor');
+goog.require('app.Model');
 
 
 /**
@@ -18,16 +18,16 @@ goog.require('my.Model');
  * @constructor
  * @extends {goog.ui.Component}
  */
-my.App = function (opt_domHelper) {
+App = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
 
   this.initModel_();
 };
-goog.inherits(my.App, goog.ui.Component);
+goog.inherits(App, goog.ui.Component);
 
 
-my.App.prototype.initModel_ = function () {
-  var model = my.Model.getInstance();
+App.prototype.initModel_ = function () {
+  var model = app.Model.getInstance();
   var tabIds = model.getTabIds();
   if (!tabIds) {
     var tabId = goog.ui.IdGenerator.getInstance().getNextUniqueId();
@@ -44,32 +44,32 @@ my.App.prototype.initModel_ = function () {
 
 
 /** @inheritDoc */
-my.App.prototype.enterDocument = function () {
+App.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
 };
 
 
 /** @inheritDoc */
-my.App.prototype.decorateInternal = function (element) {
+App.prototype.decorateInternal = function (element) {
   this.initTabAndFrame_();
 };
 
-my.App.prototype.initTabAndFrame_ = function () {
+App.prototype.initTabAndFrame_ = function () {
   var dh = this.getDomHelper();
 
   var tabs;
   /**
-   * @type {my.app.Tabs}
+   * @type {app.controller.Tabs}
    */
-  this.tabs_ = tabs = new my.app.Tabs(dh);
+  this.tabs_ = tabs = new app.controller.Tabs(dh);
   this.addChild(tabs);
   tabs.decorate(this.tabsElement_);
 
   var frames;
   /**
-   * @type {my.app.Frames}
+   * @type {app.controller.Frames}
    */
-  this.frames_ = frames = new my.app.Frames(tabs.getCurrSelectedTab().getId(), dh);
+  this.frames_ = frames = new app.controller.Frames(tabs.getCurrSelectedTab().getId(), dh);
   this.addChild(frames);
   frames.decorate(this.framesElement_);
 
@@ -77,21 +77,21 @@ my.App.prototype.initTabAndFrame_ = function () {
   // goog.asserts.assert(frames.getChildCount() == 1, 'Frame has to be only one at decorating phase.');
 };
 
-my.App.prototype.enterDocument = function () {
+App.prototype.enterDocument = function () {
   this.getHandler()
     .listen(
-        my.events.EventCenter.getInstance(),
-        my.events.EventCenter.EventType.TAB_CHANGED, this.handleTabChanged_);
+        app.events.EventCenter.getInstance(),
+        app.events.EventCenter.EventType.TAB_CHANGED, this.handleTabChanged_);
   goog.base(this, 'enterDocument');
 };
 
-my.App.prototype.handleTabChanged_ = function (e) {
+App.prototype.handleTabChanged_ = function (e) {
   this.frames_.selectFrame(e.data.tab.getId());
 };
 
 
 /** @inheritDoc */
-my.App.prototype.canDecorate = function (element) {
+App.prototype.canDecorate = function (element) {
   if (element) {
     var dh = this.getDomHelper();
     var toolbar = dh.getElementByClass('toolbar', element);
@@ -110,7 +110,7 @@ my.App.prototype.canDecorate = function (element) {
 };
 
 
-my.App.prototype.disposeInternal = function () {
+App.prototype.disposeInternal = function () {
   if (this.frames_) {
     this.frames_.dispose();
     this.frames_ = null;

@@ -1,21 +1,21 @@
 
-goog.provide('my.app.Detail');
+goog.provide('app.controller.Detail');
 
 goog.require('goog.ui.SplitPane');
 goog.require('goog.style');
-goog.require('my.ui.ThousandRows');
+goog.require('app.ui.ThousandRows');
 
 
 /**
  * @constructor
  * @extends {goog.ui.Scroller}
  */
-my.app.Detail = function (opt_domHelper) {
+app.controller.Detail = function (opt_domHelper) {
   goog.base(this, 'vertical', opt_domHelper);
 }
-goog.inherits(my.app.Detail, goog.ui.Scroller);
+goog.inherits(app.controller.Detail, goog.ui.Scroller);
 
-my.app.Detail.prototype.renderContent = function (data) {
+app.controller.Detail.prototype.renderContent = function (data) {
   var dh = this.getDomHelper();
   var container = this.getContentElement();
   dh.removeChildren(container);
@@ -42,7 +42,7 @@ my.app.Detail.prototype.renderContent = function (data) {
 /**
  * @param {boolean=} isFirst If FALSE, unrender and update.
  */
-my.app.Detail.prototype.clearContent = function (isFirst) {
+app.controller.Detail.prototype.clearContent = function (isFirst) {
   var dh = this.getDomHelper();
   var content = this.getContentElement();
 
@@ -54,7 +54,7 @@ my.app.Detail.prototype.clearContent = function (isFirst) {
 };
 
 
-my.app.Detail.prototype.createDom = function () {
+app.controller.Detail.prototype.createDom = function () {
   goog.base(this, 'createDom');
   this.clearContent(true);
 };

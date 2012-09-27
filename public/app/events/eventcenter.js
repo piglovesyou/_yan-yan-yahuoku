@@ -1,5 +1,5 @@
 
-goog.provide('my.events.EventCenter');
+goog.provide('app.events.EventCenter');
 
 goog.require('goog.events.EventTarget');
 
@@ -8,16 +8,16 @@ goog.require('goog.events.EventTarget');
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-my.events.EventCenter = function () {
+app.events.EventCenter = function () {
   goog.base(this);
 };
-goog.inherits(my.events.EventCenter, goog.events.EventTarget);
-goog.addSingletonGetter(my.events.EventCenter);
+goog.inherits(app.events.EventCenter, goog.events.EventTarget);
+goog.addSingletonGetter(app.events.EventCenter);
 
 /**
  * @enum {string}
  */
-my.events.EventCenter.EventType = {
+app.events.EventCenter.EventType = {
   TAB_SORTED: 'tabsorted',
   TAB_CHANGED: 'tabchanged'
 };
@@ -27,7 +27,7 @@ my.events.EventCenter.EventType = {
  * @param {string} type
  * @param {Object} data
  */
-my.events.EventCenter.prototype.dispatch = function (type, data) {
+app.events.EventCenter.prototype.dispatch = function (type, data) {
   this.dispatchEvent({
     type: type,
     data: data

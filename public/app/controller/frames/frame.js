@@ -1,40 +1,40 @@
 
-goog.provide('my.app.Frame');
+goog.provide('app.controller.Frame');
 
-goog.require('my.app.Searchbar');
-goog.require('my.app.Container');
+goog.require('app.controller.Searchbar');
+goog.require('app.controller.Container');
 
 
 /**
  * @constructor
  * @extends {goog.ui.Component}
  */
-my.app.Frame = function (id, opt_domHelper) {
+app.controller.Frame = function (id, opt_domHelper) {
   goog.base(this, opt_domHelper);
   this.setId(id);
 
-  this.searchbar_ = new my.app.Searchbar(this.getDomHelper());
+  this.searchbar_ = new app.controller.Searchbar(this.getDomHelper());
   this.addChild(this.searchbar_);
-  this.container_ = new my.app.Container(this.getDomHelper());
+  this.container_ = new app.controller.Container(this.getDomHelper());
   this.addChild(this.container_);
 }
-goog.inherits(my.app.Frame, goog.ui.Component);
+goog.inherits(app.controller.Frame, goog.ui.Component);
 
 
-my.app.Frame.prototype.enterDocument = function () {
+app.controller.Frame.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
 
   this.getHandler()
-    .listen(this, my.app.Searchbar.EventType.SEARCH, this.handleSearch_)
-    .listen(this, my.app.category.Suggest.EventType.UPDATE_CATEGORY, this.handleUpdateCategory_);
+    .listen(this, app.controller.Searchbar.EventType.SEARCH, this.handleSearch_)
+    .listen(this, app.controller.category.Suggest.EventType.UPDATE_CATEGORY, this.handleUpdateCategory_);
 };
 
 
-my.app.Frame.prototype.handleSearch_ = function (e) {
+app.controller.Frame.prototype.handleSearch_ = function (e) {
   var searchbar = e.target;
   var query = searchbar.getQuery();
   if (goog.isString(query)) {
-    my.Model.getInstance().setTabQuery(this.getId(), {
+    app.Model.getInstance().setTabQuery(this.getId(), {
       'query': query,
       'category': this.currCategory_
     });
@@ -51,13 +51,13 @@ my.app.Frame.prototype.handleSearch_ = function (e) {
  * }
  * @type {?Object}
  */
-my.app.Frame.prototype.currCategory_ = {
+app.controller.Frame.prototype.currCategory_ = {
   'id': 0,
   'path': ''
 };
 
 
-my.app.Frame.prototype.handleUpdateCategory_ = function (e) {
+app.controller.Frame.prototype.handleUpdateCategory_ = function (e) {
   var category = /** @type {Object} */(e.category);
   if (category) {
     this.currCategory_ = category;
@@ -65,7 +65,7 @@ my.app.Frame.prototype.handleUpdateCategory_ = function (e) {
 };
 
 
-my.app.Frame.prototype.createDom = function () {
+app.controller.Frame.prototype.createDom = function () {
   var dh = this.getDomHelper();
   this.searchbar_.createDom();
   this.container_.createDom();
@@ -75,13 +75,13 @@ my.app.Frame.prototype.createDom = function () {
 };
 
 
-my.app.Frame.prototype.decorateInternal = function (element) {
+app.controller.Frame.prototype.decorateInternal = function (element) {
   goog.base(this, 'decorateInternal', element);
   this.container_.decorateInternal(this.containerElement_);
 };
 
 
-my.app.Frame.prototype.canDecorate = function (element) {
+app.controller.Frame.prototype.canDecorate = function (element) {
   if (element) {
     var dh = this.getDomHelper();
     var searchbar = dh.getElementByClass('searchbar', element);
@@ -97,7 +97,7 @@ my.app.Frame.prototype.canDecorate = function (element) {
 
 
 
-my.app.Frame.Model = function () {
+app.controller.Frame.Model = function () {
   this.query = '';
-  this.category = my.app.category.Suggest.DefaultCategory;
+  this.category = app.controller.category.Suggest.DefaultCategory;
 };

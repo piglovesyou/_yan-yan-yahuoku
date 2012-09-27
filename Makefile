@@ -4,14 +4,13 @@ COMPILER_DIR					= closure-compiler/
 COMPILER_JAR					= $(COMPILER_DIR)/compiler.jar
 CLOSURELIB_DIR        = ./public/closure-library
 CLOSURELIB_REMOTE_DIR = http://closure-library.googlecode.com/svn/trunk/
-DUMMY_CLIENTSCRIPT_PATH    = public/javascripts/app.js
 
 
 COMMAND_CLOSURE_BUILDER_ = $(CLOSURELIB_DIR)/closure/bin/build/closurebuilder.py \
 	--root=$(CLOSURELIB_DIR) \
 	--root=public/closure-thirdparty/closure-scroller/piglovesyou \
 	--root=public/closure-thirdparty/closure-thousandrows/piglovesyou \
-	--root=public/my \
+	--root=public/app \
 	--root=public/javascripts \
 	--namespace="main" \
 	--compiler_jar=$(COMPILER_JAR) \

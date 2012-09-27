@@ -1,10 +1,11 @@
 goog.provide('main');
 
-goog.require('my.App');
+goog.require('App');
+goog.require('goog.dom');
 
 main = function () {
-  var app = new my.App();
-  app.decorate(document.body);
+  var app = new App();
+  app.decorate(goog.dom.getDocument().body);
 };
 
 goog.exportSymbol('main', main);

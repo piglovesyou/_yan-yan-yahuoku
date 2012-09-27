@@ -1,11 +1,11 @@
 
-goog.provide('my.app.Tabs');
+goog.provide('app.controller.Tabs');
 
-goog.require('my.events.EventCenter');
+goog.require('app.events.EventCenter');
 goog.require('goog.ui.Component');
 goog.require('goog.fx.DragListGroup');
 goog.require('goog.asserts');
-goog.require('my.string');
+goog.require('app.string');
 
 
 /**
@@ -13,16 +13,16 @@ goog.require('my.string');
  * @constructor
  * @extends {goog.ui.Component}
  */
-my.app.Tabs = function (opt_domHelper) {
+app.controller.Tabs = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
 };
-goog.inherits(my.app.Tabs, goog.ui.Component);
+goog.inherits(app.controller.Tabs, goog.ui.Component);
 
 
-my.app.Tabs.prototype.decorateInternal = function (element) {
+app.controller.Tabs.prototype.decorateInternal = function (element) {
   var dh = this.getDomHelper();
 
-  var tabIds = my.Model.getInstance().getTabIds();
+  var tabIds = app.Model.getInstance().getTabIds();
   goog.asserts.assert(tabIds, 'We have to have tab ids.');
 
   // Basically, element to decorate supposed to be only 1.
@@ -30,7 +30,7 @@ my.app.Tabs.prototype.decorateInternal = function (element) {
   goog.asserts.assert(tabIds.length >= tabElms.length, 'Too many tab elements.');
 
   goog.array.forEach(tabIds, function (tabId, index) {
-    var tab = new my.app.Tabs.Tab(tabId, dh);
+    var tab = new app.controller.Tab(tabId, dh);
     this.addChild(tab);
 
     var tabElm = tabElms[index];
@@ -56,41 +56,41 @@ my.app.Tabs.prototype.decorateInternal = function (element) {
 
 
 /**
- * @type {?my.app.Tabs.Tab}
+ * @type {?app.controller.Tab}
  */
-my.app.Tabs.prototype.currSelectedTab_;
+app.controller.Tabs.prototype.currSelectedTab_;
 
 
 /**
- * @return {?my.app.Tabs.Tab}
+ * @return {?app.controller.Tab}
  */
-my.app.Tabs.prototype.getCurrSelectedTab = function () {
+app.controller.Tabs.prototype.getCurrSelectedTab = function () {
   return this.currSelectedTab_;
 };
 
 
-my.app.Tabs.prototype.draggingClassName_ = 'tab-dragging';
+app.controller.Tabs.prototype.draggingClassName_ = 'tab-dragging';
 
 
 /**
  * @type {?goog.fx.DragListGroup}
  */
-my.app.Tabs.prototype.dragListGroup_;
+app.controller.Tabs.prototype.dragListGroup_;
 
 
 /**
  * @type {Element}
  */
-my.app.Tabs.prototype.contentElement_;
+app.controller.Tabs.prototype.contentElement_;
 
 
 /** @inheritDoc */
-my.app.Tabs.prototype.getContentElement = function () {
+app.controller.Tabs.prototype.getContentElement = function () {
   return this.contentElement_;
 };
 
 
-my.app.Tabs.prototype.setupDragListGroup_ = function () {
+app.controller.Tabs.prototype.setupDragListGroup_ = function () {
   if (this.dragListGroup_) {
     this.dragListGroup_.dispose();
   }
@@ -116,23 +116,23 @@ my.app.Tabs.prototype.setupDragListGroup_ = function () {
 
 
 /**
- * @param {my.app.Tabs.Tab} tab
+ * @param {app.controller.Tab} tab
  */
-my.app.Tabs.prototype.selectTab = function (tab) {
+app.controller.Tabs.prototype.selectTab = function (tab) {
   if (this.currSelectedTab_.getId() == tab.getId()) return;
   goog.dom.classes.enable(tab.getElement(), 'selected', true);
   goog.dom.classes.enable(this.currSelectedTab_.getElement(), 'selected', false);
   this.currSelectedTab_ = tab;
-  my.events.EventCenter.getInstance().dispatch(my.events.EventCenter.EventType.TAB_CHANGED, {
+  app.events.EventCenter.getInstance().dispatch(app.events.EventCenter.EventType.TAB_CHANGED, {
     tab: tab
   });
 };
 
 /**
  * @param {Element} element
- * @return {my.app.Tabs.Tab}
+ * @return {app.controller.Tab}
  */
-my.app.Tabs.prototype.findChildByElement_ = function (element) {
+app.controller.Tabs.prototype.findChildByElement_ = function (element) {
   var child;
   goog.array.find(this.getChildIds(), function (id) {
     var c = this.getChild(id);
@@ -142,18 +142,18 @@ my.app.Tabs.prototype.findChildByElement_ = function (element) {
     }
     return false;
   }, this);
-  return /** @type {my.app.Tabs.Tab} */(child);
+  return /** @type {app.controller.Tab} */(child);
 };
 
 
-my.app.Tabs.prototype.createFixTabWidthStylesheet_ = function (width) {
+app.controller.Tabs.prototype.createFixTabWidthStylesheet_ = function (width) {
   var styleString = '.tabs-content > .tab,.' + 
                     this.draggingClassName_ +
                     '{width: ' + width + 'px;}';
   return goog.style.installStyles(styleString)
 };
 
-my.app.Tabs.prototype.canDecorate = function (element) {
+app.controller.Tabs.prototype.canDecorate = function (element) {
   var content = goog.dom.getElementByClass('tabs-content', element);
   if (content) {
     this.contentElement_ = content;
@@ -168,17 +168,17 @@ my.app.Tabs.prototype.canDecorate = function (element) {
  * @constructor
  * @extends {goog.ui.Component}
  */
-my.app.Tabs.Tab = function (id, opt_domHelper) {
+app.controller.Tab = function (id, opt_domHelper) {
   goog.base(this, opt_domHelper);
   this.setId(id);
 };
-goog.inherits(my.app.Tabs.Tab, goog.ui.Component);
+goog.inherits(app.controller.Tab, goog.ui.Component);
 
 
-my.app.Tabs.Tab.prototype.enterDocument = function () {
+app.controller.Tab.prototype.enterDocument = function () {
   this.getHandler().listen(
-      my.Model.getInstance(), 
-      my.Model.EventType.UPDATE_TABQUERY, function (e) {
+      app.Model.getInstance(), 
+      app.Model.EventType.UPDATE_TABQUERY, function (e) {
         this.renderContent();
       });
   this.renderContent();
@@ -186,8 +186,8 @@ my.app.Tabs.Tab.prototype.enterDocument = function () {
 };
 
 
-my.app.Tabs.Tab.prototype.renderContent = function () {
-  var data = my.Model.getInstance().getTabQuery(this.getId());
+app.controller.Tab.prototype.renderContent = function () {
+  var data = app.Model.getInstance().getTabQuery(this.getId());
   goog.asserts.assert(data, 'Model should have data here.');
 
   // TODO: I want renderer for him
@@ -195,7 +195,7 @@ my.app.Tabs.Tab.prototype.renderContent = function () {
   if (!query) {
     query = '全てのアイテム';
   }
-  var category = my.string.getCategoryNameByPath(data['category']['path']);
+  var category = app.string.getCategoryNameByPath(data['category']['path']);
   category = (!category || category == 'オークション') ?
       '' : '[' + category + ']';
   var result = query + ' ' + category;
@@ -207,10 +207,10 @@ my.app.Tabs.Tab.prototype.renderContent = function () {
 /**
  * @type {?goog.ui.Tooltip}
  */
-my.app.Tabs.Tab.prototype.tooltip_;
+app.controller.Tab.prototype.tooltip_;
 
 
-my.app.Tabs.Tab.prototype.setTooltip_ = function (text) {
+app.controller.Tab.prototype.setTooltip_ = function (text) {
   if (!this.tooltip_) {
     this.tooltip_ = new goog.ui.Tooltip(this.getElement(), null, this.getDomHelper());
     this.tooltip_.className += ' label';
@@ -222,26 +222,26 @@ my.app.Tabs.Tab.prototype.setTooltip_ = function (text) {
 /**
  * @type {Element}
  */
-my.app.Tabs.Tab.prototype.contentElement_;
+app.controller.Tab.prototype.contentElement_;
 
 
 /**
  * @return {Element}
  */
-my.app.Tabs.Tab.prototype.getContentElement = function () {
+app.controller.Tab.prototype.getContentElement = function () {
   return this.contentElement_;
 };
 
 
 /** @inheritDoc */
-my.app.Tabs.Tab.prototype.decorateInternal = function (element) {
+app.controller.Tab.prototype.decorateInternal = function (element) {
   this.setElementInternal(element);
   goog.style.setUnselectable(element, true, true);
 };
 
 
 /** @inheritDoc */
-my.app.Tabs.Tab.prototype.canDecorate = function (element) {
+app.controller.Tab.prototype.canDecorate = function (element) {
   if (element) {
     var dh = this.getDomHelper();
     var content = dh.getElementByClass('tab-content', element);
@@ -254,7 +254,7 @@ my.app.Tabs.Tab.prototype.canDecorate = function (element) {
 };
 
 
-my.app.Tabs.Tab.prototype.disposeInternal = function () {
+app.controller.Tab.prototype.disposeInternal = function () {
   if (this.tooltip_) {
     this.tooltip_.dispose();
     this.tooltip_ = null;

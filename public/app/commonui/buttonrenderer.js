@@ -1,5 +1,5 @@
 
-goog.provide('my.ui.ButtonRenderer');
+goog.provide('app.ui.ButtonRenderer');
 
 goog.require('goog.ui.ButtonRenderer');
 
@@ -9,10 +9,10 @@ goog.require('goog.ui.ButtonRenderer');
 //  * @constructor
 //  * @extends {goog.ui.Button}
 //  */
-// my.ui.Button = function (content, opt_domHelper) {
+// app.ui.Button = function (content, opt_domHelper) {
 //   goog.base(this, opt_domHelper);
 // }
-// goog.inherits(my.ui.Button, goog.ui.Button);
+// goog.inherits(app.ui.Button, goog.ui.Button);
 
 
 
@@ -25,18 +25,18 @@ goog.require('goog.ui.ButtonRenderer');
  * @constructor
  * @extends {goog.ui.ButtonRenderer}
  */
-my.ui.ButtonRenderer = function () {
+app.ui.ButtonRenderer = function () {
   goog.base(this);
   this.tagName = 'a';
 };
-goog.inherits(my.ui.ButtonRenderer, goog.ui.ButtonRenderer);
-goog.addSingletonGetter(my.ui.ButtonRenderer);
+goog.inherits(app.ui.ButtonRenderer, goog.ui.ButtonRenderer);
+goog.addSingletonGetter(app.ui.ButtonRenderer);
 
 
 /**
- * @param {my.ui.Button} button
+ * @param {app.ui.Button} button
  */
-my.ui.ButtonRenderer.prototype.createDom = function (button) {
+app.ui.ButtonRenderer.prototype.createDom = function (button) {
   var dh = button.getDomHelper();
   var element = dh.createDom(this.tagName, {
     className: 'btn'
@@ -66,12 +66,12 @@ my.ui.ButtonRenderer.prototype.createDom = function (button) {
 
 /**
  * @constructor
- * @extends {my.ui.ButtonRenderer}
+ * @extends {app.ui.ButtonRenderer}
  */
-my.ui.NativeButtonRenderer = function () {
+app.ui.NativeButtonRenderer = function () {
   goog.base(this);
   this.tagName = 'button';
 };
-goog.inherits(my.ui.NativeButtonRenderer, my.ui.ButtonRenderer);
-goog.addSingletonGetter(my.ui.NativeButtonRenderer);
+goog.inherits(app.ui.NativeButtonRenderer, app.ui.ButtonRenderer);
+goog.addSingletonGetter(app.ui.NativeButtonRenderer);
 

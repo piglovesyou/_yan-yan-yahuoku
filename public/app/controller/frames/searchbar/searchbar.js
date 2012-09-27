@@ -1,10 +1,10 @@
 
-goog.provide('my.app.Searchbar');
+goog.provide('app.controller.Searchbar');
 
-goog.require('my.app.searchbar.Category');
-goog.require('my.app.searchbar.QueryInput');
+goog.require('app.controller.Category');
+goog.require('app.controller.QueryInput');
 goog.require('goog.ui.Button');
-goog.require('my.ui.ButtonRenderer');
+goog.require('app.ui.ButtonRenderer');
 goog.require('goog.ui.Component');
 goog.require('goog.string');
 
@@ -13,50 +13,50 @@ goog.require('goog.string');
  * @constructor
  * @extends {goog.ui.Component}
  */
-my.app.Searchbar = function (opt_domHelper) {
+app.controller.Searchbar = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
   var dh = this.getDomHelper();
 
-  this.categorySuggest_ = new my.app.searchbar.Category(dh);
+  this.categorySuggest_ = new app.controller.Category(dh);
   this.addChild(this.categorySuggest_);
 
-  this.queryInput_ = new my.app.searchbar.QueryInput(dh);
+  this.queryInput_ = new app.controller.QueryInput(dh);
   this.addChild(this.queryInput_);
   
   this.button_ = new goog.ui.Button('search', 
-      my.ui.NativeButtonRenderer.getInstance(), dh);
+      app.ui.NativeButtonRenderer.getInstance(), dh);
 }
-goog.inherits(my.app.Searchbar, goog.ui.Component);
+goog.inherits(app.controller.Searchbar, goog.ui.Component);
 
 
-my.app.Searchbar.EventType = {
+app.controller.Searchbar.EventType = {
   SEARCH: 'search'
 };
 
 
-my.app.Searchbar.prototype.enterDocument = function () {
+app.controller.Searchbar.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler()
     .listen(this.formElement_, goog.events.EventType.SUBMIT, this.handleSubmit_);
 };
 
 
-my.app.Searchbar.prototype.formElement_;
+app.controller.Searchbar.prototype.formElement_;
 
 
-my.app.Searchbar.prototype.handleSubmit_ = function (e) {
-  this.dispatchEvent(my.app.Searchbar.EventType.SEARCH);
+app.controller.Searchbar.prototype.handleSubmit_ = function (e) {
+  this.dispatchEvent(app.controller.Searchbar.EventType.SEARCH);
   e.preventDefault();
   return false;
 };
 
   
-my.app.Searchbar.prototype.getQuery = function () {
+app.controller.Searchbar.prototype.getQuery = function () {
   return this.queryInput_.getValue();
 };
 
 
-my.app.Searchbar.prototype.createDom = function () {
+app.controller.Searchbar.prototype.createDom = function () {
   var dh = this.getDomHelper();
 
   // Prepare to append
@@ -78,7 +78,7 @@ my.app.Searchbar.prototype.createDom = function () {
   this.setElementInternal(element);
 };
 
-my.app.Searchbar.prototype.disposeInternal = function () {
+app.controller.Searchbar.prototype.disposeInternal = function () {
   if (this.categorySuggest_) {
     this.categorySuggest_.dispose();
     this.categorySuggest_ = null;

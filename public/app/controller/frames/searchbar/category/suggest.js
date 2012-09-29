@@ -40,7 +40,7 @@ app.controller.category.Suggest = function (url, inputElement, lastCategory, opt
    * @type {goog.ui.Tooltip}
    */
   this.tooltip_ = tooltip = new goog.ui.Tooltip(inputElement,
-      !goog.string.isEmpty(lastCategory['path']) ? lastCategory['path'] : defaultLabel);
+      !goog.string.isEmpty(lastCategory['CategoryPath']) ? lastCategory['CategoryPath'] : defaultLabel);
   tooltip.className += ' label';
 
   var eh = new goog.events.EventHandler(this);
@@ -67,8 +67,8 @@ app.controller.category.Suggest.EventType = {
  * @type {Object}
  */
 app.controller.category.Suggest.DefaultRow = {
-  'id': 0,
-  'path': ''
+  'CategoryId': 0,
+  'CategoryPath': ''
 };
 
 
@@ -87,13 +87,13 @@ app.controller.category.Suggest.prototype.clearSelection = function (inputHandle
 
 app.controller.category.Suggest.prototype.getBackInputTextIfNeeded_ = function (inputHandler) {
   var value = inputHandler.getActiveElement() && inputHandler.getValue();
-  if (goog.isString(value) && this.lastSelectedRow_['path'] !== value) {
+  if (goog.isString(value) && this.lastSelectedRow_['CategoryPath'] !== value) {
     if (goog.string.isEmpty(value)) {
       // If an empty value, just clear all.
       this.clearSelection(inputHandler);
     } else {
       // Else, get back input value.
-      inputHandler.setValue(this.lastSelectedRow_['path']);
+      inputHandler.setValue(this.lastSelectedRow_['CategoryPath']);
     }
   }
 };
@@ -106,7 +106,7 @@ app.controller.category.Suggest.prototype.handleSelected = function (e) {
   var row = e.row;
   if (row) {
     this.lastSelectedRow_ = row;
-    this.tooltip_.setText(row['path']);
+    this.tooltip_.setText(row['CategoryPath']);
     this.dispatchUpdate_(row);
   }
 };
@@ -167,7 +167,7 @@ app.controller.category.Suggest.InputHandler.prototype.needKeyUpListener = funct
 
 
 app.controller.category.Suggest.InputHandler.prototype.selectRow = function (row, opt_multi) {
-  this.setTokenText(row['path'], opt_multi);
+  this.setTokenText(row['CategoryPath'], opt_multi);
   return false;
 };
 
@@ -184,7 +184,7 @@ app.controller.category.Suggest.CustomRenderer.prototype.render = function (rend
   var ul = dh.createDom('ul', 'dropdown-menu');
   token = goog.string.htmlEscape(token);
   goog.array.forEach(rows, function (row) {
-    var content = app.controller.category.Suggest.CustomRenderer.hiliteMatchingText(row.data.path, token);
+    var content = app.controller.category.Suggest.CustomRenderer.hiliteMatchingText(row.data.CategoryPath, token);
     var a = dh.createDom('a', { 'href': 'javascript:void(0)' });
     a.innerHTML = content;
     renderer.hiliteMatchingText_(a, token);

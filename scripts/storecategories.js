@@ -67,6 +67,6 @@ var check = function (id) {
 
 stack.push(check.bind(null, 0));
 
-stack.exec(200);
+stack.exec(10);
 
 // send(2084050628);

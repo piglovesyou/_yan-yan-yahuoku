@@ -86,8 +86,8 @@ app.Model.prototype.setTabQuery = function (tabId, data) {
   goog.asserts.assert(
       goog.isString(data['query']) &&
       goog.isObject(data['category']) &&
-      (goog.isString(data['category']['id']) || goog.isNumber(data['category']['id'])) &&
-      goog.isString(data['category']['path']),
+      (goog.isString(data['category']['CategoryId']) || goog.isNumber(data['category']['CategoryId'])) &&
+      goog.isString(data['category']['CategoryPath']),
       'Wrong data to store');
   this.localStore_.set(app.Model.KeyPrefix.TAB_ + tabId, data);
   this.dispatchEvent({
@@ -103,7 +103,7 @@ app.Model.prototype.setTabQuery = function (tabId, data) {
  * @param {Object=} opt_obj
  */
 app.Model.prototype.getAuctionItem = function (id, callback, opt_obj) {
-  var storage = this.sessionStore_;
+  var storage = this.localStore_;
   var key = app.Model.getAuctionItemKey_(id);
   var data = storage.get(key);
   if (data) {

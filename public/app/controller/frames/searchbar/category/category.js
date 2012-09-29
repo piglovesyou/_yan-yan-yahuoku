@@ -59,7 +59,7 @@ app.controller.Category.prototype.createDom = function () {
       this.inputElement_ = 
         dh.createDom('input', {
           type:'text',
-          value: condition['category']['path']
+          value: condition['category']['CategoryPath']
         });
   this.setElementInternal(element);
 };

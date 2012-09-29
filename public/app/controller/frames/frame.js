@@ -38,7 +38,7 @@ app.controller.Frame.prototype.handleSearch_ = function (e) {
       'query': query,
       'category': this.currCategory_
     });
-    this.container_.refreshByQuery(query, this.currCategory_['id']);
+    this.container_.refreshByQuery(query, this.currCategory_['CategoryId']);
 
   }
 };
@@ -46,14 +46,13 @@ app.controller.Frame.prototype.handleSearch_ = function (e) {
 
 /**
  * {
- *   'id': categoryId,
- *   'path': categoryPath
+ *   TODO: ...
  * }
  * @type {?Object}
  */
 app.controller.Frame.prototype.currCategory_ = {
-  'id': 0,
-  'path': ''
+  'CategoryId': 0,
+  'CategoryPath': ''
 };
 
 

@@ -35,8 +35,8 @@ App.prototype.initModel_ = function () {
     model.setTabQuery(tabId, {
       'query': '',
       'category': {
-        'id': 0,
-        'path': ''
+        'CategoryId': 0,
+        'CategoryPath': ''
       }
     });
   }

@@ -5,10 +5,6 @@ var redis = require('redis').createClient();
 
 
 var exec = require('child_process').exec, child;
-// exec('cmigemo -d /usr/local/share/migemo/utf-8/migemo-dict -w ab', function (err, result) {
-//   console.log(result);
-// });
-
 exec('cmigemo -d /usr/local/share/migemo/utf-8/migemo-dict -w ab', function (err, result) {
   console.log(result);
 });

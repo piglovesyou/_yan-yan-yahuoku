@@ -30,10 +30,11 @@ module.exports['categorySuggest'] = function (req, res) {
     var m = +req.query.max_matches;
     var maxMaches = !_.isNaN(m) ?
         Math.min(Math.max(m, 0), 50) : 10;
-    completer.search(token, function (err, result) {
+
+    completer.search(token, maxMaches, function (err, result) {
       if (err) res.end('[]');
       res.writeHead(200, {'Content-Type': 'application/json;charset=UTF8'});
-      result.length = maxMaches;
+      if (result.length > maxMaches) result.length = maxMaches;
       res.end(JSON.stringify(result));
     });
   } else {

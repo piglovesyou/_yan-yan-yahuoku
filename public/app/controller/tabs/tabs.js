@@ -195,7 +195,7 @@ app.controller.Tab.prototype.renderContent = function () {
   if (!query) {
     query = '全てのアイテム';
   }
-  var category = app.string.getCategoryNameByPath(data['category']['path']);
+  var category = app.string.getCategoryNameByPath(data['category']['CategoryPath']);
   category = (!category || category == 'オークション') ?
       '' : '[' + category + ']';
   var result = query + ' ' + category;

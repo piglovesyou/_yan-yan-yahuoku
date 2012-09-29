@@ -1,6 +1,7 @@
 
 var yapi = require('../sources/net/yahooapi');
 var redis = require('redis').createClient();
+var stack = require('../sources/util/stack');
 
 
 
@@ -33,7 +34,7 @@ var checkChildren = function (err, data) {
   if (err) return new Error('Error on callback');
   if (data.IsLeaf == 'false' && data.ChildCategory.length > 0) {
     data.ChildCategory.forEach(function (child) {
-      check(child.CategoryId);
+      stack.push(check.bind(null, child.CategoryId));
     });
   }
 };
@@ -49,7 +50,7 @@ var check = function (id) {
     if (exists) {
       redis.get(key, function (err, data) {
         var data = JSON.parse(data);
-        console.log('onFly: ' + onFly + ', found:   ' + id);
+        console.log('exists: ' + data.CategoryPath);
         checkChildren(err, data);
       });
     } else {
@@ -64,6 +65,8 @@ var check = function (id) {
   });
 };
 
-check(0);
+stack.push(check.bind(null, 0));
+
+stack.exec(200);
 
 // send(2084050628);

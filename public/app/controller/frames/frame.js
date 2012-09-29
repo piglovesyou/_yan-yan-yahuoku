@@ -17,6 +17,12 @@ app.controller.Frame = function (id, opt_domHelper) {
   this.addChild(this.searchbar_);
   this.container_ = new app.controller.Container(this.getDomHelper());
   this.addChild(this.container_);
+
+
+  /**
+   * @type {Object}
+   */
+  this.currCategory_ = app.Model.getInstance().getTabQuery(this.getId())['category'];
 }
 goog.inherits(app.controller.Frame, goog.ui.Component);
 
@@ -41,18 +47,6 @@ app.controller.Frame.prototype.handleSearch_ = function (e) {
     this.container_.refreshByQuery(query, this.currCategory_['CategoryId']);
 
   }
-};
-
-
-/**
- * {
- *   TODO: ...
- * }
- * @type {?Object}
- */
-app.controller.Frame.prototype.currCategory_ = {
-  'CategoryId': 0,
-  'CategoryPath': ''
 };
 
 
@@ -95,8 +89,3 @@ app.controller.Frame.prototype.canDecorate = function (element) {
 
 
 
-
-app.controller.Frame.Model = function () {
-  this.query = '';
-  this.category = app.controller.category.Suggest.DefaultCategory;
-};

@@ -7,6 +7,7 @@ goog.require('goog.ui.ac.Renderer');
 goog.require('goog.ui.ac.InputHandler');
 goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.Tooltip');
+goog.require('goog.Timer');
 
 
 /**
@@ -148,9 +149,33 @@ app.controller.category.Suggest.InputHandler = function (opt_separators, opt_lit
 goog.inherits(app.controller.category.Suggest.InputHandler, goog.ui.ac.InputHandler);
 
 
+/** @inheritDoc */
+app.controller.category.Suggest.InputHandler.prototype.processFocus = function (target) {
+  goog.base(this, 'processFocus', target);
+  if (this.activeElement_ = target) {
+    this.activeElement_.value = this.activeElement_.value;
+  }
+};
+
+
 app.controller.category.Suggest.InputHandler.prototype.handleBlur = function (e) {
   this.getAutoComplete().processBeforeInputBlur(this);
+  var input = this.getActiveElement();
   goog.base(this, 'handleBlur', e);
+  if (input) {
+    app.controller.category.Suggest.InputHandler.showEndOfValue(input);
+  }
+};
+
+
+/**
+ * @param {Element} inputElement
+ */
+app.controller.category.Suggest.InputHandler.showEndOfValue = function (inputElement) {
+  // I don't understand why it needs defer (but it does)
+  goog.Timer.callOnce(function () {
+    inputElement.scrollLeft = inputElement.scrollWidth; // It's bigger, but who cares.
+  });
 };
 
 
@@ -168,6 +193,8 @@ app.controller.category.Suggest.InputHandler.prototype.needKeyUpListener = funct
 
 app.controller.category.Suggest.InputHandler.prototype.selectRow = function (row, opt_multi) {
   this.setTokenText(row['CategoryPath'], opt_multi);
+  var inputElement = this.getActiveElement();
+  if (inputElement) app.controller.category.Suggest.InputHandler.showEndOfValue(inputElement);
   return false;
 };
 

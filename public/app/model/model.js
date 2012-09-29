@@ -15,7 +15,7 @@ goog.require('goog.events.EventTarget');
 app.Model = function () {
   goog.base(this);
   this.xhr_ = new app.model.Xhr;
-  this.sessionStore_ = new goog.storage.ExpiringStorage(new goog.storage.mechanism.HTML5SessionStorage());
+  // this.sessionStore_ = new goog.storage.ExpiringStorage(new goog.storage.mechanism.HTML5SessionStorage());
   this.localStore_ = new goog.storage.ExpiringStorage(new goog.storage.mechanism.HTML5LocalStorage());
 };
 goog.inherits(app.Model, goog.events.EventTarget);

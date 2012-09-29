@@ -61,5 +61,6 @@ app.controller.Category.prototype.createDom = function () {
           type:'text',
           value: condition['category']['CategoryPath']
         });
+  app.controller.category.Suggest.InputHandler.showEndOfValue(this.inputElement_);
   this.setElementInternal(element);
 };

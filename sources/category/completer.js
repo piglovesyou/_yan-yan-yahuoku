@@ -92,7 +92,8 @@ module.exports.search = search = function (token, maxMatches, callback) {
         if (matched.length > maxMatches) matched.length = maxMatches;
       }
     }
-    expandChildren(matched);
+    // XXX: I quit to manage subcategories in autocomplete! But, how then?
+    // expandChildren(matched); 
     callback(err, matched);
   });
 };

@@ -213,20 +213,20 @@ app.controller.category.Suggest.CustomRenderer.prototype.render = function (rend
   token = goog.string.htmlEscape(token);
   goog.array.forEach(rows, function (row) {
     var data = row.data
-    var hasSubRows = data['IsLeaf'] == 'false' && goog.isArray(data['ChildCategory']);
+    // var hasSubRows = data['IsLeaf'] == 'false' && goog.isArray(data['ChildCategory']);
 
-    var li = app.controller.category.Suggest.CustomRenderer.createLi(renderer, data, token, dh, hasSubRows, false);
+    var li = app.controller.category.Suggest.CustomRenderer.createLi(renderer, data, token, dh, false, false);
     renderer.rowDivs_.push(li);
 
-    if (hasSubRows) {
-      var subUl = dh.createDom('ul', 'dropdown-menu');
-      goog.array.forEach(data['ChildCategory'], function (subRow) {
-        var li = app.controller.category.Suggest.CustomRenderer.createLi(renderer, subRow, token, dh, false, true)
-        renderer.rowDivs_.push(li);
-        subUl.appendChild(li);
-      });
-      li.appendChild(subUl);
-    }
+    // if (hasSubRows) {
+    //   var subUl = dh.createDom('ul', 'dropdown-menu');
+    //   goog.array.forEach(data['ChildCategory'], function (subRow) {
+    //     var li = app.controller.category.Suggest.CustomRenderer.createLi(renderer, subRow, token, dh, false, true)
+    //     renderer.rowDivs_.push(li);
+    //     subUl.appendChild(li);
+    //   });
+    //   li.appendChild(subUl);
+    // }
 
     ul.appendChild(li);
   });

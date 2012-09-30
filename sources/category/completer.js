@@ -83,17 +83,27 @@ module.exports.search = search = function (token, maxMatches, callback) {
     var matched = [];
     if (!err) {
       // mm....
-      matched = getMatchedName(reg).sort(compareByName);
-      if (matched.length > maxMatches) {
-        matched.length = maxMatches;
-      } else {
-        // TODO: Remove duplicate.
-        matched = matched.concat(getMatchedPath(reg).sort(compareByPath));
-        if (matched.length > maxMatches) matched.length = maxMatches;
+      matched = getMatchedName(reg).sort(compareByName); // TODO: use underscore.
+      if (matched.length < maxMatches) {
+        // Remove duplicate.
+        var matchedIds = matched.map(function (row) {
+          return row.CategoryId;
+        });
+        var anotherMatched = getMatchedPath(reg).sort(compareByPath);
+        var anotherMatchedIds = anotherMatched.map(function (row) {
+          return row.CategoryId;
+        });
+        var intersection = _.intersection(matchedIds, anotherMatchedIds);
+        anotherMatched = anotherMatched.filter(function (row) {
+          return !_.contains(intersection, row.CategoryId);
+        });
+        matched = matched.concat(anotherMatched);
       }
     }
     // XXX: I quit to manage subcategories in autocomplete! But, how then?
     // expandChildren(matched); 
+    
+    if (matched.length > maxMatches) matched.length = maxMatches;
     callback(err, matched);
   });
 };

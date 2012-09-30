@@ -28,7 +28,6 @@ goog.inherits(App, goog.ui.Component);
 
 App.prototype.initModel_ = function () {
   var tabIds = app.model.getTabIds();
-  console.log(app.model.getTabQuery(tabIds[0]));
   if (!tabIds) {
     var tabId = goog.ui.IdGenerator.getInstance().getNextUniqueId();
     app.model.setTabIds([tabId]);

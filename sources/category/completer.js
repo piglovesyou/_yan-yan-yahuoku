@@ -1,4 +1,5 @@
 
+var _ = require('underscore');
 var redis = require('redis').createClient();
 var exec = require('child_process').exec;
 var querystring = require('querystring');
@@ -21,13 +22,18 @@ var loadCategory = function (key) {
   redis.get(key, function (err, data) {
     if (err) new Error('couldn\'t load category from redis.')
     var category = JSON.parse(data);
-
+    category['CategoryPath'] = category['CategoryPath'].slice(9);
+    if (category['ChildCategory'] && _.isArray(category['ChildCategory'])) {
+      category['ChildCategory'].forEach(function (category) {
+        category['CategoryPath'] = category['CategoryPath'].slice(9);
+      });
+    }
     store.push(category);
   });
 };
 
 var createRegExp = function (token, callback) {
-  if (token.indexOf('\'') >= 0) token.replace('\'', ' ');
+  token = regExpEscape(token);
   exec('cmigemo -nq -d /usr/local/share/migemo/utf-8/migemo-dict -n -w \'' + token + '\'', function (err, result) {
     if (result.indexOf('\n') >= 0) result = result.replace('\n','');
     var reg;
@@ -61,6 +67,17 @@ var compareByPath = function (a, b) {
   return a.CategoryPath > b.CategoryPath ? 1 : -1;
 };
 
+/**
+ * Notice: Destructive.
+ */
+var expandChildren = function (rows) {
+  for (var i = rows.length - 1,row=[i]; i>=0; row=rows[i--]) {
+    if (row.IsLeaf == 'false' && _.isArray(row.ChildCategory)) {
+      rows.splice.apply(rows, _.flatten([i + 1, 0, row.ChildCategory]));
+    }
+  }
+};
+
 module.exports.search = search = function (token, maxMatches, callback) {
   createRegExp(token, function (err, reg) {
     var matched = [];
@@ -75,6 +92,7 @@ module.exports.search = search = function (token, maxMatches, callback) {
         if (matched.length > maxMatches) matched.length = maxMatches;
       }
     }
+    expandChildren(matched);
     callback(err, matched);
   });
 };
@@ -85,6 +103,11 @@ loadKeys(function (keys) {
   });
 });
 
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+regExpEscape = function(s) {
+  return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
+      replace(/\x08/g, '\\x08');
+};
 
 
 

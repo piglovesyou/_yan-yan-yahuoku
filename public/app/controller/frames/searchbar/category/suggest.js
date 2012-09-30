@@ -209,18 +209,42 @@ app.controller.category.Suggest.CustomRenderer = function () {};
 app.controller.category.Suggest.CustomRenderer.prototype.render = function (renderer, element, rows, token) {
   var dh = goog.dom.getDomHelper();
   var ul = dh.createDom('ul', 'dropdown-menu');
+
   token = goog.string.htmlEscape(token);
   goog.array.forEach(rows, function (row) {
-    var content = app.controller.category.Suggest.CustomRenderer.hiliteMatchingText(row.data.CategoryPath, token);
-    var a = dh.createDom('a', { 'href': 'javascript:void(0)' });
-    a.innerHTML = content;
-    renderer.hiliteMatchingText_(a, token);
-    var li = dh.createDom('li', renderer.rowClassName, a);
+    var data = row.data
+    var hasSubRows = data['IsLeaf'] == 'false' && goog.isArray(data['ChildCategory']);
+
+    var li = app.controller.category.Suggest.CustomRenderer.createLi(renderer, data, token, dh, hasSubRows, false);
     renderer.rowDivs_.push(li);
+
+    if (hasSubRows) {
+      var subUl = dh.createDom('ul', 'dropdown-menu');
+      goog.array.forEach(data['ChildCategory'], function (subRow) {
+        var li = app.controller.category.Suggest.CustomRenderer.createLi(renderer, subRow, token, dh, false, true)
+        renderer.rowDivs_.push(li);
+        subUl.appendChild(li);
+      });
+      li.appendChild(subUl);
+    }
+
     ul.appendChild(li);
   });
   element.appendChild(ul);
   return element;
+};
+
+
+app.controller.category.Suggest.CustomRenderer.createLi = function (renderer, row, token, dh, hasSubRows, onlyName) {
+
+  var content = app.controller.category.Suggest.CustomRenderer.hiliteMatchingText(
+      onlyName ? row['CategoryName'] : row['CategoryPath'], token);
+  var a = dh.createDom('a', { 'href': 'javascript:void(0)' });
+  a.innerHTML = content;
+  renderer.hiliteMatchingText_(a, token);
+  var li = dh.createDom('li', renderer.rowClassName + (hasSubRows ? ' dropdown-submenu' : ''), a);
+
+  return li;
 };
 
 

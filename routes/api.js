@@ -34,7 +34,6 @@ module.exports['categorySuggest'] = function (req, res) {
     completer.search(token, maxMaches, function (err, result) {
       if (err) res.end('[]');
       res.writeHead(200, {'Content-Type': 'application/json;charset=UTF8'});
-      if (result.length > maxMaches) result.length = maxMaches;
       res.end(JSON.stringify(result));
     });
   } else {

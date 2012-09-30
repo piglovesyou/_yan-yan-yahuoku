@@ -73,8 +73,8 @@ app.controller.Container.prototype.enterDocument = function () {
   // First request by thousand rows.
   var frame = this.getParent();
   goog.asserts.assert(frame instanceof app.controller.Frame, 'Wrong Parent to container!!');
-  var tab = app.Model.getInstance().getTabQuery(frame.getId());
-  this.refreshByQuery(tab['query'], tab['category']['id']);
+  var tab = app.model.getTabQuery(frame.getId());
+  this.refreshByQuery(tab['query'], tab['category']['CategoryId']);
 };
 
 /**
@@ -85,7 +85,7 @@ app.controller.Container.prototype.offsetTopCache_;
 app.controller.Container.prototype.handleRowClicked_ = function (e) {
   var id = e.row.getAuctionId();
   if (id) {
-    app.Model.getInstance().getAuctionItem(id, function (err, data) {
+    app.model.getAuctionItem(id, function (err, data) {
       if (!err) this.detail_.renderContent(data);
     }, this);
   }

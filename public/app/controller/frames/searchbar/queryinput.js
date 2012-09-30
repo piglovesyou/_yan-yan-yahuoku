@@ -43,7 +43,7 @@ app.controller.QueryInput.prototype.enterDocument = function () {
 app.controller.QueryInput.prototype.createDom = function () {
   var frame = this.getParent().getParent();
   goog.asserts.assert(frame instanceof app.controller.Frame, 'Wrong parent for queryInput!!');
-  var condition = app.Model.getInstance().getTabQuery(frame.getId());
+  var condition = app.model.getTabQuery(frame.getId());
   goog.asserts.assert(condition, 'Model must have data for queryInput!');
 
   var element = this.getDomHelper().createDom('input', {

@@ -14,15 +14,11 @@ goog.require('goog.events.EventTarget');
  */
 app.Model = function () {
   goog.base(this);
-  this.xhr_ = new app.model.Xhr;
   // this.sessionStore_ = new goog.storage.ExpiringStorage(new goog.storage.mechanism.HTML5SessionStorage());
   this.localStore_ = new goog.storage.ExpiringStorage(new goog.storage.mechanism.HTML5LocalStorage());
 };
 goog.inherits(app.Model, goog.events.EventTarget);
 goog.addSingletonGetter(app.Model);
-
-
-app.Model.EXPIRE_AUCTION_ITEM = 30 * 60 * 1000;
 
 
 /**
@@ -35,62 +31,113 @@ app.Model.EventType = {
 };
 
 
-app.Model.getLifeTime_ = function () {
-  return app.Model.EXPIRE_AUCTION_ITEM + goog.now();
+/**
+ * @return {goog.storage.ExpiringStorage}
+ */
+app.Model.prototype.getLocalStore = function () {
+  return this.localStore_;
 };
 
 
-app.Model.Key = {
-  // LocalStore
+
+
+/**
+ * Model utility namespace.
+ */
+
+/**
+ * @private
+ * @return {goog.storage.ExpiringStorage}
+ */
+app.model.getLocalStore_ = function () {
+  return app.Model.getInstance().getLocalStore();
+};
+
+
+/**
+ * @enum {number}
+ */
+app.model.ExpireTime = {
+  AUCTION_ITEM: 30 * 60 * 1000
+};
+
+
+/**
+ * @param {app.model.ExpireTime} baseTime
+ */
+app.model.getLifeTime_ = function (baseTime) {
+  return baseTime + goog.now();
+};
+
+
+/**
+ * @enum {string}
+ */
+app.model.Key = {
   TAB_IDS: 'tab:ids'
 };
 
 
-app.Model.KeyPrefix = {
+/**
+ * @enum {string}
+ */
+app.model.KeyPrefix = {
   AUCTION_ITEM_: 'auctionitem:',
   TAB_: 'tab:'
 };
 
 
-app.Model.getAuctionItemKey_ = function (id) {
-  return app.Model.KeyPrefix.AUCTION_ITEM_ + id;
+/**
+ * @param {string} id
+ * @return {string}
+ */
+app.model.getAuctionItemKey_ = function (id) {
+  return app.model.KeyPrefix.AUCTION_ITEM_ + id;
 };
 
 
 /**
  * @return {Array.<string>}
  */
-app.Model.prototype.getTabIds = function () {
-  return this.localStore_.get(app.Model.Key.TAB_IDS);
+app.model.getTabIds = function () {
+  return app.model.getLocalStore_().get(app.model.Key.TAB_IDS);
 };
 
 
 /**
  * @param {Array.<string>}
  */
-app.Model.prototype.setTabIds = function (ids) {
+app.model.setTabIds = function (ids) {
   goog.asserts.assert(goog.isArray(ids) && goog.array.every(ids, function (id) {
     return goog.isString(id) && !goog.string.isEmpty(id);
   }), 'Wrong value to store');
-  this.localStore_.set(app.Model.Key.TAB_IDS, ids);
-  this.dispatchEvent(app.Model.EventType.UPDATE_TABIDS);
+  app.model.getLocalStore_().set(app.model.Key.TAB_IDS, ids);
+  app.Model.getInstance().dispatchEvent(app.Model.EventType.UPDATE_TABIDS);
 };
 
 
-app.Model.prototype.getTabQuery = function (tabId) {
-  return this.localStore_.get(app.Model.KeyPrefix.TAB_ + tabId);
+/**
+ * @param {string} tabId
+ * @return {Object} Query and category data.
+ */
+app.model.getTabQuery = function (tabId) {
+  return app.model.getLocalStore_().get(app.model.KeyPrefix.TAB_ + tabId);
 };
 
 
-app.Model.prototype.setTabQuery = function (tabId, data) {
+/**
+ * @param {string} tabId
+ * @param {Object} Query and category data.
+ */
+app.model.setTabQuery = function (tabId, data) {
   goog.asserts.assert(
       goog.isString(data['query']) &&
       goog.isObject(data['category']) &&
       (goog.isString(data['category']['CategoryId']) || goog.isNumber(data['category']['CategoryId'])) &&
       goog.isString(data['category']['CategoryPath']),
       'Wrong data to store');
-  this.localStore_.set(app.Model.KeyPrefix.TAB_ + tabId, data);
-  this.dispatchEvent({
+  app.model.getLocalStore_().set(app.model.KeyPrefix.TAB_ + tabId, data);
+  app.Model.getInstance().dispatchEvent({
     type: app.Model.EventType.UPDATE_TABQUERY,
     id: tabId
   });
@@ -102,20 +149,20 @@ app.Model.prototype.setTabQuery = function (tabId, data) {
  * @param {Function} callback
  * @param {Object=} opt_obj
  */
-app.Model.prototype.getAuctionItem = function (id, callback, opt_obj) {
-  var storage = this.localStore_;
-  var key = app.Model.getAuctionItemKey_(id);
+app.model.getAuctionItem = function (id, callback, opt_obj) {
+  var storage = app.model.getLocalStore_();
+  var key = app.model.getAuctionItemKey_(id);
   var data = storage.get(key);
   if (data) {
     callback.call(opt_obj, false, data);
   } else {
-    this.xhr_.get('/api/auctionItem', {
+    app.model.Xhr.getInstance().get('/api/auctionItem', {
       'auctionID': id
     }, function (err, json) {
       var itemData;
       if (!err) {
         itemData = json['ResultSet']['Result'];
-        storage.set(key, itemData, app.Model.getLifeTime_());
+        storage.set(key, itemData, app.model.getLifeTime_(app.model.ExpireTime.AUCTION_ITEM));
       }
       callback.call(opt_obj, err, itemData);
     });

@@ -22,7 +22,7 @@ goog.inherits(app.controller.Tabs, goog.ui.Component);
 app.controller.Tabs.prototype.decorateInternal = function (element) {
   var dh = this.getDomHelper();
 
-  var tabIds = app.Model.getInstance().getTabIds();
+  var tabIds = app.model.getTabIds();
   goog.asserts.assert(tabIds, 'We have to have tab ids.');
 
   // Basically, element to decorate supposed to be only 1.
@@ -187,7 +187,7 @@ app.controller.Tab.prototype.enterDocument = function () {
 
 
 app.controller.Tab.prototype.renderContent = function () {
-  var data = app.Model.getInstance().getTabQuery(this.getId());
+  var data = app.model.getTabQuery(this.getId());
   goog.asserts.assert(data, 'Model should have data here.');
 
   // TODO: I want renderer for him

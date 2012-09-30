@@ -22,7 +22,7 @@ app.controller.Frame = function (id, opt_domHelper) {
   /**
    * @type {Object}
    */
-  this.currCategory_ = app.Model.getInstance().getTabQuery(this.getId())['category'];
+  this.currCategory_ = app.model.getTabQuery(this.getId())['category'];
 }
 goog.inherits(app.controller.Frame, goog.ui.Component);
 
@@ -40,7 +40,7 @@ app.controller.Frame.prototype.handleSearch_ = function (e) {
   var searchbar = e.target;
   var query = searchbar.getQuery();
   if (goog.isString(query)) {
-    app.Model.getInstance().setTabQuery(this.getId(), {
+    app.model.setTabQuery(this.getId(), {
       'query': query,
       'category': this.currCategory_
     });

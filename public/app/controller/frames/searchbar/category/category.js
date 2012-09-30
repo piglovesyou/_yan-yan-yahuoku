@@ -45,7 +45,7 @@ app.controller.Category.prototype.enterDocument = function () {
 app.controller.Category.prototype.getCondition_ = function () {
   var frame = this.getParent().getParent();
   goog.asserts.assert(frame instanceof app.controller.Frame, 'Wrong parent for category!');
-  var condition = app.Model.getInstance().getTabQuery(frame.getId());
+  var condition = app.model.getTabQuery(frame.getId());
   goog.asserts.assert(condition, 'Model must have data for category.');
   return condition;
 };

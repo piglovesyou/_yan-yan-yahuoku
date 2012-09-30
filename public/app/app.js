@@ -27,12 +27,12 @@ goog.inherits(App, goog.ui.Component);
 
 
 App.prototype.initModel_ = function () {
-  var model = app.Model.getInstance();
-  var tabIds = model.getTabIds();
+  var tabIds = app.model.getTabIds();
+  console.log(app.model.getTabQuery(tabIds[0]));
   if (!tabIds) {
     var tabId = goog.ui.IdGenerator.getInstance().getNextUniqueId();
-    model.setTabIds([tabId]);
-    model.setTabQuery(tabId, {
+    app.model.setTabIds([tabId]);
+    app.model.setTabQuery(tabId, {
       'query': '',
       'category': {
         'CategoryId': 0,

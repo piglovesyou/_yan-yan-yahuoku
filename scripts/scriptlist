@@ -37,6 +37,9 @@ public/closure-library/closure/goog/timer/timer.js
 public/closure-library/closure/goog/style/bidi.js
 public/closure-library/closure/goog/fx/dragger.js
 public/closure-library/closure/goog/ui/splitpane.js
+public/closure-library/closure/goog/i18n/datetimesymbols.js
+public/closure-library/closure/goog/date/datelike.js
+public/closure-library/closure/goog/date/date.js
 public/closure-library/closure/goog/positioning/positioning.js
 public/closure-library/closure/goog/positioning/abstractposition.js
 public/closure-library/closure/goog/positioning/anchoredposition.js
@@ -55,6 +58,9 @@ public/closure-library/closure/goog/iter/iter.js
 public/closure-library/closure/goog/structs/map.js
 public/closure-library/closure/goog/structs/set.js
 public/closure-library/closure/goog/ui/tooltip.js
+public/closure-library/closure/goog/i18n/timezone.js
+public/closure-library/closure/goog/i18n/datetimeformat.js
+public/closure-library/closure/goog/date/relative.js
 public/closure-library/closure/goog/uri/utils.js
 public/closure-library/closure/goog/uri/uri.js
 public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/rowrenderer.js

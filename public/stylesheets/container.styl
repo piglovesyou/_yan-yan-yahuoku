@@ -74,8 +74,14 @@ rowHeight = 138px
     height: rowHeight !important
 
     // Override bootstrap
-    .row
+    > .row
       padding: 14px 5px
+      color: #333
+
+  .active
+    .row
+      color: white
+
   .goods-image
     text-align: center
   .goog-thousandrows-row-notrendered .img-polaroid
@@ -84,6 +90,8 @@ rowHeight = 138px
       opacity: .4
   h4
     ellipsis(true)
+  .row-detail
+    margin-bottom: 10px
 
 // Override bootstrap
 .nav > li > a:hover

@@ -5,6 +5,8 @@ goog.provide('app.ui.ThousandRows.Model');
 goog.require('goog.ui.ThousandRows');
 goog.require('goog.events.EventTarget');
 goog.require('goog.ui.Tooltip');
+goog.require('goog.date.relative');
+goog.require('goog.date');
 
 
 /**
@@ -287,6 +289,28 @@ app.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
 /** @inheritDoc */
 app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) {
   var dh = row.getDomHelper();
+  var esc = goog.string.htmlEscape;
+  
+  var html = '<strong>' + app.ui.ThousandRows.RowRenderer.renderCurrentPrice(esc(record['CurrentPrice'])) + '円</strong>';
+  var bids = +record['Bids'];
+  if (!isNaN(bids) && bids > 0) {
+    html += ' | ';
+    html += '入札 ' + bids;
+  }
+  html += ' | ';
+  html += app.ui.ThousandRows.RowRenderer.renderEndDate(goog.string.htmlEscape(record['EndTime']));
+
+  if (record['Option']) {
+    html += '&nbsp;';
+    goog.array.forEach(['EasyPaymentIcon', 'FeaturedIcon', 'GiftIcon'], function (k) {
+      var url = record['Option'][k];
+      if (url) html += '<img src=' + url + ' />';
+    });
+  }
+  var fragment1 = dh.htmlToDocumentFragment(html);
+
+
+  console.log(record);
   var element = 
       dh.createDom('a', {
             className: 'row',
@@ -298,12 +322,38 @@ app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record)
               src: record['Image']
             })),
           dh.createDom('h4', null, row.getId() + ' ' + record['Title']),
-          dh.createDom('div', '', '' + record['AuctionID']),
-          dh.createDom('div', '', record['BidOrBuy'])
+          dh.createDom('div', 'row-detail', fragment1)
           
           );
   row.setTitleTooltip(record['Title']);
   return element;
+};
+
+
+app.ui.ThousandRows.RowRenderer.renderCurrentPrice = function (escapedString) {
+  var value = +escapedString;
+  if (!goog.isNumber(value)) return null;
+  return app.string.addCommaToNumber('' + Math.floor(value));
+}
+
+app.ui.ThousandRows.RowRenderer.renderEndDate = function (escapedString) {
+  var formatted = goog.date.relative.format(new Date(escapedString).getTime());
+  // Yahoo auction is always in 2 weeks.
+  if (formatted) {
+    if (goog.string.contains(formatted, 'in')) {
+      formatted = 'あと' + formatted.slice(3);
+    }
+    if (goog.string.contains(formatted, 'day')) {
+      formatted = formatted.replace(/day.*$/, '日');
+    } else if (goog.string.contains(formatted, 'minute')) {
+      formatted = formatted.replace(/minute.*$/, '分');
+    } else if (goog.string.contains(formatted, 'hour')) {
+      formatted = formatted.replace(/hour.*$/, '時間');
+    }
+    return formatted;
+  } else {
+    return escapedString;
+  }
 };
 
 

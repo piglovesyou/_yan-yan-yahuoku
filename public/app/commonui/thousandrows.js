@@ -309,8 +309,6 @@ app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record)
   }
   var fragment1 = dh.htmlToDocumentFragment(html);
 
-
-  console.log(record);
   var element = 
       dh.createDom('a', {
             className: 'row',

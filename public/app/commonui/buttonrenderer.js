@@ -33,14 +33,23 @@ goog.inherits(app.ui.ButtonRenderer, goog.ui.ButtonRenderer);
 goog.addSingletonGetter(app.ui.ButtonRenderer);
 
 
+app.ui.ButtonRenderer.prototype.canDecorate = function (element) {
+  return true;
+};
+
+
 /**
+ * For this.tagName.
  * @param {app.ui.Button} button
  */
 app.ui.ButtonRenderer.prototype.createDom = function (button) {
   var dh = button.getDomHelper();
-  var element = dh.createDom(this.tagName, {
-    className: 'btn'
-  }, button.getContent());
+
+  // Create and return DIV wrapping contents.
+  var element = button.getDomHelper().createDom(
+      this.tagName, 'btn ' + this.getClassNames(button).join(' '), button.getContent());
+  this.setAriaStates(button, element);
+  return element;
 
   var tooltip = button.getTooltip();
   if (tooltip) {

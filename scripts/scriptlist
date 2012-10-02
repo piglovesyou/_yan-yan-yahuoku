@@ -118,6 +118,14 @@ public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/
 public/closure-library/closure/goog/math/range.js
 public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/thousandrows.js
 public/app/commonui/thousandrows.js
+public/app/controller/util.js
+public/closure-library/closure/goog/ui/buttonside.js
+public/closure-library/closure/goog/ui/buttonrenderer.js
+public/closure-library/closure/goog/ui/nativebuttonrenderer.js
+public/closure-library/closure/goog/ui/button.js
+public/closure-library/closure/goog/ui/cssnames.js
+public/closure-library/closure/goog/ui/custombuttonrenderer.js
+public/closure-library/closure/goog/ui/togglebutton.js
 public/app/controller/frames/container/detail.js
 public/app/model/xhr.js
 public/closure-library/closure/goog/storage/mechanism/mechanism.js
@@ -135,11 +143,7 @@ public/app/controller/frames/container/container.js
 public/app/events/eventcenter.js
 public/closure-library/closure/goog/events/inputhandler.js
 public/app/controller/frames/searchbar/queryinput.js
-public/closure-library/closure/goog/ui/buttonside.js
-public/closure-library/closure/goog/ui/buttonrenderer.js
 public/app/commonui/buttonrenderer.js
-public/closure-library/closure/goog/ui/nativebuttonrenderer.js
-public/closure-library/closure/goog/ui/button.js
 public/closure-library/closure/goog/ui/ac/autocomplete.js
 public/closure-library/closure/goog/dom/selection.js
 public/closure-library/closure/goog/useragent/product.js

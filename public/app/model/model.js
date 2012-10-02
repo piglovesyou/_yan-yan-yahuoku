@@ -83,7 +83,8 @@ app.model.Key = {
  */
 app.model.KeyPrefix = {
   AUCTION_ITEM_: 'auctionitem:',
-  TAB_: 'tab:'
+  TAB_: 'tab:',
+  _DETAILTITLEFIXEDSTATE_: ':detailtitlefixedstate:'
 };
 
 
@@ -166,5 +167,24 @@ app.model.getAuctionItem = function (id, callback, opt_obj) {
       }
       callback.call(opt_obj, err, itemData);
     });
+  }
+};
+
+
+app.model.setDetailTitleFixedState = function (tabId, fixed) {
+  var storage = app.model.getLocalStore_();
+  storage.set(app.model.KeyPrefix.TAB_ + tabId + 
+              app.model.KeyPrefix._DETAILTITLEFIXEDSTATE_, !!fixed);
+};
+
+
+app.model.getDetailTitleFixedState = function (tabId) {
+  var storage = app.model.getLocalStore_();
+  var value = storage.get(app.model.KeyPrefix.TAB_ + tabId + 
+                app.model.KeyPrefix._DETAILTITLEFIXEDSTATE_);
+  if (goog.isDefAndNotNull(value) && goog.isBoolean(value)) {
+    return value;
+  } else {
+    return false;
   }
 };

@@ -104,29 +104,36 @@ app.controller.Detail.prototype.renderContent = function (data) {
           dh.createDom('tr', null,
             dh.createDom('th', null, '終了日時'), dh.createDom('td', null, data['EndTime'])),
           dh.createDom('tr', null,
-            dh.createDom('th', null, '早期終了'), dh.createDom('td', null, data['Price'])),
+            dh.createDom('th', null, '早期終了'), dh.createDom('td', null, data['IsEarlyClosing']=='true'?'あり':'なし')),
           dh.createDom('tr', null,
-            dh.createDom('th', null, '自動延長'), dh.createDom('td', null, data['Price'])),
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '商品の状態'), dh.createDom('td', null, data['Price'])),
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '返品の可否'), dh.createDom('td', null, data['Price']))
+            dh.createDom('th', null, '自動延長'), dh.createDom('td', null, data['IsAutomaticExtension']=='true'?'あり':'なし')),
+          data['ItemStatus'] ?
+            dh.createDom('tr', null,
+              dh.createDom('th', null, '商品の状態'), dh.createDom('td', null, data['ItemStatus']['Condition']))
+          :null,
+          data['ItemReturnable'] ?
+            dh.createDom('tr', null,
+              dh.createDom('th', null, '返品の可否'), dh.createDom('td', null, data['ItemReturnable']['Allowed']=='true'?'あり':'なし'))
+          :null
         )
       );
 
-  var paymentTable = 
+  // TODO: data['ShipTime']
+  var paymentTable = data['Payment'] ?
       dh.createDom('table', 'table table-bordered table-condensed',
         // dh.createDom('caption', null, 'caption......'),
         dh.createDom('tbody', null,
-          dh.createDom('tr', null,
-            dh.createDom('th', {'rowspan':2}, '決済方法'), 
-            dh.createDom('td', {'colspan':2}, 
-              dh.htmlToDocumentFragment('Yahoo!簡単決済' + 
-                (data['Payment']['EasyPayment']['IsCreditCard']=='true' ? '<br> - クレジットカード決済':'') +
-                (data['Payment']['EasyPayment']['IsNetBank']=='true' ? '<br> - 銀行ネット決済':'')
+          data['Payment']['EasyPayment'] ?
+            dh.createDom('tr', null,
+              dh.createDom('th', {'rowspan':2}, '決済方法'), 
+              dh.createDom('td', {'colspan':2}, 
+                dh.htmlToDocumentFragment('Yahoo!簡単決済' + 
+                  (data['Payment']['EasyPayment']['IsCreditCard']=='true' ? '<br> - クレジットカード決済':'') +
+                  (data['Payment']['EasyPayment']['IsNetBank']=='true' ? '<br> - 銀行ネット決済':'')
+                )
               )
             )
-          ),
+          :null,
           (data['Payment']['Bank'] && +data['Payment']['Bank']['@attributes']['totalBankMethodAvailable']>=1) ?
             dh.createDom('tr', null,
               dh.createDom('td', {style:'width:60px'}, '銀行振込'),
@@ -140,9 +147,10 @@ app.controller.Detail.prototype.renderContent = function (data) {
                   )
                 )
               )
-            ):null
+            )
+          :null
         )
-      );
+      ):null;
 
   var senddetailTable = 
       dh.createDom('table', 'table table-bordered table-condensed',
@@ -178,6 +186,7 @@ app.controller.Detail.prototype.renderContent = function (data) {
       shippingTable);
 
   dh.append(this.innerElement_, images, descriptionContainer);
+  this.update();
 };
 
 
@@ -212,6 +221,7 @@ app.controller.Detail.prototype.prepareContent_ = function (toShow) {
   dh.removeChildren(this.titleInnerElement_);
   dh.removeNode(this.emptyMessageElement_);
   dh.removeChildren(this.innerElement_);
+  this.setZero();
 };
 
 

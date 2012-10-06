@@ -1,10 +1,10 @@
 
-div(style="margin: 100px")
-  input#suggest-input(type="text")
+  
+
+
+div#target(style="margin:100px;padding: 20px; width:100px;height: 100px;background:rgba(0,0,0,.05)")
+  | yeah
 
 script
-  // console.log(my.ui.Suggest);
-  // new my.ui.Suggest
-  var button = new goog.ui.Button('aaa', 
-      my.ui.ButtonRenderer.getInstance());
-  button.render()
+  var menu = app.ui.ContextMenu.getInstance();
+  menu.launch(goog.dom.getElement('target'), [1,2,3,4,5]);

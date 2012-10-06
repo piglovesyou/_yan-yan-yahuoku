@@ -17,10 +17,12 @@ app.controller.Detail = function (opt_domHelper) {
 }
 goog.inherits(app.controller.Detail, goog.ui.Scroller);
 
+
 /**
  * @type {app.controller.Detail.TitleFixedStateButton}
  */
 app.controller.Detail.prototype.titleFixedStateButton_;
+
 
 app.controller.Detail.prototype.emptyMessageElement_;
 app.controller.Detail.prototype.titleElement_;
@@ -71,7 +73,7 @@ app.controller.Detail.prototype.renderContent = function (data) {
       dh.createDom('a', {
         target: '_blank',
         href: data['AuctionItemUrl']
-      }, dh.createTextNode(data['Title'] + ' '), dh.createDom('i', 'icon-share-alt')));
+      }, dh.createTextNode(data['Title'] + ' '), dh.createDom('span', 'i i-text', 'o')));
   
   var images = dh.createDom('div', {className: 'detail-images', 'style':'text-align:center'}); 
   var imageCount = 0;
@@ -209,8 +211,7 @@ app.controller.Detail.prototype.clearContent = function (isFirst) {
     this.prepareContent_(false);
   }
   content.appendChild(this.emptyMessageElement_ =
-      dh.createDom('h2', { 'style': 'color:lightgray;text-align:center' },
-        'アイテムを選択してください'));
+      dh.createDom('h2', 'detail-emptymessage', 'アイテムを選択してください'));
   if (!isFirst) this.update();
 };
 
@@ -250,4 +251,12 @@ app.controller.Detail.TitleFixedStateButton.prototype.enterDocument = function (
     // Prevent that a parent node steels focus.
     e.stopPropagation();
   });
+};
+
+app.controller.Detail.TitleFixedStateButton.prototype.disposeInternal = function () {
+  if (this.titleFixedStateButton_) {
+    this.titleFixedStateButton_.dispose();
+    this.titleFixedStateButton_ = null;
+  }
+  goog.base(this, 'disposeInternal');
 };

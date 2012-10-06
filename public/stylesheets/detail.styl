@@ -1,12 +1,18 @@
 
-detailTitleHeight = 32px
+detailTitleHeight = 36px
 
 .goog-splitpane-second-container
+  a[href]
+    text-decoration underline
   .goog-scroller-container
     position: relative
   .goog-scroller-bar
     z-index: 2
 
+  .detail-emptymessage
+    margin: 0
+    color:lightgray
+    text-align:center
   .detail-title-fixed
     .detail-title
       position: absolute
@@ -17,6 +23,8 @@ detailTitleHeight = 32px
       z-index: 1
     .detail-inner
       padding-top: detailTitleHeight
+    .detail-title-fixedstatebutton
+      color #999
 
   .detail-title
     clearfix()
@@ -31,9 +39,10 @@ detailTitleHeight = 32px
     float: right
 
   .detail-title-fixedstatebutton
-    font-size: 22px
+    border none
     padding: 5px;
     margin-bottom: 2px;
+    font-size: 22px
 
   .detail-description-container
     margin: 10px 20px

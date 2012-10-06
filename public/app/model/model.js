@@ -84,7 +84,8 @@ app.model.Key = {
 app.model.KeyPrefix = {
   AUCTION_ITEM_: 'auctionitem:',
   TAB_: 'tab:',
-  _DETAILTITLEFIXEDSTATE_: ':detailtitlefixedstate:'
+  _DETAILTITLEFIXEDSTATE_: ':detailtitlefixedstate:',
+  _DETAILPANEWIDTH_: ':detailpanewidth'
 };
 
 
@@ -187,4 +188,29 @@ app.model.getDetailTitleFixedState = function (tabId) {
   } else {
     return false;
   }
+};
+
+
+/**
+ * @param {string} tabId
+ * @param {number} width
+ * @return {number}
+ */
+app.model.setDetailPaneWidth = function (tabId, width) {
+  goog.asserts.assertNumber(width, 'Invalid type for detail pane width.');
+  goog.asserts.assert(width > 0, 'Invalid width for detail pane.');
+  var storage = app.model.getLocalStore_();
+  storage.set(app.model.KeyPrefix.TAB_ + tabId + 
+              app.model.KeyPrefix._DETAILPANEWIDTH_, width);
+};
+
+
+/**
+ * @param {string} tabId
+ * @return {number}
+ */
+app.model.getDetailPaneWidth = function (tabId) {
+  var storage = app.model.getLocalStore_();
+  return storage.get(app.model.KeyPrefix.TAB_ + tabId + 
+              app.model.KeyPrefix._DETAILPANEWIDTH_);
 };

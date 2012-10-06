@@ -13,7 +13,7 @@ goog.require('app.controller.util');
  * @extends {goog.ui.Scroller}
  */
 app.controller.Detail = function (opt_domHelper) {
-  goog.base(this, 'vertical', opt_domHelper);
+  goog.base(this, goog.ui.Scroller.ORIENTATION.BOTH, opt_domHelper);
 }
 goog.inherits(app.controller.Detail, goog.ui.Scroller);
 

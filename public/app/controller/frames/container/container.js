@@ -64,10 +64,13 @@ app.controller.Container.prototype.enterDocument = function () {
     .listen(this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
     .listen(this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, function (e) {
       this.detail_.update();
+      app.model.setDetailPaneWidth(app.controller.util.getFrameId(this),
+        this.detail_.getWidth());
     })
     .listen(this.resizeTimer_, goog.Timer.TICK, this.handleResizeTimerTick_);
 
-  this.resize_();
+  this.setDetailpainSize_(app.model.getDetailPaneWidth(app.controller.util.getFrameId(this)));
+
   goog.base(this, 'enterDocument');
 
   // First request by thousand rows.
@@ -125,11 +128,27 @@ app.controller.Container.prototype.resize_ = function () {
 
 app.controller.Container.prototype.handleResizeTimerTick_ = function (e) {
   this.resizeTimer_.stop();
+  this.setDetailpainSize_();
+};
+
+
+/**
+ * If an argument passed, use it.
+ * @param {number?} opt_width
+ */
+app.controller.Container.prototype.setDetailpainSize_ = function (opt_width) {
   var size = app.dom.ViewportSizeMonitor.getInstance().getSize();
   size.height -= this.getOffsetTop_();
   goog.style.setBorderBoxSize(this.getElement(), size);
-  this.setFirstComponentSize(size.width - this.detailPaneElement_.offsetWidth);
-  
+
+  var leftPaneWidth = Math.max(240, size.width - 
+      (goog.isDefAndNotNull(opt_width) ? 
+        opt_width : this.detailPaneElement_.offsetWidth));
+
+  this.setFirstComponentSize(leftPaneWidth);
+  var width = size.width - leftPaneWidth;
+  app.model.setDetailPaneWidth(app.controller.util.getFrameId(this), width);
+
   var iframeOverlay = this.getIframeOverlay_();
   if (iframeOverlay) {
     goog.style.setBorderBoxSize(iframeOverlay, size);

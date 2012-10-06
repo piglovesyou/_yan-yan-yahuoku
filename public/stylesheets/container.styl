@@ -44,12 +44,21 @@ splitPaneHandleHeight = 100px
 .goog-splitpane-second-container
   .goog-scroller-bar
     background: none
+
+  .goog-scroller-bar-vertical
     width: 20px
+    > .goog-scroller-bar-thumb
+      width: 14px
+      left: 3px !important
+  .goog-scroller-bar-horizontal
+    height: 20px
+    > .goog-scroller-bar-thumb
+      height: 14px
+      top: 3px !important
   .goog-scroller-bar-thumb
     border-radius: 1px
     background: rgba(0,0,0,.1)
-    width: 14px
-    left: 3px !important
+
   .goog-scroller-bar:hover,
   .goog-slider-dragging
     background: rgba(0,0,0,.03)

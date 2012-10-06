@@ -291,14 +291,14 @@ app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record)
   var dh = row.getDomHelper();
   var esc = goog.string.htmlEscape;
   
-  var html = '<strong>' + app.ui.ThousandRows.RowRenderer.renderCurrentPrice(esc(record['CurrentPrice'])) + '円</strong>';
+  var html = '<strong>' + app.string.renderPrice(esc(record['CurrentPrice'])) + '</strong>';
   var bids = +record['Bids'];
   if (!isNaN(bids) && bids > 0) {
     html += ' | ';
     html += '入札 ' + bids;
   }
   html += ' | ';
-  html += app.ui.ThousandRows.RowRenderer.renderEndDate(goog.string.htmlEscape(record['EndTime']));
+  html += app.string.renderEndDate(esc(record['EndTime']));
 
   if (record['Option']) {
     html += '&nbsp;';
@@ -328,33 +328,6 @@ app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record)
 };
 
 
-app.ui.ThousandRows.RowRenderer.renderCurrentPrice = function (escapedString) {
-  var value = +escapedString;
-  if (!goog.isNumber(value)) return null;
-  return app.string.addCommaToNumber('' + Math.floor(value));
-}
-
-app.ui.ThousandRows.RowRenderer.renderEndDate = function (escapedString) {
-  var formatted = goog.date.relative.format(new Date(escapedString).getTime());
-  // Yahoo auction is always in 2 weeks.
-  if (formatted) {
-    if (goog.string.contains(formatted, 'in')) {
-      formatted = 'あと' + formatted.slice(3);
-    }
-    if (goog.string.contains(formatted, 'day')) {
-      formatted = formatted.replace(/day.*$/, '日');
-    } else if (goog.string.contains(formatted, 'minute')) {
-      formatted = formatted.replace(/minute.*$/, '分');
-    } else if (goog.string.contains(formatted, 'hour')) {
-      formatted = formatted.replace(/hour.*$/, '時間');
-    }
-    return formatted;
-  } else {
-    return escapedString;
-  }
-};
-
-
 
 
 /**
@@ -370,6 +343,13 @@ app.ui.ThousandRows.Model = function (uri, opt_totalRowCount, opt_updateTotalWit
   goog.base(this, uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager);
 };
 goog.inherits(app.ui.ThousandRows.Model, goog.ui.thousandrows.Model);
+
+
+app.ui.ThousandRows.Model.prototype.buildUri_ = function (index, rowCountInPage) {
+	var uri = goog.Uri.parse(this.uri_);
+	uri.setParameterValue('page', index + 1);
+	return uri.toString();
+};
 
 
 app.ui.ThousandRows.Model.prototype.extractTotalFromJson = function (json) {

@@ -2,6 +2,7 @@
 goog.provide('app.string');
 
 goog.require('goog.date.relative');
+goog.require('goog.i18n.DateTimeFormat');
 
 
 app.string = {};
@@ -16,6 +17,39 @@ app.string.renderPrice = function (escapedString) {
   if (!goog.isNumber(value) || isNaN(value)) return null;
   return app.string.addCommaToNumber('' + Math.floor(value)) + '円';
 }
+
+
+/**
+ * @type {goog.i18n.DateTimeFormat}
+ */
+app.string.dateFormatter_;
+
+
+/**
+ * @param {string} escapeString
+ * @return {string}
+ */
+app.string.renderDate = function (escapedString) {
+  if (!app.string.dateFormatter_) {
+    app.string.dateFormatter_ = new goog.i18n.DateTimeFormat('M月 d日 H時 m分');
+  }
+  return app.string.dateFormatter_.format(new Date(escapedString));
+};
+
+
+app.string.renderBoolean = function (escapedString) {
+  return escapedString == 'true' ? 'あり' : 'なし' 
+}
+
+
+app.string.renderItemCondition = function (escapedString) {
+  switch (escapedString) {
+    case 'new': return '新品';
+    case 'used': return '中古';
+    case 'other': return 'その他';
+  }
+  return '';
+};
 
 
 /**
@@ -38,7 +72,7 @@ app.string.renderEndDate = function (escapedString) {
     }
     return formatted;
   } else {
-    return escapedString;
+    return app.string.renderDate(escapedString);
   }
 };
 

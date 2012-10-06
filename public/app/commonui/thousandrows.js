@@ -292,10 +292,9 @@ app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record)
   var esc = goog.string.htmlEscape;
   
   var html = '<strong>' + app.string.renderPrice(esc(record['CurrentPrice'])) + '</strong>';
-  var bids = +record['Bids'];
-  if (!isNaN(bids) && bids > 0) {
+  if (goog.string.isNumeric(record['Bids']) && +record['Bids']>=1) {
     html += ' | ';
-    html += '入札 ' + bids;
+    html += '入札 ' + record['Bids'];
   }
   html += ' | ';
   html += app.string.renderEndDate(esc(record['EndTime']));

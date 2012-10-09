@@ -1,7 +1,8 @@
 
 
 $distFromCenter = 120px
-$menuItemWidth = 60px
+$menuItemWidth = 50px
+$menuItemLineHeight = 52px
 $transitionDuration = .2s
 $transitionEasing = ease-out
 
@@ -11,15 +12,21 @@ $transitionEasing = ease-out
   left: 0
   width: 100%
   height: 100%;
-  background: rgba(0,0,0,.1)
-.container  
+  background-color: rgba(0,0,0,.1)
+  opacity 1
+  transition: opacity .2s linear //background-color .1s linear
+  
+  &.goog-control-disabled
+    // background: rgba(0,0,0,0)
+    opacity 0
+.contextmenu  
   position: absolute;
   top: 300px;
   left: 400px;
   width: 400px;
   height: 400px;
   border: gray 1px solid
-  .container-inner
+  .contextmenu-inner
     position relative
     left ($menuItemWidth / -2)
     top ($menuItemWidth / -2)
@@ -30,12 +37,23 @@ $transitionEasing = ease-out
       position relative
       width: $menuItemWidth
       height: $menuItemWidth
-      background: blue
       border-radius ($menuItemWidth / 2)
-      color white
-      line-height $menuItemWidth
+      line-height $menuItemLineHeight
       text-align center
-      transition: -webkit-transform $transitionDuration $transitionEasing
+      transition:
+        background-color ($transitionDuration / 2) linear ($transitionDuration / 2),
+        color ($transitionDuration / 2) linear ($transitionDuration / 2),
+        -webkit-transform $transitionDuration $transitionEasing
+      font-size 38px
+    &.goog-control-selected .menu-item-inner,
+    &.goog.control-hover .menu-item-inner
+      background: #08C
+      color white
+    &.goog.control-hover .menu-item-inner
+      transition:
+        background-color ($transitionDuration / 2) linear 0,
+        color ($transitionDuration / 2) linear 0,
+        -webkit-transform $transitionDuration $transitionEasing
   // for $n in 1..5
   //   .menu-item:nth-child({$n})
   //     $degree = 360 / 5 * $n

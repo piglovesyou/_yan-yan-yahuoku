@@ -7,4 +7,6 @@ div#target(style="margin:100px;padding: 20px; width:100px;height: 100px;backgrou
 
 script
   var menu = app.ui.ContextMenu.getInstance();
-  menu.launch(goog.dom.getElement('target'), [1,2,3,4,5]);
+  goog.events.listen(document.body, 'mousedown', function () {
+    menu.launch(goog.dom.getElement('target'), ['9','b','g','l','j']);
+  });

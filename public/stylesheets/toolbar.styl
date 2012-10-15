@@ -39,14 +39,6 @@ toolbarRightWidth = 100px
 
 tabHeight = 24px
   
-tabSelectedStyle()
-  box-shadow: 0 1px 0 #f2f2f2 // hide white border
-  border-bottom: 1px transparent solid
-
-tabUnselectedStyle()
-  box-shadow 0 -16px 16px rgba(0,0,0,.1) inset
-  border-bottom: 1px tabBorderColor solid
-  
 .tabs
   margin-left: toolbarLeftWidth
   margin-right: toolbarRightWidth
@@ -56,35 +48,50 @@ tabUnselectedStyle()
   position: relative
   float: left
   padding: 0 15px 1px
-  margin-right: -18px
+  margin-right: -17px
   box-sizing: border-box
-  tabUnselectedStyle()
-  background: white
   height: tabHeight
   width: 18%
   min-width: 180px
-  background: url(../images/bg_tableft.png) left top no-repeat,
-              url(../images/bg_tabright.png) right top no-repeat;
   color: #444
   cursor: default
-
+  background: url(../images/aa/bg_tableft.png) left top no-repeat,
+              url(../images/aa/bg_tabright.png) right top no-repeat
   &.selected
-    tabSelectedStyle()
-    z-index: 1
-    .tab-content
-      tabSelectedStyle()
-      height: 100%
-      padding: 3px 0 0 3px
-      line-height: tabHeight - 4px
+    background: url(../images/bg_tableft.png) left top no-repeat,
+                url(../images/bg_tabright.png) right top no-repeat
+    z-index: 10 !important
+
+for i in 1 2 3 4 5
+  .tab:nth-child({i})
+    z-index: 5 - i
+
+.tab-content
+  box-sizing: border-box
+  height: tabHeight
+  padding: 3px 0 0 3px
+  line-height: tabHeight - 4px
+  ellipsis(true)
+  tabUnselectedStyle()
+  background: url(../images/aa/bg_tabcenter.png) left top repeat-x
+
+.selected .tab-content
+  background: url(../images/bg_tabcenter.png) left top repeat-x
 
 .tab-dragging
   top: toolbarHeight - tabHeight !important
 
-.tab-content
-  ellipsis(true)
-  tabUnselectedStyle()
-  background: url(../images/bg_tabcenter.png) left top repeat-x;
-
 .tabs-content
   position: relative
   clearfix()
+
+.tab-adder
+  position: absolute
+  top: 0
+  height: tabHeight
+  width: 22px
+  background: url(../images/bg_tabadder.png) center top no-repeat
+  &:hover
+    background-position: center -24px
+  &:active
+    background-position: center -48px

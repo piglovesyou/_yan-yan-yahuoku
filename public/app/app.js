@@ -32,13 +32,7 @@ App.prototype.initModel_ = function () {
   if (!tabIds) {
     var tabId = goog.ui.IdGenerator.getInstance().getNextUniqueId();
     app.model.setTabIds([tabId]);
-    app.model.setTabQuery(tabId, {
-      'query': '',
-      'category': {
-        'CategoryId': 0,
-        'CategoryPath': ''
-      }
-    });
+    app.model.setTabQuery(tabId, app.model.createEmptyTab());
   }
 };
 

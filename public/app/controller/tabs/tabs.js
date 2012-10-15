@@ -27,11 +27,18 @@ app.controller.Tabs.prototype.enterDocument = function () {
 
 
 app.controller.Tabs.prototype.handleAdderClicked_ = function (e) {
+  this.selectTab(this.insertNewTab_());
+  this.repositionAdder_();
 };
 
 
 app.controller.Tabs.prototype.decorateInternal = function (element) {
   var dh = this.getDomHelper();
+
+  var tabAdder = this.adder_ = new app.controller.TabAdder(dh);
+  this.addChild(tabAdder);
+  tabAdder.createDom();
+  dh.append(this.getElement(), tabAdder.getElement());
 
   var tabIds = app.model.getTabIds();
   goog.asserts.assert(tabIds, 'We have to have tab ids.');
@@ -42,7 +49,6 @@ app.controller.Tabs.prototype.decorateInternal = function (element) {
 
   goog.array.forEach(tabIds, function (tabId, index) {
     var tab = new app.controller.Tab(tabId, dh);
-    this.addChild(tab);
 
     var tabElm = tabElms[index];
     if (tabElm) {
@@ -55,7 +61,7 @@ app.controller.Tabs.prototype.decorateInternal = function (element) {
       // TODO: Implement this.insertTab_
       // this.insertTab_(tab);
     }
-    // tab.renderContent();
+    this.addChildAt(tab, index);
 
     if (goog.dom.classes.has(tabElm, 'selected')) {
       goog.asserts.assert(!this.currSelectedTab_, 'Two or more selected tab element.');
@@ -63,13 +69,22 @@ app.controller.Tabs.prototype.decorateInternal = function (element) {
     }
   }, this);
 
-  var tabAdder = this.adder_ = new app.controller.TabAdder(dh);
-  this.addChild(tabAdder);
-  tabAdder.createDom();
-  dh.append(this.getElement(), tabAdder.getElement());
   this.repositionAdder_();
-
   this.setupDragListGroup_();
+};
+
+
+app.controller.Tabs.prototype.insertNewTab_ = function () {
+  var dh = this.getDomHelper();
+  var lastIndex = this.getLastTabIndex_();
+  var tab = new app.controller.Tab(goog.ui.IdGenerator.getInstance().getNextUniqueId(), dh);
+  this.addChildAt(tab, lastIndex + 1);
+  app.model.setTabIds(this.getTabIds());
+  tab.createDom();
+  dh.append(this.getContentElement(), tab.getElement()); // <-- Because I want do this, I don't addChildAt(tab, index, true).
+  tab.enterDocument();
+  this.setupDragListGroup_();
+  return tab;
 };
 
 
@@ -88,6 +103,15 @@ app.controller.Tabs.prototype.repositionAdder_ = function () {
 };
 
 
+app.controller.Tabs.prototype.getTabIds = function () {
+  var ids = [];
+  this.forEachChild(function (child) {
+    if (child instanceof app.controller.Tab) ids.push(child.getId());
+  });
+  return ids;
+};
+
+
 /**
  * @return {app.controller.TabAdder}
  */
@@ -103,6 +127,24 @@ app.controller.Tabs.prototype.getLastTab_ = function () {
   }, this);
   goog.asserts.assert(tab, 'Must be a tab');
   return tab;
+};
+
+
+/**
+ * @return {app.controller.TabAdder}
+ */
+app.controller.Tabs.prototype.getLastTabIndex_ = function () {
+  var index;
+  goog.array.findRight(this.getChildIds(), function (id, i) {
+    var child = this.getChild(id);
+    if (child && child instanceof app.controller.Tab) {
+      index = i;
+      return true;
+    }
+    return false;
+  }, this);
+  goog.asserts.assertNumber(index, 'Must be a tab index');
+  return index;
 };
 
 
@@ -231,18 +273,18 @@ app.controller.Tab.prototype.enterDocument = function () {
       .listen(
         app.Model.getInstance(), 
         app.Model.EventType.UPDATE_TABQUERY, function (e) {
-          this.renderContent();
+          this.renderContent_();
         });
-  this.renderContent();
+  this.renderContent_();
   goog.base(this, 'enterDocument');
 };
 
 
-app.controller.Tab.prototype.renderContent = function () {
+app.controller.Tab.prototype.renderContent_ = function () {
   var data = app.model.getTabQuery(this.getId());
-  goog.asserts.assert(data, 'Model should have data here.');
+  
+  if (!data) app.model.setTabQuery(this.getId(), data = app.model.createEmptyTab());
 
-  // TODO: I want renderer for him
   var query = data['query'];
   if (!query) {
     query = '全てのアイテム';
@@ -289,6 +331,15 @@ app.controller.Tab.prototype.getContentElement = function () {
 app.controller.Tab.prototype.decorateInternal = function (element) {
   this.setElementInternal(element);
   goog.style.setUnselectable(element, true, true);
+};
+
+
+/** @inheritDoc */
+app.controller.Tab.prototype.createDom = function () {
+  var dh = this.getDomHelper();
+  var element = dh.createDom('div', 'tab selected',
+      this.contentElement_ = dh.createDom('div', 'tab-content'));
+  this.setElementInternal(element);
 };
 
 

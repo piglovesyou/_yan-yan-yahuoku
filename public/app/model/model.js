@@ -240,3 +240,18 @@ app.model.getDetailPaneWidth = function (tabId) {
   return storage.get(app.model.KeyPrefix.TAB_ + tabId + 
               app.model.KeyPrefix._DETAILPANEWIDTH_);
 };
+
+
+
+/**
+ * @return {Object}
+ */
+app.model.createEmptyTab = function () {
+  return {
+    'query': '',
+    'category': {
+      'CategoryId': 0,
+      'CategoryPath': ''
+    }
+  }
+};

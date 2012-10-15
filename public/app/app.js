@@ -73,8 +73,8 @@ App.prototype.initTabAndFrame_ = function () {
   this.addChild(frames);
   frames.decorate(this.framesElement_);
 
-  // goog.asserts.assert(tabs.getChildCount() > 0, 'Tab has to be more than 1.');
-  // goog.asserts.assert(frames.getChildCount() == 1, 'Frame has to be only one at decorating phase.');
+  goog.asserts.assert(tabs.getChildCount() > 0, 'Tab has to be more than 1.');
+  goog.asserts.assert(frames.getChildCount() == 1, 'Frame has to be only one at decorating phase.');
 };
 
 App.prototype.enterDocument = function () {
@@ -97,7 +97,6 @@ App.prototype.canDecorate = function (element) {
     var toolbar = dh.getElementByClass('toolbar', element);
     var tabs = dh.getElementByClass('tabs', element);
     var frames = dh.getElementByClass('main-frame', element);
-    // var container = dh.getElementByClass('container', element);
     if (toolbar && tabs && frames) {
       this.toolbarElement_ = toolbar;
       this.tabsElement_ = tabs;

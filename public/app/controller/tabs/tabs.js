@@ -19,13 +19,24 @@ app.controller.Tabs = function (opt_domHelper) {
 goog.inherits(app.controller.Tabs, goog.ui.Component);
 
 
+app.controller.Tabs.prototype.enterDocument = function () {
+  goog.base(this, 'enterDocument');
+  this.getHandler()
+      .listen(this, app.controller.TabAdder.EventType.CLICK, this.handleAdderClicked_);
+};
+
+
+app.controller.Tabs.prototype.handleAdderClicked_ = function (e) {
+};
+
+
 app.controller.Tabs.prototype.decorateInternal = function (element) {
   var dh = this.getDomHelper();
 
   var tabIds = app.model.getTabIds();
   goog.asserts.assert(tabIds, 'We have to have tab ids.');
 
-  // Basically, element to decorate supposed to be only 1.
+  // Element to decorate must be only 1.
   var tabElms = dh.getChildren(this.contentElement_);
   goog.asserts.assert(tabIds.length >= tabElms.length, 'Too many tab elements.');
 
@@ -51,7 +62,47 @@ app.controller.Tabs.prototype.decorateInternal = function (element) {
       this.currSelectedTab_ = tab;
     }
   }, this);
+
+  var tabAdder = this.adder_ = new app.controller.TabAdder(dh);
+  this.addChild(tabAdder);
+  tabAdder.createDom();
+  dh.append(this.getElement(), tabAdder.getElement());
+  this.repositionAdder_();
+
   this.setupDragListGroup_();
+};
+
+
+/**
+ * @type {app.controller.TabAdder}
+ */
+app.controller.Tabs.prototype.adder_;
+
+
+app.controller.Tabs.prototype.repositionAdder_ = function () {
+  var lastEl = this.getLastTab_().getElement();
+  var pos = goog.style.getPageOffset(lastEl);
+  var minusMargin = 3;
+  goog.style.setPageOffset(this.adder_.getElement(),
+      pos.x + lastEl.offsetWidth - minusMargin, pos.y);
+};
+
+
+/**
+ * @return {app.controller.TabAdder}
+ */
+app.controller.Tabs.prototype.getLastTab_ = function () {
+  var tab;
+  goog.array.findRight(this.getChildIds(), function (id) {
+    var child = this.getChild(id);
+    if (child && child instanceof app.controller.Tab) {
+      tab = child;
+      return true;
+    }
+    return false;
+  }, this);
+  goog.asserts.assert(tab, 'Must be a tab');
+  return tab;
 };
 
 
@@ -176,11 +227,12 @@ goog.inherits(app.controller.Tab, goog.ui.Component);
 
 
 app.controller.Tab.prototype.enterDocument = function () {
-  this.getHandler().listen(
-      app.Model.getInstance(), 
-      app.Model.EventType.UPDATE_TABQUERY, function (e) {
-        this.renderContent();
-      });
+  this.getHandler()
+      .listen(
+        app.Model.getInstance(), 
+        app.Model.EventType.UPDATE_TABQUERY, function (e) {
+          this.renderContent();
+        });
   this.renderContent();
   goog.base(this, 'enterDocument');
 };
@@ -260,4 +312,37 @@ app.controller.Tab.prototype.disposeInternal = function () {
     this.tooltip_ = null;
   }
   goog.base(this, 'disposeInternal')
+};
+
+
+
+
+/**
+ * @param {goog.dom.DomHelper=} opt_domHelper
+ * @constructor
+ * @extends {goog.ui.Component}
+ */
+app.controller.TabAdder = function (opt_domHelper) {
+  goog.base(this, opt_domHelper);
+};
+goog.inherits(app.controller.TabAdder, goog.ui.Component);
+
+
+app.controller.TabAdder.EventType = {
+  CLICK: 'tabadderclicked'
+};
+
+
+app.controller.TabAdder.prototype.enterDocument = function () {
+  goog.base(this, 'enterDocument');
+  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK, function () {
+    this.dispatchEvent(app.controller.TabAdder.EventType.CLICK);
+  });
+};
+
+
+app.controller.TabAdder.prototype.createDom = function () {
+  var dh = this.getDomHelper();
+  var element = dh.createDom('div', 'tab-adder');
+  this.setElementInternal(element);
 };

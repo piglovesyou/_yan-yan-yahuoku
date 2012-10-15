@@ -1,11 +1,12 @@
 
 goog.provide('app.Model');
 
-goog.require('goog.storage.ExpiringStorage');
+goog.require('goog.storage.CollectableStorage');
 goog.require('goog.storage.mechanism.HTML5SessionStorage');
 goog.require('goog.storage.mechanism.HTML5LocalStorage');
 goog.require('app.model.Xhr');
 goog.require('goog.events.EventTarget');
+goog.require('goog.Timer');
 
 
 /**
@@ -14,8 +15,8 @@ goog.require('goog.events.EventTarget');
  */
 app.Model = function () {
   goog.base(this);
-  // this.sessionStore_ = new goog.storage.ExpiringStorage(new goog.storage.mechanism.HTML5SessionStorage());
-  this.localStore_ = new goog.storage.ExpiringStorage(new goog.storage.mechanism.HTML5LocalStorage());
+  this.sessionStore_ = new goog.storage.CollectableStorage(new goog.storage.mechanism.HTML5SessionStorage());
+  this.localStore_ = new goog.storage.CollectableStorage(new goog.storage.mechanism.HTML5LocalStorage());
 };
 goog.inherits(app.Model, goog.events.EventTarget);
 goog.addSingletonGetter(app.Model);
@@ -32,7 +33,15 @@ app.Model.EventType = {
 
 
 /**
- * @return {goog.storage.ExpiringStorage}
+ * @return {goog.storage.CollectableStorage}
+ */
+app.Model.prototype.getSessionStore = function () {
+  return this.sessionStore_;
+};
+
+
+/**
+ * @return {goog.storage.CollectableStorage}
  */
 app.Model.prototype.getLocalStore = function () {
   return this.localStore_;
@@ -47,7 +56,7 @@ app.Model.prototype.getLocalStore = function () {
 
 /**
  * @private
- * @return {goog.storage.ExpiringStorage}
+ * @return {goog.storage.CollectableStorage}
  */
 app.model.getLocalStore_ = function () {
   return app.Model.getInstance().getLocalStore();
@@ -55,10 +64,19 @@ app.model.getLocalStore_ = function () {
 
 
 /**
+ * @private
+ * @return {goog.storage.CollectableStorage}
+ */
+app.model.getSessionStore_ = function () {
+  return app.Model.getInstance().getSessionStore();
+};
+
+
+/**
  * @enum {number}
  */
 app.model.ExpireTime = {
-  AUCTION_ITEM: 30 * 60 * 1000
+  AUCTION_ITEM: 60 * 1000
 };
 
 
@@ -152,7 +170,7 @@ app.model.setTabQuery = function (tabId, data) {
  * @param {Object=} opt_obj
  */
 app.model.getAuctionItem = function (id, callback, opt_obj) {
-  var storage = app.model.getLocalStore_();
+  var storage = app.model.getSessionStore_();
   var key = app.model.getAuctionItemKey_(id);
   var data = storage.get(key);
   if (data) {
@@ -164,11 +182,19 @@ app.model.getAuctionItem = function (id, callback, opt_obj) {
       var itemData;
       if (!err) {
         itemData = json['ResultSet']['Result'];
-        storage.set(key, itemData, app.model.getLifeTime_(app.model.ExpireTime.AUCTION_ITEM));
+        try {
+          storage.set(key, itemData, app.model.getLifeTime_(app.model.ExpireTime.AUCTION_ITEM));
+        } catch (e) {
+          storage.collect();
+          storage.set(key, itemData, app.model.getLifeTime_(app.model.ExpireTime.AUCTION_ITEM));
+        }
       }
       callback.call(opt_obj, err, itemData);
     });
   }
+  goog.Timer.callOnce(function () {
+    storage.collect();
+  });
 };
 
 

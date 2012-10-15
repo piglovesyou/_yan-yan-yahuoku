@@ -57,9 +57,8 @@ app.controller.Tabs.prototype.decorateInternal = function (element) {
       tab.decorateInternal(tabElm);
     } else {
       tab.createDom();
-
-      // TODO: Implement this.insertTab_
-      // this.insertTab_(tab);
+      tabElm = tab.getElement();
+      dh.append(this.getContentElement(), tab.getElement());
     }
     this.addChildAt(tab, index);
 
@@ -286,10 +285,10 @@ app.controller.Tab.prototype.renderContent_ = function () {
   if (!data) app.model.setTabQuery(this.getId(), data = app.model.createEmptyTab());
 
   var query = data['query'];
-  if (!query) {
-    query = '全てのアイテム';
-  }
   var category = app.string.getCategoryNameByPath(data['category']['CategoryPath']);
+  if (!query) {
+    query = category ? '全ての商品' : '(search something)';
+  }
   category = (!category || category == 'オークション') ?
       '' : '[' + category + ']';
   var result = query + ' ' + category;
@@ -337,7 +336,7 @@ app.controller.Tab.prototype.decorateInternal = function (element) {
 /** @inheritDoc */
 app.controller.Tab.prototype.createDom = function () {
   var dh = this.getDomHelper();
-  var element = dh.createDom('div', 'tab selected',
+  var element = dh.createDom('div', 'tab',
       this.contentElement_ = dh.createDom('div', 'tab-content'));
   this.setElementInternal(element);
 };

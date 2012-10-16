@@ -27,7 +27,6 @@ app.controller.Frames.prototype.renderFrame = function (id) {
  * @param {string} id
  */
 app.controller.Frames.prototype.selectFrame = function (id) {
-  this.currSelectedFrame_.exitDocument();
   goog.dom.classes.enable(this.currSelectedFrame_.getElement(), 'selected', false);
   var frame = /** @type {?app.controller.Frame} */(this.getChild(id));
   if (!frame) {

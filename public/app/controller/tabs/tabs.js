@@ -21,8 +21,28 @@ goog.inherits(app.controller.Tabs, goog.ui.Component);
 
 app.controller.Tabs.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
+  this.adder_.enterDocument();
   this.getHandler()
-      .listen(this, app.controller.TabAdder.EventType.CLICK, this.handleAdderClicked_);
+      .listen(this, app.controller.TabAdder.EventType.CLICK, this.handleAdderClicked_)
+      .listen(this, app.controller.Tab.EventType.DELETEBUTTONCLICKED, this.handleTabDelBtnClicked_);
+};
+
+
+app.controller.Tabs.prototype.exitDocument = function (e) {
+  this.adder_.exitDocument();
+  goog.base(this, 'exitDocument');
+};
+
+
+app.controller.Tabs.prototype.handleTabDelBtnClicked_ = function (e) {
+  var child = e.target;
+  var index = app.controller.util.getChildIndex(this, child);
+  this.selectTab(this.getChildAt(index + 1) || this.getChildAt(index - 1));
+
+  this.removeChild(child, true).dispose();
+
+  app.model.setTabIds(this.getTabIds());
+  this.repositionAdder_();
 };
 
 
@@ -36,7 +56,8 @@ app.controller.Tabs.prototype.decorateInternal = function (element) {
   var dh = this.getDomHelper();
 
   var tabAdder = this.adder_ = new app.controller.TabAdder(dh);
-  this.addChild(tabAdder);
+  // We don't deal with it as a child. Only tabs are.
+  tabAdder.setParentEventTarget(this);
   tabAdder.createDom();
   dh.append(this.getElement(), tabAdder.getElement());
 
@@ -98,7 +119,7 @@ app.controller.Tabs.prototype.repositionAdder_ = function () {
   var pos = goog.style.getPageOffset(lastEl);
   var minusMargin = 3;
   goog.style.setPageOffset(this.adder_.getElement(),
-      pos.x + lastEl.offsetWidth - minusMargin, pos.y);
+      pos.x + lastEl.offsetWidth - minusMargin, pos.y + 1);
 };
 
 
@@ -112,7 +133,7 @@ app.controller.Tabs.prototype.getTabIds = function () {
 
 
 /**
- * @return {app.controller.TabAdder}
+ * @return {app.controller.Tab}
  */
 app.controller.Tabs.prototype.getLastTab_ = function () {
   var tab;
@@ -130,7 +151,7 @@ app.controller.Tabs.prototype.getLastTab_ = function () {
 
 
 /**
- * @return {app.controller.TabAdder}
+ * @return {number}
  */
 app.controller.Tabs.prototype.getLastTabIndex_ = function () {
   var index;
@@ -245,6 +266,7 @@ app.controller.Tabs.prototype.createFixTabWidthStylesheet_ = function (width) {
   return goog.style.installStyles(styleString)
 };
 
+
 app.controller.Tabs.prototype.canDecorate = function (element) {
   var content = goog.dom.getElementByClass('tabs-content', element);
   if (content) {
@@ -254,6 +276,20 @@ app.controller.Tabs.prototype.canDecorate = function (element) {
   }
   return false;
 };
+
+
+app.controller.Tabs.prototype.disposeInternal = function () {
+  if (this.adder_) {
+    this.adder_.dispose();
+    this.adder_ = null;
+  }
+  goog.base(this, 'disposeInternal');
+};
+
+
+
+
+
 
 /**
  * @param {goog.dom.DomHelper=} opt_domHelper
@@ -267,15 +303,40 @@ app.controller.Tab = function (id, opt_domHelper) {
 goog.inherits(app.controller.Tab, goog.ui.Component);
 
 
+/**
+ * @enum {string}
+ */
+app.controller.Tab.EventType = {
+  DELETEBUTTONCLICKED: 'delbtnclicked'
+};
+
+
+/** @inheritDoc */
 app.controller.Tab.prototype.enterDocument = function () {
-  this.getHandler()
-      .listen(
-        app.Model.getInstance(), 
-        app.Model.EventType.UPDATE_TABQUERY, function (e) {
-          this.renderContent_();
-        });
-  this.renderContent_();
   goog.base(this, 'enterDocument');
+  this.getHandler()
+      .listen(app.Model.getInstance(), app.Model.EventType.UPDATE_TABQUERY, function (e) {
+        this.renderContent_();
+      })
+      .listen(this.delBtnElement_, goog.events.EventType.MOUSEDOWN, function (e) {
+        e.stopPropagation();
+      })
+      .listen(this.delBtnElement_, goog.events.EventType.CLICK, function (e) {
+        this.dispatchEvent(app.controller.Tab.EventType.DELETEBUTTONCLICKED);
+      });
+  this.renderContent_();
+};
+
+
+/** @inheritDoc */
+app.controller.Tab.prototype.exitDocument = function () {
+  this.unrenderContent_();
+  goog.base(this, 'exitDocument');
+};
+
+
+app.controller.Tab.prototype.unrenderContent_ = function () {
+  app.model.deleteTabQuery(this.getId());
 };
 
 
@@ -319,6 +380,12 @@ app.controller.Tab.prototype.contentElement_;
 
 
 /**
+ * @type {Element}
+ */
+app.controller.Tab.prototype.delBtnElement_;
+
+
+/**
  * @return {Element}
  */
 app.controller.Tab.prototype.getContentElement = function () {
@@ -337,7 +404,11 @@ app.controller.Tab.prototype.decorateInternal = function (element) {
 app.controller.Tab.prototype.createDom = function () {
   var dh = this.getDomHelper();
   var element = dh.createDom('div', 'tab',
-      this.contentElement_ = dh.createDom('div', 'tab-content'));
+      this.contentElement_ = dh.createDom('div', 'tab-content'),
+      this.delBtnElement_ = dh.createDom('a', {
+        'href': 'javascript:void(0)',
+        'className': 'i del-btn'
+      }, 'X'));
   this.setElementInternal(element);
 };
 
@@ -347,8 +418,10 @@ app.controller.Tab.prototype.canDecorate = function (element) {
   if (element) {
     var dh = this.getDomHelper();
     var content = dh.getElementByClass('tab-content', element);
+    var delButtn = dh.getElementByClass('del-btn', element);
     if (content) {
       this.contentElement_ = content;
+      this.delBtnElement_ = delButtn;
       return true;
     }
   }
@@ -356,6 +429,7 @@ app.controller.Tab.prototype.canDecorate = function (element) {
 };
 
 
+/** @inheritDoc */
 app.controller.Tab.prototype.disposeInternal = function () {
   if (this.tooltip_) {
     this.tooltip_.dispose();
@@ -363,6 +437,7 @@ app.controller.Tab.prototype.disposeInternal = function () {
   }
   goog.base(this, 'disposeInternal')
 };
+
 
 
 
@@ -378,11 +453,15 @@ app.controller.TabAdder = function (opt_domHelper) {
 goog.inherits(app.controller.TabAdder, goog.ui.Component);
 
 
+/**
+ * @enum {string}
+ */
 app.controller.TabAdder.EventType = {
   CLICK: 'tabadderclicked'
 };
 
 
+/** @inheritDoc */
 app.controller.TabAdder.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK, function () {
@@ -391,6 +470,7 @@ app.controller.TabAdder.prototype.enterDocument = function () {
 };
 
 
+/** @inheritDoc */
 app.controller.TabAdder.prototype.createDom = function () {
   var dh = this.getDomHelper();
   var element = dh.createDom('div', 'tab-adder');

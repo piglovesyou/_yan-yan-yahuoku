@@ -96,7 +96,6 @@ app.controller.Detail.prototype.renderContent = function (data) {
     }));
   });
 
-  console.log(data);
   var primaryTable =
       dh.createDom('table', 'table table-hover',
         // dh.createDom('caption', null, 'caption......'),

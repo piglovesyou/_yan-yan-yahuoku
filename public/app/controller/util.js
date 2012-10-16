@@ -5,6 +5,20 @@ goog.provide('app.controller.util');
 app.controller.util = {};
 
 
+app.controller.util.getChildIndex = function (parent, child) {
+  var index;
+  goog.array.find(parent.getChildIds(), function (id, i) {
+    if (id == child.getId()) {
+      index = i;
+      return true;
+    }
+    return false;
+  });
+  goog.asserts.assertNumber(index, 'Invalid pare of parent and child');
+  return index;
+};
+
+
 /**
  * @param {goog.ui.Component} child
  * @return {!string}

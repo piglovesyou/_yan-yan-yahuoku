@@ -122,6 +122,13 @@ app.ui.ThousandRows.prototype.createPage_ = function (pageIndex) {
 };
 
 
+app.ui.ThousandRows.prototype.clearContent = function () {
+  goog.array.forEach(this.removeChildren(), function (child) {
+    child.dispose();
+  });
+};
+
+
 /** @inheritDoc */
 app.ui.ThousandRows.prototype.disposeInternal = function () {
   this.selectedRow_ = null;

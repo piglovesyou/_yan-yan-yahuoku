@@ -147,6 +147,14 @@ app.model.getTabQuery = function (tabId) {
 
 /**
  * @param {string} tabId
+ */
+app.model.deleteTabQuery = function (tabId) {
+  app.model.getLocalStore_().remove(app.model.KeyPrefix.TAB_ + tabId);
+};
+
+
+/**
+ * @param {string} tabId
  * @param {Object} Query and category data.
  */
 app.model.setTabQuery = function (tabId, data) {

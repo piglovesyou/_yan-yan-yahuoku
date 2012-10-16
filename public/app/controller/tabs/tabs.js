@@ -293,7 +293,7 @@ app.controller.Tab.prototype.renderContent_ = function () {
       '' : '[' + category + ']';
   var result = query + ' ' + category;
   goog.dom.setTextContent(this.getContentElement(), result);
-  this.setTooltip_(result);
+  if (data['query'] || category) this.setTooltip_(result);
 };
 
 

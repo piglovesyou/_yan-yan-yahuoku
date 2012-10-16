@@ -18,7 +18,7 @@ app.controller.Container = function (opt_domHelper) {
   /**
    * @type {app.ui.ThousandRows}
    */
-  this.thousandRows_ = this.createThousandRows_(opt_domHelper);
+  this.thousandRows_ = app.controller.Container.createThousandRows_(opt_domHelper);
 
   /**
    * @type {app.controller.Detail}
@@ -37,10 +37,14 @@ app.controller.Container.prototype.refreshByQuery = function (query, categoryId)
   if (old) {
     old.dispose(); // TODO: Enable it to be used again.
   }
-  var model = app.controller.Container.createNewModel_(query, categoryId);
-  this.thousandRows_.setModel(model);
-  this.thousandRows_.setZero();
-  this.detail_.clearContent();
+  if (goog.string.isEmpty(query) && categoryId == 0) {
+    this.thousandRows_.clearContent();
+  } else {
+    var model = app.controller.Container.createNewModel_(query, categoryId);
+    this.thousandRows_.setModel(model);
+    this.thousandRows_.setZero();
+    this.detail_.clearContent();
+  }
 };
 
 
@@ -182,7 +186,7 @@ app.controller.Container.prototype.getIframeOverlay_ = function () {
 app.controller.Container.prototype.thousandRowsModel_;
 
 
-app.controller.Container.prototype.createThousandRows_ = function (opt_domHelper) {
+app.controller.Container.createThousandRows_ = function (opt_domHelper) {
   var thousandRows = new app.ui.ThousandRows(138, 50, opt_domHelper);
   thousandRows.setMinThumbLength(30);
   return thousandRows;

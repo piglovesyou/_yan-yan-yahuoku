@@ -67,6 +67,9 @@ app.controller.Container.prototype.enterDocument = function () {
     })
     .listen(this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
     .listen(this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, function (e) {
+
+      // TODO: Call resize only when the belonging frame selected.
+      
       this.detail_.update();
       app.model.setDetailPaneWidth(app.controller.util.getFrameId(this),
         this.detail_.getWidth());

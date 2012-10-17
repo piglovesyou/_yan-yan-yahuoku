@@ -4,7 +4,7 @@ goog.require('App');
 goog.require('goog.dom');
 
 main = function () {
-  var app = new App();
+  var app = App.getInstance();
   app.decorate(goog.dom.getDocument().body);
 };
 

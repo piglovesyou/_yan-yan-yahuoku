@@ -72,6 +72,7 @@ app.controller.Frames.prototype.createDom = function () {
 }
 
 
+/** @inheritDoc */
 app.controller.Frames.prototype.decorateInternal = function (element) {
   goog.base(this, 'decorateInternal', element);
   var dh = this.getDomHelper();

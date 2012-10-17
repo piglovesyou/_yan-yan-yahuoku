@@ -23,8 +23,24 @@ app.controller.Tabs.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.adder_.enterDocument();
   this.getHandler()
-      .listen(this, app.controller.TabAdder.EventType.CLICK, this.handleAdderClicked_)
-      .listen(this, app.controller.Tab.EventType.DELETEBUTTONCLICKED, this.handleTabDelBtnClicked_);
+      .listen(this, app.controller.Tab.EventType.SELECT, this.handleTabSelected_)
+      .listen(this, app.controller.Tab.EventType.DELETE, this.handleTabDelBtnClicked_)
+      .listen(this, app.controller.TabAdder.EventType.CLICK, this.handleAdderClicked_);
+};
+
+
+/**
+ * @param {goog.events.Event} e
+ */
+app.controller.Tabs.prototype.handleTabSelected_ = function (e) {
+  var tab = e.target;
+  if (this.currSelectedTab_.getId() == tab.getId()) return;
+  goog.dom.classes.enable(tab.getElement(), 'selected', true);
+  goog.dom.classes.enable(this.currSelectedTab_.getElement(), 'selected', false);
+  this.currSelectedTab_ = tab;
+  app.events.EventCenter.getInstance().dispatch(app.events.EventCenter.EventType.TAB_CHANGED, {
+    tab: tab
+  });
 };
 
 
@@ -37,7 +53,7 @@ app.controller.Tabs.prototype.exitDocument = function (e) {
 app.controller.Tabs.prototype.handleTabDelBtnClicked_ = function (e) {
   var child = e.target;
   var index = app.controller.util.getChildIndex(this, child);
-  this.selectTab(this.getChildAt(index + 1) || this.getChildAt(index - 1));
+  (this.getChildAt(index + 1) || this.getChildAt(index - 1)).dispatchSelect();
 
   this.removeChild(child, true).dispose();
 
@@ -47,7 +63,7 @@ app.controller.Tabs.prototype.handleTabDelBtnClicked_ = function (e) {
 
 
 app.controller.Tabs.prototype.handleAdderClicked_ = function (e) {
-  this.selectTab(this.insertNewTab_());
+  this.insertNewTab_().dispatchSelect();
   this.repositionAdder_();
 };
 
@@ -221,25 +237,11 @@ app.controller.Tabs.prototype.setupDragListGroup_ = function () {
 
       // Becuase of dragListGroup, tab cannot listen click event by itself.
       // So, we take care of it by here.
-      var tab = this.findChildByElement_(e.currDragItem);
-      this.selectTab(tab);
+      this.findChildByElement_(e.currDragItem).dispatchSelect();
     })
   this.dragListGroup_.init();
 };
 
-
-/**
- * @param {app.controller.Tab} tab
- */
-app.controller.Tabs.prototype.selectTab = function (tab) {
-  if (this.currSelectedTab_.getId() == tab.getId()) return;
-  goog.dom.classes.enable(tab.getElement(), 'selected', true);
-  goog.dom.classes.enable(this.currSelectedTab_.getElement(), 'selected', false);
-  this.currSelectedTab_ = tab;
-  app.events.EventCenter.getInstance().dispatch(app.events.EventCenter.EventType.TAB_CHANGED, {
-    tab: tab
-  });
-};
 
 /**
  * @param {Element} element
@@ -307,7 +309,8 @@ goog.inherits(app.controller.Tab, goog.ui.Component);
  * @enum {string}
  */
 app.controller.Tab.EventType = {
-  DELETEBUTTONCLICKED: 'delbtnclicked'
+  SELECT: 'select',
+  DELETE: 'delete'
 };
 
 
@@ -322,7 +325,7 @@ app.controller.Tab.prototype.enterDocument = function () {
         e.stopPropagation();
       })
       .listen(this.delBtnElement_, goog.events.EventType.CLICK, function (e) {
-        this.dispatchEvent(app.controller.Tab.EventType.DELETEBUTTONCLICKED);
+        this.dispatchEvent(app.controller.Tab.EventType.DELETE);
       });
   this.renderContent_();
 };
@@ -390,6 +393,11 @@ app.controller.Tab.prototype.delBtnElement_;
  */
 app.controller.Tab.prototype.getContentElement = function () {
   return this.contentElement_;
+};
+
+
+app.controller.Tab.prototype.dispatchSelect = function () {
+  this.dispatchEvent(app.controller.Tab.EventType.SELECT);
 };
 
 

@@ -26,6 +26,15 @@ app.controller.TabAdder.EventType = {
 };
 
 
+app.controller.TabAdder.prototype.isVisible_ = true;
+
+
+app.controller.TabAdder.prototype.setVisible = function (show) {
+  if (this.isVisible_ == show) return;
+  goog.style.showElement(this.getElement(), this.isVisible_ = show);
+};
+
+
 /** @inheritDoc */
 app.controller.TabAdder.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');

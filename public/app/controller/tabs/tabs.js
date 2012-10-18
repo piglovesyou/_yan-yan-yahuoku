@@ -137,6 +137,12 @@ app.controller.Tabs.prototype.adder_;
 
 
 app.controller.Tabs.prototype.repositionAdder_ = function () {
+  if (this.getChildCount() >= 5) {
+    this.adder_.setVisible(false);
+    return;
+  }
+  this.adder_.setVisible(true);
+
   var lastEl = this.getLastTab_().getElement();
   var pos = goog.style.getPageOffset(lastEl);
   var minusMargin = 3;
@@ -294,12 +300,4 @@ app.controller.Tabs.prototype.disposeInternal = function () {
   }
   goog.base(this, 'disposeInternal');
 };
-
-
-
-
-
-
-
-
 

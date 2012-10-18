@@ -42,7 +42,9 @@ app.controller.Tabs.prototype.handleTabSelected_ = function (e) {
 
   oldTab.processSelected(false);
   newTab.processSelected(true);
-  this.currSelectedTab_ = newTab;
+  app.events.EventCenter.getInstance().dispatch(app.events.EventCenter.EventType, {
+    tab: (this.currSelectedTab_ = newTab)
+  });
 };
 
 

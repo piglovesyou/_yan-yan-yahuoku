@@ -25,11 +25,29 @@ app.controller.Container = function (opt_domHelper) {
    */
   this.detail_ = new app.controller.Detail(opt_domHelper);
 
+  /**
+   * @type {goog.Timer}
+   */
+  this.resizeTimer_ = new goog.Timer(100);
+
   goog.base(this, this.thousandRows_, this.detail_, opt_domHelper);
   this.setHandleSize(0);
 
 }
 goog.inherits(app.controller.Container, goog.ui.SplitPane);
+
+
+/**
+ * @type {?number}
+ */
+app.controller.Container.prototype.offsetTopCache_;
+
+
+/**
+ * He is private.. So we grab and cache him.
+ * @type {?Element}
+ */
+app.controller.Container.prototype.iframeOverlayCache_;
 
 
 app.controller.Container.prototype.refreshByQuery = function (query, categoryId) {
@@ -59,37 +77,49 @@ app.controller.Container.prototype.createDom = function () {
 
 
 app.controller.Container.prototype.enterDocument = function () {
-  this.getHandler()
-    .listen(app.dom.ViewportSizeMonitor.getInstance(), goog.events.EventType.RESIZE, function (e) {
-      this.resize_();
-      this.thousandRows_.update();
-      this.detail_.update();
-    })
-    .listen(this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
-    .listen(this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, function (e) {
-      if (!app.controller.util.getTab(this).isSelected()) return;
-
-      this.detail_.update();
-      app.model.setDetailPaneWidth(app.controller.util.getFrameId(this),
-        this.detail_.getWidth());
-    })
-    .listen(this.resizeTimer_, goog.Timer.TICK, this.handleResizeTimerTick_);
-
-  this.setDetailpainSize_(app.model.getDetailPaneWidth(app.controller.util.getFrameId(this)));
-
   goog.base(this, 'enterDocument');
-
-  // First request by thousand rows.
-  var frame = this.getParent();
-  goog.asserts.assert(frame instanceof app.controller.Frame, 'Wrong Parent to container!!');
-  var tab = app.model.getTabQuery(frame.getId());
-  this.refreshByQuery(tab['query'], tab['category']['CategoryId']);
+  this.getHandler()
+    .listen(app.events.EventCenter.getInstance(), app.events.EventCenter.EventType, function (e) {
+      this.processSelected_(app.controller.util.getTab(this).isSelected());
+    });
+  this.processSelected_(app.controller.util.getTab(this).isSelected());
 };
 
+
+app.controller.Container.prototype.processSelected_ = function (selected) {
+  var eh = this.getHandler()
+  var fn = selected ? eh.listen : eh.unlisten;
+  fn.call(eh,  app.dom.ViewportSizeMonitor.getInstance(), goog.events.EventType.RESIZE, this.handleViewportResize_)
+  fn.call(eh,  this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
+  fn.call(eh,  this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, this.handlePaneResized_)
+  fn.call(eh,  this.resizeTimer_, goog.Timer.TICK, this.handleResizeTimerTick_);
+
+  if (selected) {
+    this.setDetailpainSize_(app.model.getDetailPaneWidth(app.controller.util.getFrameId(this)));
+    // First request by thousand rows.
+    var frame = this.getParent();
+    goog.asserts.assert(frame instanceof app.controller.Frame, 'Wrong Parent to container!!');
+    var tab = app.model.getTabQuery(frame.getId());
+    this.refreshByQuery(tab['query'], tab['category']['CategoryId']);
+  }
+};
+
+
+app.controller.Container.prototype.handleViewportResize_ = function (e) {
+  this.resize_();
+  this.thousandRows_.update();
+  this.detail_.update();
+};
+
+
 /**
- * @type {?number}
+ * We can't use 'handleDragEnd_' for its name.. which used by superClass.
  */
-app.controller.Container.prototype.offsetTopCache_;
+app.controller.Container.prototype.handlePaneResized_ = function (e) {
+  this.detail_.update();
+  app.model.setDetailPaneWidth(app.controller.util.getFrameId(this),
+    this.detail_.getWidth());
+};
 
 app.controller.Container.prototype.handleRowClicked_ = function (e) {
   var id = e.row.getAuctionId();
@@ -114,12 +144,6 @@ app.controller.Container.prototype.resize = function () {
 
 
 /**
- * @type {goog.Timer}
- */
-app.controller.Container.prototype.resizeTimer_ = new goog.Timer(100);
-
-
-/**
  * Resize splitPane layout on delay.
  * We don't use setSize() because we want to resize 
  *    based on this.detailPaneElement_.offsetWidth.
@@ -133,8 +157,6 @@ app.controller.Container.prototype.resize_ = function () {
 
 
 app.controller.Container.prototype.handleResizeTimerTick_ = function (e) {
-  if (!app.controller.util.getTab(this).isSelected()) return;
-
   this.resizeTimer_.stop();
   this.setDetailpainSize_();
 };
@@ -162,13 +184,6 @@ app.controller.Container.prototype.setDetailpainSize_ = function (opt_width) {
     goog.style.setBorderBoxSize(iframeOverlay, size);
   }
 };
-
-
-/**
- * He is private.. So we grab and cache him.
- * @type {?Element}
- */
-app.controller.Container.prototype.iframeOverlayCache_;
 
 
 /**

@@ -78,11 +78,16 @@ app.controller.Container.prototype.createDom = function () {
 
 app.controller.Container.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
+  var tab = app.controller.util.getTab(this)
   this.getHandler()
     .listen(app.events.EventCenter.getInstance(), app.events.EventCenter.EventType, function (e) {
-      this.processSelected_(app.controller.util.getTab(this).isSelected());
+      this.processSelected_(tab.isSelected());
     });
-  this.processSelected_(app.controller.util.getTab(this).isSelected());
+  this.processSelected_(tab.isSelected());
+
+  // First request by thousand rows.
+  var data = app.model.getTabQuery(tab.getId());
+  this.refreshByQuery(data['query'], data['category']['CategoryId']);
 };
 
 
@@ -95,12 +100,7 @@ app.controller.Container.prototype.processSelected_ = function (selected) {
   fn.call(eh,  this.resizeTimer_, goog.Timer.TICK, this.handleResizeTimerTick_);
 
   if (selected) {
-    this.setDetailpainSize_(app.model.getDetailPaneWidth(app.controller.util.getFrameId(this)));
-    // First request by thousand rows.
-    var frame = this.getParent();
-    goog.asserts.assert(frame instanceof app.controller.Frame, 'Wrong Parent to container!!');
-    var tab = app.model.getTabQuery(frame.getId());
-    this.refreshByQuery(tab['query'], tab['category']['CategoryId']);
+    this.setDetailpainSize_(app.model.getDetailPaneWidth(app.controller.util.getTab(this).getId()));
   }
 };
 

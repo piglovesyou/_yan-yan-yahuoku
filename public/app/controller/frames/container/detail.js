@@ -231,6 +231,13 @@ app.controller.Detail.prototype.renderContent = function (data) {
 /** @inheritDoc */
 app.controller.Detail.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
+
+  var tab = app.controller.util.getTab(this)
+  this.getHandler().listen(app.events.EventCenter.getInstance(), app.events.EventCenter.EventType.TAB_CHANGED, function (e) {
+    if (!tab.isSelected()) return;
+    this.titleFixedStateButton_.setChecked(app.model.getDetailTitleFixedState(app.controller.util.getFrameId(this)));
+    this.updateTitleFixedState_();
+  });
   this.getHandler().listen(this, goog.ui.Component.EventType.ACTION, function (e) {
     this.updateTitleFixedState_();
   });
@@ -271,14 +278,13 @@ goog.inherits(app.controller.Detail.TitleFixedStateButton, goog.ui.ToggleButton)
 
 app.controller.Detail.TitleFixedStateButton.prototype.setChecked = function (checked) {
   goog.base(this, 'setChecked', checked);
-  app.model.setDetailTitleFixedState(app.controller.util.getFrameId(this), checked);
+  app.model.setDetailTitleFixedState(checked);
   this.setContent(checked ? 'n' : 'q');
 };
 
 app.controller.Detail.TitleFixedStateButton.prototype.decorateInternal = function (element) {
   goog.base(this, 'decorateInternal', element);
-  this.setState(goog.ui.Component.State.CHECKED,
-      app.model.getDetailTitleFixedState(app.controller.util.getFrameId(this)));
+  this.setState(goog.ui.Component.State.CHECKED, app.model.getDetailTitleFixedState());
 };
 
 app.controller.Detail.TitleFixedStateButton.prototype.enterDocument = function () {

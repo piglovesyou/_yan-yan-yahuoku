@@ -80,7 +80,7 @@ app.controller.Container.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   var tab = app.controller.util.getTab(this)
   this.getHandler()
-    .listen(app.events.EventCenter.getInstance(), app.events.EventCenter.EventType, function (e) {
+    .listen(app.events.EventCenter.getInstance(), app.events.EventCenter.EventType.TAB_CHANGED, function (e) {
       this.processSelected_(tab.isSelected());
     });
   this.processSelected_(tab.isSelected());

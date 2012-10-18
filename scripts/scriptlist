@@ -132,7 +132,6 @@ public/closure-library/closure/goog/ui/cssnames.js
 public/closure-library/closure/goog/ui/custombuttonrenderer.js
 public/closure-library/closure/goog/ui/togglebutton.js
 public/app/controller/frames/container/detail.js
-public/app/model/xhr.js
 public/closure-library/closure/goog/storage/mechanism/mechanism.js
 public/closure-library/closure/goog/storage/mechanism/iterablemechanism.js
 public/closure-library/closure/goog/storage/mechanism/errorcode.js
@@ -142,6 +141,8 @@ public/closure-library/closure/goog/storage/errorcode.js
 public/closure-library/closure/goog/storage/storage.js
 public/closure-library/closure/goog/storage/richstorage.js
 public/closure-library/closure/goog/storage/expiringstorage.js
+public/closure-library/closure/goog/storage/collectablestorage.js
+public/app/model/xhr.js
 public/closure-library/closure/goog/storage/mechanism/html5sessionstorage.js
 public/app/model/model.js
 public/app/controller/frames/container/container.js
@@ -161,8 +162,10 @@ public/app/controller/frames/searchbar/category/category.js
 public/app/controller/frames/searchbar/searchbar.js
 public/app/controller/frames/frame.js
 public/app/controller/frames/frames.js
-public/closure-library/closure/goog/fx/draglistgroup.js
 public/app/string/string.js
+public/closure-library/closure/goog/fx/draglistgroup.js
+public/app/controller/tabs/tab.js
+public/app/controller/tabs/tabadder.js
 public/app/controller/tabs/tabs.js
 public/app/app.js
 public/javascripts/main.js

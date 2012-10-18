@@ -67,9 +67,8 @@ app.controller.Container.prototype.enterDocument = function () {
     })
     .listen(this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
     .listen(this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, function (e) {
+      if (!app.controller.util.getTab(this).isSelected()) return;
 
-      // TODO: Call resize only when the belonging frame selected.
-      
       this.detail_.update();
       app.model.setDetailPaneWidth(app.controller.util.getFrameId(this),
         this.detail_.getWidth());
@@ -134,6 +133,8 @@ app.controller.Container.prototype.resize_ = function () {
 
 
 app.controller.Container.prototype.handleResizeTimerTick_ = function (e) {
+  if (!app.controller.util.getTab(this).isSelected()) return;
+
   this.resizeTimer_.stop();
   this.setDetailpainSize_();
 };

@@ -81,7 +81,6 @@ app.ui.ContextMenu.prototype.rotate_ = function (next) {
     var index = this.hilitedIndex_ + 1;
     if (!this.getChildAt(index)) index = 0;
   }
-  console.log(index);
   this.updateRotateIndex_(this.currRotateIndex_);
   this.hilite_(index);
 };

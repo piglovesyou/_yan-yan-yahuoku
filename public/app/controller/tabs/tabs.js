@@ -1,6 +1,8 @@
 
 goog.provide('app.controller.Tabs');
 
+goog.require('app.controller.TabAdder');
+goog.require('app.controller.Tab');
 goog.require('app.events.EventCenter');
 goog.require('goog.ui.Component');
 goog.require('goog.fx.DragListGroup');
@@ -19,6 +21,7 @@ app.controller.Tabs = function (opt_domHelper) {
 goog.inherits(app.controller.Tabs, goog.ui.Component);
 
 
+/** @inheritDoc */
 app.controller.Tabs.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.adder_.enterDocument();
@@ -33,17 +36,17 @@ app.controller.Tabs.prototype.enterDocument = function () {
  * @param {goog.events.Event} e
  */
 app.controller.Tabs.prototype.handleTabSelected_ = function (e) {
-  var tab = e.target;
-  if (this.currSelectedTab_.getId() == tab.getId()) return;
-  goog.dom.classes.enable(tab.getElement(), 'selected', true);
-  goog.dom.classes.enable(this.currSelectedTab_.getElement(), 'selected', false);
-  this.currSelectedTab_ = tab;
-  app.events.EventCenter.getInstance().dispatch(app.events.EventCenter.EventType.TAB_CHANGED, {
-    tab: tab
-  });
+  var oldTab = this.currSelectedTab_;
+  var newTab = e.target;
+  if (oldTab.getId() == newTab.getId()) return;
+
+  oldTab.processSelected(false);
+  newTab.processSelected(true);
+  this.currSelectedTab_ = newTab;
 };
 
 
+/** @inheritDoc */
 app.controller.Tabs.prototype.exitDocument = function (e) {
   this.adder_.exitDocument();
   goog.base(this, 'exitDocument');
@@ -68,6 +71,7 @@ app.controller.Tabs.prototype.handleAdderClicked_ = function (e) {
 };
 
 
+/** @inheritDoc */
 app.controller.Tabs.prototype.decorateInternal = function (element) {
   var dh = this.getDomHelper();
 
@@ -167,6 +171,7 @@ app.controller.Tabs.prototype.getLastTab_ = function () {
 
 
 /**
+ * TODO: We don't do this. We just grab a child of the last index.
  * @return {number}
  */
 app.controller.Tabs.prototype.getLastTabIndex_ = function () {
@@ -293,194 +298,6 @@ app.controller.Tabs.prototype.disposeInternal = function () {
 
 
 
-/**
- * @param {goog.dom.DomHelper=} opt_domHelper
- * @constructor
- * @extends {goog.ui.Component}
- */
-app.controller.Tab = function (id, opt_domHelper) {
-  goog.base(this, opt_domHelper);
-  this.setId(id);
-};
-goog.inherits(app.controller.Tab, goog.ui.Component);
-
-
-/**
- * @enum {string}
- */
-app.controller.Tab.EventType = {
-  SELECT: 'select',
-  DELETE: 'delete'
-};
-
-
-/** @inheritDoc */
-app.controller.Tab.prototype.enterDocument = function () {
-  goog.base(this, 'enterDocument');
-  this.getHandler()
-      .listen(app.Model.getInstance(), app.Model.EventType.UPDATE_TABQUERY, function (e) {
-        this.renderContent_();
-      })
-      .listen(this.delBtnElement_, goog.events.EventType.MOUSEDOWN, function (e) {
-        e.stopPropagation();
-      })
-      .listen(this.delBtnElement_, goog.events.EventType.CLICK, function (e) {
-        this.dispatchEvent(app.controller.Tab.EventType.DELETE);
-      });
-  this.renderContent_();
-};
-
-
-/** @inheritDoc */
-app.controller.Tab.prototype.exitDocument = function () {
-  this.unrenderContent_();
-  goog.base(this, 'exitDocument');
-};
-
-
-app.controller.Tab.prototype.unrenderContent_ = function () {
-  app.model.deleteTabQuery(this.getId());
-};
-
-
-app.controller.Tab.prototype.renderContent_ = function () {
-  var data = app.model.getTabQuery(this.getId());
-  
-  if (!data) app.model.setTabQuery(this.getId(), data = app.model.createEmptyTab());
-
-  var query = data['query'];
-  var category = app.string.getCategoryNameByPath(data['category']['CategoryPath']);
-  if (!query) {
-    query = category ? '全ての商品' : '(search something)';
-  }
-  category = (!category || category == 'オークション') ?
-      '' : '[' + category + ']';
-  var result = query + ' ' + category;
-  goog.dom.setTextContent(this.getContentElement(), result);
-  if (data['query'] || category) this.setTooltip_(result);
-};
-
-
-/**
- * @type {?goog.ui.Tooltip}
- */
-app.controller.Tab.prototype.tooltip_;
-
-
-app.controller.Tab.prototype.setTooltip_ = function (text) {
-  if (!this.tooltip_) {
-    this.tooltip_ = new goog.ui.Tooltip(this.getElement(), null, this.getDomHelper());
-    this.tooltip_.className += ' label';
-  }
-  this.tooltip_.setText(text);
-};
-
-
-/**
- * @type {Element}
- */
-app.controller.Tab.prototype.contentElement_;
-
-
-/**
- * @type {Element}
- */
-app.controller.Tab.prototype.delBtnElement_;
-
-
-/**
- * @return {Element}
- */
-app.controller.Tab.prototype.getContentElement = function () {
-  return this.contentElement_;
-};
-
-
-app.controller.Tab.prototype.dispatchSelect = function () {
-  this.dispatchEvent(app.controller.Tab.EventType.SELECT);
-};
-
-
-/** @inheritDoc */
-app.controller.Tab.prototype.decorateInternal = function (element) {
-  this.setElementInternal(element);
-  goog.style.setUnselectable(element, true, true);
-};
-
-
-/** @inheritDoc */
-app.controller.Tab.prototype.createDom = function () {
-  var dh = this.getDomHelper();
-  var element = dh.createDom('div', 'tab',
-      this.contentElement_ = dh.createDom('div', 'tab-content'),
-      this.delBtnElement_ = dh.createDom('a', {
-        'href': 'javascript:void(0)',
-        'className': 'i del-btn'
-      }, 'X'));
-  this.setElementInternal(element);
-};
-
-
-/** @inheritDoc */
-app.controller.Tab.prototype.canDecorate = function (element) {
-  if (element) {
-    var dh = this.getDomHelper();
-    var content = dh.getElementByClass('tab-content', element);
-    var delButtn = dh.getElementByClass('del-btn', element);
-    if (content) {
-      this.contentElement_ = content;
-      this.delBtnElement_ = delButtn;
-      return true;
-    }
-  }
-  return false;
-};
-
-
-/** @inheritDoc */
-app.controller.Tab.prototype.disposeInternal = function () {
-  if (this.tooltip_) {
-    this.tooltip_.dispose();
-    this.tooltip_ = null;
-  }
-  goog.base(this, 'disposeInternal')
-};
 
 
 
-
-
-/**
- * @param {goog.dom.DomHelper=} opt_domHelper
- * @constructor
- * @extends {goog.ui.Component}
- */
-app.controller.TabAdder = function (opt_domHelper) {
-  goog.base(this, opt_domHelper);
-};
-goog.inherits(app.controller.TabAdder, goog.ui.Component);
-
-
-/**
- * @enum {string}
- */
-app.controller.TabAdder.EventType = {
-  CLICK: 'tabadderclicked'
-};
-
-
-/** @inheritDoc */
-app.controller.TabAdder.prototype.enterDocument = function () {
-  goog.base(this, 'enterDocument');
-  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK, function () {
-    this.dispatchEvent(app.controller.TabAdder.EventType.CLICK);
-  });
-};
-
-
-/** @inheritDoc */
-app.controller.TabAdder.prototype.createDom = function () {
-  var dh = this.getDomHelper();
-  var element = dh.createDom('div', 'tab-adder');
-  this.setElementInternal(element);
-};

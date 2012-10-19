@@ -54,6 +54,11 @@ app.controller.Tab.prototype.enterDocument = function () {
 };
 
 
+app.controller.Tab.prototype.getThousandRows = function () {
+  return this.frame_.getContainer().getThousandRows();
+};
+
+
 /** @inheritDoc */
 app.controller.Tab.prototype.exitDocument = function () {
   this.unrenderContent_();

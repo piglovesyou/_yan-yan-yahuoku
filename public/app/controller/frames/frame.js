@@ -27,9 +27,13 @@ app.controller.Frame = function (id, opt_domHelper) {
 goog.inherits(app.controller.Frame, goog.ui.Component);
 
 
+app.controller.Frame.prototype.getContainer = function () {
+  return this.container_;
+};
+
+
 app.controller.Frame.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
-
   this.getHandler()
     .listen(this, app.controller.Searchbar.EventType.SEARCH, this.handleSearch_)
     .listen(this, app.controller.category.Suggest.EventType.UPDATE_CATEGORY, this.handleUpdateCategory_);
@@ -44,8 +48,9 @@ app.controller.Frame.prototype.handleSearch_ = function (e) {
       'query': query,
       'category': this.currCategory_
     });
+    // TODO: listen, don't call here.
     this.container_.refreshByQuery(query, this.currCategory_['CategoryId']);
-
+    this.searchbar_.updateLabel(null, query, this.currCategory_['CategoryName']);
   }
 };
 

@@ -7,6 +7,7 @@ goog.require('goog.ui.Button');
 goog.require('app.ui.ButtonRenderer');
 goog.require('goog.ui.Component');
 goog.require('goog.string');
+goog.require('app.controller.searchbar.Label');
 
 
 /**
@@ -23,8 +24,12 @@ app.controller.Searchbar = function (opt_domHelper) {
   this.queryInput_ = new app.controller.QueryInput(dh);
   this.addChild(this.queryInput_);
   
+  this.label_ = new app.controller.searchbar.Label(dh);
+  this.addChild(this.label_);
+
   this.button_ = new goog.ui.Button('search', 
       app.ui.NativeButtonRenderer.getInstance(), dh);
+  this.addChild(this.button_);
 }
 goog.inherits(app.controller.Searchbar, goog.ui.Component);
 
@@ -56,12 +61,21 @@ app.controller.Searchbar.prototype.getQuery = function () {
 };
 
 
+/**
+ * TODO: Delete this method. Just let label listens.
+ */
+app.controller.Searchbar.prototype.updateLabel = function (total, query, category) {
+  this.label_.updateContent(total, query, category);
+};
+
+
 app.controller.Searchbar.prototype.createDom = function () {
   var dh = this.getDomHelper();
 
   // Prepare to append
   this.categorySuggest_.createDom();
   this.queryInput_.createDom();
+  this.label_.createDom();
   this.button_.createDom();
 
   var element = dh.createDom('div', 'searchbar',
@@ -74,7 +88,9 @@ app.controller.Searchbar.prototype.createDom = function () {
           dh.createTextNode('\n'),
           this.categorySuggest_.getElement(),
           dh.createTextNode('\n'),
-          this.button_.getElement()));
+          this.button_.getElement(),
+          dh.createTextNode('\n'),
+          this.label_.getElement()));
   this.setElementInternal(element);
 };
 

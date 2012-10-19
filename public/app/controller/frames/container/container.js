@@ -50,6 +50,11 @@ app.controller.Container.prototype.offsetTopCache_;
 app.controller.Container.prototype.iframeOverlayCache_;
 
 
+app.controller.Container.prototype.getThousandRows = function () {
+  return this.thousandRows_;
+};
+
+
 app.controller.Container.prototype.refreshByQuery = function (query, categoryId) {
   var old = this.thousandRows_.getModel();
   if (old) {

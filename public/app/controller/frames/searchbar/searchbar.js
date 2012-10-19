@@ -42,18 +42,18 @@ app.controller.Searchbar.EventType = {
 app.controller.Searchbar.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler()
-    .listen(this.formElement_, goog.events.EventType.SUBMIT, this.handleSubmit_);
+    .listen(this.formElement_, goog.events.EventType.SUBMIT, function(e) {
+      this.dispatchEvent(app.controller.Searchbar.EventType.SEARCH);
+      e.preventDefault();
+    })
+    .listen(this, goog.ui.Component.EventType.ACTION, function(e) {
+      // XXX: e.preventDefault() causes goog.structs.Pool error
+      this.dispatchEvent(app.controller.Searchbar.EventType.SEARCH);
+    });
 };
 
 
 app.controller.Searchbar.prototype.formElement_;
-
-
-app.controller.Searchbar.prototype.handleSubmit_ = function (e) {
-  this.dispatchEvent(app.controller.Searchbar.EventType.SEARCH);
-  e.preventDefault();
-  return false;
-};
 
   
 app.controller.Searchbar.prototype.getQuery = function () {

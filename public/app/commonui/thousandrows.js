@@ -318,7 +318,8 @@ app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record)
   var element = 
       dh.createDom('a', {
             className: 'row',
-            href: 'javascript:void(0)'
+            href: 'javascript:void(0)',
+            tabIndex: -1
           },
           dh.createDom('a', ['span3', 'goods-image'], 
             dh.createDom('img', {

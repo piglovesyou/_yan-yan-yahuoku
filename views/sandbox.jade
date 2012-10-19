@@ -1,12 +1,29 @@
+style
+  html,body {height: 100%}
+  #target {
+    margin:100px;
+    padding: 20px;
+    width:100px;
+    height: 100px;
+    background: lightgreen;
+    /* background:rgba(0,0,0,.05); */
+  }
 
-  
 
-
-div#target(style="margin:100px;padding: 20px; width:100px;height: 100px;background:rgba(0,0,0,.05)")
+div#target
   | yeah
 
 script
   var menu = app.ui.ContextMenu.getInstance();
-  goog.events.listen(document.body, 'mousedown', function () {
-    menu.launch(goog.dom.getElement('target'), ['9','b','g','l','j']);
+
+  var component = new goog.ui.Component();
+  component.decorate(goog.dom.getElement('target'));
+  goog.events.listen(component.getElement(), 'mousedown', function (e) {
+    menu.launch(new goog.math.Coordinate(e.clientX, e.clientY), [
+      {content: '9'},
+      {content: 'b'},
+      {content: 'g'},
+      {content: 'l'},
+      {content: 'j'}
+    ]);
   });

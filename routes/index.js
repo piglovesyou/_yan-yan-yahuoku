@@ -2,9 +2,12 @@
 var oa = require('../sources/core/oauth.js');
 var isProduction = process.env.NODE_ENV === 'production';
 
+console.log(require('secret-strings').AUC_PRO.AFFILIATE_BASE);
+
 exports.index = function(req, res){
   res.render('index', {
-    isProduction: isProduction
+    isProduction: isProduction,
+    affiliateBase: require('secret-strings').AUC_PRO.AFFILIATE_BASE
     // screen_name: req.session.yahoo.screen_name
   });
 

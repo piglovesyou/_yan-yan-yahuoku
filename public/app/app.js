@@ -86,6 +86,20 @@ App.prototype.canDecorate = function (element) {
 };
 
 
+App.prototype.affiliateBase_;
+
+
+App.prototype.setAffiliateBase = function (base) {
+  console.log(base);
+  this.affiliateBase_ = base;
+};
+
+
+App.prototype.getAffiliateBase = function () {
+  return this.affiliateBase_;
+};
+
+
 App.prototype.disposeInternal = function () {
   if (this.frames_) {
     this.frames_.dispose();

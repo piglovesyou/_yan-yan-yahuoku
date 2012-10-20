@@ -1,11 +1,13 @@
 div.toolbar
+
   div.left
     div.logo
       a(href='/') auc-pro
+
   div.right
-    a(href='javascript:void(0)',title='watch list',tabindex='0').watch-tab.i E
-    div.logout 
-      a(href='/logout') logout
+    // a(href='javascript:void(0)',title='watch list',tabindex='0').watch-tab.i E
+    // div.logout 
+    //   a(href='/logout') logout
 
   div.tabs
     div.tabs-content
@@ -15,5 +17,11 @@ div.toolbar
 
 div.main-frame
 
+div.yahoo-credit
+  | <!-- Begin Yahoo! JAPAN Web Services Attribution Snippet -->
+  | <a href="http://developer.yahoo.co.jp/about">
+  | <img src="http://i.yimg.jp/images/yjdn/yjdn_attbtn2_105_17.gif" width="105" height="17" title="Webサービス by Yahoo! JAPAN" alt="Webサービス by Yahoo! JAPAN" border="0" style="margin:15px 15px 15px 15px"></a>
+  | <!-- End Yahoo! JAPAN Web Services Attribution Snippet -->
+
 script
-  main()
+  main('!{affiliateBase}')

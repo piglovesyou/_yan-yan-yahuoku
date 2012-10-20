@@ -3,14 +3,19 @@ var oa = require('../sources/core/oauth.js');
 var isProduction = process.env.NODE_ENV === 'production';
 
 exports.index = function(req, res){
-  if(req.session.oauth && req.session.oauth.access_token) {
-    res.render('index', {
-      isProduction: isProduction
-      // screen_name: req.session.yahoo.screen_name
-    });
-  } else {
-    res.redirect("/login");
-  }
+  res.render('index', {
+    isProduction: isProduction
+    // screen_name: req.session.yahoo.screen_name
+  });
+
+  // if(req.session.oauth && req.session.oauth.access_token) {
+  //   res.render('index', {
+  //     isProduction: isProduction
+  //     // screen_name: req.session.yahoo.screen_name
+  //   });
+  // } else {
+  //   res.redirect("/login");
+  // }
 };
 
 exports.login = function (req, res) {

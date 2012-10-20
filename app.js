@@ -47,8 +47,8 @@ app.configure('production', function(){
 
 var routes = require('./routes');
 app.get('/', routes.index);
-app.get('/login', routes.login);
-app.get('/logout', routes.logout);
+// app.get('/login', routes.login);
+// app.get('/logout', routes.logout);
 app.get('/sandbox', routes.sandbox);
 
 var authRoutes = require('./routes/auth');

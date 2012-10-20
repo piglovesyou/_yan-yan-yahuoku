@@ -28,11 +28,21 @@ app.controller.searchbar.Label.prototype.enterDocument = function () {
 /**
  */
 app.controller.searchbar.Label.prototype.updateContent = function (total, query, category) {
+  this.clearContent();
+
   var dh = this.getDomHelper();
   var text = '';
-  if (goog.isDefAndNotNull(total))    text += goog.string.format('&nbsp;<strong>%d</strong> 件を表示&nbsp;&nbsp;&nbsp;<small>', goog.string.htmlEscape(total));
-  if (goog.isDefAndNotNull(query) && !goog.string.isEmpty(query)) text += goog.string.htmlEscape(query);
-  if (goog.isDefAndNotNull(category) && !goog.string.isEmpty(category)) text += goog.string.format(' [%s]', goog.string.htmlEscape(category));
+
+  if (goog.isDefAndNotNull(total)) {
+    text += goog.string.format('&nbsp;<strong>%s</strong> 件を表示&nbsp;&nbsp;&nbsp;<small>',
+          app.string.toDecimal(goog.string.htmlEscape(total)));
+  }
+  if (goog.isDefAndNotNull(query) && !goog.string.isEmpty(query)) {
+    text += goog.string.htmlEscape(query);
+  }
+  if (goog.isDefAndNotNull(category) && !goog.string.isEmpty(category)) {
+    text += goog.string.format(' [%s]', goog.string.htmlEscape(category));
+  }
   text += '</small>';
 
   dh.append(this.getElement(), dh.htmlToDocumentFragment(text));

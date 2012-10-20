@@ -90,7 +90,6 @@ App.prototype.affiliateBase_;
 
 
 App.prototype.setAffiliateBase = function (base) {
-  console.log(base);
   this.affiliateBase_ = base;
 };
 

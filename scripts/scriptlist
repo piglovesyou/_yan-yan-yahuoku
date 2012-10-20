@@ -164,6 +164,9 @@ public/app/controller/frames/searchbar/category/category.js
 public/app/controller/frames/searchbar/searchbar.js
 public/app/controller/frames/frame.js
 public/app/controller/frames/frames.js
+public/closure-library/closure/goog/i18n/numberformatsymbols.js
+public/closure-library/closure/goog/i18n/currency.js
+public/closure-library/closure/goog/i18n/numberformat.js
 public/app/string/string.js
 public/closure-library/closure/goog/fx/draglistgroup.js
 public/app/controller/tabs/tab.js

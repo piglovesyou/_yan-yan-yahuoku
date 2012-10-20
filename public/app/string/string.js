@@ -1,6 +1,7 @@
 
 goog.provide('app.string');
 
+goog.require('goog.i18n.NumberFormat');
 goog.require('goog.date.relative');
 goog.require('goog.i18n.DateTimeFormat');
 
@@ -15,7 +16,7 @@ app.string = {};
 app.string.renderPrice = function (escapedString) {
   var value = +escapedString;
   if (!goog.isNumber(value) || isNaN(value)) return null;
-  return app.string.addCommaToNumber('' + Math.floor(value)) + '円';
+  return app.string.toDecimal(Math.floor(value)) + '円';
 }
 
 
@@ -23,6 +24,12 @@ app.string.renderPrice = function (escapedString) {
  * @type {goog.i18n.DateTimeFormat}
  */
 app.string.dateFormatter_;
+
+
+/**
+ * @type {goog.i18n.NumberFormat}
+ */
+app.string.numberFormatter_;
 
 
 /**
@@ -87,9 +94,13 @@ app.string.getCategoryNameByPath = function (path) {
 };
 
 
-app.string.addCommaToNumber = function (numstring) {
-  while(numstring != (numstring = numstring.replace(/^(-?\d+)(\d{3})/, "$1,$2")));
-  return numstring;
+/**
+ * @param {number} num
+ */
+app.string.toDecimal = function (num) {
+  var formatter = app.string.numberFormatter_ || (app.string.numberFormatter_ =
+      new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL));
+  return formatter.format(num);
 };
 
 

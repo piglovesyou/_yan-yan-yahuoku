@@ -15,6 +15,7 @@ goog.require('goog.date');
  */
 app.ui.ThousandRows = function (rowHeight, rowCountInPage, opt_domHelper) {
   goog.base(this, rowHeight, rowCountInPage, opt_domHelper);
+  this.setDispatchTransitionEvents(goog.ui.Component.State.FOCUSED, true);
 };
 goog.inherits(app.ui.ThousandRows, goog.ui.ThousandRows)
 

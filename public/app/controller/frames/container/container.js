@@ -87,6 +87,11 @@ app.controller.Container.prototype.enterDocument = function () {
   this.getHandler()
     .listen(app.events.EventCenter.getInstance(), app.events.EventCenter.EventType.TAB_CHANGED, function (e) {
       this.processSelected_(tab.isSelected());
+    })
+    .listen(this, [goog.ui.Component.EventType.FOCUS, goog.ui.Component.EventType.BLUR], function (e) {
+      // We want to show thousandrows upper by z-index.
+      goog.dom.classes.enable(this.getElement(), 'firstComponentFocused',
+        e.type == goog.ui.Component.EventType.FOCUS);
     });
   this.processSelected_(tab.isSelected());
 

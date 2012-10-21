@@ -4,9 +4,23 @@
   padding: 4px 12px
   background: #f2f2f2
   line-height: 24px
-  form
+  .form-inline
     ellipsis(true)
     margin-bottom: 0
+    .btn-group:focus
+      outline: 0;
+      .btn
+        outline: 0;
+        border-color: rgba(82, 168, 236, 0.8);
+        box-shadow:
+          inset 0 2px 4px rgba(0, 0, 0, 0.15),
+          0 1px 2px rgba(0, 0, 0, 0.05)
+          inset 0 1px 1px rgba(0, 0, 0, 0.075),
+          0 0 8px rgba(82, 168, 236, 0.6)
+      .btn:not(:first-child)
+        border-left-color rgba(0, 0, 0, 0.15);
+
+
 
 .searchbar-label
   display inline-block

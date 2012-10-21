@@ -1,6 +1,7 @@
 
 goog.provide('app.controller.Searchbar');
 
+goog.require('app.controller.searchbar.Switch');
 goog.require('app.controller.Category');
 goog.require('app.controller.QueryInput');
 goog.require('goog.ui.Button');
@@ -17,6 +18,9 @@ goog.require('app.controller.searchbar.Label');
 app.controller.Searchbar = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
   var dh = this.getDomHelper();
+
+  this.switch_ = new app.controller.searchbar.Switch(dh);
+  this.addChild(this.switch_);
 
   this.categorySuggest_ = new app.controller.Category(dh);
   this.addChild(this.categorySuggest_);
@@ -42,12 +46,9 @@ app.controller.Searchbar.EventType = {
 app.controller.Searchbar.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler()
-    .listen(this.formElement_, goog.events.EventType.SUBMIT, function(e) {
-      this.dispatchEvent(app.controller.Searchbar.EventType.SEARCH);
-      e.preventDefault();
-    })
     .listen(this, goog.ui.Component.EventType.ACTION, function(e) {
       // XXX: e.preventDefault() causes goog.structs.Pool error
+      // XXX: .. fixed?
       this.dispatchEvent(app.controller.Searchbar.EventType.SEARCH);
     });
 };
@@ -73,6 +74,7 @@ app.controller.Searchbar.prototype.createDom = function () {
   var dh = this.getDomHelper();
 
   // Prepare to append
+  this.switch_.createDom();
   this.categorySuggest_.createDom();
   this.queryInput_.createDom();
   this.label_.createDom();
@@ -82,15 +84,18 @@ app.controller.Searchbar.prototype.createDom = function () {
       this.formElement_ =
         dh.createDom('form', {
             className: 'form-inline',
-            action: ''
+            onsubmit: function () {return false}
           },
+          this.switch_.getElement(),
+          dh.createTextNode('\n'),
           this.queryInput_.getElement(),
           dh.createTextNode('\n'),
           this.categorySuggest_.getElement(),
           dh.createTextNode('\n'),
           this.button_.getElement(),
           dh.createTextNode('\n'),
-          this.label_.getElement()));
+          this.label_.getElement()
+        ));
   this.setElementInternal(element);
 };
 

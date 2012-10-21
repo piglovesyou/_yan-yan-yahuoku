@@ -56,6 +56,13 @@ app.ui.ThousandRows.prototype.setModel = function (model) {
 };
 
 
+app.ui.ThousandRows.prototype.updateAlignment = function () {
+  var isGrid = app.model.getAlignmentStyle(app.controller.util.getTabId(this));
+  goog.dom.classes.enable(this.getElement(), 'isListAlignment', !isGrid);
+  goog.dom.classes.enable(this.getElement(), 'isGridAlignment', isGrid);
+};
+
+
 /**
  * This can be null when scroll back, because it has already gone..
  * Then, we can find it ONLY when it is in the document.
@@ -294,11 +301,69 @@ app.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
 };
 
 
-/** @inheritDoc */
+/**
+ * @param {app.ui.ThousandRows.Row} row
+ * @param {Object|Array} record If grid, array will be passed.
+ */
 app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) {
   var dh = row.getDomHelper();
   var esc = goog.string.htmlEscape;
+  var element;
   
+  if (!goog.isArray(record)) {
+    var detailFragment = this.createDetailFragment(row, record, true);
+    element = 
+        dh.createDom('a', {
+              className: 'row',
+              href: 'javascript:void(0)',
+              tabIndex: -1
+            },
+            dh.createDom('a', ['span3', 'goods-image'], 
+              dh.createDom('img', {
+                className: 'img-polaroid',
+                src: record['Image']
+              })),
+            dh.createDom('h4', null, row.getId() + ' ' + record['Title']),
+            dh.createDom('div', 'row-detail', detailFragment)
+            
+            );
+    row.setTitleTooltip(record['Title']);
+
+  } else {
+    element = dh.createDom('div', 'row');
+    goog.array.forEach(record, function (r) {
+      dh.append(element, this.createColmun_(row, r));
+    }, this);
+  }
+
+  return element;
+};
+
+
+/**
+ * @param {app.ui.ThousandRows.Row} row
+ * @param {Object} record
+ */
+app.ui.ThousandRows.RowRenderer.prototype.createColmun_ = function (row, record) {
+  var dh = row.getDomHelper();
+  return dh.createDom('a', 'grid-col span',
+      dh.createDom('a', ['goods-image'],
+        dh.createDom('img', {
+          className: 'img-polaroid',
+          src: record['Image']
+        })),
+      dh.createDom('div', 'row-detail',
+        this.createDetailFragment(row, record)));
+};
+
+
+/**
+ * @param {Object} record
+ * @param {boolean} icons
+ */
+app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment = function (row, record, icons) {
+  var dh = row.getDomHelper();
+  var esc = goog.string.htmlEscape;
   var html = '<strong>' + app.string.renderPrice(esc(record['CurrentPrice'])) + '</strong>';
   if (goog.string.isNumeric(record['Bids']) && +record['Bids']>=1) {
     html += ' | ';
@@ -307,32 +372,14 @@ app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record)
   html += ' | ';
   html += app.string.renderEndDate(esc(record['EndTime']));
 
-  if (record['Option']) {
+  if (icons && record['Option']) {
     html += '&nbsp;';
     goog.array.forEach(['EasyPaymentIcon', 'FeaturedIcon', 'GiftIcon'], function (k) {
       var url = record['Option'][k];
       if (url) html += '<img src=' + url + ' />';
     });
   }
-  var fragment1 = dh.htmlToDocumentFragment(html);
-
-  var element = 
-      dh.createDom('a', {
-            className: 'row',
-            href: 'javascript:void(0)',
-            tabIndex: -1
-          },
-          dh.createDom('a', ['span3', 'goods-image'], 
-            dh.createDom('img', {
-              className: 'img-polaroid',
-              src: record['Image']
-            })),
-          dh.createDom('h4', null, row.getId() + ' ' + record['Title']),
-          dh.createDom('div', 'row-detail', fragment1)
-          
-          );
-  row.setTitleTooltip(record['Title']);
-  return element;
+  return dh.htmlToDocumentFragment(html);
 };
 
 
@@ -354,6 +401,7 @@ goog.inherits(app.ui.ThousandRows.Model, goog.ui.thousandrows.Model);
 
 
 app.ui.ThousandRows.Model.prototype.buildUri_ = function (index, rowCountInPage) {
+  console.log(rowCountInPage);
 	var uri = goog.Uri.parse(this.uri_);
 	uri.setParameterValue('page', index + 1);
 	return uri.toString();
@@ -368,3 +416,35 @@ app.ui.ThousandRows.Model.prototype.extractTotalFromJson = function (json) {
 app.ui.ThousandRows.Model.prototype.extractRowsDataFromJson = function (json) {
   return json['ResultSet']['Result']['Item'];
 };
+
+
+
+
+/**
+ * @param {string} uri
+ * @param {number=} opt_totalRowCount
+ * @param {boolean=} opt_updateTotalWithJson
+ * @param {goog.net.XhrManager=} opt_xhrManager
+ *
+ * @constructor
+ * @extends {app.ui.ThousandRows.Model}
+ */
+app.ui.ThousandRows.ModelForGrid = function (uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager) {
+  goog.base(this, uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager);
+};
+goog.inherits(app.ui.ThousandRows.ModelForGrid, app.ui.ThousandRows.Model);
+
+
+app.ui.ThousandRows.ModelForGrid.gridCols_ = 4;
+
+
+app.ui.ThousandRows.ModelForGrid.prototype.extractRowsDataFromJson = function (json) {
+  var items = json['ResultSet']['Result']['Item'];
+  var rows = [];
+  while (items && !goog.array.isEmpty(items)) {
+    rows.push(items.splice(0, app.ui.ThousandRows.ModelForGrid.gridCols_));
+  }
+  
+  return rows;
+};
+

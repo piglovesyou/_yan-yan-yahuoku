@@ -63,15 +63,16 @@ app.controller.Container.prototype.refreshByQuery = function (query, categoryId)
   if (goog.string.isEmpty(query) && categoryId == 0) {
     this.thousandRows_.clearContent();
   } else {
-    var model = app.controller.Container.createNewModel_(query, categoryId);
     var isGrid = app.model.getAlignmentStyle(app.controller.util.getTabId(this));
+    var model = app.controller.Container.createNewModel_(query, categoryId, isGrid);
 
-    this.thousandRows_.setRowHeight(isGrid ?
+    this.thousandRows_.setRowHeight(!isGrid ?
         app.controller.Container.listRowHeigt_ :
         app.controller.Container.gridRowHeigt_);
-    this.thousandRows_.setRowCountInPane(isGrid ?
+    this.thousandRows_.setRowCountInPane(!isGrid ?
         app.controller.Container.listRowCount_ :
         app.controller.Container.gridRowCount_);
+    this.thousandRows_.updateAlignment();
 
     this.thousandRows_.setModel(model);
     this.thousandRows_.setZero();
@@ -135,6 +136,7 @@ app.controller.Container.prototype.handleViewportResize_ = function (e) {
  * We can't use 'handleDragEnd_' for its name.. which used by superClass.
  */
 app.controller.Container.prototype.handlePaneResized_ = function (e) {
+  // this.thousandRows_.update(); Something wrong..
   this.detail_.update();
   app.model.setDetailPaneWidth(app.controller.util.getTabId(this),
     this.detail_.getWidth());
@@ -226,14 +228,17 @@ app.controller.Container.prototype.thousandRowsModel_;
 
 app.controller.Container.listRowHeigt_ = 138;
 app.controller.Container.listRowCount_ = 50;
-app.controller.Container.gridRowHeigt_ = 138;
-app.controller.Container.gridRowCount_ = 50;
+app.controller.Container.gridRowHeigt_ = 168;
+app.controller.Container.gridRowCount_ =
+    app.controller.Container.listRowCount_ /
+      app.ui.ThousandRows.ModelForGrid.gridCols_;
 
 
 app.controller.Container.createThousandRows_ = function (opt_domHelper) {
   var thousandRows = new app.ui.ThousandRows(
       app.controller.Container.listRowHeigt_,
-      app.controller.Container.listRowCount_, opt_domHelper);
+      app.controller.Container.listRowCount_,
+      goog.ui.Scroller.ORIENTATION.BOTH, opt_domHelper);
 
   // var thousandRows = new app.ui.ThousandRows(
   //     isGrid ? app.controller.Container.listRowHeigt_ :
@@ -247,7 +252,7 @@ app.controller.Container.createThousandRows_ = function (opt_domHelper) {
 };
 
 
-app.controller.Container.createNewModel_ = function (query, categoryId) {
+app.controller.Container.createNewModel_ = function (query, categoryId, isGrid) {
   var endPoint = query ? '/api/search' : '/api/categoryLeaf';
   var uri = new goog.Uri(endPoint); // goog.Uri.create escape its argument.. Why?
   var q = uri.getQueryData();
@@ -255,6 +260,8 @@ app.controller.Container.createNewModel_ = function (query, categoryId) {
   if (goog.isDefAndNotNull(categoryId)) {
     q.set('category', categoryId);
   }
-  return new app.ui.ThousandRows.Model(uri.toString(), undefined, true);
+  return isGrid ? 
+    new app.ui.ThousandRows.ModelForGrid(uri.toString(), undefined, true) :
+    new app.ui.ThousandRows.Model(uri.toString(), undefined, true);
 };
 

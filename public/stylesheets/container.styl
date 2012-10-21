@@ -82,33 +82,52 @@ splitPaneHandleHeight = 100px
 
 
 
-rowHeight = 138px
+listRowHeight = 138px
+gridRowHeight = 168px
+gridCols = 4
+
 .goog-splitpane-first-container
   position: relative
+
   .goog-thousandrows-row
     box-sizing: border-box
-    height: rowHeight !important
 
-    // Override bootstrap
+  .isListAlignment .goog-thousandrows-row
+    height: listRowHeight !important
     > .row
+      // Override bootstrap
       padding: 14px 5px
       color: #333
+    &.active
+      .row
+        color: white
+    .goods-image
+      text-align: center
+      min-height: 110px
+    &.goog-thousandrows-row-notrendered .img-polaroid
+        width: 140px
+        height: 100px
+        opacity: .4
+    h4
+      ellipsis(true)
+    .row-detail
+      margin-bottom: 10px
 
-  .active
+  gridColWidth = 158px
+  .isGridAlignment .goog-thousandrows-page
+    min-width ( gridColWidth + 30 ) * gridCols
+  .isGridAlignment .goog-thousandrows-row
+    height: gridRowHeight !important
     .row
-      color: white
-
-  .goods-image
-    text-align: center
-    min-height: 110px
-  .goog-thousandrows-row-notrendered .img-polaroid
-      width: 140px
-      height: 100px
-      opacity: .4
-  h4
-    ellipsis(true)
-  .row-detail
-    margin-bottom: 10px
+      height 100%
+    .span
+      box-sizing border-box
+      padding-top 10px
+      width 158px
+      height 100%
+      text-align center
+      color: #333
+      text-decoration none
 
 // Override bootstrap
 .nav > li > a:hover

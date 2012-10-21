@@ -34,7 +34,7 @@ app.controller.Detail.prototype.innerElement_;
 app.controller.Detail.prototype.updateTitleFixedState_ = function () {
   var dh = this.getDomHelper();
 
-  var fixed = app.model.getDetailTitleFixedState(app.controller.util.getFrameId(this));
+  var fixed = app.model.getDetailTitleFixedState(app.controller.util.getTabId(this));
   goog.dom.classes.enable(this.getElement(), 'detail-title-fixed', fixed);
   dh.insertChildAt(fixed ? this.getElement() : this.getContentElement(), this.titleElement_, 0);
 };
@@ -44,7 +44,7 @@ app.controller.Detail.prototype.createDom = function () {
   goog.base(this, 'createDom');
   var dh = this.getDomHelper();
 
-  var fixed = app.model.getDetailTitleFixedState(app.controller.util.getFrameId(this));
+  var fixed = app.model.getDetailTitleFixedState(app.controller.util.getTabId(this));
   this.titleFixedStateButton_ = new app.controller.Detail.TitleFixedStateButton(dh);
   this.addChild(this.titleFixedStateButton_);
   var titleFixedStateButtonElement;
@@ -235,7 +235,7 @@ app.controller.Detail.prototype.enterDocument = function () {
   var tab = app.controller.util.getTab(this)
   this.getHandler().listen(app.events.EventCenter.getInstance(), app.events.EventCenter.EventType.TAB_CHANGED, function (e) {
     if (!tab.isSelected()) return;
-    this.titleFixedStateButton_.setChecked(app.model.getDetailTitleFixedState(app.controller.util.getFrameId(this)));
+    this.titleFixedStateButton_.setChecked(app.model.getDetailTitleFixedState(app.controller.util.getTabId(this)));
     this.updateTitleFixedState_();
   });
   this.getHandler().listen(this, goog.ui.Component.EventType.ACTION, function (e) {

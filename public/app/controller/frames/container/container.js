@@ -136,7 +136,7 @@ app.controller.Container.prototype.handleViewportResize_ = function (e) {
  */
 app.controller.Container.prototype.handlePaneResized_ = function (e) {
   this.detail_.update();
-  app.model.setDetailPaneWidth(app.controller.util.getFrameId(this),
+  app.model.setDetailPaneWidth(app.controller.util.getTabId(this),
     this.detail_.getWidth());
 };
 
@@ -196,7 +196,7 @@ app.controller.Container.prototype.setDetailpainSize_ = function (opt_width) {
 
   this.setFirstComponentSize(leftPaneWidth);
   var width = size.width - leftPaneWidth;
-  app.model.setDetailPaneWidth(app.controller.util.getFrameId(this), width);
+  app.model.setDetailPaneWidth(app.controller.util.getTabId(this), width);
 
   var iframeOverlay = this.getIframeOverlay_();
   if (iframeOverlay) {

@@ -45,6 +45,17 @@ app.controller.util.getFrame = function (component) {
 
 /**
  * @param {goog.ui.Component} component
+ * @return {string}
+ */
+app.controller.util.getTabId = function (component) {
+  var id = app.controller.util.getTab(component).getId();
+  goog.asserts.assertString(id, 'Couldn\'t get tab Id. There must be.');
+  return id;
+};
+
+
+/**
+ * @param {goog.ui.Component} component
  * @return {?app.controller.Tab}
  */
 app.controller.util.getTab = function (component) {

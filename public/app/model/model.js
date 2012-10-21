@@ -103,7 +103,8 @@ app.model.KeyPrefix = {
   AUCTION_ITEM_: 'auctionitem:',
   TAB_: 'tab:',
   DETAILTITLEFIXEDSTATE_: 'detailtitlefixedstate:',
-  _DETAILPANEWIDTH_: ':detailpanewidth'
+  _DETAILPANEWIDTH_: ':detailpanewidth',
+  _ISGRID_: ':isGrid:'
 };
 
 
@@ -260,4 +261,27 @@ app.model.createEmptyTab = function () {
       'CategoryPath': ''
     }
   }
+};
+
+
+/**
+ * @param {string} tabId
+ * @param {boolean} isGrid
+ */
+app.model.setAlignmentStyle = function (tabId, isGrid) {
+  goog.asserts.assertBoolean(isGrid, 'Invalid type to set list or grid.');
+  var storage = app.model.getLocalStore_();
+  storage.set(app.model.KeyPrefix.TAB_ + tabId + 
+              app.model.KeyPrefix._ISGRID_, isGrid);
+};
+
+
+/**
+ * @param {string} tabId
+ * @return {boolean}
+ */
+app.model.getAlignmentStyle = function (tabId) {
+  var storage = app.model.getLocalStore_();
+  return !!storage.get(app.model.KeyPrefix.TAB_ + tabId + 
+              app.model.KeyPrefix._ISGRID_);
 };

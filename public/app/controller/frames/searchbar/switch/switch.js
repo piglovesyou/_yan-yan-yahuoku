@@ -29,11 +29,18 @@ goog.inherits(app.controller.searchbar.Switch, goog.ui.Container);
 app.controller.searchbar.Switch.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler().listen(this, 'action', function (e) {
-    var id = e.target.getId();
-    this.forEachChild(function (child) {
-      if (id != child.getId()) child.setSelected(false);
-    }, this);
+    var isGrid = this.gridButton_.getId() == e.target.getId();
+    app.model.setAlignmentStyle(app.controller.util.getTabId(this), isGrid);
+    this.updateSwitchState_(isGrid);
   });
+
+  this.updateSwitchState_(app.model.getAlignmentStyle(app.controller.util.getTabId(this)));
+};
+
+
+app.controller.searchbar.Switch.prototype.updateSwitchState_ = function (isGrid) {
+  this.listButton_.setSelected(!isGrid);
+  this.gridButton_.setSelected(isGrid);
 };
 
 
@@ -56,6 +63,7 @@ app.controller.searchbar.Switch.createButton = function (content, dh) {
 /** @inheritDoc */
 app.controller.searchbar.Switch.prototype.createDom = function () {
   goog.base(this, 'createDom');
+
   this.listButton_.createDom();
   this.gridButton_.createDom();
   this.getDomHelper().append(this.getContentElement(),
@@ -77,6 +85,5 @@ goog.addSingletonGetter(app.controller.searchbar.SwitchRenderer);
 
 /** @inheritDoc */
 app.controller.searchbar.SwitchRenderer.prototype.getCssClass = function () {
-  console.log('yeah')
   return goog.base(this, 'getCssClass') + ' btn-group';
 };

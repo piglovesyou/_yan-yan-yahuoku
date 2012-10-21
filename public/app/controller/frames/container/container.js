@@ -64,6 +64,15 @@ app.controller.Container.prototype.refreshByQuery = function (query, categoryId)
     this.thousandRows_.clearContent();
   } else {
     var model = app.controller.Container.createNewModel_(query, categoryId);
+    var isGrid = app.model.getAlignmentStyle(app.controller.util.getTabId(this));
+
+    this.thousandRows_.setRowHeight(isGrid ?
+        app.controller.Container.listRowHeigt_ :
+        app.controller.Container.gridRowHeigt_);
+    this.thousandRows_.setRowCountInPane(isGrid ?
+        app.controller.Container.listRowCount_ :
+        app.controller.Container.gridRowCount_);
+
     this.thousandRows_.setModel(model);
     this.thousandRows_.setZero();
     this.detail_.clearContent();
@@ -215,8 +224,24 @@ app.controller.Container.prototype.getIframeOverlay_ = function () {
 app.controller.Container.prototype.thousandRowsModel_;
 
 
+app.controller.Container.listRowHeigt_ = 138;
+app.controller.Container.listRowCount_ = 50;
+app.controller.Container.gridRowHeigt_ = 138;
+app.controller.Container.gridRowCount_ = 50;
+
+
 app.controller.Container.createThousandRows_ = function (opt_domHelper) {
-  var thousandRows = new app.ui.ThousandRows(138, 50, opt_domHelper);
+  var thousandRows = new app.ui.ThousandRows(
+      app.controller.Container.listRowHeigt_,
+      app.controller.Container.listRowCount_, opt_domHelper);
+
+  // var thousandRows = new app.ui.ThousandRows(
+  //     isGrid ? app.controller.Container.listRowHeigt_ :
+  //              app.controller.Container.gridRowHeigt_,
+  //     isGrid ? app.controller.Container.listRowCount_ :
+  //              app.controller.Container.gridRowCount_,
+  //     opt_domHelper);
+
   thousandRows.setMinThumbLength(30);
   return thousandRows;
 };

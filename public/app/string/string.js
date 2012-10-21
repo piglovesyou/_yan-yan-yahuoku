@@ -67,8 +67,10 @@ app.string.renderEndDate = function (escapedString) {
   var formatted = goog.date.relative.format(new Date(escapedString).getTime());
   // Yahoo auction is always in 2 weeks.
   if (formatted) {
-    if (goog.string.contains(formatted, 'in')) {
+    if (goog.string.startsWith(formatted, 'in')) {
       formatted = 'あと' + formatted.slice(3);
+    } else if (goog.string.endsWith(formatted, 'ago')) {
+      return '終了';
     }
     if (goog.string.contains(formatted, 'day')) {
       formatted = formatted.replace(/day.*$/, '日');

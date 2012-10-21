@@ -346,14 +346,17 @@ app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record)
  */
 app.ui.ThousandRows.RowRenderer.prototype.createColmun_ = function (row, record) {
   var dh = row.getDomHelper();
-  return dh.createDom('a', 'grid-col span',
-      dh.createDom('a', ['goods-image'],
-        dh.createDom('img', {
-          className: 'img-polaroid',
-          src: record['Image']
-        })),
-      dh.createDom('div', 'row-detail',
-        this.createDetailFragment(row, record)));
+  return dh.createDom('a', {
+            'className': 'grid-col span',
+            'href': 'javascript:void(0)',
+          },
+          dh.createDom('a', ['goods-image'],
+            dh.createDom('img', {
+              className: 'img-polaroid',
+              src: record['Image']
+            })),
+          dh.createDom('div', 'row-detail',
+            this.createDetailFragment(row, record)));
 };
 
 
@@ -448,3 +451,7 @@ app.ui.ThousandRows.ModelForGrid.prototype.extractRowsDataFromJson = function (j
   return rows;
 };
 
+app.ui.ThousandRows.ModelForGrid.prototype.getTotal = function () {
+  // TODO: How do I ? For now, the last row is not shown in a container.
+  return Math.ceil(this.totalDs_.get() / app.ui.ThousandRows.ModelForGrid.gridCols_);
+};

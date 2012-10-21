@@ -115,7 +115,8 @@ gridCols = 4
 
   gridColWidth = 158px
   .isGridAlignment .goog-thousandrows-page
-    min-width ( gridColWidth + 30 ) * gridCols
+    padding-right 0
+    min-width (( gridColWidth + 20 ) * gridCols) - 20
   .isGridAlignment .goog-thousandrows-row
     height: gridRowHeight !important
     .row
@@ -130,6 +131,7 @@ gridCols = 4
       text-decoration none
 
 // Override bootstrap
-.nav > li > a:hover
+.nav > li > a:hover,
+.nav > li > .row > .span:hover
   background-color: rgba(0,0,0,.03)
 

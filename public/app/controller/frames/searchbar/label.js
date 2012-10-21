@@ -20,7 +20,9 @@ app.controller.searchbar.Label.prototype.enterDocument = function () {
   var tab = app.controller.util.getTab(this);
   this.getHandler().listen(tab.getThousandRows(), goog.ui.ThousandRows.EventType.UPDATE_TOTAL, function (e) {
     var q = app.model.getTabQuery(tab.getId());
-    this.updateContent(e.total, q['query'], q['category']['CategoryPath']);
+    var total = app.model.getAlignmentStyle(app.controller.util.getTabId(this)) ?
+        e.total * app.ui.ThousandRows.ModelForGrid.gridCols_ : e.total;
+    this.updateContent(total, q['query'], q['category']['CategoryPath']);
   });
 };
 

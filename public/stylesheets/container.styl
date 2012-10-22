@@ -132,6 +132,11 @@ gridCols = 4
       height 100%
       color: #333
       text-decoration none
+      &.active
+        // Same as bootstrap's .nav-list > .active > a, .nav-list > .active > a:hover
+        color: white;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+        background-color: #08C;
 
 // Override bootstrap
 .nav > li > a:hover,

@@ -116,6 +116,7 @@ app.controller.Container.prototype.processSelected_ = function (selected) {
   var fn = selected ? eh.listen : eh.unlisten;
   fn.call(eh,  app.dom.ViewportSizeMonitor.getInstance(), goog.events.EventType.RESIZE, this.handleViewportResize_)
   fn.call(eh,  this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
+  fn.call(eh,  this, app.ui.ThousandRows.EventType.COL_CLICKED, this.handleColClicked_)
   fn.call(eh,  this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, this.handlePaneResized_)
   fn.call(eh,  this.resizeTimer_, goog.Timer.TICK, this.handleResizeTimerTick_);
 
@@ -142,14 +143,25 @@ app.controller.Container.prototype.handlePaneResized_ = function (e) {
     this.detail_.getWidth());
 };
 
+
 app.controller.Container.prototype.handleRowClicked_ = function (e) {
-  var id = e.row.getAuctionId();
-  if (id) {
-    app.model.getAuctionItem(id, function (err, data) {
+  this.renderItemInDetail_(e.row.getAuctionId());
+};
+
+
+app.controller.Container.prototype.handleColClicked_ = function (e) {
+  this.renderItemInDetail_(e.col.getAuctionId());
+};
+
+
+app.controller.Container.prototype.renderItemInDetail_ = function (auctionId) {
+  if (auctionId) {
+    app.model.getAuctionItem(auctionId, function (err, data) {
       if (!err) this.detail_.renderContent(data);
     }, this);
   }
 };
+
 
 /**
  * @return {number}

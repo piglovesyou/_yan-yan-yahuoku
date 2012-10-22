@@ -150,7 +150,10 @@ app.model.getTabQuery = function (tabId) {
  * @param {string} tabId
  */
 app.model.deleteTabQuery = function (tabId) {
-  app.model.getLocalStore_().remove(app.model.KeyPrefix.TAB_ + tabId);
+  var storage = app.model.getLocalStore_();
+  storage.remove(app.model.KeyPrefix.TAB_ + tabId);
+  storage.remove(app.model.KeyPrefix.TAB_ + tabId + app.model.KeyPrefix._DETAILPANEWIDTH_);
+  storage.remove(app.model.KeyPrefix.TAB_ + tabId + app.model.KeyPrefix._ISGRID_);
 };
 
 

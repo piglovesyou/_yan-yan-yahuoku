@@ -237,6 +237,15 @@ app.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {
 
 
 /**
+ * @param {Object} record
+ */
+app.ui.ThousandRows.Row.prototype.renderContent_ = function (record) {
+  this.getDomHelper().appendChild(/** @type {!Node} */(this.getContentElement()),
+      this.renderer_.renderContent(this, record));
+};
+
+
+/**
  * @type {?string}
  */
 app.ui.ThousandRows.Row.prototype.auctionId_;
@@ -305,7 +314,7 @@ app.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
  * @param {app.ui.ThousandRows.Row} row
  * @param {Object|Array} record If grid, array will be passed.
  */
-app.ui.ThousandRows.RowRenderer.prototype.createContent = function (row, record) {
+app.ui.ThousandRows.RowRenderer.prototype.renderContent = function (row, record) {
   var dh = row.getDomHelper();
   var esc = goog.string.htmlEscape;
   var element;

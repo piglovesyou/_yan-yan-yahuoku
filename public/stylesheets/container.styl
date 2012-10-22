@@ -116,17 +116,20 @@ gridCols = 4
   gridColWidth = 158px
   .isGridAlignment .goog-thousandrows-page
     padding-right 0
-    min-width (( gridColWidth + 20 ) * gridCols) - 20
   .isGridAlignment .goog-thousandrows-row
     height: gridRowHeight !important
+    text-align center
     .row
+      width 98%
+      min-width (( gridColWidth + 20 ) * gridCols)
+      display inline-block
       height 100%
     .span
       box-sizing border-box
       padding-top 10px
-      width 158px
+      width 22%
+      min-width 158px
       height 100%
-      text-align center
       color: #333
       text-decoration none
 

@@ -240,8 +240,28 @@ app.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {
  * @param {Object} record
  */
 app.ui.ThousandRows.Row.prototype.renderContent_ = function (record) {
-  this.getDomHelper().appendChild(/** @type {!Node} */(this.getContentElement()),
-      this.renderer_.renderContent(this, record));
+  var dh;
+  var stuff;
+  if (!goog.isArray(record)) {
+    stuff = this.renderer_.renderContent(this, record);
+  } else {
+    // Grid alignment
+    dh = this.getDomHelper();
+    stuff = dh.createDom('div', {
+      className: 'row',
+      href: 'javascript:void(0)',
+      tabIndex: -1
+    });
+    goog.array.forEach(record, function (r) {
+      var col = new app.ui.ThousandRows.RowColumn(dh);
+      this.addChild(col);
+      col.createDom(r);
+      dh.append(stuff, col.getElement());
+      col.enterDocument();
+    }, this);
+  }
+  this.getDomHelper().appendChild(/** @type {!Node} */
+      (this.getContentElement()), stuff);
 };
 
 
@@ -319,53 +339,33 @@ app.ui.ThousandRows.RowRenderer.prototype.renderContent = function (row, record)
   var esc = goog.string.htmlEscape;
   var element;
   
-  if (!goog.isArray(record)) {
-    var detailFragment = this.createDetailFragment(row, record, true);
-    element = 
-        dh.createDom('a', {
-              className: 'row',
-              href: 'javascript:void(0)',
-              tabIndex: -1
-            },
-            dh.createDom('a', ['span3', 'goods-image'], 
-              dh.createDom('img', {
-                className: 'img-polaroid',
-                src: record['Image']
-              })),
-            dh.createDom('h4', null, row.getId() + ' ' + record['Title']),
-            dh.createDom('div', 'row-detail', detailFragment)
-            
-            );
-    row.setTitleTooltip(record['Title']);
-
-  } else {
-    element = dh.createDom('div', 'row');
-    goog.array.forEach(record, function (r) {
-      dh.append(element, this.createColmun_(row, r));
-    }, this);
-  }
-
-  return element;
-};
-
-
-/**
- * @param {app.ui.ThousandRows.Row} row
- * @param {Object} record
- */
-app.ui.ThousandRows.RowRenderer.prototype.createColmun_ = function (row, record) {
-  var dh = row.getDomHelper();
-  return dh.createDom('a', {
-            'className': 'grid-col span',
-            'href': 'javascript:void(0)',
+  // if (!goog.isArray(record)) {
+  var detailFragment = this.createDetailFragment(row, record, true);
+  element = 
+      dh.createDom('a', {
+            className: 'row',
+            href: 'javascript:void(0)',
+            tabIndex: -1
           },
-          dh.createDom('a', ['goods-image'],
+          dh.createDom('a', ['span3', 'goods-image'], 
             dh.createDom('img', {
               className: 'img-polaroid',
               src: record['Image']
             })),
-          dh.createDom('div', 'row-detail',
-            this.createDetailFragment(row, record)));
+          dh.createDom('h4', null, row.getId() + ' ' + record['Title']),
+          dh.createDom('div', 'row-detail', detailFragment)
+          
+          );
+  row.setTitleTooltip(record['Title']);
+
+  // } else {
+  //   element = dh.createDom('div', 'row');
+  //   goog.array.forEach(record, function (r) {
+  //     dh.append(element, this.createColmun_(row, r));
+  //   }, this);
+  // }
+
+  return element;
 };
 
 
@@ -393,6 +393,70 @@ app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment = function (row, 
   }
   return dh.htmlToDocumentFragment(html);
 };
+
+
+
+
+
+
+/**
+ * @constructor
+ * @extends {app.ui.ThousandRows.RowColumn}
+ */
+app.ui.ThousandRows.RowColumn = function (opt_domHelper) {
+  goog.base(this, opt_domHelper);
+  
+  this.renderer_ = app.ui.ThousandRows.RowColumnRenderer.getInstance();
+};
+goog.inherits(app.ui.ThousandRows.RowColumn, goog.ui.Component);
+
+
+/**
+ * @param {Object} record
+ */
+app.ui.ThousandRows.RowColumn.prototype.createDom = function (record) {
+  var element = this.renderer_.createDom(this, record);
+  this.setElementInternal(element);
+};
+
+
+
+
+/**
+ * @constructor
+ */
+app.ui.ThousandRows.RowColumnRenderer = function () {};
+goog.addSingletonGetter(app.ui.ThousandRows.RowColumnRenderer);
+
+
+/**
+ * @param {Object} record
+ */
+app.ui.ThousandRows.RowColumnRenderer.prototype.createDom = function (col, record) {
+  var dh = col.getDomHelper();
+  var element = dh.createDom('a', {
+                    'className': 'grid-col span',
+                    'href': 'javascript:void(0)',
+                  },
+                  dh.createDom('a', 'goods-image',
+                    dh.createDom('img', {
+                      className: 'img-polaroid',
+                      src: record['Image']
+                    })),
+                  dh.createDom('div', 'row-detail',
+                    this.createDetailFragment(col, record)));
+  return element;
+};
+
+
+app.ui.ThousandRows.RowColumnRenderer.prototype.createDetailFragment = 
+    app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment;
+
+
+
+
+
+
 
 
 
@@ -456,7 +520,6 @@ app.ui.ThousandRows.ModelForGrid.prototype.extractRowsDataFromJson = function (j
   while (items && !goog.array.isEmpty(items)) {
     rows.push(items.splice(0, app.ui.ThousandRows.ModelForGrid.gridCols_));
   }
-  
   return rows;
 };
 

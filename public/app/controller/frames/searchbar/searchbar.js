@@ -5,7 +5,6 @@ goog.require('app.controller.searchbar.Switch');
 goog.require('app.controller.Category');
 goog.require('app.controller.QueryInput');
 goog.require('goog.ui.Button');
-goog.require('app.ui.ButtonRenderer');
 goog.require('goog.ui.Component');
 goog.require('goog.string');
 goog.require('app.controller.searchbar.Label');

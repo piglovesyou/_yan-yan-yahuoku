@@ -81,10 +81,10 @@ app.ui.ContextMenu.prototype.rotate_ = function (next) {
 
   var index;
   if (next) {
-    var index = this.hilitedIndex_ - 1;
+    index = this.hilitedIndex_ - 1;
     if (!this.getChildAt(index)) index = this.getChildCount() - 1;
   } else {
-    var index = this.hilitedIndex_ + 1;
+    index = this.hilitedIndex_ + 1;
     if (!this.getChildAt(index)) index = 0;
   }
   this.hilite_(index);
@@ -157,6 +157,9 @@ app.ui.ContextMenu.prototype.unhilite_ = function () {
 };
 
 
+/**
+ * @param {boolean=} selected
+ */
 app.ui.ContextMenu.prototype.dismiss = function (selected) {
   this.dismissing_ = true;
 
@@ -263,7 +266,15 @@ app.ui.ContextMenu.prototype.getChildIndex_ = function (child) {
 };
 
 
+/**
+ * @type {Element}
+ */
 app.ui.ContextMenu.prototype.positionOriginElement_;
+
+
+/**
+ * @param {Element} element
+ */
 app.ui.ContextMenu.prototype.setPositionOriginElement = function (element) {
   this.positionOriginElement_ = element;
 };
@@ -290,15 +301,25 @@ app.ui.ContextMenu.prototype.handleKeyEventInternal = function (e) {
       return true;
     case goog.events.KeyCodes.SPACE:
     case goog.events.KeyCodes.ENTER:
-      return this.selectCurrentHilited_(e);
+      this.selectCurrentHilited_();
+      return true;
   }
   return false;
 };
 
 
+/**
+ * @override
+ * @param {number} index
+ * @return {app.ui.ContextMenu.Item}
+ */
+app.ui.ContextMenu.prototype.getChildAt;
+
+
 app.ui.ContextMenu.prototype.selectCurrentHilited_ = function () {
   this.getChildAt(this.hilitedIndex_).processSelected();
-  this.dispatchEvent(app.ui.ContextMenu.EventTarget.SELECT, {
+  this.dispatchEvent({
+    type: app.ui.ContextMenu.EventTarget.SELECT,
     record: this.records_[this.hilitedIndex_]
   });
   this.dismissing_ = true;
@@ -397,7 +418,7 @@ app.ui.ContextMenu.Renderer.prototype.createDom = function (control) {
 /**
  * @param {goog.dom.DomHelper=} opt_domHelper
  * @constructor
- * @extends {goog.ui.Component}
+ * @extends {goog.ui.Control}
  */
 app.ui.ContextMenu.Item = function (content, opt_domHelper) {
   goog.base(this, content, app.ui.ContextMenu.Item.Renderer.getInstance(), opt_domHelper);

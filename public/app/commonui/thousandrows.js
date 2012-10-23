@@ -76,6 +76,20 @@ app.ui.ThousandRows.prototype.isGrid_;
 
 
 /**
+ * @param {string} id
+ * @return {?app.ui.ThousandRows.Page}
+ */
+app.ui.ThousandRows.prototype.getChild;
+
+
+/**
+ * @param {number} index
+ * @return {?app.ui.ThousandRows.Page}
+ */
+app.ui.ThousandRows.prototype.getChildAt;
+
+
+/**
  * @return {number}
  */
 app.ui.ThousandRows.prototype.getSelectedColIndex = function () {
@@ -155,7 +169,7 @@ app.ui.ThousandRows.prototype.handleColSelected_ = function (e) {
   if (!newRow || !newCol) return;
 
   var oldRow = this.findSelectedRow_();
-  if (oldRow) {
+  if (oldRow && goog.isDefAndNotNull(this.selectedColId_)) {
     // We must have the last selected col here.
     var oldCol = oldRow.getChild(this.selectedColId_);
     if (oldCol) {
@@ -242,6 +256,20 @@ app.ui.ThousandRows.Page = function (pageIndex, rowCount, rowHeight, opt_domHelp
 goog.inherits(app.ui.ThousandRows.Page, goog.ui.thousandrows.Page);
 
 
+/**
+ * @param {string} id
+ * @return {?app.ui.ThousandRows.Row}
+ */
+app.ui.ThousandRows.Page.prototype.getChild;
+
+
+/**
+ * @param {number} index
+ * @return {?app.ui.ThousandRows.Row}
+ */
+app.ui.ThousandRows.Page.prototype.getChildAt;
+
+
 /** @inheritDoc */
 app.ui.ThousandRows.Page.prototype.createDom = function () {
   var dh = this.getDomHelper();
@@ -282,6 +310,20 @@ goog.inherits(app.ui.ThousandRows.Row, goog.ui.thousandrows.Row);
 
 
 /**
+ * @param {string} id
+ * @return {?app.ui.ThousandRows.RowColumn}
+ */
+app.ui.ThousandRows.Row.prototype.getChild;
+
+
+/**
+ * @param {number} index
+ * @return {?app.ui.ThousandRows.RowColumn}
+ */
+app.ui.ThousandRows.Row.prototype.getChildAt;
+
+
+/**
  * @type {boolean}
  */
 app.ui.ThousandRows.Row.prototype.isGrid_ = function() {
@@ -290,8 +332,8 @@ app.ui.ThousandRows.Row.prototype.isGrid_ = function() {
 
 
 /** 
- * @param {boolean} asSelected
  * @override
+ * @param {boolean} asSelected
  */
 app.ui.ThousandRows.Row.prototype.createDom = function (asSelected) {
   goog.base(this, 'createDom');
@@ -562,7 +604,7 @@ app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment = function (row, 
 
 /**
  * @constructor
- * @extends {app.ui.ThousandRows.RowColumn}
+ * @extends {goog.ui.Component}
  */
 app.ui.ThousandRows.RowColumn = function (opt_domHelper) {
   goog.base(this, opt_domHelper);

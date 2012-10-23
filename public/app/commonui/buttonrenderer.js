@@ -40,7 +40,7 @@ app.ui.ButtonRenderer.prototype.canDecorate = function (element) {
 
 /**
  * For this.tagName.
- * @param {app.ui.Button} button
+ * @param {goog.ui.Button} button
  */
 app.ui.ButtonRenderer.prototype.createDom = function (button) {
   var dh = button.getDomHelper();
@@ -51,10 +51,12 @@ app.ui.ButtonRenderer.prototype.createDom = function (button) {
   this.setAriaStates(button, element);
   return element;
 
-  var tooltip = button.getTooltip();
-  if (tooltip) {
-    this.setTooltip(element, tooltip);
-  }
+  // TODO: Impl to attach tooltip.
+  // var tooltip = button.getTooltip();
+  // console.log(tooltip);
+  // if (tooltip) {
+  //   this.setTooltip(element, tooltip);
+  // }
 
   var value = button.getValue();
   if (value) {
@@ -69,18 +71,3 @@ app.ui.ButtonRenderer.prototype.createDom = function (button) {
 
   return element;
 };
-
-
-
-
-/**
- * @constructor
- * @extends {app.ui.ButtonRenderer}
- */
-app.ui.NativeButtonRenderer = function () {
-  goog.base(this);
-  this.tagName = 'button';
-};
-goog.inherits(app.ui.NativeButtonRenderer, app.ui.ButtonRenderer);
-goog.addSingletonGetter(app.ui.NativeButtonRenderer);
-

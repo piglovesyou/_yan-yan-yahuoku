@@ -86,19 +86,29 @@ App.prototype.canDecorate = function (element) {
 };
 
 
+/**
+ * @type {string}
+ */
 App.prototype.affiliateBase_;
 
 
+/**
+ * @param {string} base
+ */
 App.prototype.setAffiliateBase = function (base) {
   this.affiliateBase_ = base;
 };
 
 
+/**
+ * @return {string} base
+ */
 App.prototype.getAffiliateBase = function () {
   return this.affiliateBase_;
 };
 
 
+/** @inheritDoc */
 App.prototype.disposeInternal = function () {
   if (this.frames_) {
     this.frames_.dispose();

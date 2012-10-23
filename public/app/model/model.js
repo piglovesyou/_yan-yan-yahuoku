@@ -118,7 +118,7 @@ app.model.getAuctionItemKey_ = function (id) {
 
 
 /**
- * @return {Array.<string>}
+ * @return {?Array.<string>}
  */
 app.model.getTabIds = function () {
   return app.model.getLocalStore_().get(app.model.Key.TAB_IDS);
@@ -126,7 +126,7 @@ app.model.getTabIds = function () {
 
 
 /**
- * @param {Array.<string>}
+ * @param {Array.<string>} ids
  */
 app.model.setTabIds = function (ids) {
   goog.asserts.assert(goog.isArray(ids) && goog.array.every(ids, function (id) {
@@ -139,7 +139,7 @@ app.model.setTabIds = function (ids) {
 
 /**
  * @param {string} tabId
- * @return {Object} Query and category data.
+ * @return {?Object} Query and category data.
  */
 app.model.getTabQuery = function (tabId) {
   return app.model.getLocalStore_().get(app.model.KeyPrefix.TAB_ + tabId);
@@ -159,7 +159,7 @@ app.model.deleteTabQuery = function (tabId) {
 
 /**
  * @param {string} tabId
- * @param {Object} Query and category data.
+ * @param {Object} data Query and category data.
  */
 app.model.setTabQuery = function (tabId, data) {
   goog.asserts.assert(
@@ -230,7 +230,6 @@ app.model.getDetailTitleFixedState = function (tabId) {
 /**
  * @param {string} tabId
  * @param {number} width
- * @return {number}
  */
 app.model.setDetailPaneWidth = function (tabId, width) {
   goog.asserts.assertNumber(width, 'Invalid type for detail pane width.');
@@ -247,8 +246,10 @@ app.model.setDetailPaneWidth = function (tabId, width) {
  */
 app.model.getDetailPaneWidth = function (tabId) {
   var storage = app.model.getLocalStore_();
-  return storage.get(app.model.KeyPrefix.TAB_ + tabId + 
+  var num = storage.get(app.model.KeyPrefix.TAB_ + tabId + 
               app.model.KeyPrefix._DETAILPANEWIDTH_);
+  goog.asserts.assertNumber(num, 'Must be a number');
+  return num;
 };
 
 

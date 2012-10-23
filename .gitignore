@@ -5,5 +5,4 @@ closure-compiler
 .DS_Store
 redis/dump.rdb
 redis/redis.log
-*.css
 public/javascripts/main-min.js

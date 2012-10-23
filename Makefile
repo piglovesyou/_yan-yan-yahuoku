@@ -24,7 +24,9 @@ setup:;
 	unzip -d $(COMPILER_DIR) $(COMPILER_DIR)$(COMPILER_ZIP) && \
 	rm $(COMPILER_DIR)$(COMPILER_ZIP) && \
 	rm -rf $(CLOSURELIB_DIR) && \
-	svn checkout $(CLOSURELIB_REMOTE_DIR) $(CLOSURELIB_DIR)
+	svn checkout $(CLOSURELIB_REMOTE_DIR) $(CLOSURELIB_DIR) && \
+	git submodule init && \
+	git submodule update
 
 compile:;
 	$(COMMAND_CLOSURE_BUILDER_) \

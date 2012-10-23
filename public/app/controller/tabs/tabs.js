@@ -123,7 +123,9 @@ app.controller.Tabs.prototype.insertNewTab_ = function () {
   this.addChildAt(tab, lastIndex + 1);
   app.model.setTabIds(this.getTabIds());
   tab.createDom();
-  dh.append(this.getContentElement(), tab.getElement()); // <-- Because I want do this, I don't addChildAt(tab, index, true).
+  var content = this.getContentElement();
+  goog.asserts.assert(content, 'There must be.');
+  dh.append(content, tab.getElement()); // <-- Because I want do this, I don't addChildAt(tab, index, true).
   tab.enterDocument();
   this.setupDragListGroup_();
   return tab;

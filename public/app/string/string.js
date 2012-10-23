@@ -11,7 +11,7 @@ app.string = {};
 
 /**
  * @param {string} escapedString
- * @return {string}
+ * @return {?string}
  */
 app.string.renderPrice = function (escapedString) {
   var value = +escapedString;
@@ -33,7 +33,7 @@ app.string.numberFormatter_;
 
 
 /**
- * @param {string} escapeString
+ * @param {string} escapedString
  * @return {string}
  */
 app.string.renderDate = function (escapedString) {
@@ -44,6 +44,10 @@ app.string.renderDate = function (escapedString) {
 };
 
 
+/**
+ * TODO: use it.
+ * @param {string} escapedString
+ */
 app.string.renderBoolean = function (escapedString) {
   return escapedString == 'true' ? 'あり' : 'なし' 
 }

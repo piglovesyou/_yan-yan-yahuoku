@@ -121,7 +121,9 @@ app.model.getAuctionItemKey_ = function (id) {
  * @return {?Array.<string>}
  */
 app.model.getTabIds = function () {
-  return app.model.getLocalStore_().get(app.model.Key.TAB_IDS);
+  var ids = app.model.getLocalStore_().get(app.model.Key.TAB_IDS);
+  if (ids) goog.asserts.assertArray(ids, 'Invalid ids were stored.');
+  return ids;
 };
 
 
@@ -142,7 +144,9 @@ app.model.setTabIds = function (ids) {
  * @return {?Object} Query and category data.
  */
 app.model.getTabQuery = function (tabId) {
-  return app.model.getLocalStore_().get(app.model.KeyPrefix.TAB_ + tabId);
+  var data = app.model.getLocalStore_().get(app.model.KeyPrefix.TAB_ + tabId);
+  if (data) goog.asserts.assertObject(data, 'Invalid data was stored.');
+  return data;
 };
 
 

@@ -10,11 +10,15 @@ goog.require('goog.date');
 
 
 /**
+ * @param {number} rowHeight
+ * @param {number} rowCountInPage
+ * @param {?goog.ui.Scroller.ORIENTATION=} opt_orient
+ * @param {goog.dom.DomHelper=} opt_domHelper
  * @constructor
  * @extends {goog.ui.ThousandRows}
  */
-app.ui.ThousandRows = function (rowHeight, rowCountInPage, opt_domHelper) {
-  goog.base(this, rowHeight, rowCountInPage, opt_domHelper);
+app.ui.ThousandRows = function (rowHeight, rowCountInPage, opt_orient, opt_domHelper) {
+  goog.base(this, rowHeight, rowCountInPage, opt_orient, opt_domHelper);
   this.setDispatchTransitionEvents(goog.ui.Component.State.FOCUSED, true);
 };
 goog.inherits(app.ui.ThousandRows, goog.ui.ThousandRows)
@@ -200,7 +204,7 @@ app.ui.ThousandRows.prototype.findSelectedCol_ = function () {
   var oldRow = this.findSelectedRow_();
   if (oldRow) {
     var selectedColId = this.selectedColId_;
-    return oldRow.getChild(selectedColId);
+    if (selectedColId) return oldRow.getChild(selectedColId);
   }
   return null;
 };
@@ -324,7 +328,7 @@ app.ui.ThousandRows.Row.prototype.getChildAt;
 
 
 /**
- * @type {boolean}
+ * @return {boolean}
  */
 app.ui.ThousandRows.Row.prototype.isGrid_ = function() {
   return this.getParent().getParent().isGrid();
@@ -333,11 +337,11 @@ app.ui.ThousandRows.Row.prototype.isGrid_ = function() {
 
 /** 
  * @override
- * @param {boolean} asSelected
+ * @param {boolean} selected
  */
-app.ui.ThousandRows.Row.prototype.createDom = function (asSelected) {
+app.ui.ThousandRows.Row.prototype.createDom = function (selected) {
   goog.base(this, 'createDom');
-  if (asSelected) this.asSelected(true);
+  if (selected) this.asSelected(true);
 };
 
 
@@ -406,6 +410,7 @@ app.ui.ThousandRows.Row.prototype.getColumnFromEventTarget_ = function (et) {
   goog.array.find(this.getChildIds(), function (id) {
     var child = this.getChild(id);
     if (child && child.getElement() == et) return !!(col = child);
+    return false;
   }, this);
   return col || null;
 };
@@ -533,6 +538,7 @@ app.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
 
 
 /**
+ * @override
  * @param {app.ui.ThousandRows.Row} row
  * @param {Object|Array} record If grid, array will be passed.
  */
@@ -574,7 +580,7 @@ app.ui.ThousandRows.RowRenderer.prototype.renderContent = function (row, record)
 /**
  * @param {app.ui.ThousandRows.Row} row
  * @param {Object} record
- * @param {boolean} icons
+ * @param {boolean=} icons
  */
 app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment = function (row, record, icons) {
   var dh = row.getDomHelper();
@@ -621,6 +627,7 @@ app.ui.ThousandRows.RowColumn.prototype.auctionId_;
 
 
 /**
+ * @override
  * @param {Object} record
  */
 app.ui.ThousandRows.RowColumn.prototype.createDom = function (record) {
@@ -631,7 +638,7 @@ app.ui.ThousandRows.RowColumn.prototype.createDom = function (record) {
 
 
 /**
- * @return {string}
+ * @return {?string}
  */
 app.ui.ThousandRows.RowColumn.prototype.getAuctionId = function () {
   return this.auctionId_;
@@ -672,15 +679,17 @@ app.ui.ThousandRows.RowColumnRenderer.prototype.createDom = function (col, recor
 
 
 /**
+ * @override
  * @param {app.ui.ThousandRows.RowColumn} col
  * @param {Object} record
- * @param {boolean} icons
+ * @param {boolean=} icons
  */
 app.ui.ThousandRows.RowColumnRenderer.prototype.createDetailFragment = 
     app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment;
 
 
 /**
+ * @override
  * @param {app.ui.ThousandRows.RowColumn} col
  * @param {boolean} selected
  */

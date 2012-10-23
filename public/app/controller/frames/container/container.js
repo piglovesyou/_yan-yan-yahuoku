@@ -139,8 +139,8 @@ app.controller.Container.prototype.handleViewportResize_ = function (e) {
 app.controller.Container.prototype.handlePaneResized_ = function (e) {
   // this.thousandRows_.update(); Something wrong..
   this.detail_.update();
-  app.model.setDetailPaneWidth(app.controller.util.getTabId(this),
-    this.detail_.getWidth());
+  var w = this.detail_.getWidth();
+  if (goog.isNumber(w)) app.model.setDetailPaneWidth(app.controller.util.getTabId(this), w);
 };
 
 
@@ -197,7 +197,7 @@ app.controller.Container.prototype.handleResizeTimerTick_ = function (e) {
 
 /**
  * If an argument passed, use it.
- * @param {number?} opt_width
+ * @param {?number=} opt_width
  */
 app.controller.Container.prototype.setDetailpainSize_ = function (opt_width) {
   var size = app.dom.ViewportSizeMonitor.getInstance().getSize();

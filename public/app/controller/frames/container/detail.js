@@ -24,10 +24,33 @@ goog.inherits(app.controller.Detail, goog.ui.Scroller);
 app.controller.Detail.prototype.titleFixedStateButton_;
 
 
+/**
+ * @type {Element}
+ */
 app.controller.Detail.prototype.emptyMessageElement_;
+
+
+/**
+ * @type {Element}
+ */
 app.controller.Detail.prototype.titleElement_;
+
+
+/**
+ * @type {Element}
+ */
 app.controller.Detail.prototype.titleInnerElement_;
+
+
+/**
+ * @type {Element}
+ */
 app.controller.Detail.prototype.buttonsContainerElement_;
+
+
+/**
+ * @type {Element}
+ */
 app.controller.Detail.prototype.innerElement_;
 
 
@@ -49,7 +72,9 @@ app.controller.Detail.prototype.createDom = function () {
   this.addChild(this.titleFixedStateButton_);
   var titleFixedStateButtonElement;
 
-  dh.append(this.getContentElement(),
+  var content = this.getContentElement();
+  goog.asserts.assert(content, 'should be.');
+  dh.append(content,
       this.titleElement_ = dh.createDom('h5', {className: 'detail-title', style: 'display:none'},
         this.buttonsContainerElement_ = dh.createDom('div', 'detail-title-buttons',
             titleFixedStateButtonElement = 
@@ -271,6 +296,11 @@ app.controller.Detail.prototype.prepareContent_ = function (toShow) {
 
 
 
+/**
+ * @param {?goog.dom.DomHelper=} opt_domHelper
+ * @constructor
+ * @extends {goog.ui.ToggleButton}
+ */
 app.controller.Detail.TitleFixedStateButton = function (opt_domHelper) {
   goog.base(this, '', app.ui.ButtonRenderer.getInstance(), opt_domHelper);
 };

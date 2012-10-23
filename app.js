@@ -1,4 +1,6 @@
 
+var port = process.argv[2] || 3000;
+
 /**
  * Module dependencies.
  */
@@ -66,6 +68,6 @@ apiRoutes.getPaths().forEach(function (path) {
 
 
 
-app.listen(require('secret-strings').AUC_PRO.PORT, function(){
+app.listen(port, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });

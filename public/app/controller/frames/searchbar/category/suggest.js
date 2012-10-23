@@ -86,6 +86,9 @@ app.controller.category.Suggest.prototype.clearSelection = function (inputHandle
 };
 
 
+/**
+ * @param {app.controller.category.Suggest.InputHandler} inputHandler
+ */
 app.controller.category.Suggest.prototype.getBackInputTextIfNeeded_ = function (inputHandler) {
   var value = inputHandler.getActiveElement() && inputHandler.getValue();
   if (goog.isString(value) && this.lastSelectedRow_['CategoryPath'] !== value) {
@@ -101,7 +104,7 @@ app.controller.category.Suggest.prototype.getBackInputTextIfNeeded_ = function (
 
 
 /**
- * @param {goog.events.Event} e
+ * @param {Object} e
  */
 app.controller.category.Suggest.prototype.handleSelected = function (e) {
   var row = e.row;
@@ -179,6 +182,7 @@ app.controller.category.Suggest.InputHandler.showEndOfValue = function (inputEle
 };
 
 
+/** @inheritDoc */
 app.controller.category.Suggest.InputHandler.prototype.handleKeyUp = function (e) {
   if (e.target == this.activeElement_ && e.target.value == '') {
     this.getAutoComplete().clearSelection(this);
@@ -186,7 +190,8 @@ app.controller.category.Suggest.InputHandler.prototype.handleKeyUp = function (e
 };
 
 
-app.controller.category.Suggest.InputHandler.prototype.needKeyUpListener = function (e) {
+/** @inheritDoc */
+app.controller.category.Suggest.InputHandler.prototype.needKeyUpListener = function () {
   return true;
 };
 

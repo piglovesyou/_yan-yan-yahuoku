@@ -1,6 +1,7 @@
 
 goog.provide('app.controller.Detail');
 
+goog.require('app.ui.ButtonRenderer');
 goog.require('goog.ui.SplitPane');
 goog.require('goog.style');
 goog.require('app.ui.ThousandRows');
@@ -100,7 +101,7 @@ app.controller.Detail.prototype.renderContent = function (data) {
   var container = this.getContentElement();
   this.prepareContent_(true);
 
-  dh.append(this.titleInnerElement_,
+  dh.append(/** @type {Element} */(this.titleInnerElement_),
       dh.createDom('a', {
         target: '_blank',
         href: esc(data['AuctionItemUrl'])
@@ -248,6 +249,7 @@ app.controller.Detail.prototype.renderContent = function (data) {
       senddetailTable,
       shippingTable);
 
+  goog.asserts.assert(this.innerElement_, 'Must be');
   dh.append(this.innerElement_, images, descriptionContainer);
   this.update();
 };

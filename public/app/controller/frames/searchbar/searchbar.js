@@ -53,9 +53,6 @@ app.controller.Searchbar.prototype.enterDocument = function () {
     });
 };
 
-
-app.controller.Searchbar.prototype.formElement_;
-
   
 app.controller.Searchbar.prototype.getQuery = function () {
   return this.queryInput_.getValue();
@@ -81,7 +78,6 @@ app.controller.Searchbar.prototype.createDom = function () {
   this.button_.createDom();
 
   var element = dh.createDom('div', 'searchbar',
-      this.formElement_ =
         dh.createDom('form', {
             className: 'form-inline',
             onsubmit: function () {return false}

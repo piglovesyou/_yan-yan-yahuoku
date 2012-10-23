@@ -66,7 +66,9 @@ app.controller.searchbar.Switch.prototype.createDom = function () {
 
   this.listButton_.createDom();
   this.gridButton_.createDom();
-  this.getDomHelper().append(this.getContentElement(),
+  var content = this.getContentElement();
+  goog.asserts.assert(content, 'There must be.');
+  this.getDomHelper().append(content,
       this.listButton_.getElement(),
       this.gridButton_.getElement());
 };
@@ -74,7 +76,7 @@ app.controller.searchbar.Switch.prototype.createDom = function () {
 
 /**
  * @constructor
- * @extends {app.controller.searchbar.SwitchRenderer}
+ * @extends {goog.ui.ContainerRenderer}
  */
 app.controller.searchbar.SwitchRenderer = function () {
   goog.base(this);

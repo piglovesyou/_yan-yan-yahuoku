@@ -118,12 +118,11 @@ app.model.getAuctionItemKey_ = function (id) {
 
 
 /**
- * @return {?Array.<string>}
+ * @return {?Array}
  */
 app.model.getTabIds = function () {
   var ids = app.model.getLocalStore_().get(app.model.Key.TAB_IDS);
-  if (ids) goog.asserts.assertArray(ids, 'Invalid ids were stored.');
-  return ids;
+  return goog.isDefAndNotNull(ids) && goog.isArray(ids) ? ids : null;
 };
 
 
@@ -145,8 +144,7 @@ app.model.setTabIds = function (ids) {
  */
 app.model.getTabQuery = function (tabId) {
   var data = app.model.getLocalStore_().get(app.model.KeyPrefix.TAB_ + tabId);
-  if (data) goog.asserts.assertObject(data, 'Invalid data was stored.');
-  return data;
+  return goog.isObject(data) ? data : null;
 };
 
 
@@ -220,14 +218,12 @@ app.model.setDetailTitleFixedState = function (fixed) {
 };
 
 
-app.model.getDetailTitleFixedState = function (tabId) {
+/**
+ * @return {boolean}
+ */
+app.model.getDetailTitleFixedState = function () {
   var storage = app.model.getLocalStore_();
-  var value = storage.get(app.model.KeyPrefix.DETAILTITLEFIXEDSTATE_);
-  if (goog.isDefAndNotNull(value) && goog.isBoolean(value)) {
-    return value;
-  } else {
-    return false;
-  }
+  return !!storage.get(app.model.KeyPrefix.DETAILTITLEFIXEDSTATE_);
 };
 
 

@@ -37,8 +37,8 @@ app.controller.Tabs.prototype.enterDocument = function () {
  */
 app.controller.Tabs.prototype.handleTabSelected_ = function (e) {
   var oldTab = this.currSelectedTab_;
-  var newTab = e.target;
-  if (oldTab.getId() == newTab.getId()) return;
+  var newTab = /** @type {?app.controller.Tab} */(e.target);
+  if (!newTab || oldTab.getId() == newTab.getId()) return;
 
   oldTab.processSelected(false);
   newTab.processSelected(true);
@@ -49,7 +49,7 @@ app.controller.Tabs.prototype.handleTabSelected_ = function (e) {
 
 
 /** @inheritDoc */
-app.controller.Tabs.prototype.exitDocument = function (e) {
+app.controller.Tabs.prototype.exitDocument = function () {
   this.adder_.exitDocument();
   goog.base(this, 'exitDocument');
 };
@@ -81,7 +81,7 @@ app.controller.Tabs.prototype.decorateInternal = function (element) {
   // We don't deal with it as a child. Only tabs are.
   tabAdder.setParentEventTarget(this);
   tabAdder.createDom();
-  dh.append(this.getElement(), tabAdder.getElement());
+  dh.append(element, tabAdder.getElement());
 
   var tabIds = app.model.getTabIds();
   goog.asserts.assert(tabIds, 'We have to have tab ids.');

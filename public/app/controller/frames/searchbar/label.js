@@ -15,6 +15,7 @@ app.controller.searchbar.Label = function (opt_domHelper) {
 goog.inherits(app.controller.searchbar.Label, goog.ui.Component);
 
 
+/** @inheritDoc */
 app.controller.searchbar.Label.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   var tab = app.controller.util.getTab(this);
@@ -37,7 +38,7 @@ app.controller.searchbar.Label.prototype.updateContent = function (total, query,
 
   if (goog.isDefAndNotNull(total)) {
     text += goog.string.format('&nbsp;<strong>%s</strong> 件を表示&nbsp;&nbsp;&nbsp;<small>',
-          app.string.toDecimal(goog.string.htmlEscape(total)));
+          app.string.toDecimal(+goog.string.htmlEscape(total)));
   }
   if (goog.isDefAndNotNull(query) && !goog.string.isEmpty(query)) {
     text += goog.string.htmlEscape(query);
@@ -47,7 +48,9 @@ app.controller.searchbar.Label.prototype.updateContent = function (total, query,
   }
   text += '</small>';
 
-  dh.append(this.getElement(), dh.htmlToDocumentFragment(text));
+  var element = this.getElement();
+  goog.asserts.assert(element, 'There must be.');
+  dh.append(element, dh.htmlToDocumentFragment(text));
 };
 
 

@@ -251,13 +251,12 @@ app.model.setDetailPaneWidth = function (tabId, width) {
 
 /**
  * @param {string} tabId
- * @return {number}
+ * @return {?number}
  */
 app.model.getDetailPaneWidth = function (tabId) {
   var storage = app.model.getLocalStore_();
   var num = storage.get(app.model.KeyPrefix.TAB_ + tabId + 
               app.model.KeyPrefix._DETAILPANEWIDTH_);
-  goog.asserts.assertNumber(num, 'Must be a number');
   return num;
 };
 

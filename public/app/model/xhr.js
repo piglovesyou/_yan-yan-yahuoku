@@ -71,7 +71,11 @@ app.model.Xhr.prototype.request_ = function (method, uri, content, callback, opt
     xhr.send(id, uri, method, content_, u, u, function (e) {
       var xhrio = e.target;
       if (xhrio && xhrio.isSuccess()) {
-        callback.call(opt_obj, false, xhrio.getResponseJson());
+        callback.call(opt_obj, false,
+            goog.string.contains(xhrio.getResponseHeader('Content-Type'),
+              'application/json') ?
+                xhrio.getResponseJson() :
+                xhrio.getResponseText());
       } else {
         callback.call(opt_obj, true, null);
       }

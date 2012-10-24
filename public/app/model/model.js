@@ -178,6 +178,15 @@ app.model.setTabQuery = function (tabId, data) {
 };
 
 
+app.model.getRemoteHtml = function (url, callback, opt_obj) {
+  app.model.Xhr.getInstance().get(url, {
+    'noLayout': 1
+  }, function(err, html){
+    callback.call(opt_obj, err, html);
+  });
+};
+
+
 /**
  * @param {string} id
  * @param {Function} callback

@@ -25,12 +25,12 @@
 
 // goog.ui.Dialog
 .modal {
+  position: absolute;
   margin: 0 // Override Bootstrap
   // background: #c1d9ff;
   // border: 1px solid #3a5774;
   // color: #000;
   // padding: 4px;
-  position: absolute;
 }
 
 .modal a,
@@ -45,6 +45,14 @@
   left: 0;
   position: absolute;
   top: 0;
+}
+
+.modal-header .close {
+  float none
+  line-height auto
+  position absolute
+  top 0
+  right 10px
 }
 
 .modal-buttons,

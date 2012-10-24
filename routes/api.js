@@ -15,6 +15,10 @@ YAPI_PATHS.forEach(function (path) {
   module.exports[path] = function (req, res) {
     yapi.requestGet(path, req.query, function (err, data) {
       if (err) res.end('{}');
+      res.writeHead(200, {
+        'Content-Type': 'application/json;charset=UTF8',
+        'yeahyeahyeah': '1'
+      });
       res.end(data);
     });
   };

@@ -19,6 +19,12 @@ exports.index = function(req, res){
   // }
 };
 
+exports.about = function (req, res) {
+  res.render('about', {
+    layout: !req.query.noLayout
+  });
+};
+
 exports.login = function (req, res) {
   if(req.session.oauth && req.session.oauth.access_token) {
   } else {

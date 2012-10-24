@@ -11,6 +11,7 @@ goog.require('app.controller.Container');
 goog.require('app.controller.Tabs');
 goog.require('app.dom.ViewportSizeMonitor');
 goog.require('app.ui.ContextMenu');
+goog.require('app.ui.Dialog');
 goog.require('app.Model');
 
 

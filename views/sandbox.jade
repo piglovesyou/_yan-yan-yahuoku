@@ -14,16 +14,12 @@ div#target
   | yeah
 
 script
-  var menu = app.ui.ContextMenu.getInstance();
-
-  var component = new goog.ui.Component();
-  component.decorate(goog.dom.getElement('target'));
-  goog.events.listen(component.getElement(), 'mousedown', function (e) {
-    menu.launch(new goog.math.Coordinate(e.clientX, e.clientY), [
-      {content: '9'},
-      {content: 'b'},
-      {content: 'g'},
-      {content: 'l'},
-      {content: 'j'}
-    ]);
+  var dialog = new app.ui.Dialog();
+  goog.events.listen(goog.dom.getElement('target'), 'mousedown', function (e) {
+    // TODO* position is something wrong/
+    dialog.setContent('yaahh<br />eee');
+    dialog.setVisible(true);
   });
+  dialog.setContent('yaahh<br />eee');
+  dialog.setTitle('yaahh');
+  dialog.setVisible(true);

@@ -46,9 +46,19 @@ public/closure-library/closure/goog/ui/container.js
 public/app/commonui/contextmenu.js
 public/closure-library/closure/goog/dom/viewportsizemonitor.js
 public/app/dom/viewportsizemonitor.js
-public/closure-library/closure/goog/timer/timer.js
 public/closure-library/closure/goog/style/bidi.js
 public/closure-library/closure/goog/fx/dragger.js
+public/closure-library/closure/goog/timer/timer.js
+public/closure-library/closure/goog/fx/transition.js
+public/closure-library/closure/goog/ui/popupbase.js
+public/closure-library/closure/goog/events/focushandler.js
+public/closure-library/closure/goog/dom/iframe.js
+public/closure-library/closure/goog/ui/modalpopup.js
+public/closure-library/closure/goog/iter/iter.js
+public/closure-library/closure/goog/structs/structs.js
+public/closure-library/closure/goog/structs/map.js
+public/closure-library/closure/goog/ui/dialog.js
+public/app/commonui/dialog.js
 public/closure-library/closure/goog/ui/splitpane.js
 public/closure-library/closure/goog/i18n/datetimesymbols.js
 public/closure-library/closure/goog/date/datelike.js
@@ -56,8 +66,6 @@ public/closure-library/closure/goog/date/date.js
 public/closure-library/closure/goog/positioning/positioning.js
 public/closure-library/closure/goog/positioning/abstractposition.js
 public/closure-library/closure/goog/positioning/anchoredposition.js
-public/closure-library/closure/goog/fx/transition.js
-public/closure-library/closure/goog/ui/popupbase.js
 public/closure-library/closure/goog/positioning/viewportposition.js
 public/closure-library/closure/goog/positioning/clientposition.js
 public/closure-library/closure/goog/positioning/viewportclientposition.js
@@ -65,9 +73,6 @@ public/closure-library/closure/goog/positioning/absoluteposition.js
 public/closure-library/closure/goog/positioning/anchoredviewportposition.js
 public/closure-library/closure/goog/ui/popup.js
 public/closure-library/closure/goog/structs/collection.js
-public/closure-library/closure/goog/structs/structs.js
-public/closure-library/closure/goog/iter/iter.js
-public/closure-library/closure/goog/structs/map.js
 public/closure-library/closure/goog/structs/set.js
 public/closure-library/closure/goog/ui/tooltip.js
 public/closure-library/closure/goog/i18n/timezone.js
@@ -123,7 +128,6 @@ public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/
 public/closure-library/closure/goog/math/range.js
 public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/thousandrows.js
 public/app/commonui/thousandrows.js
-public/app/controller/util.js
 public/closure-library/closure/goog/ui/buttonside.js
 public/closure-library/closure/goog/ui/buttonrenderer.js
 public/closure-library/closure/goog/ui/nativebuttonrenderer.js
@@ -131,6 +135,8 @@ public/closure-library/closure/goog/ui/button.js
 public/closure-library/closure/goog/ui/cssnames.js
 public/closure-library/closure/goog/ui/custombuttonrenderer.js
 public/closure-library/closure/goog/ui/togglebutton.js
+public/app/commonui/buttonrenderer.js
+public/app/controller/util.js
 public/app/controller/frames/container/detail.js
 public/closure-library/closure/goog/storage/mechanism/mechanism.js
 public/closure-library/closure/goog/storage/mechanism/iterablemechanism.js
@@ -152,7 +158,6 @@ public/closure-library/closure/goog/string/stringformat.js
 public/app/controller/frames/searchbar/label.js
 public/closure-library/closure/goog/events/inputhandler.js
 public/app/controller/frames/searchbar/queryinput.js
-public/app/commonui/buttonrenderer.js
 public/closure-library/closure/goog/ui/ac/autocomplete.js
 public/closure-library/closure/goog/dom/selection.js
 public/closure-library/closure/goog/useragent/product.js

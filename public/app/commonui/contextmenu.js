@@ -6,6 +6,19 @@ goog.require('goog.ui.Container');
 
 
 /**
+ * Usage:
+ *   var menu = app.ui.ContextMenu.getInstance();
+ *   var component = new goog.ui.Component();
+ *   component.decorate(goog.dom.getElement('target'));
+ *   goog.events.listen(component.getElement(), 'mousedown', function (e) {
+ *     menu.launch(new goog.math.Coordinate(e.clientX, e.clientY), [
+ *       {content: '9'},
+ *       {content: 'b'},
+ *       {content: 'g'},
+ *       {content: 'l'},
+ *       {content: 'j'}
+ *     ]);
+ *   });
  * @param {goog.dom.DomHelper=} opt_domHelper
  * @constructor
  * @extends {goog.ui.Container}

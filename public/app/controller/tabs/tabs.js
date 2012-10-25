@@ -285,7 +285,8 @@ app.controller.Tabs.prototype.createFixTabWidthStylesheet_ = function (width) {
 
 
 app.controller.Tabs.prototype.canDecorate = function (element) {
-  var content = goog.dom.getElementByClass('tabs-content', element);
+  var dh = this.getDomHelper();
+  var content = dh.getElementByClass('tabs-content', element);
   if (content) {
     this.contentElement_ = content;
     this.setElementInternal(element);
@@ -300,6 +301,12 @@ app.controller.Tabs.prototype.disposeInternal = function () {
     this.adder_.dispose();
     this.adder_ = null;
   }
+  this.contentElement_ = null;
   goog.base(this, 'disposeInternal');
 };
+
+
+
+
+
 

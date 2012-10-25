@@ -17,13 +17,23 @@ goog.inherits(app.ui.Dialog, goog.ui.Dialog);
 
 
 /**
+ */
+app.ui.Dialog.prototype.decorateLoadedContent_;
+
+
+/**
  * @param {string} url
  */
 app.ui.Dialog.prototype.launch = function (url) {
-  app.model.getRemoteHtml(url, this.handleHtmlLoad_, this);
-  this.setContent('Loading..')
+  if (!this.wasContentLoaded_) {
+    app.model.getRemoteHtml(url, this.handleHtmlLoad_, this);
+    this.setContent('Loading..')
+  }
   this.setVisible(true);
 };
+
+
+app.ui.Dialog.prototype.wasContentLoaded_ = false;
 
 
 /**
@@ -41,6 +51,8 @@ app.ui.Dialog.prototype.handleHtmlLoad_ = function (err, html) {
   dh.append(this.getTitleElement(),
       dh.getElementByClass('modal-content-title', this.getContentElement()));
 
+  if (goog.isFunction(this.decorateLoadedContent_)) this.decorateLoadedContent_();
+  this.wasContentLoaded_ = true;
   this.reposition();
 };
 

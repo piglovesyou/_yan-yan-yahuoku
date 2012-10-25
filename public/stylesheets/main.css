@@ -39,7 +39,7 @@
 .btn.goog-button-checked,.btn.goog-button-selected{background-color:#e6e6e6;background-color:#d9d9d9 9;background-image:none;-webkit-box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);-moz-box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);-webkit-box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);-moz-box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05)}
 .modal{position:absolute;margin:0}
 .modal a,.modal alink,.modal avisited{color:#06c;cursor:pointer}
-.modal-bg{background:#666;left:0;position:absolute;top:0}
+.modal-bg{background:#666;left:0;position:absolute;top:0;z-index:1000}
 .modal-header{border:none;cursor:move}
 .modal-header .close{float:none;line-height:auto;position:absolute;top:0;right:10px}
 .modal-buttons,.modal-content{padding:8px}
@@ -47,6 +47,8 @@
 .logo a{-webkit-transition:opacity .1s linear;-moz-transition:opacity .1s linear;-o-transition:opacity .1s linear;-ms-transition:opacity .1s linear;transition:opacity .1s linear}
 .logo a:hover{opacity:.7;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70)}
 .logo a:active{-webkit-transition:opacity .01s linear;-moz-transition:opacity .01s linear;-o-transition:opacity .01s linear;-ms-transition:opacity .01s linear;transition:opacity .01s linear;opacity:.4;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=40)}
+.modal-title h1{margin-bottom:20px}
+.modal-title .nav-tabs{margin-bottom:0}
 .modal-content-content{overflow:auto;}
 .modal-content-content .tab-belonging{display:none;}
 .modal-content-content .tab-belonging.active{display:block}

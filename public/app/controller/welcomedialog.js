@@ -11,6 +11,7 @@ goog.require('goog.ui.TabPane');
  */
 app.controller.WelcomeDialog = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
+  this.setModel(false);
 };
 goog.inherits(app.controller.WelcomeDialog, app.ui.Dialog);
 
@@ -30,6 +31,9 @@ app.controller.WelcomeDialog.prototype.decorateLoadedContent_ = function () {
   var tabContainer = this.tabsContainer_ = dh.getElementByClass('nav-tabs', content);
   var tabs = this.tabs_ = dh.getChildren(tabContainer);
   var tabContents = this.tabContents_ = dh.getChildren(dh.getElementByClass('tab-belongings'));
+
+  dh.append(this.getTitleElement(), tabContainer);
+
   this.getHandler().listen(tabContainer, goog.events.EventType.CLICK, function (e) {
     e.stopPropagation();
     e.preventDefault();

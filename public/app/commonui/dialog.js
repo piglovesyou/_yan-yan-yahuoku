@@ -11,6 +11,7 @@ goog.require('goog.ui.Dialog');
  */
 app.ui.Dialog = function (opt_domHelper) {
   goog.base(this, 'modal', false, opt_domHelper);
+  this.setBackgroundElementOpacity(.15);
   this.setButtonSet(null);
 };
 goog.inherits(app.ui.Dialog, goog.ui.Dialog);
@@ -54,6 +55,7 @@ app.ui.Dialog.prototype.handleHtmlLoad_ = function (err, html) {
   if (goog.isFunction(this.decorateLoadedContent_)) this.decorateLoadedContent_();
   this.wasContentLoaded_ = true;
   this.reposition();
+  // goog.Timer.callOnce(function() {this.reposition();}, 2000, this);
 };
 
 

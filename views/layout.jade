@@ -15,3 +15,6 @@ html
       include _scripts
 
   body!= body
+
+  - if (isProduction)
+    include _googleAnalytics

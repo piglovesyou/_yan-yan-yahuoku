@@ -21,6 +21,15 @@ app.string.renderPrice = function (escapedString) {
 
 
 /**
+ * @type {string} escapedUrl
+ * @return {string}
+ */
+app.string.createAuctionItemLink = function (escapedUrl) {
+  return escapedUrl;
+};
+
+
+/**
  * @type {goog.i18n.DateTimeFormat}
  */
 app.string.dateFormatter_;

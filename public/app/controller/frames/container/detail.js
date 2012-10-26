@@ -101,11 +101,10 @@ app.controller.Detail.prototype.renderContent = function (data) {
   var container = this.getContentElement();
   this.prepareContent_(true);
 
+  var safe_itemLink = app.string.createAuctionItemLink(esc(data['AuctionItemUrl']));
+  var safe_itemTitle = esc(data['Title'])
   dh.append(/** @type {Element} */(this.titleInnerElement_),
-      dh.createDom('a', {
-        target: '_blank',
-        href: esc(data['AuctionItemUrl'])
-      }, dh.createTextNode(esc(data['Title']) + ' '), dh.createDom('span', 'i i-text', 'o')));
+      app.controller.Detail.createItemLink_(safe_itemLink, safe_itemTitle, dh));
   
   var images = dh.createDom('div', {className: 'detail-images', 'style':'text-align:center'}); 
   var imageCount = 0;
@@ -243,15 +242,41 @@ app.controller.Detail.prototype.renderContent = function (data) {
 
   var descriptionContainer = dh.createDom('div', 'detail-description-container',
       description,
+      app.controller.Detail.createItemLinkParagraph_(safe_itemLink, safe_itemTitle, dh),
       primaryTable,
       subTable,
       paymentTable,
       senddetailTable,
-      shippingTable);
+      shippingTable,
+      app.controller.Detail.createItemLinkParagraph_(safe_itemLink, safe_itemTitle, dh));
 
   goog.asserts.assert(this.innerElement_, 'Must be');
   dh.append(this.innerElement_, images, descriptionContainer);
   this.update();
+};
+
+
+/**
+ * @param {string} safe_itemLink
+ * @param {string} safe_itemTitle
+ * @param {goog.dom.DomHelper} dh
+ */
+app.controller.Detail.createItemLinkParagraph_ = function (safe_link, safe_title, dh) {
+  return dh.createDom('p', 'detail-item-link',
+          app.controller.Detail.createItemLink_(safe_link, safe_title, dh));
+};
+
+
+/**
+ * @param {string} safe_itemLink
+ * @param {string} safe_itemTitle
+ * @param {goog.dom.DomHelper} dh
+ */
+app.controller.Detail.createItemLink_ = function (safe_itemLink, safe_itemTitle, dh) {
+  return dh.createDom('a', {
+        target: '_blank',
+        href: safe_itemLink
+      }, dh.createTextNode(safe_itemTitle + ' '), dh.createDom('span', 'i i-text', 'o'))
 };
 
 

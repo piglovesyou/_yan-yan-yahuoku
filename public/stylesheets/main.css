@@ -144,6 +144,7 @@
 .goog-splitpane-second-container .detail-title-buttons{float:right}
 .goog-splitpane-second-container .detail-title-fixedstatebutton{border:none;padding:5px;margin-bottom:2px;font-size:22px}
 .goog-splitpane-second-container .detail-description-container{margin:10px 20px 50px}
+.goog-splitpane-second-container .detail-item-link{text-align:right}
 .goog-splitpane-second-container .table th{width:30%}
 .goog-splitpane-second-container .table-bordered th{font-weight:normal;background:#d9edf7}
 .goog-splitpane-second-container .detail-td-tablecontainer{padding:0;}

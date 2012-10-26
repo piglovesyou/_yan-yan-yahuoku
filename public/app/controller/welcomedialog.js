@@ -61,7 +61,7 @@ app.controller.WelcomeDialog.prototype.getTabIndexFromEventTarget_ = function (e
     et = /** @type {Element} */ (et.parentNode);
   }
   if (!et) return null;
-  var tabEl_ = -1;
+  var index = -1;
   goog.array.find(this.tabs_, function (tab, i) {
     if (et == tab) {
       index = i;

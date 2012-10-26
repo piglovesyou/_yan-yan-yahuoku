@@ -2,7 +2,7 @@
 goog.provide('app.controller.WelcomeDialog');
 
 goog.require('app.ui.Dialog');
-goog.require('goog.ui.TabPane');
+goog.require('app.ui.TabPane');
 
 
 /**
@@ -12,11 +12,13 @@ goog.require('goog.ui.TabPane');
 app.controller.WelcomeDialog = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
   this.setModel(false);
+
+  /**
+   * @type {app.ui.TabPane}
+   */
+  this.tabPane_ = new app.ui.TabPane(opt_domHelper);
 };
 goog.inherits(app.controller.WelcomeDialog, app.ui.Dialog);
-
-
-app.controller.WelcomeDialog.prototype.tabPane_;
 
 
 app.controller.WelcomeDialog.prototype.launch = function () {
@@ -26,48 +28,19 @@ app.controller.WelcomeDialog.prototype.launch = function () {
 
 app.controller.WelcomeDialog.prototype.decorateLoadedContent_ = function () {
   var dh = this.getDomHelper();
-  var content = this.getContentElement();
 
-  var tabContainer = this.tabsContainer_ = dh.getElementByClass('nav-tabs', content);
-  var tabs = this.tabs_ = dh.getChildren(tabContainer);
-  var tabContents = this.tabContents_ = dh.getChildren(dh.getElementByClass('tab-belongings'));
+  var content = this.getContentElement()
+  this.tabPane_.decorate(content);
 
-  dh.append(this.getTitleElement(), tabContainer);
+  dh.append(this.getTitleElement(), dh.getElementByClass('nav-tabs', content));
 
-  this.getHandler().listen(tabContainer, goog.events.EventType.CLICK, function (e) {
-    e.stopPropagation();
-    e.preventDefault();
-    var index = this.getTabIndexFromEventTarget_(e.target);
-    if (this.selectedIndex_ == index) return;
-    this.enableContent_(this.selectedIndex_, false);
-    this.enableContent_(index, true);
-    this.selectedIndex_ = index;
-  });
-  this.enableContent_(this.selectedIndex_, true);
-
-  goog.style.setHeight(content, content.offsetHeight);
+  // goog.style.setHeight(content, content.offsetHeight);
 };
 
-app.controller.WelcomeDialog.prototype.selectedIndex_ = 0;
-
-app.controller.WelcomeDialog.prototype.enableContent_ = function (index, enable) {
-  goog.dom.classes.enable(this.tabs_[index], 'active', enable);
-  goog.dom.classes.enable(this.tabContents_[index], 'active', enable);
-};
-
-
-app.controller.WelcomeDialog.prototype.getTabIndexFromEventTarget_ = function (et) {
-  while (et && et != this.element_ && et.nodeName != 'LI') {
-    et = /** @type {Element} */ (et.parentNode);
+app.controller.WelcomeDialog.prototype.disposeInternal = function () {
+  if (this.tabPane_) {
+    this.tabPane_.dispose();
+    this.tabPane_ = null;
   }
-  if (!et) return null;
-  var index = -1;
-  goog.array.find(this.tabs_, function (tab, i) {
-    if (et == tab) {
-      index = i;
-      return true;
-    }
-    return false;
-  });
-  return index;
+  goog.base(this, 'disposeInternal');
 };

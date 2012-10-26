@@ -46,7 +46,7 @@ public/closure-library/closure/goog/structs/map.js
 public/closure-library/closure/goog/dom/a11y.js
 public/closure-library/closure/goog/ui/dialog.js
 public/app/commonui/dialog.js
-public/closure-library/closure/goog/ui/tabpane.js
+public/app/commonui/tabpane.js
 public/app/controller/welcomedialog.js
 public/closure-library/closure/goog/dom/viewportsizemonitor.js
 public/app/dom/viewportsizemonitor.js

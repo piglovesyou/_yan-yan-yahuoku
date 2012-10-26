@@ -53,9 +53,9 @@ app.ui.Dialog.prototype.handleHtmlLoad_ = function (err, html) {
       dh.getElementByClass('modal-content-title', this.getContentElement()));
 
   if (goog.isFunction(this.decorateLoadedContent_)) this.decorateLoadedContent_();
-  this.wasContentLoaded_ = true;
   this.reposition();
-  // goog.Timer.callOnce(function() {this.reposition();}, 2000, this);
+
+  this.wasContentLoaded_ = true;
 };
 
 

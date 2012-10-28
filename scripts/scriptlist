@@ -45,9 +45,9 @@ public/closure-library/closure/goog/structs/structs.js
 public/closure-library/closure/goog/structs/map.js
 public/closure-library/closure/goog/dom/a11y.js
 public/closure-library/closure/goog/ui/dialog.js
-public/app/commonui/dialog.js
+public/app/ui/dialog.js
 public/app/dom/dom.js
-public/app/commonui/tabpane.js
+public/app/ui/tabpane.js
 public/app/controller/welcomedialog.js
 public/closure-library/closure/goog/dom/viewportsizemonitor.js
 public/app/dom/viewportsizemonitor.js
@@ -125,12 +125,12 @@ public/closure-library/closure/goog/datasource/jsxmlhttpdatasource.js
 public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/model.js
 public/closure-library/closure/goog/math/range.js
 public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/thousandrows.js
-public/app/commonui/thousandrows.js
+public/app/ui/thousandrows.js
 public/closure-library/closure/goog/ui/menuseparatorrenderer.js
 public/closure-library/closure/goog/ui/separator.js
 public/closure-library/closure/goog/ui/containerrenderer.js
 public/closure-library/closure/goog/ui/container.js
-public/app/commonui/contextmenu.js
+public/app/ui/contextmenu.js
 public/closure-library/closure/goog/ui/buttonside.js
 public/closure-library/closure/goog/ui/buttonrenderer.js
 public/closure-library/closure/goog/ui/nativebuttonrenderer.js
@@ -138,7 +138,7 @@ public/closure-library/closure/goog/ui/button.js
 public/closure-library/closure/goog/ui/cssnames.js
 public/closure-library/closure/goog/ui/custombuttonrenderer.js
 public/closure-library/closure/goog/ui/togglebutton.js
-public/app/commonui/buttonrenderer.js
+public/app/ui/buttonrenderer.js
 public/app/controller/util.js
 public/app/controller/frames/container/detail.js
 public/closure-library/closure/goog/storage/mechanism/mechanism.js
@@ -178,8 +178,8 @@ public/closure-library/closure/goog/i18n/currency.js
 public/closure-library/closure/goog/i18n/numberformat.js
 public/app/string/string.js
 public/closure-library/closure/goog/fx/draglistgroup.js
-public/app/controller/tabs/tab.js
-public/app/controller/tabs/tabadder.js
-public/app/controller/tabs/tabs.js
+public/app/controller/toolbar/tabs/tab.js
+public/app/controller/toolbar/tabs/tabadder.js
+public/app/controller/toolbar/tabs/tabs.js
 public/app/app.js
 public/javascripts/main.js

@@ -8,6 +8,7 @@ goog.require('app.ui.ThousandRows');
 goog.require('goog.ui.ToggleButton');
 goog.require('app.controller.util');
 goog.require('app.ui.ContextMenu');
+goog.require('goog.window');
 
 
 /**
@@ -102,7 +103,7 @@ app.controller.Detail.prototype.renderContent = function (data) {
   var container = this.getContentElement();
   this.prepareContent_(true);
 
-  var safe_itemLink = app.string.createAuctionItemLink(esc(data['AuctionItemUrl']));
+  var safe_itemLink = this.safeItemLink_ = app.string.createAuctionItemLink(esc(data['AuctionItemUrl']));
   var safe_itemTitle = esc(data['Title'])
   dh.append(/** @type {Element} */(this.titleInnerElement_),
       app.controller.Detail.createItemLink_(safe_itemLink, safe_itemTitle, dh));
@@ -257,6 +258,9 @@ app.controller.Detail.prototype.renderContent = function (data) {
 };
 
 
+app.controller.Detail.prototype.safeItemLink_;
+
+
 app.controller.Detail.prototype.imagesElementRef_;
 
 
@@ -342,7 +346,9 @@ app.controller.Detail.prototype.handleMenuDismiss_ = function (e) {
 
 app.controller.Detail.prototype.handleMenuSelect_ = function (e) {
   switch(e.record.key) {
-    case 'goToAuction': break; // TODO:
+    case 'goToAuction': 
+      if (this.safeItemLink_) goog.window.open(this.safeItemLink_);
+      break; // TODO:
     case 'showPicture': this.jumpToElement(this.imagesElementRef_); break;
     case 'showDesc': this.jumpToElement(this.descriptionElementRef_); break;
     case 'showDetail': this.jumpToElement(this.tableElementRef_); break;

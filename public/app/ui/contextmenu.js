@@ -375,7 +375,9 @@ app.ui.ContextMenu.prototype.getChildAt;
 
 
 app.ui.ContextMenu.prototype.selectCurrentHilited_ = function () {
-  this.getChildAt(this.hilitedIndex_).processSelected();
+  var item = this.getChildAt(this.hilitedIndex_);
+  if (!item) return;
+  item.processSelected();
   this.dispatchEvent({
     type: app.ui.ContextMenu.EventTarget.SELECT,
     record: this.records_[this.hilitedIndex_]
@@ -384,7 +386,7 @@ app.ui.ContextMenu.prototype.selectCurrentHilited_ = function () {
   goog.dom.classes.enable(this.getElement(), 'isHiding', true);
   goog.Timer.callOnce(function () {
     this.dismiss(true);
-  }, 500, this);
+  }, 300, this);
 };
 
 

@@ -47,6 +47,10 @@
 .modal-header .close{float:none;line-height:auto;position:absolute;top:0;right:10px}
 .modal-buttons,.modal-content{padding:8px}
 .goog-tooltip{z-index:2000}
+.goog-button:focus{border-color:rgba(82,168,236,0.80);outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60);-moz-box-shadow:inset 0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60);box-shadow:inset 0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60)}
+.goog-container.btn-group:focus{outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60);-moz-box-shadow:inset 0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60);box-shadow:inset 0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60);}
+.goog-container.btn-group:focus .btn{border-color:rgba(82,168,236,0.80)}
+.goog-container.btn-group:focus .btn:not(:first-child){border-left-color:rgba(0,0,0,0.15)}
 .logo{margin-left:7px;}
 .logo a{-webkit-transition:opacity .1s linear;-moz-transition:opacity .1s linear;-o-transition:opacity .1s linear;-ms-transition:opacity .1s linear;transition:opacity .1s linear}
 .logo a:hover{opacity:.7;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70)}
@@ -128,11 +132,7 @@
 .goog-splitpane-first-container .isGridAlignment .goog-thousandrows-row .span.active{color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.20);background-color:#08c}
 .nav > li > a:hover,.nav > li > .row > .span:hover{background-color:rgba(0,0,0,0.03)}
 .searchbar{border-top:1px #fcfcfc solid;border-bottom:1px #cfcfcf solid;padding:4px 12px;background:#f2f2f2;line-height:24px;}
-.searchbar .form-inline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:0;}
-.searchbar .form-inline .btn-group:focus{outline:0;}
-.searchbar .form-inline .btn-group:focus .btn{outline:0;border-color:rgba(82,168,236,0.80);}
-.searchbar .form-inline .btn-group:focus .btn box-shadow:inset 02px4pxrgba(0,.searchbar .form-inline .btn-group:focus .btn 0,.searchbar .form-inline .btn-group:focus .btn 0,.searchbar .form-inline .btn-group:focus .btn 0.15),.searchbar .form-inline .btn-group:focus .btn 01px2pxrgba(0,.searchbar .form-inline .btn-group:focus .btn 0,.searchbar .form-inline .btn-group:focus .btn 0,.searchbar .form-inline .btn-group:focus .btn 0.05){inset:0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60)}
-.searchbar .form-inline .btn-group:focus .btn:not(:first-child){border-left-color:rgba(0,0,0,0.15)}
+.searchbar .form-inline{white-space:nowrap;margin-bottom:0}
 .searchbar-label{display:inline-block}
 .goog-splitpane-second-container a[href]{text-decoration:underline}
 .goog-splitpane-second-container .goog-scroller-container{position:relative}

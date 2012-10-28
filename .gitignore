@@ -6,3 +6,4 @@ closure-compiler
 redis/dump.rdb
 redis/redis.log
 public/javascripts/main-min.js
+jsdoc-toolkit

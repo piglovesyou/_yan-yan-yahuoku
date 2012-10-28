@@ -400,10 +400,7 @@ app.ui.ThousandRows.Row.prototype.getColIndex_ = function (col) {
  * @return {?Node}
  */
 app.ui.ThousandRows.Row.prototype.getColumnFromEventTarget_ = function (et) {
-  while (et && et != this.element_ &&
-      !goog.dom.classes.has(et, 'grid-col')) {
-    et = /** @type {Element} */ (et.parentNode);
-  }
+  et = app.dom.getAncestorFromEventTargetByClass(et);
   if (!et) return null;
 
   var col;
@@ -560,7 +557,7 @@ app.ui.ThousandRows.RowRenderer.prototype.renderContent = function (row, record)
               className: 'img-polaroid',
               src: record['Image']
             })),
-          dh.createDom('h4', null, row.getId() + ' ' + record['Title']),
+          dh.createDom('h4', null, record['Title']),
           dh.createDom('div', 'row-detail', detailFragment)
           
           );

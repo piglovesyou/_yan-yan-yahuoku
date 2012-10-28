@@ -46,6 +46,7 @@ public/closure-library/closure/goog/structs/map.js
 public/closure-library/closure/goog/dom/a11y.js
 public/closure-library/closure/goog/ui/dialog.js
 public/app/commonui/dialog.js
+public/app/dom/dom.js
 public/app/commonui/tabpane.js
 public/app/controller/welcomedialog.js
 public/closure-library/closure/goog/dom/viewportsizemonitor.js
@@ -125,6 +126,11 @@ public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/
 public/closure-library/closure/goog/math/range.js
 public/closure-thirdparty/closure-thousandrows/piglovesyou/goog/ui/thousandrows/thousandrows.js
 public/app/commonui/thousandrows.js
+public/closure-library/closure/goog/ui/menuseparatorrenderer.js
+public/closure-library/closure/goog/ui/separator.js
+public/closure-library/closure/goog/ui/containerrenderer.js
+public/closure-library/closure/goog/ui/container.js
+public/app/commonui/contextmenu.js
 public/closure-library/closure/goog/ui/buttonside.js
 public/closure-library/closure/goog/ui/buttonrenderer.js
 public/closure-library/closure/goog/ui/nativebuttonrenderer.js
@@ -149,11 +155,6 @@ public/app/model/xhr.js
 public/closure-library/closure/goog/storage/mechanism/html5sessionstorage.js
 public/app/model/model.js
 public/app/controller/frames/container/container.js
-public/closure-library/closure/goog/ui/menuseparatorrenderer.js
-public/closure-library/closure/goog/ui/separator.js
-public/closure-library/closure/goog/ui/containerrenderer.js
-public/closure-library/closure/goog/ui/container.js
-public/app/commonui/contextmenu.js
 public/app/events/eventcenter.js
 public/app/controller/frames/searchbar/switch/switch.js
 public/closure-library/closure/goog/string/stringformat.js

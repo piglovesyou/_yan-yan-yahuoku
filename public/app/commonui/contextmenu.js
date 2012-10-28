@@ -1,7 +1,9 @@
 
 goog.provide('app.ui.ContextMenu');
 
+goog.require('app.dom');
 goog.require('goog.ui.Container');
+goog.require('goog.ui.Tooltip');
 
 
 
@@ -11,7 +13,7 @@ goog.require('goog.ui.Container');
  *   var component = new goog.ui.Component();
  *   component.decorate(goog.dom.getElement('target'));
  *   goog.events.listen(component.getElement(), 'mousedown', function (e) {
- *     menu.launch(new goog.math.Coordinate(e.clientX, e.clientY), [
+ *     menu.launch(e, [
  *       {content: '9'},
  *       {content: 'b'},
  *       {content: 'g'},
@@ -28,6 +30,13 @@ app.ui.ContextMenu = function (opt_domHelper) {
   // this.setSupportedState(goog.ui.Component.State.HOVER   , false);
   // this.setSupportedState(goog.ui.Component.State.ACTIVE  , false);
 
+  /**
+   * @param {goog.ui.Tooltip}
+   */
+  this.tooltip_ = new goog.ui.Tooltip(null, null, opt_domHelper);
+  this.tooltip_.className += ' label';
+  this.tooltip_.setShowDelayMs(this.tooltip_.getShowDelayMs() * 3);
+
   this.render();
   this.setVisible(false);
   this.setEnabled(false);
@@ -37,7 +46,9 @@ goog.addSingletonGetter(app.ui.ContextMenu);
 
 
 app.ui.ContextMenu.EventTarget = {
-  SELECT: 'itemselected'
+  SELECT: 'itemselected',
+  LAUNCH: 'launch',
+  DISMISS: 'dismiss'
 };
 
 
@@ -50,7 +61,7 @@ app.ui.ContextMenu.prototype.dismissing_ = false;
 /**
  * @type {number}
  */
-app.ui.ContextMenu.prototype.translateX_ = 60;
+app.ui.ContextMenu.prototype.translateX_ = 50;
 
 
 /**
@@ -114,17 +125,26 @@ app.ui.ContextMenu.prototype.updateRotateIndex_ = function (index) {
 
 
 /**
- * @param {!goog.math.Coordinate} pos
+ * @param {!goog.events.Event} e
  * @param {Array.<*>} records
  */
-app.ui.ContextMenu.prototype.launch = function (pos, records) {
+app.ui.ContextMenu.prototype.launch = function (e, records) {
   if (this.dismissing_) return;
   goog.asserts.assert(!this.styleSheetElement_, 'Stylesheet element should be removed on dismiss.');
+
+  var targetEl = e.currentTarget; // TODO: Are you sure?
+  if (targetEl) {
+    goog.style.showElement(this.targetGhostElement_, true);
+    goog.style.setSize(this.targetGhostElement_, goog.style.getSize(targetEl));
+    goog.style.setPageOffset(this.targetGhostElement_, goog.style.getPageOffset(targetEl)); 
+  } else {
+    goog.style.showElement(this.targetGhostElement_, false);
+  }
 
   // Init variables.
   this.records_ = records;
 
-  this.reposition_(pos);
+  this.reposition_(new goog.math.Coordinate(e.clientX, e.clientY));
 
   // Setup stylesheets and events.
   this.installStyles(records.length, this.currRotateIndex_, 0);
@@ -133,7 +153,7 @@ app.ui.ContextMenu.prototype.launch = function (pos, records) {
   // Create menu item.
   var dh = this.getDomHelper();
   goog.array.forEach(records, function (record, index) {
-    this.addChildAt(new app.ui.ContextMenu.Item(record['content'], dh), index, true);
+    this.addChildAt(new app.ui.ContextMenu.Item(record.content, dh), index, true);
     // if (index == 0) this.hilite_(0);
   }, this);
 
@@ -148,6 +168,7 @@ app.ui.ContextMenu.prototype.launch = function (pos, records) {
     // Get focused.
     this.lastActiveElement_ = dh.getDocument().activeElement;
     this.getKeyEventTarget().focus();
+    this.dispatchEvent(app.ui.ContextMenu.EventTarget.LAUNCH);
   }, 0, this);
 };
 
@@ -159,6 +180,7 @@ app.ui.ContextMenu.prototype.reposition_ = function (pos) {
 
 app.ui.ContextMenu.prototype.hilite_ = function (index) {
   this.unhilite_();
+  if (this.records_[index].desc) this.tooltip_.setText(this.records_[index].desc)
   this.getChildAt(this.hilitedIndex_ = index).setHighlighted(true);
 };
 
@@ -181,6 +203,7 @@ app.ui.ContextMenu.prototype.dismiss = function (selected) {
     this.installStyles(this.records_.length, this.currRotateIndex_-1, 0);
   }
   this.setEnabled(false);
+  // this.tooltip_.startHideTimer();
 
   goog.Timer.callOnce(function () {
   
@@ -198,8 +221,11 @@ app.ui.ContextMenu.prototype.dismiss = function (selected) {
     this.dismissing_ = false;
     this.currRotateIndex_ = -1;
     this.hilitedIndex_ = -1;
+    goog.dom.classes.enable(this.getElement(), 'isHiding', false);
 
     if (this.lastActiveElement_) this.lastActiveElement_.focus();
+
+    this.dispatchEvent(app.ui.ContextMenu.EventTarget.LAUNCH);
   }, 300, this);
 };
 
@@ -215,7 +241,7 @@ app.ui.ContextMenu.prototype.setEnabled = function (enable) {
     }
     eh.listen(this.mouseWheelHandler_,
         goog.events.MouseWheelHandler.EventType.MOUSEWHEEL, this.handleMouseWheel_);
-  } else {
+  } else if (this.mouseWheelHandler_) {
     eh.unlisten(this.mouseWheelHandler_,
         goog.events.MouseWheelHandler.EventType.MOUSEWHEEL, this.handleMouseWheel_);
   }
@@ -242,6 +268,8 @@ app.ui.ContextMenu.prototype.installStyles = function (count, rotateIndex, trans
 app.ui.ContextMenu.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler()
+
+    // Listener for items.
     .listen(this, [
         goog.ui.Component.EventType.ENABLE,
         goog.ui.Component.EventType.DISABLE
@@ -250,6 +278,8 @@ app.ui.ContextMenu.prototype.enterDocument = function () {
           goog.getCssName(this.renderer_.getCssClass(this), 'disabled'),
             this.isEnabled());
       })
+    
+    // Listener for items.
     .listen(this, [
         goog.ui.Component.EventType.ENTER,
         goog.ui.Component.EventType.ACTION
@@ -286,9 +316,24 @@ app.ui.ContextMenu.prototype.positionOriginElement_;
 
 
 /**
+ * @type {Element}
+ */
+app.ui.ContextMenu.prototype.targetGhostElement_;
+
+
+/**
+ * @param {Element} element
+ */
+app.ui.ContextMenu.prototype.setTargetGhostElement = function (element) {
+  this.targetGhostElement_ = element;
+};
+
+
+/**
  * @param {Element} element
  */
 app.ui.ContextMenu.prototype.setPositionOriginElement = function (element) {
+  this.tooltip_.attach(element);
   this.positionOriginElement_ = element;
 };
 
@@ -336,19 +381,25 @@ app.ui.ContextMenu.prototype.selectCurrentHilited_ = function () {
     record: this.records_[this.hilitedIndex_]
   });
   this.dismissing_ = true;
+  goog.dom.classes.enable(this.getElement(), 'isHiding', true);
   goog.Timer.callOnce(function () {
     this.dismiss(true);
-  }, 200, this);
+  }, 500, this);
 };
 
 
 app.ui.ContextMenu.prototype.handleMouseDown = function (e) {
-  if (e.target == this.getElement() && this.isVisible() && this.isEnabled()) {
+  if (this.wasOverlayClicked_(e.target) && this.isVisible() && this.isEnabled()) {
     this.dismiss();
     e.stopPropagation();
     return;
   }
   goog.base(this, 'handleMouseDown', e);
+};
+
+
+app.ui.ContextMenu.prototype.wasOverlayClicked_ = function (et) {
+  return app.dom.getAncestorFromEventTargetByClass(this.getElement(), 'menu-item', et) == this.getElement();
 };
 
 
@@ -393,15 +444,17 @@ goog.addSingletonGetter(app.ui.ContextMenu.Renderer);
 app.ui.ContextMenu.Renderer.prototype.createDom = function (control) {
   var dh = control.getDomHelper();
   var element = goog.base(this, 'createDom', control);
-  var positionOriginElement, contentElement;
+  var positionOriginElement, contentElement, targetGhost;
   goog.dom.setProperties(element, {
     'className': 'contextmenu-overlay'
     // , 'style', 'display:none'
   });
-  element.appendChild(
+  dh.append(element,
+      targetGhost = dh.createDom('div', 'contextmenu-targetghost'),
       positionOriginElement = dh.createDom('div', 'contextmenu',
         contentElement = dh.createDom('div', 'contextmenu-inner')));
   control.setPositionOriginElement(positionOriginElement);
+  control.setTargetGhostElement(targetGhost);
   control.setContentElement(contentElement);
   return element;
 };
@@ -458,8 +511,8 @@ app.ui.ContextMenu.Item.prototype.processSelected = function () {
 
 
 app.ui.ContextMenu.Item.prototype.handleMouseDown = function (e) {
-  goog.base(this, 'handleMouseDown', e);
   e.stopPropagation();
+  goog.base(this, 'handleMouseDown', e);
 };
 
 

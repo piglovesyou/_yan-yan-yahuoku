@@ -14,13 +14,26 @@ div#target
   | yeah
 
 script
-  var dialog = new app.ui.Dialog();
-  goog.events.listen(goog.dom.getElement('target'), 'mousedown', function (e) {
-    // TODO* position is something wrong/
-    dialog.setVisible(true);
+  var menu = app.ui.ContextMenu.getInstance();
+  var component = new goog.ui.Component();
+  component.decorate(goog.dom.getElement('target'));
+  goog.events.listen(component.getElement(), 'mousedown', function (e) {
+    menu.launch(e, [
+      {content: '9', desc: '9999999999999'},
+      {content: 'b', desc: 'bbbbbbbbbbbb'},
+      {content: 'g', desc: 'gggggggggggggg'},
+      {content: 'l', desc: 'zzzzzzzzzzzzz'},
+      {content: 'j', desc: 'ooooooooooo'}
+    ]);
   });
 
-  dialog.launch('/about');
+  // var dialog = new app.ui.Dialog();
+  // goog.events.listen(goog.dom.getElement('target'), 'mousedown', function (e) {
+  //   // TODO* position is something wrong/
+  //   dialog.setVisible(true);
+  // });
+
+  // dialog.launch('/about');
   // dialog.setContent('yaahh<br />eee');
   // goog.dom.append(dialog.getTitleTextElement(),
   //   goog.dom.createDom('img', {src:'/images/logo-large.png'}));

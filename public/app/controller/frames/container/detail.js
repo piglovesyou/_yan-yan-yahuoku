@@ -7,6 +7,7 @@ goog.require('goog.style');
 goog.require('app.ui.ThousandRows');
 goog.require('goog.ui.ToggleButton');
 goog.require('app.controller.util');
+goog.require('app.ui.ContextMenu');
 
 
 /**
@@ -241,9 +242,9 @@ app.controller.Detail.prototype.renderContent = function (data) {
       ):null;
 
   var descriptionContainer = dh.createDom('div', 'detail-description-container',
-      description,
+      this.descriptionElementRef_ = description,
       app.controller.Detail.createItemLinkParagraph_(safe_itemLink, safe_itemTitle, dh),
-      primaryTable,
+      this.tableElementRef_ = primaryTable,
       subTable,
       paymentTable,
       senddetailTable,
@@ -251,9 +252,18 @@ app.controller.Detail.prototype.renderContent = function (data) {
       app.controller.Detail.createItemLinkParagraph_(safe_itemLink, safe_itemTitle, dh));
 
   goog.asserts.assert(this.innerElement_, 'Must be');
-  dh.append(this.innerElement_, images, descriptionContainer);
+  dh.append(this.innerElement_, this.imagesElementRef_ = images, descriptionContainer);
   this.update();
 };
+
+
+app.controller.Detail.prototype.imagesElementRef_;
+
+
+app.controller.Detail.prototype.descriptionElementRef_;
+
+
+app.controller.Detail.prototype.tableElementRef_;
 
 
 /**
@@ -293,6 +303,61 @@ app.controller.Detail.prototype.enterDocument = function () {
   this.getHandler().listen(this, goog.ui.Component.EventType.ACTION, function (e) {
     this.updateTitleFixedState_();
   });
+};
+
+
+/** @inheritDoc */
+app.controller.Detail.prototype.performActionInternal = function (e) {
+  if (e.type == goog.events.EventType.MOUSEUP &&
+      app.dom.getAncestorFromEventTargetByClass(
+        this.getElement(), 'goog-scroller-bar', e.target) == this.getElement()) {
+    this.enableMenuEvents_(true);
+    app.ui.ContextMenu.getInstance().launch(e, app.controller.Detail.MenuRecords_);
+  }
+  goog.base(this, 'performActionInternal', e);
+};
+
+
+app.controller.Detail.MenuRecords_ = [
+  {content: 'o', key: 'goToAuction', desc: 'オークションの商品ページを表示します'},
+  {content: 'A', key: 'showPicture', desc: '写真を表示します'},
+  {content: 'K', key: 'showDesc', desc: '商品説明を表示します'},
+  {content: 'J', key: 'showDetail', desc: '価格、残り時間を表示します'}
+];
+
+
+app.controller.Detail.prototype.enableMenuEvents_ = function (enable) {
+  var menu = app.ui.ContextMenu.getInstance();
+  var eh = this.getHandler();
+  var fn = enable ? eh.listen : eh.unlisten;
+  fn.call(eh, menu, app.ui.ContextMenu.EventTarget.DISMISS, this.handleMenuDismiss_);
+  fn.call(eh, menu, app.ui.ContextMenu.EventTarget.SELECT, this.handleMenuSelect_);
+};
+
+
+app.controller.Detail.prototype.handleMenuDismiss_ = function (e) {
+  this.enableMenuEvents_(false);
+};
+
+
+app.controller.Detail.prototype.handleMenuSelect_ = function (e) {
+  switch(e.record.key) {
+    case 'goToAuction': break; // TODO:
+    case 'showPicture': this.jumpToElement(this.imagesElementRef_); break;
+    case 'showDesc': this.jumpToElement(this.descriptionElementRef_); break;
+    case 'showDetail': this.jumpToElement(this.tableElementRef_); break;
+  }
+};
+
+
+app.controller.Detail.prototype.jumpToElement = function (el) {
+  goog.asserts.assert(goog.dom.isElement(el), 'There must be');
+
+  var top = el.offsetTop;
+  if (this.titleFixedStateButton_.isChecked()) top -  - this.titleElement_.offsetHeight;
+  var rate = top / this.getScrollableRange();
+  var slider = this.getSlider();
+  slider.setValueFromStart(Math.max(slider.getMaximum() * rate, 0));
 };
 
 

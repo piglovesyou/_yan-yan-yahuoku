@@ -1,6 +1,7 @@
 
 goog.provide('app.ui.TabPane');
 
+goog.require('app.dom');
 goog.require('goog.ui.Component');
 
 
@@ -62,9 +63,7 @@ app.ui.TabPane.prototype.enterDocument = function () {
 
 
 app.ui.TabPane.prototype.getTabIndexFromEventTarget_ = function (et) {
-  while (et && et != this.element_ && et.nodeName != 'LI') {
-    et = /** @type {Element} */ (et.parentNode);
-  }
+  et = app.dom.getAncestorFromEventTargetByTagName(this.getElement(), 'LI', et);
   if (!et) return null;
   var index = -1;
   goog.array.find(this.tabs_, function (tab, i) {

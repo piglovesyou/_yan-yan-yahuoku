@@ -12,11 +12,19 @@ $transitionEasing = ease-out
   left: 0
   width: 100%
   height: 100%;
-  background-color: rgba(0,0,0,.1)
+  // background-color: rgba(0,0,0,.15)
   opacity 1
   transition: opacity .2s linear
+  z-index 1000
   &.goog-container-disabled
     opacity 0
+
+.contextmenu-targetghost
+  position absolute
+  background rgba(30, 31, 32, 0.15)
+  box-sizing border-box
+  // border 2px solid rgba(54, 66, 68, .6)
+  box-shadow 0 0 9px rgba(0, 0, 0, 0.2) inset
 
 .contextmenu  
   position: absolute;
@@ -28,7 +36,9 @@ $transitionEasing = ease-out
     top ($menuItemWidth / -2)
   .menu-item
     position: absolute;
-    transition: -webkit-transform $transitionDuration $transitionEasing
+    transition:
+      -webkit-transform $transitionDuration $transitionEasing,
+      opacity ($transitionDuration / 4) linear
     .menu-item-inner
       display: block
       position relative
@@ -44,7 +54,10 @@ $transitionEasing = ease-out
       font-size 38px
       text-decoration none
       color #333
-    &.goog-control-hover .menu-item-inner
+      text-shadow 1px 1px 0 #ccc, 1px -1px 0 #ccc, -1px -1px 0 #ccc, -1px 1px 0 #ccc
+    &.goog-control-hover .menu-item-inner,
+    &.blinking .menu-item-inner
+      text-shadow none
       background-color #0088cc
       color white
 
@@ -57,6 +70,12 @@ $transitionEasing = ease-out
       transition:
         background-color 0 linear
       background: #009be8
+
+.isHiding .menu-item
+  opacity 0
+  &.blinking
+    opacity 1
+
 
   // for $n in 1..5
   //   .menu-item:nth-child({$n})

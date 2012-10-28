@@ -400,7 +400,7 @@ app.ui.ThousandRows.Row.prototype.getColIndex_ = function (col) {
  * @return {?Node}
  */
 app.ui.ThousandRows.Row.prototype.getColumnFromEventTarget_ = function (et) {
-  et = app.dom.getAncestorFromEventTargetByClass(et);
+  et = app.dom.getAncestorFromEventTargetByClass(this.getElement(), 'grid-col', et);
   if (!et) return null;
 
   var col;

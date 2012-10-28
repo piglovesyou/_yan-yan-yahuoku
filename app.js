@@ -8,6 +8,7 @@ var port = process.argv[2] || 3000;
 var express = require('express')
   , stylus = require('stylus')
   , RedisStore = require('connect-redis')(express)
+  , _ = require('underscore');
 
 var app = module.exports = express.createServer();
 
@@ -48,20 +49,13 @@ app.configure('production', function(){
 // Routes
 
 var routes = require('./routes');
-app.get('/', routes.index);
-app.get('/about', routes.about);
-// app.get('/login', routes.login);
-// app.get('/logout', routes.logout);
-app.get('/sandbox', routes.sandbox);
-
-var authRoutes = require('./routes/auth');
-authRoutes.getPaths().forEach(function (path) {
-  app.get('/auth/' + path, authRoutes[path]);
+_.each(routes, function (listener, path) {
+  app.get(path=='index' ? '/' : path, listener);
 });
 
 var apiRoutes = require('./routes/api');
-apiRoutes.getPaths().forEach(function (path) {
-  app.get('/api/' + path, apiRoutes[path]);
+_.each(apiRoutes, function (listener, path) {
+  app.get('/api/' + path, listener);
 });
 
 

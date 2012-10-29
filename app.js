@@ -50,7 +50,7 @@ app.configure('production', function(){
 
 var routes = require('./routes');
 _.each(routes, function (listener, path) {
-  app.get(path=='index' ? '/' : path, listener);
+  app.get(path=='index' ? '/' : '/' + path, listener);
 });
 
 var apiRoutes = require('./routes/api');

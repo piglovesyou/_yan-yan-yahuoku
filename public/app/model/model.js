@@ -267,7 +267,7 @@ app.model.getDetailPaneWidth = function (tabId) {
  */
 app.model.createEmptyTab = function () {
   return {
-    'query': '',
+    'query': ['たらば', 'ずわい'][Math.round(Math.random())],
     'category': {
       'CategoryId': 0,
       'CategoryPath': ''

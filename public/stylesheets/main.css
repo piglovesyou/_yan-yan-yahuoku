@@ -51,7 +51,7 @@
 .goog-container.btn-group:focus{outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60);-moz-box-shadow:inset 0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60);box-shadow:inset 0 1px 1px rgba(0,0,0,0.07),0 0 8px rgba(82,168,236,0.60);}
 .goog-container.btn-group:focus .btn{border-color:rgba(82,168,236,0.80)}
 .goog-container.btn-group:focus .btn:not(:first-child){border-left-color:rgba(0,0,0,0.15)}
-.logo{margin-left:7px;}
+.logo{margin:0 0 0 7px;font-size:1em;line-height:1em;}
 .logo a{-webkit-transition:opacity .1s linear;-moz-transition:opacity .1s linear;-o-transition:opacity .1s linear;-ms-transition:opacity .1s linear;transition:opacity .1s linear}
 .logo a:hover{opacity:.7;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70)}
 .logo a:active{-webkit-transition:opacity .01s linear;-moz-transition:opacity .01s linear;-o-transition:opacity .01s linear;-ms-transition:opacity .01s linear;transition:opacity .01s linear;opacity:.4;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=40)}

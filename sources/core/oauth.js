@@ -7,7 +7,7 @@ module.exports = new OAuth(
     AUC_PRO.CONSUMER_KEY,
     AUC_PRO.CONSUMER_SECRET,
     "1.0",
-    "http://auc.stakam.net/auth/callback",
+    "oob", // AUC_PRO.DOMAIN + "/authcallback",
     "HMAC-SHA1");
 
 

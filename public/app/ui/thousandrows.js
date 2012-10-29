@@ -723,12 +723,13 @@ app.ui.ThousandRows.Model.prototype.buildUri_ = function (index, rowCountInPage)
 
 
 app.ui.ThousandRows.Model.prototype.extractTotalFromJson = function (json) {
-  return json['ResultSet']['@attributes']['totalResultsAvailable'];
+  return json['ResultSet']['@attributes']['totalResultsAvailable'] || 0;
 };
 
 
 app.ui.ThousandRows.Model.prototype.extractRowsDataFromJson = function (json) {
-  return json['ResultSet']['Result']['Item'];
+  var result = json['ResultSet']['Result'];
+  return !goog.object.isEmpty(result) ? result['Item'] : [];
 };
 
 
@@ -753,7 +754,7 @@ app.ui.ThousandRows.ModelForGrid.gridCols_ = 4;
 
 
 app.ui.ThousandRows.ModelForGrid.prototype.extractRowsDataFromJson = function (json) {
-  var items = json['ResultSet']['Result']['Item'];
+  var items = goog.base(this, 'extractRowsDataFromJson', json);
   var rows = [];
   while (items && !goog.array.isEmpty(items)) {
     rows.push(items.splice(0, app.ui.ThousandRows.ModelForGrid.gridCols_));

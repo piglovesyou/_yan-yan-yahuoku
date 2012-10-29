@@ -3,11 +3,12 @@ var oa = require('../sources/core/oauth.js');
 var isProduction = process.env.NODE_ENV === 'production';
 
 exports.index = function(req, res){
+
   res.render('index', {
     isProduction: isProduction,
     affiliateBase: require('secret-strings').AUC_PRO.AFFILIATE_BASE
-    // screen_name: req.session.yahoo.screen_name
   });
+
 
   // if(req.session.oauth && req.session.oauth.access_token) {
   //   res.render('index', {
@@ -73,6 +74,12 @@ exports.about = function (req, res) {
 //   } else
 //     next(new Error("you're not supposed to be here."));
 // };
+
+
+
+
+
+
 
 // exports.post = function (req, res) {
 //   if(req.session.oauth && req.session.oauth.access_token) {

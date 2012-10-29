@@ -7,7 +7,8 @@ module.exports = new OAuth(
     AUC_PRO.CONSUMER_KEY,
     AUC_PRO.CONSUMER_SECRET,
     "1.0",
-    "oob", // AUC_PRO.DOMAIN + "/authcallback",
+    AUC_PRO.DOMAIN + "/authcallback",
+    // "oob", // AUC_PRO.DOMAIN + "/authcallback",
     "HMAC-SHA1");
 
 

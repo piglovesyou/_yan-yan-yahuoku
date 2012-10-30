@@ -33,8 +33,9 @@ var loadCategory = function (key) {
 };
 
 var createRegExp = function (token, callback) {
-  token = regExpEscape(token);
+  token = shellEscape(token);
   exec('cmigemo -nq -d /usr/local/share/migemo/utf-8/migemo-dict -n -w \'' + token + '\'', function (err, result) {
+    console.log(result);
     if (result.indexOf('\n') >= 0) result = result.replace('\n','');
     var reg;
     // Token 'p' gets err somehow.
@@ -114,12 +115,9 @@ loadKeys(function (keys) {
   });
 });
 
-// Copyright 2006 The Closure Library Authors. All Rights Reserved.
-regExpEscape = function(s) {
-  return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
-      replace(/\x08/g, '\\x08');
+shellEscape = function(s) {
+  return String(s).replace(/([|&;<>()$`"'\t\n\r*?[#˜~=%])/g, "\\$1");
 };
-
 
 
 // setTimeout(function () {

@@ -140,6 +140,7 @@ public/closure-library/closure/goog/ui/custombuttonrenderer.js
 public/closure-library/closure/goog/ui/togglebutton.js
 public/app/ui/buttonrenderer.js
 public/app/controller/util.js
+public/closure-library/closure/goog/window/window.js
 public/app/controller/frames/container/detail.js
 public/closure-library/closure/goog/storage/mechanism/mechanism.js
 public/closure-library/closure/goog/storage/mechanism/iterablemechanism.js

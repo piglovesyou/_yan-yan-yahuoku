@@ -4,6 +4,7 @@ goog.provide('app.string');
 goog.require('goog.i18n.NumberFormat');
 goog.require('goog.date.relative');
 goog.require('goog.i18n.DateTimeFormat');
+goog.require('goog.Uri');
 
 
 app.string = {};
@@ -25,7 +26,9 @@ app.string.renderPrice = function (escapedString) {
  * @return {string}
  */
 app.string.createAuctionItemLink = function (escapedUrl) {
-  return escapedUrl;
+  var uri = new goog.Uri.parse(App.getInstance().getAffiliateBase());
+  uri.getQueryData().add('vc_url', escapedUrl);
+  return uri.toString();
 };
 
 

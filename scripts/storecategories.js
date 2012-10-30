@@ -1,7 +1,7 @@
 
 var yapi = require('../sources/net/yahooapi');
 var redis = require('redis').createClient();
-var stack = require('../sources/util/stack');
+var stack = require('../sources/util/queue');
 
 
 

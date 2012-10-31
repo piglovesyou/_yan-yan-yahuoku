@@ -35,7 +35,6 @@ var loadCategory = function (key) {
 var createRegExp = function (token, callback) {
   token = shellEscape(token);
   exec('cmigemo -nq -d /usr/local/share/migemo/utf-8/migemo-dict -n -w \'' + token + '\'', function (err, result) {
-    console.log(result);
     if (result.indexOf('\n') >= 0) result = result.replace('\n','');
     var reg;
     // Token 'p' gets err somehow.

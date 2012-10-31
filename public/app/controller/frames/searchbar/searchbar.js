@@ -30,8 +30,9 @@ app.controller.Searchbar = function (opt_domHelper) {
   this.label_ = new app.controller.searchbar.Label(dh);
   this.addChild(this.label_);
 
-  this.button_ = new goog.ui.Button('検索', null, dh);
+  this.button_ = new goog.ui.Button('s', null, dh);
   this.button_.addClassName('btn');
+  this.button_.addClassName('i');
   this.addChild(this.button_);
 }
 goog.inherits(app.controller.Searchbar, goog.ui.Component);

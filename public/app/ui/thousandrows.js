@@ -730,7 +730,7 @@ app.ui.ThousandRows.Model.prototype.extractTotalFromJson = function (json) {
 app.ui.ThousandRows.Model.prototype.extractRowsDataFromJson = function (json) {
   var result = json['ResultSet']['Result'];
   if (result) {
-    if (goog.isArray(result['Item'])) return goog.isArray(result['Item']);
+    if (goog.isArray(result['Item'])) return result['Item'];
     // Damn YAPI, if result count is only 1, result['Item'] is a record object itself.
     if (goog.isObject(result['Item']) && result['Item']['AuctionID']) return [result['Item']];
   }

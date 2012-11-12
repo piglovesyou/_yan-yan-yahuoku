@@ -11,7 +11,7 @@ goog.require('goog.ui.Component');
 
 
 /**
- * @param {goog.dom.DomHelper=} opt_domHelper
+ * @param {goog.dom.DomHelper=} opt_domHelper A dom helper.
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -33,7 +33,8 @@ app.ui.Tabs.prototype.enterDocument = function() {
 
 
 /**
- * @param {goog.events.Event} e
+ * @private
+ * @param {goog.events.Event} e Provided by Tab.
  */
 app.ui.Tabs.prototype.handleTabSelected_ = function(e) {
   var oldTab = this.currSelectedTab_;
@@ -42,9 +43,10 @@ app.ui.Tabs.prototype.handleTabSelected_ = function(e) {
 
   oldTab.processSelected(false);
   newTab.processSelected(true);
-  app.events.EventCenter.getInstance().dispatch(app.events.EventCenter.EventType.TAB_CHANGED, {
-    tab: (this.currSelectedTab_ = newTab)
-  });
+  app.events.EventCenter.getInstance()
+    .dispatch(app.events.EventCenter.EventType.TAB_CHANGED, {
+      tab: (this.currSelectedTab_ = newTab)
+    });
 };
 
 
@@ -55,6 +57,10 @@ app.ui.Tabs.prototype.exitDocument = function() {
 };
 
 
+/**
+ * @private
+ * @param {goog.events.Event} e A delete event provided by Tab.
+ */
 app.ui.Tabs.prototype.handleTabDelBtnClicked_ = function(e) {
   var child = e.target;
   var index = app.ui.util.getChildIndex(this, child);
@@ -67,6 +73,10 @@ app.ui.Tabs.prototype.handleTabDelBtnClicked_ = function(e) {
 };
 
 
+/**
+ * @private
+ * @param {goog.events.Event} e A event provided by TabAdder.
+ */
 app.ui.Tabs.prototype.handleAdderClicked_ = function(e) {
   this.insertNewTab_().dispatchSelect();
   this.repositionAdder_();
@@ -88,7 +98,8 @@ app.ui.Tabs.prototype.decorateInternal = function(element) {
 
   // Element to decorate must be only 1.
   var tabElms = dh.getChildren(this.contentElement_);
-  goog.asserts.assert(tabIds.length >= tabElms.length, 'Too many tab elements.');
+  goog.asserts.assert(tabIds.length >= tabElms.length,
+                      'Too many tab elements.');
 
   goog.array.forEach(tabIds, function(tabId, index) {
     var tab = new app.ui.Tab(tabId, dh);
@@ -106,7 +117,8 @@ app.ui.Tabs.prototype.decorateInternal = function(element) {
     this.addChildAt(tab, index);
 
     if (goog.dom.classes.has(tabElm, 'selected')) {
-      goog.asserts.assert(!this.currSelectedTab_, 'Two or more selected tab element.');
+      goog.asserts.assert(!this.currSelectedTab_,
+                          'Two or more selected tab element.');
       this.currSelectedTab_ = tab;
     }
   }, this);
@@ -116,16 +128,22 @@ app.ui.Tabs.prototype.decorateInternal = function(element) {
 };
 
 
+/**
+ * @private
+ * @return {app.ui.Tab} An inserted new tab.
+ */
 app.ui.Tabs.prototype.insertNewTab_ = function() {
   var dh = this.getDomHelper();
   var lastIndex = this.getLastTabIndex_();
-  var tab = new app.ui.Tab(goog.ui.IdGenerator.getInstance().getNextUniqueId(), dh);
+  var tab = new app.ui.Tab(
+    goog.ui.IdGenerator.getInstance().getNextUniqueId(), dh);
   this.addChildAt(tab, lastIndex + 1);
   app.model.setTabIds(this.getTabIds());
   tab.createDom();
   var content = this.getContentElement();
   goog.asserts.assert(content, 'There must be.');
-  dh.append(content, tab.getElement()); // <-- Because I want do this, I don't addChildAt(tab, index, true).
+  // Because I want do this, I don't addChildAt(tab, index, true).
+  dh.append(content, tab.getElement());
   tab.enterDocument();
   this.setupDragListGroup_();
   return tab;
@@ -138,6 +156,9 @@ app.ui.Tabs.prototype.insertNewTab_ = function() {
 app.ui.Tabs.prototype.adder_;
 
 
+/**
+ * @private
+ */
 app.ui.Tabs.prototype.repositionAdder_ = function() {
   if (this.getChildCount() >= 5) {
     this.adder_.setVisible(false);
@@ -153,6 +174,9 @@ app.ui.Tabs.prototype.repositionAdder_ = function() {
 };
 
 
+/**
+ * @return {Array.<string>} Tab ids.
+ */
 app.ui.Tabs.prototype.getTabIds = function() {
   var ids = [];
   this.forEachChild(function(child) {
@@ -163,7 +187,8 @@ app.ui.Tabs.prototype.getTabIds = function() {
 
 
 /**
- * @return {app.ui.Tab}
+ * @private
+ * @return {app.ui.Tab} The right side tab.
  */
 app.ui.Tabs.prototype.getLastTab_ = function() {
   var tab;
@@ -181,8 +206,9 @@ app.ui.Tabs.prototype.getLastTab_ = function() {
 
 
 /**
+ * @private
  * TODO: We don't do this. We just grab a child of the last index.
- * @return {number}
+ * @return {number} The index of the right side tab.
  */
 app.ui.Tabs.prototype.getLastTabIndex_ = function() {
   var index;
@@ -206,13 +232,17 @@ app.ui.Tabs.prototype.currSelectedTab_;
 
 
 /**
- * @return {?app.ui.Tab}
+ * @return {?app.ui.Tab} A selected tab instance.
  */
 app.ui.Tabs.prototype.getCurrSelectedTab = function() {
   return this.currSelectedTab_;
 };
 
 
+/**
+ * @private
+ * @type {string}
+ */
 app.ui.Tabs.prototype.draggingClassName_ = 'tab-dragging';
 
 
@@ -234,6 +264,9 @@ app.ui.Tabs.prototype.getContentElement = function() {
 };
 
 
+/**
+ * @private
+ */
 app.ui.Tabs.prototype.setupDragListGroup_ = function() {
   if (this.dragListGroup_) {
     this.dragListGroup_.dispose();
@@ -241,11 +274,17 @@ app.ui.Tabs.prototype.setupDragListGroup_ = function() {
   this.dragListGroup_ = new goog.fx.DragListGroup;
   // this.dragListGroup_.setDragItemHandleHoverClass('yeah', 'ohh');
   this.dragListGroup_.setDraggerElClass(this.draggingClassName_);
-  this.dragListGroup_.addDragList(this.contentElement_, goog.fx.DragListDirection.RIGHT);
+  this.dragListGroup_.addDragList(this.contentElement_,
+                                  goog.fx.DragListDirection.RIGHT);
   var styleSheetEl;
   this.getHandler()
+    .listen(app.dom.ViewportSizeMonitor.getInstance(),
+          app.dom.ViewportSizeMonitor.EventType.DELAYED_RESIZE, function(e) {
+            this.repositionAdder_();
+          })
     .listen(this.dragListGroup_, 'beforedragstart', function(e) {
-      styleSheetEl = this.createFixTabWidthStylesheet_(e.currDragItem.offsetWidth);
+      styleSheetEl =
+        this.createFixTabWidthStylesheet_(e.currDragItem.offsetWidth);
     })
     .listen(this.dragListGroup_, 'dragend', function(e) {
       goog.style.uninstallStyles(styleSheetEl);
@@ -259,8 +298,9 @@ app.ui.Tabs.prototype.setupDragListGroup_ = function() {
 
 
 /**
- * @param {Element} element
- * @return {app.ui.Tab}
+ * @private
+ * @param {Element} element A tab element.
+ * @return {app.ui.Tab} A tab instance.
  */
 app.ui.Tabs.prototype.findChildByElement_ = function(element) {
   var child;
@@ -276,6 +316,11 @@ app.ui.Tabs.prototype.findChildByElement_ = function(element) {
 };
 
 
+/**
+ * @private
+ * @param {number} width For each tab element.
+ * @return {Element|StyleSheet} The style element created.
+ */
 app.ui.Tabs.prototype.createFixTabWidthStylesheet_ = function(width) {
   var styleString = '.tabs-content > .tab,.' +
                     this.draggingClassName_ +
@@ -284,6 +329,7 @@ app.ui.Tabs.prototype.createFixTabWidthStylesheet_ = function(width) {
 };
 
 
+/** @inheritDoc */
 app.ui.Tabs.prototype.canDecorate = function(element) {
   var dh = this.getDomHelper();
   var content = dh.getElementByClass('tabs-content', element);

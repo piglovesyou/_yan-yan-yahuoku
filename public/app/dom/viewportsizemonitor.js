@@ -8,7 +8,7 @@ goog.require('goog.dom.ViewportSizeMonitor');
  * @constructor
  * @extends {goog.dom.ViewportSizeMonitor}
  */
-app.dom.ViewportSizeMonitor = function () {
+app.dom.ViewportSizeMonitor = function() {
   goog.base(this, window);
 };
 goog.inherits(app.dom.ViewportSizeMonitor, goog.dom.ViewportSizeMonitor);

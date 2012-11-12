@@ -8,7 +8,7 @@ goog.require('goog.events.EventTarget');
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-app.events.EventCenter = function () {
+app.events.EventCenter = function() {
   goog.base(this);
 };
 goog.inherits(app.events.EventCenter, goog.events.EventTarget);
@@ -27,7 +27,7 @@ app.events.EventCenter.EventType = {
  * @param {string} type
  * @param {Object} data
  */
-app.events.EventCenter.prototype.dispatch = function (type, data) {
+app.events.EventCenter.prototype.dispatch = function(type, data) {
   this.dispatchEvent({
     type: type,
     data: data

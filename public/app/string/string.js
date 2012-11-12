@@ -1,10 +1,10 @@
 
 goog.provide('app.string');
 
-goog.require('goog.i18n.NumberFormat');
+goog.require('goog.Uri');
 goog.require('goog.date.relative');
 goog.require('goog.i18n.DateTimeFormat');
-goog.require('goog.Uri');
+goog.require('goog.i18n.NumberFormat');
 
 
 app.string = {};
@@ -14,18 +14,18 @@ app.string = {};
  * @param {string} escapedString
  * @return {?string}
  */
-app.string.renderPrice = function (escapedString) {
+app.string.renderPrice = function(escapedString) {
   var value = +escapedString;
   if (!goog.isNumber(value) || isNaN(value)) return null;
   return app.string.toDecimal(Math.floor(value)) + '円';
-}
+};
 
 
 /**
  * @type {string} escapedUrl
  * @return {string}
  */
-app.string.createAuctionItemLink = function (escapedUrl) {
+app.string.createAuctionItemLink = function(escapedUrl) {
   var uri = new goog.Uri.parse(App.getInstance().getAffiliateBase());
   uri.getQueryData().add('vc_url', escapedUrl);
   return uri.toString();
@@ -48,7 +48,7 @@ app.string.numberFormatter_;
  * @param {string} escapedString
  * @return {string}
  */
-app.string.renderDate = function (escapedString) {
+app.string.renderDate = function(escapedString) {
   if (!app.string.dateFormatter_) {
     app.string.dateFormatter_ = new goog.i18n.DateTimeFormat('M月 d日 H時 m分');
   }
@@ -60,12 +60,12 @@ app.string.renderDate = function (escapedString) {
  * TODO: use it.
  * @param {string} escapedString
  */
-app.string.renderBoolean = function (escapedString) {
-  return escapedString == 'true' ? 'あり' : 'なし' 
-}
+app.string.renderBoolean = function(escapedString) {
+  return escapedString == 'true' ? 'あり' : 'なし';
+};
 
 
-app.string.renderItemCondition = function (escapedString) {
+app.string.renderItemCondition = function(escapedString) {
   switch (escapedString) {
     case 'new': return '新品';
     case 'used': return '中古';
@@ -79,7 +79,7 @@ app.string.renderItemCondition = function (escapedString) {
  * @param {string} escapedString
  * @return {string}
  */
-app.string.renderEndDate = function (escapedString) {
+app.string.renderEndDate = function(escapedString) {
   var formatted = goog.date.relative.format(new Date(escapedString).getTime());
   // Yahoo auction is always in 2 weeks.
   if (formatted) {
@@ -103,7 +103,7 @@ app.string.renderEndDate = function (escapedString) {
 
 
 
-app.string.getCategoryNameByPath = function (path) {
+app.string.getCategoryNameByPath = function(path) {
   if (path) {
     var arr = path.split(' > ');
     return arr[arr.length - 1];
@@ -115,13 +115,13 @@ app.string.getCategoryNameByPath = function (path) {
 /**
  * @param {number} num
  */
-app.string.toDecimal = function (num) {
+app.string.toDecimal = function(num) {
   var formatter = app.string.numberFormatter_ || (app.string.numberFormatter_ =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL));
   return formatter.format(num);
 };
 
 
-app.string.relativeDateFormat = function (ms) {
+app.string.relativeDateFormat = function(ms) {
   // goog.date.relative.format(ms);
 };

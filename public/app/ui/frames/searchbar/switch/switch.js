@@ -1,6 +1,6 @@
 
 
-goog.provide('app.controller.searchbar.Switch');
+goog.provide('app.ui.searchbar.Switch');
 
 goog.require('goog.ui.ContainerRenderer');
 goog.require('goog.ui.Container');
@@ -13,38 +13,38 @@ goog.require('goog.ui.NativeButtonRenderer');
  * @constructor
  * @extends {goog.ui.Container}
  */
-app.controller.searchbar.Switch = function (opt_domHelper) {
-  goog.base(this, goog.ui.Container.Orientation.HORIZONTAL, app.controller.searchbar.SwitchRenderer.getInstance(), opt_domHelper);
+app.ui.searchbar.Switch = function (opt_domHelper) {
+  goog.base(this, goog.ui.Container.Orientation.HORIZONTAL, app.ui.searchbar.SwitchRenderer.getInstance(), opt_domHelper);
   var dh = this.getDomHelper();
 
-  this.listButton_ = app.controller.searchbar.Switch.createButton('4', dh);
+  this.listButton_ = app.ui.searchbar.Switch.createButton('4', dh);
   this.addChild(this.listButton_);
 
-  this.gridButton_ = app.controller.searchbar.Switch.createButton('3', dh);
+  this.gridButton_ = app.ui.searchbar.Switch.createButton('3', dh);
   this.addChild(this.gridButton_);
 };
-goog.inherits(app.controller.searchbar.Switch, goog.ui.Container);
+goog.inherits(app.ui.searchbar.Switch, goog.ui.Container);
 
 
-app.controller.searchbar.Switch.prototype.enterDocument = function () {
+app.ui.searchbar.Switch.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler().listen(this, 'action', function (e) {
     var isGrid = this.gridButton_.getId() == e.target.getId();
-    app.model.setAlignmentStyle(app.controller.util.getTabId(this), isGrid);
+    app.model.setAlignmentStyle(app.ui.util.getTabId(this), isGrid);
     this.updateSwitchState_(isGrid);
   });
 
-  this.updateSwitchState_(app.model.getAlignmentStyle(app.controller.util.getTabId(this)));
+  this.updateSwitchState_(app.model.getAlignmentStyle(app.ui.util.getTabId(this)));
 };
 
 
-app.controller.searchbar.Switch.prototype.updateSwitchState_ = function (isGrid) {
+app.ui.searchbar.Switch.prototype.updateSwitchState_ = function (isGrid) {
   this.listButton_.setSelected(!isGrid);
   this.gridButton_.setSelected(isGrid);
 };
 
 
-app.controller.searchbar.Switch.createButton = function (content, dh) {
+app.ui.searchbar.Switch.createButton = function (content, dh) {
   var button = new goog.ui.Button(content,
       goog.ui.ButtonRenderer.getInstance(), dh);
   button.addClassName('btn');
@@ -61,7 +61,7 @@ app.controller.searchbar.Switch.createButton = function (content, dh) {
 
 
 /** @inheritDoc */
-app.controller.searchbar.Switch.prototype.createDom = function () {
+app.ui.searchbar.Switch.prototype.createDom = function () {
   goog.base(this, 'createDom');
 
   this.listButton_.createDom();
@@ -78,14 +78,14 @@ app.controller.searchbar.Switch.prototype.createDom = function () {
  * @constructor
  * @extends {goog.ui.ContainerRenderer}
  */
-app.controller.searchbar.SwitchRenderer = function () {
+app.ui.searchbar.SwitchRenderer = function () {
   goog.base(this);
 };
-goog.inherits(app.controller.searchbar.SwitchRenderer, goog.ui.ContainerRenderer);
-goog.addSingletonGetter(app.controller.searchbar.SwitchRenderer);
+goog.inherits(app.ui.searchbar.SwitchRenderer, goog.ui.ContainerRenderer);
+goog.addSingletonGetter(app.ui.searchbar.SwitchRenderer);
 
 
 /** @inheritDoc */
-app.controller.searchbar.SwitchRenderer.prototype.getCssClass = function () {
+app.ui.searchbar.SwitchRenderer.prototype.getCssClass = function () {
   return goog.base(this, 'getCssClass') + ' btn-group';
 };

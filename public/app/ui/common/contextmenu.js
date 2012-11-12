@@ -1,5 +1,5 @@
 
-goog.provide('app.ui.ContextMenu');
+goog.provide('app.ui.common.ContextMenu');
 
 goog.require('app.dom');
 goog.require('goog.ui.Container');
@@ -9,7 +9,7 @@ goog.require('goog.ui.Tooltip');
 
 /**
  * Usage:
- *   var menu = app.ui.ContextMenu.getInstance();
+ *   var menu = app.ui.common.ContextMenu.getInstance();
  *   var component = new goog.ui.Component();
  *   component.decorate(goog.dom.getElement('target'));
  *   goog.events.listen(component.getElement(), 'mousedown', function (e) {
@@ -25,8 +25,8 @@ goog.require('goog.ui.Tooltip');
  * @constructor
  * @extends {goog.ui.Container}
  */
-app.ui.ContextMenu = function (opt_domHelper) {
-  goog.base(this, null, app.ui.ContextMenu.Renderer.getInstance(), opt_domHelper);
+app.ui.common.ContextMenu = function (opt_domHelper) {
+  goog.base(this, null, app.ui.common.ContextMenu.Renderer.getInstance(), opt_domHelper);
   // this.setSupportedState(goog.ui.Component.State.HOVER   , false);
   // this.setSupportedState(goog.ui.Component.State.ACTIVE  , false);
 
@@ -41,11 +41,11 @@ app.ui.ContextMenu = function (opt_domHelper) {
   this.setVisible(false);
   this.setEnabled(false);
 };
-goog.inherits(app.ui.ContextMenu, goog.ui.Container);
-goog.addSingletonGetter(app.ui.ContextMenu);
+goog.inherits(app.ui.common.ContextMenu, goog.ui.Container);
+goog.addSingletonGetter(app.ui.common.ContextMenu);
 
 
-app.ui.ContextMenu.EventTarget = {
+app.ui.common.ContextMenu.EventTarget = {
   SELECT: 'itemselected',
   LAUNCH: 'launch',
   DISMISS: 'dismiss'
@@ -55,31 +55,31 @@ app.ui.ContextMenu.EventTarget = {
 /**
  * @type {boolean}
  */
-app.ui.ContextMenu.prototype.dismissing_ = false;
+app.ui.common.ContextMenu.prototype.dismissing_ = false;
 
 
 /**
  * @type {number}
  */
-app.ui.ContextMenu.prototype.translateX_ = 50;
+app.ui.common.ContextMenu.prototype.translateX_ = 50;
 
 
 /**
  * @type {number}
  */
-app.ui.ContextMenu.prototype.currRotateIndex_ = -1;
+app.ui.common.ContextMenu.prototype.currRotateIndex_ = -1;
 
 
 /**
  * @type {number}
  */
-app.ui.ContextMenu.prototype.hilitedIndex_ = -1;
+app.ui.common.ContextMenu.prototype.hilitedIndex_ = -1;
 
 
 /**
  * @type {?Element|StyleSheet}
  */
-app.ui.ContextMenu.prototype.styleSheetElement_;
+app.ui.common.ContextMenu.prototype.styleSheetElement_;
 
 
 /**
@@ -87,19 +87,19 @@ app.ui.ContextMenu.prototype.styleSheetElement_;
  * We release it everytime on dismiss.
  * @type {?Array.<*>} 
  */
-app.ui.ContextMenu.prototype.records_;
+app.ui.common.ContextMenu.prototype.records_;
 
 
 /**
  * @type {?goog.events.MouseWheelHandler}
  */
-app.ui.ContextMenu.prototype.mouseWheelHandler_;
+app.ui.common.ContextMenu.prototype.mouseWheelHandler_;
 
 
 /**
  * @param {boolean} next
  */
-app.ui.ContextMenu.prototype.rotate_ = function (next) {
+app.ui.common.ContextMenu.prototype.rotate_ = function (next) {
   this.updateRotateIndex_(next ? ++this.currRotateIndex_ : --this.currRotateIndex_ );
   if (this.hilitedIndex_<0) return;
 
@@ -118,7 +118,7 @@ app.ui.ContextMenu.prototype.rotate_ = function (next) {
 /**
  * @param {number} index
  */
-app.ui.ContextMenu.prototype.updateRotateIndex_ = function (index) {
+app.ui.common.ContextMenu.prototype.updateRotateIndex_ = function (index) {
   goog.asserts.assert(this.isEnabled(), 'Should be enabled.');
   this.installStyles(this.records_.length, this.currRotateIndex_ = index, this.translateX_);
 };
@@ -128,7 +128,7 @@ app.ui.ContextMenu.prototype.updateRotateIndex_ = function (index) {
  * @param {!goog.events.Event} e
  * @param {Array.<*>} records
  */
-app.ui.ContextMenu.prototype.launch = function (e, records) {
+app.ui.common.ContextMenu.prototype.launch = function (e, records) {
   if (this.dismissing_) return;
   goog.asserts.assert(!this.styleSheetElement_, 'Stylesheet element should be removed on dismiss.');
 
@@ -153,7 +153,7 @@ app.ui.ContextMenu.prototype.launch = function (e, records) {
   // Create menu item.
   var dh = this.getDomHelper();
   goog.array.forEach(records, function (record, index) {
-    this.addChildAt(new app.ui.ContextMenu.Item(record.content, dh), index, true);
+    this.addChildAt(new app.ui.common.ContextMenu.Item(record.content, dh), index, true);
     // if (index == 0) this.hilite_(0);
   }, this);
 
@@ -168,24 +168,24 @@ app.ui.ContextMenu.prototype.launch = function (e, records) {
     // Get focused.
     this.lastActiveElement_ = dh.getDocument().activeElement;
     this.getKeyEventTarget().focus();
-    this.dispatchEvent(app.ui.ContextMenu.EventTarget.LAUNCH);
+    this.dispatchEvent(app.ui.common.ContextMenu.EventTarget.LAUNCH);
   }, 0, this);
 };
 
 
-app.ui.ContextMenu.prototype.reposition_ = function (pos) {
+app.ui.common.ContextMenu.prototype.reposition_ = function (pos) {
   goog.style.setPosition(this.positionOriginElement_, pos)
 };
 
 
-app.ui.ContextMenu.prototype.hilite_ = function (index) {
+app.ui.common.ContextMenu.prototype.hilite_ = function (index) {
   this.unhilite_();
   if (this.records_[index].desc) this.tooltip_.setText(this.records_[index].desc)
   this.getChildAt(this.hilitedIndex_ = index).setHighlighted(true);
 };
 
 
-app.ui.ContextMenu.prototype.unhilite_ = function () {
+app.ui.common.ContextMenu.prototype.unhilite_ = function () {
   var old = this.getChildAt(this.hilitedIndex_);
   if (old) old.setHighlighted(false);
   this.hilitedIndex_ = -1;
@@ -195,7 +195,7 @@ app.ui.ContextMenu.prototype.unhilite_ = function () {
 /**
  * @param {boolean=} selected
  */
-app.ui.ContextMenu.prototype.dismiss = function (selected) {
+app.ui.common.ContextMenu.prototype.dismiss = function (selected) {
   this.dismissing_ = true;
 
   if (selected) {
@@ -225,13 +225,13 @@ app.ui.ContextMenu.prototype.dismiss = function (selected) {
 
     if (this.lastActiveElement_) this.lastActiveElement_.focus();
 
-    this.dispatchEvent(app.ui.ContextMenu.EventTarget.LAUNCH);
+    this.dispatchEvent(app.ui.common.ContextMenu.EventTarget.LAUNCH);
   }, 300, this);
 };
 
 
 /** @inheritDoc */
-app.ui.ContextMenu.prototype.setEnabled = function (enable) {
+app.ui.common.ContextMenu.prototype.setEnabled = function (enable) {
   goog.base(this, 'setEnabled', enable);
   var eh = this.getHandler();
   var element = this.getElement();
@@ -251,21 +251,21 @@ app.ui.ContextMenu.prototype.setEnabled = function (enable) {
 /**
  * @param {goog.events.MouseWheelEvent} e
  */
-app.ui.ContextMenu.prototype.handleMouseWheel_ = function (e) {
+app.ui.common.ContextMenu.prototype.handleMouseWheel_ = function (e) {
   this.rotate_(e.detail > 0);
   e.preventDefault();
 };
 
 
-app.ui.ContextMenu.prototype.installStyles = function (count, rotateIndex, translateX) {
+app.ui.common.ContextMenu.prototype.installStyles = function (count, rotateIndex, translateX) {
   if (this.styleSheetElement_) goog.style.uninstallStyles(this.styleSheetElement_);
   this.styleSheetElement_ = goog.style.installStyles(
-      app.ui.ContextMenu.styleFactory_(count, rotateIndex, translateX),
+      app.ui.common.ContextMenu.styleFactory_(count, rotateIndex, translateX),
       this.getDomHelper().getDocument());
 };
 
 
-app.ui.ContextMenu.prototype.enterDocument = function () {
+app.ui.common.ContextMenu.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler()
 
@@ -286,7 +286,7 @@ app.ui.ContextMenu.prototype.enterDocument = function () {
       ], function (e) {
         if (this.dismissing_) return;
         var child = e.target;
-        if (child instanceof app.ui.ContextMenu.Item) {
+        if (child instanceof app.ui.common.ContextMenu.Item) {
           this.hilite_(this.getChildIndex_(child));
         }
       })
@@ -299,7 +299,7 @@ app.ui.ContextMenu.prototype.enterDocument = function () {
 };
 
 
-app.ui.ContextMenu.prototype.getChildIndex_ = function (child) {
+app.ui.common.ContextMenu.prototype.getChildIndex_ = function (child) {
   var index = -1;
   var id = child.getId();
   goog.array.find(this.getChildIds(), function (childId, childIndex) {
@@ -312,19 +312,19 @@ app.ui.ContextMenu.prototype.getChildIndex_ = function (child) {
 /**
  * @type {Element}
  */
-app.ui.ContextMenu.prototype.positionOriginElement_;
+app.ui.common.ContextMenu.prototype.positionOriginElement_;
 
 
 /**
  * @type {Element}
  */
-app.ui.ContextMenu.prototype.targetGhostElement_;
+app.ui.common.ContextMenu.prototype.targetGhostElement_;
 
 
 /**
  * @param {Element} element
  */
-app.ui.ContextMenu.prototype.setTargetGhostElement = function (element) {
+app.ui.common.ContextMenu.prototype.setTargetGhostElement = function (element) {
   this.targetGhostElement_ = element;
 };
 
@@ -332,7 +332,7 @@ app.ui.ContextMenu.prototype.setTargetGhostElement = function (element) {
 /**
  * @param {Element} element
  */
-app.ui.ContextMenu.prototype.setPositionOriginElement = function (element) {
+app.ui.common.ContextMenu.prototype.setPositionOriginElement = function (element) {
   this.tooltip_.attach(element);
   this.positionOriginElement_ = element;
 };
@@ -342,12 +342,12 @@ app.ui.ContextMenu.prototype.setPositionOriginElement = function (element) {
  * Supposed to be called by renderer.
  * @param {Element} content
  */
-app.ui.ContextMenu.prototype.setContentElement = function (content) {
+app.ui.common.ContextMenu.prototype.setContentElement = function (content) {
   this.contentElement_ = content;
 };
 
 
-app.ui.ContextMenu.prototype.handleKeyEventInternal = function (e) {
+app.ui.common.ContextMenu.prototype.handleKeyEventInternal = function (e) {
   switch (e.keyCode) {
     case goog.events.KeyCodes.RIGHT:
     case goog.events.KeyCodes.DOWN:
@@ -369,17 +369,17 @@ app.ui.ContextMenu.prototype.handleKeyEventInternal = function (e) {
 /**
  * @override
  * @param {number} index
- * @return {app.ui.ContextMenu.Item}
+ * @return {app.ui.common.ContextMenu.Item}
  */
-app.ui.ContextMenu.prototype.getChildAt;
+app.ui.common.ContextMenu.prototype.getChildAt;
 
 
-app.ui.ContextMenu.prototype.selectCurrentHilited_ = function () {
+app.ui.common.ContextMenu.prototype.selectCurrentHilited_ = function () {
   var item = this.getChildAt(this.hilitedIndex_);
   if (!item) return;
   item.processSelected();
   this.dispatchEvent({
-    type: app.ui.ContextMenu.EventTarget.SELECT,
+    type: app.ui.common.ContextMenu.EventTarget.SELECT,
     record: this.records_[this.hilitedIndex_]
   });
   this.dismissing_ = true;
@@ -390,7 +390,7 @@ app.ui.ContextMenu.prototype.selectCurrentHilited_ = function () {
 };
 
 
-app.ui.ContextMenu.prototype.handleMouseDown = function (e) {
+app.ui.common.ContextMenu.prototype.handleMouseDown = function (e) {
   if (this.wasOverlayClicked_(e.target) && this.isVisible() && this.isEnabled()) {
     this.dismiss();
     e.stopPropagation();
@@ -400,13 +400,13 @@ app.ui.ContextMenu.prototype.handleMouseDown = function (e) {
 };
 
 
-app.ui.ContextMenu.prototype.wasOverlayClicked_ = function (et) {
+app.ui.common.ContextMenu.prototype.wasOverlayClicked_ = function (et) {
   return app.dom.getAncestorFromEventTargetByClass(this.getElement(), 'menu-item', et) == this.getElement();
 };
 
 
 /** @inheritDoc */
-app.ui.ContextMenu.prototype.getContentElement = function () {
+app.ui.common.ContextMenu.prototype.getContentElement = function () {
   return this.contentElement_;
 };
 
@@ -415,7 +415,7 @@ app.ui.ContextMenu.prototype.getContentElement = function () {
  * @param {number} rotateIndex
  * @param {number} translateX
  */
-app.ui.ContextMenu.styleFactory_ = function (count, rotateIndex, translateX) {
+app.ui.common.ContextMenu.styleFactory_ = function (count, rotateIndex, translateX) {
   var s = '';
   var degFrag = 360 / count;
   for (var i=0;i<count;i++) {
@@ -435,15 +435,15 @@ app.ui.ContextMenu.styleFactory_ = function (count, rotateIndex, translateX) {
  * @constructor
  * @extends {goog.ui.ContainerRenderer}
  */
-app.ui.ContextMenu.Renderer = function () {
+app.ui.common.ContextMenu.Renderer = function () {
   goog.base(this);
 };
-goog.inherits(app.ui.ContextMenu.Renderer, goog.ui.ContainerRenderer);
-goog.addSingletonGetter(app.ui.ContextMenu.Renderer);
+goog.inherits(app.ui.common.ContextMenu.Renderer, goog.ui.ContainerRenderer);
+goog.addSingletonGetter(app.ui.common.ContextMenu.Renderer);
 
 
 /** @inheritDoc */
-app.ui.ContextMenu.Renderer.prototype.createDom = function (control) {
+app.ui.common.ContextMenu.Renderer.prototype.createDom = function (control) {
   var dh = control.getDomHelper();
   var element = goog.base(this, 'createDom', control);
   var positionOriginElement, contentElement, targetGhost;
@@ -488,8 +488,8 @@ app.ui.ContextMenu.Renderer.prototype.createDom = function (control) {
  * @constructor
  * @extends {goog.ui.Control}
  */
-app.ui.ContextMenu.Item = function (content, opt_domHelper) {
-  goog.base(this, content, app.ui.ContextMenu.Item.Renderer.getInstance(), opt_domHelper);
+app.ui.common.ContextMenu.Item = function (content, opt_domHelper) {
+  goog.base(this, content, app.ui.common.ContextMenu.Item.Renderer.getInstance(), opt_domHelper);
   // Enable 
   // this.setSupportedState(goog.ui.Component.State.SELECTED, true);
   // Disable
@@ -498,28 +498,28 @@ app.ui.ContextMenu.Item = function (content, opt_domHelper) {
   // this.setSupportedState(goog.ui.Component.State.ACTIVE  , false);
   this.setSupportedState(goog.ui.Component.State.FOCUSED , false);
 };
-goog.inherits(app.ui.ContextMenu.Item, goog.ui.Control);
+goog.inherits(app.ui.common.ContextMenu.Item, goog.ui.Control);
 
 
-app.ui.ContextMenu.Item.prototype.processSelected = function () {
+app.ui.common.ContextMenu.Item.prototype.processSelected = function () {
   this.renderer_.processSelected(this);
 };
 
 
 // /** @inheritDoc */
-// app.ui.ContextMenu.Item.prototype.enterDocument = function () {
+// app.ui.common.ContextMenu.Item.prototype.enterDocument = function () {
 //   goog.base(this, 'enterDocument');
 // };
 
 
-app.ui.ContextMenu.Item.prototype.handleMouseDown = function (e) {
+app.ui.common.ContextMenu.Item.prototype.handleMouseDown = function (e) {
   e.stopPropagation();
   goog.base(this, 'handleMouseDown', e);
 };
 
 
 /** @inheritDoc */
-app.ui.ContextMenu.Item.prototype.createDom = function () {
+app.ui.common.ContextMenu.Item.prototype.createDom = function () {
   var dh = this.getDomHelper();
   var element = dh.createDom('div', 'menu-item',
       dh.createDom('a', {
@@ -534,13 +534,13 @@ app.ui.ContextMenu.Item.prototype.createDom = function () {
  * @constructor
  * @extends {goog.ui.ControlRenderer}
  */
-app.ui.ContextMenu.Item.Renderer = function () {
+app.ui.common.ContextMenu.Item.Renderer = function () {
   goog.base(this);
 };
-goog.inherits(app.ui.ContextMenu.Item.Renderer, goog.ui.ControlRenderer);
-goog.addSingletonGetter(app.ui.ContextMenu.Item.Renderer);
+goog.inherits(app.ui.common.ContextMenu.Item.Renderer, goog.ui.ControlRenderer);
+goog.addSingletonGetter(app.ui.common.ContextMenu.Item.Renderer);
 
 
-app.ui.ContextMenu.Item.Renderer.prototype.processSelected = function (item) {
+app.ui.common.ContextMenu.Item.Renderer.prototype.processSelected = function (item) {
   goog.dom.classes.add(item.getElement(), 'blinking');
 };

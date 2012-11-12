@@ -1,5 +1,5 @@
 
-goog.provide('app.ui.TabPane');
+goog.provide('app.ui.common.TabPane');
 
 goog.require('app.dom');
 goog.require('goog.ui.Component');
@@ -11,21 +11,21 @@ goog.require('goog.ui.Component');
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.ui.TabPane = function (id, opt_domHelper) {
+app.ui.common.TabPane = function (id, opt_domHelper) {
   goog.base(this, opt_domHelper);
   this.setId(id);
 };
-goog.inherits(app.ui.TabPane, goog.ui.Component);
+goog.inherits(app.ui.common.TabPane, goog.ui.Component);
 
 
-app.ui.TabPane.prototype.tabs_;
+app.ui.common.TabPane.prototype.tabs_;
 
 
-app.ui.TabPane.prototype.tabBelongings_;
+app.ui.common.TabPane.prototype.tabBelongings_;
 
 
 /** @inheritDoc */
-app.ui.TabPane.prototype.canDecorate = function (element) {
+app.ui.common.TabPane.prototype.canDecorate = function (element) {
   if (element) {
     var dh = this.getDomHelper();
     var tabContainer =   this.tabContainer_ =  dh.getElementByClass('nav-tabs', element);
@@ -37,17 +37,17 @@ app.ui.TabPane.prototype.canDecorate = function (element) {
 };
 
 
-app.ui.TabPane.prototype.selectedIndex_ = 0;
+app.ui.common.TabPane.prototype.selectedIndex_ = 0;
 
 
-app.ui.TabPane.prototype.enableContent_ = function (index, enable) {
+app.ui.common.TabPane.prototype.enableContent_ = function (index, enable) {
   this.tabs_[index] && goog.dom.classes.enable(this.tabs_[index], 'active', enable);
   this.tabBelongings_[index] && goog.dom.classes.enable(this.tabBelongings_[index], 'active', enable);
 };
 
 
 /** @inheritDoc */
-app.ui.TabPane.prototype.enterDocument = function () {
+app.ui.common.TabPane.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler().listen(this.tabContainer_, goog.events.EventType.CLICK, function (e) {
     e.stopPropagation();
@@ -62,7 +62,7 @@ app.ui.TabPane.prototype.enterDocument = function () {
 };
 
 
-app.ui.TabPane.prototype.getTabIndexFromEventTarget_ = function (et) {
+app.ui.common.TabPane.prototype.getTabIndexFromEventTarget_ = function (et) {
   et = app.dom.getAncestorFromEventTargetByTagName(this.getElement(), 'LI', et);
   if (!et) return null;
   var index = -1;
@@ -77,6 +77,6 @@ app.ui.TabPane.prototype.getTabIndexFromEventTarget_ = function (et) {
 };
 
 /** @inheritDoc */
-app.ui.TabPane.prototype.disposeInternal = function () {
+app.ui.common.TabPane.prototype.disposeInternal = function () {
   goog.base(this, 'disposeInternal');
 };

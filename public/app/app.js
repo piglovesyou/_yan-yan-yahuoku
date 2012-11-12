@@ -3,16 +3,16 @@ goog.provide('App');
 
 goog.require('goog.ui.Component');
 goog.require('goog.events.EventType');
-goog.require('app.ui.ThousandRows');
+goog.require('app.ui.common.ThousandRows');
 
-goog.require('app.controller.WelcomeDialog');
+goog.require('app.ui.WelcomeDialog');
 goog.require('app.events.EventCenter');
-goog.require('app.controller.Frames');
-goog.require('app.controller.Container');
-goog.require('app.controller.Tabs');
+goog.require('app.ui.Frames');
+goog.require('app.ui.Container');
+goog.require('app.ui.Tabs');
 goog.require('app.dom.ViewportSizeMonitor');
-goog.require('app.ui.ContextMenu');
-goog.require('app.ui.Dialog');
+goog.require('app.ui.common.ContextMenu');
+goog.require('app.ui.common.Dialog');
 goog.require('app.Model');
 
 
@@ -27,9 +27,9 @@ App = function (opt_domHelper) {
   this.initModel_();
 
   /**
-   * @type {app.ui.Dialog}
+   * @type {app.ui.common.Dialog}
    */
-  this.dialog_ = new app.controller.WelcomeDialog(opt_domHelper);
+  this.dialog_ = new app.ui.WelcomeDialog(opt_domHelper);
 };
 goog.inherits(App, goog.ui.Component);
 goog.addSingletonGetter(App);
@@ -68,9 +68,9 @@ App.prototype.initTabAndFrame_ = function () {
 
   var tabs;
   /**
-   * @type {app.controller.Tabs}
+   * @type {app.ui.Tabs}
    */
-  this.tabs_ = tabs = new app.controller.Tabs(dh);
+  this.tabs_ = tabs = new app.ui.Tabs(dh);
   this.addChild(tabs);
   tabs.decorate(this.tabsElement_);
 };

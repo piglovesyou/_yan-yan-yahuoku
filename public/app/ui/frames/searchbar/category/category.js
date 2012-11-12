@@ -1,50 +1,50 @@
 
-goog.provide('app.controller.Category');
+goog.provide('app.ui.Category');
 
 goog.require('goog.ui.Component');
-goog.require('app.controller.category.Suggest');
+goog.require('app.ui.category.Suggest');
 
 
 
 
 /**
- * XXX: Do I want this Class? app.controller.category.Suggest can be
+ * XXX: Do I want this Class? app.ui.category.Suggest can be
  *      directly appended to an instance of Searchbar.
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.controller.Category = function (opt_domHelper) {
+app.ui.Category = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
 }
-goog.inherits(app.controller.Category, goog.ui.Component);
+goog.inherits(app.ui.Category, goog.ui.Component);
 
 
 /**
- * @type {app.controller.category.Suggest}
+ * @type {app.ui.category.Suggest}
  */
-app.controller.Category.prototype.suggest_;
+app.ui.Category.prototype.suggest_;
 
 
 /**
  * @type {Element}
  */
-app.controller.Category.prototype.inputElement_;
+app.ui.Category.prototype.inputElement_;
 
 
 /** @inheritDoc */
-app.controller.Category.prototype.enterDocument = function () {
+app.ui.Category.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
 
   var condition = this.getCondition_();
-  var suggest = this.suggest_ = new app.controller.category.Suggest('/api/categorySuggest', 
+  var suggest = this.suggest_ = new app.ui.category.Suggest('/api/categorySuggest', 
       this.inputElement_, condition['category'], this.getDomHelper());
   suggest.setParentEventTarget(this);
 };
 
 
-app.controller.Category.prototype.getCondition_ = function () {
+app.ui.Category.prototype.getCondition_ = function () {
   var frame = this.getParent().getParent();
-  goog.asserts.assert(frame instanceof app.controller.Frame, 'Wrong parent for category!');
+  goog.asserts.assert(frame instanceof app.ui.Frame, 'Wrong parent for category!');
   var condition = app.model.getTabQuery(frame.getId());
   goog.asserts.assert(condition, 'Model must have data for category.');
   return condition;
@@ -52,7 +52,7 @@ app.controller.Category.prototype.getCondition_ = function () {
 
 
 /** @inheritDoc */
-app.controller.Category.prototype.createDom = function () {
+app.ui.Category.prototype.createDom = function () {
   var condition = this.getCondition_();
   var dh = this.getDomHelper();
   var element = 
@@ -61,6 +61,6 @@ app.controller.Category.prototype.createDom = function () {
           type:'text',
           value: condition['category']['CategoryPath']
         });
-  app.controller.category.Suggest.InputHandler.showEndOfValue(this.inputElement_);
+  app.ui.category.Suggest.InputHandler.showEndOfValue(this.inputElement_);
   this.setElementInternal(element);
 };

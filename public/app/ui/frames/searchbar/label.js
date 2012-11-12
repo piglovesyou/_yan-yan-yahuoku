@@ -1,5 +1,5 @@
 
-goog.provide('app.controller.searchbar.Label');
+goog.provide('app.ui.searchbar.Label');
 
 goog.require('goog.ui.Component');
 goog.require('goog.string.format');
@@ -9,20 +9,20 @@ goog.require('goog.string.format');
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.controller.searchbar.Label = function (opt_domHelper) {
+app.ui.searchbar.Label = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
 };
-goog.inherits(app.controller.searchbar.Label, goog.ui.Component);
+goog.inherits(app.ui.searchbar.Label, goog.ui.Component);
 
 
 /** @inheritDoc */
-app.controller.searchbar.Label.prototype.enterDocument = function () {
+app.ui.searchbar.Label.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
-  var tab = app.controller.util.getTab(this);
+  var tab = app.ui.util.getTab(this);
   this.getHandler().listen(tab.getThousandRows(), goog.ui.ThousandRows.EventType.UPDATE_TOTAL, function (e) {
     var q = app.model.getTabQuery(tab.getId());
-    var total = app.model.getAlignmentStyle(app.controller.util.getTabId(this)) ?
-        e.total * app.ui.ThousandRows.ModelForGrid.gridCols_ : e.total;
+    var total = app.model.getAlignmentStyle(app.ui.util.getTabId(this)) ?
+        e.total * app.ui.common.ThousandRows.ModelForGrid.gridCols_ : e.total;
     this.updateContent(total, q['query'], q['category']['CategoryPath']);
   });
 };
@@ -30,7 +30,7 @@ app.controller.searchbar.Label.prototype.enterDocument = function () {
 
 /**
  */
-app.controller.searchbar.Label.prototype.updateContent = function (total, query, category) {
+app.ui.searchbar.Label.prototype.updateContent = function (total, query, category) {
   this.clearContent();
 
   var dh = this.getDomHelper();
@@ -54,12 +54,12 @@ app.controller.searchbar.Label.prototype.updateContent = function (total, query,
 };
 
 
-app.controller.searchbar.Label.prototype.clearContent = function () {
+app.ui.searchbar.Label.prototype.clearContent = function () {
   this.getDomHelper().removeChildren(this.getElement());
 };
 
 
-app.controller.searchbar.Label.prototype.createDom = function () {
+app.ui.searchbar.Label.prototype.createDom = function () {
   var dh = this.getDomHelper();
   var element = dh.createDom('div', 'searchbar-label muted');
   this.setElementInternal(element);

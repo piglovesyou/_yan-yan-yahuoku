@@ -1,8 +1,8 @@
 
-goog.provide('app.controller.Tabs');
+goog.provide('app.ui.Tabs');
 
-goog.require('app.controller.TabAdder');
-goog.require('app.controller.Tab');
+goog.require('app.ui.TabAdder');
+goog.require('app.ui.Tab');
 goog.require('app.events.EventCenter');
 goog.require('goog.ui.Component');
 goog.require('goog.fx.DragListGroup');
@@ -15,29 +15,29 @@ goog.require('app.string');
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.controller.Tabs = function (opt_domHelper) {
+app.ui.Tabs = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
 };
-goog.inherits(app.controller.Tabs, goog.ui.Component);
+goog.inherits(app.ui.Tabs, goog.ui.Component);
 
 
 /** @inheritDoc */
-app.controller.Tabs.prototype.enterDocument = function () {
+app.ui.Tabs.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.adder_.enterDocument();
   this.getHandler()
-      .listen(this, app.controller.Tab.EventType.SELECT, this.handleTabSelected_)
-      .listen(this, app.controller.Tab.EventType.DELETE, this.handleTabDelBtnClicked_)
-      .listen(this, app.controller.TabAdder.EventType.CLICK, this.handleAdderClicked_);
+      .listen(this, app.ui.Tab.EventType.SELECT, this.handleTabSelected_)
+      .listen(this, app.ui.Tab.EventType.DELETE, this.handleTabDelBtnClicked_)
+      .listen(this, app.ui.TabAdder.EventType.CLICK, this.handleAdderClicked_);
 };
 
 
 /**
  * @param {goog.events.Event} e
  */
-app.controller.Tabs.prototype.handleTabSelected_ = function (e) {
+app.ui.Tabs.prototype.handleTabSelected_ = function (e) {
   var oldTab = this.currSelectedTab_;
-  var newTab = /** @type {?app.controller.Tab} */(e.target);
+  var newTab = /** @type {?app.ui.Tab} */(e.target);
   if (!newTab || oldTab.getId() == newTab.getId()) return;
 
   oldTab.processSelected(false);
@@ -49,15 +49,15 @@ app.controller.Tabs.prototype.handleTabSelected_ = function (e) {
 
 
 /** @inheritDoc */
-app.controller.Tabs.prototype.exitDocument = function () {
+app.ui.Tabs.prototype.exitDocument = function () {
   this.adder_.exitDocument();
   goog.base(this, 'exitDocument');
 };
 
 
-app.controller.Tabs.prototype.handleTabDelBtnClicked_ = function (e) {
+app.ui.Tabs.prototype.handleTabDelBtnClicked_ = function (e) {
   var child = e.target;
-  var index = app.controller.util.getChildIndex(this, child);
+  var index = app.ui.util.getChildIndex(this, child);
   (this.getChildAt(index + 1) || this.getChildAt(index - 1)).dispatchSelect();
 
   this.removeChild(child, true).dispose();
@@ -67,17 +67,17 @@ app.controller.Tabs.prototype.handleTabDelBtnClicked_ = function (e) {
 };
 
 
-app.controller.Tabs.prototype.handleAdderClicked_ = function (e) {
+app.ui.Tabs.prototype.handleAdderClicked_ = function (e) {
   this.insertNewTab_().dispatchSelect();
   this.repositionAdder_();
 };
 
 
 /** @inheritDoc */
-app.controller.Tabs.prototype.decorateInternal = function (element) {
+app.ui.Tabs.prototype.decorateInternal = function (element) {
   var dh = this.getDomHelper();
 
-  var tabAdder = this.adder_ = new app.controller.TabAdder(dh);
+  var tabAdder = this.adder_ = new app.ui.TabAdder(dh);
   // We don't deal with it as a child. Only tabs are.
   tabAdder.setParentEventTarget(this);
   tabAdder.createDom();
@@ -91,7 +91,7 @@ app.controller.Tabs.prototype.decorateInternal = function (element) {
   goog.asserts.assert(tabIds.length >= tabElms.length, 'Too many tab elements.');
 
   goog.array.forEach(tabIds, function (tabId, index) {
-    var tab = new app.controller.Tab(tabId, dh);
+    var tab = new app.ui.Tab(tabId, dh);
 
     var tabElm = tabElms[index];
     if (tabElm) {
@@ -116,10 +116,10 @@ app.controller.Tabs.prototype.decorateInternal = function (element) {
 };
 
 
-app.controller.Tabs.prototype.insertNewTab_ = function () {
+app.ui.Tabs.prototype.insertNewTab_ = function () {
   var dh = this.getDomHelper();
   var lastIndex = this.getLastTabIndex_();
-  var tab = new app.controller.Tab(goog.ui.IdGenerator.getInstance().getNextUniqueId(), dh);
+  var tab = new app.ui.Tab(goog.ui.IdGenerator.getInstance().getNextUniqueId(), dh);
   this.addChildAt(tab, lastIndex + 1);
   app.model.setTabIds(this.getTabIds());
   tab.createDom();
@@ -133,12 +133,12 @@ app.controller.Tabs.prototype.insertNewTab_ = function () {
 
 
 /**
- * @type {app.controller.TabAdder}
+ * @type {app.ui.TabAdder}
  */
-app.controller.Tabs.prototype.adder_;
+app.ui.Tabs.prototype.adder_;
 
 
-app.controller.Tabs.prototype.repositionAdder_ = function () {
+app.ui.Tabs.prototype.repositionAdder_ = function () {
   if (this.getChildCount() >= 5) {
     this.adder_.setVisible(false);
     return;
@@ -153,23 +153,23 @@ app.controller.Tabs.prototype.repositionAdder_ = function () {
 };
 
 
-app.controller.Tabs.prototype.getTabIds = function () {
+app.ui.Tabs.prototype.getTabIds = function () {
   var ids = [];
   this.forEachChild(function (child) {
-    if (child instanceof app.controller.Tab) ids.push(child.getId());
+    if (child instanceof app.ui.Tab) ids.push(child.getId());
   });
   return ids;
 };
 
 
 /**
- * @return {app.controller.Tab}
+ * @return {app.ui.Tab}
  */
-app.controller.Tabs.prototype.getLastTab_ = function () {
+app.ui.Tabs.prototype.getLastTab_ = function () {
   var tab;
   goog.array.findRight(this.getChildIds(), function (id) {
     var child = this.getChild(id);
-    if (child && child instanceof app.controller.Tab) {
+    if (child && child instanceof app.ui.Tab) {
       tab = child;
       return true;
     }
@@ -184,11 +184,11 @@ app.controller.Tabs.prototype.getLastTab_ = function () {
  * TODO: We don't do this. We just grab a child of the last index.
  * @return {number}
  */
-app.controller.Tabs.prototype.getLastTabIndex_ = function () {
+app.ui.Tabs.prototype.getLastTabIndex_ = function () {
   var index;
   goog.array.findRight(this.getChildIds(), function (id, i) {
     var child = this.getChild(id);
-    if (child && child instanceof app.controller.Tab) {
+    if (child && child instanceof app.ui.Tab) {
       index = i;
       return true;
     }
@@ -200,41 +200,41 @@ app.controller.Tabs.prototype.getLastTabIndex_ = function () {
 
 
 /**
- * @type {?app.controller.Tab}
+ * @type {?app.ui.Tab}
  */
-app.controller.Tabs.prototype.currSelectedTab_;
+app.ui.Tabs.prototype.currSelectedTab_;
 
 
 /**
- * @return {?app.controller.Tab}
+ * @return {?app.ui.Tab}
  */
-app.controller.Tabs.prototype.getCurrSelectedTab = function () {
+app.ui.Tabs.prototype.getCurrSelectedTab = function () {
   return this.currSelectedTab_;
 };
 
 
-app.controller.Tabs.prototype.draggingClassName_ = 'tab-dragging';
+app.ui.Tabs.prototype.draggingClassName_ = 'tab-dragging';
 
 
 /**
  * @type {?goog.fx.DragListGroup}
  */
-app.controller.Tabs.prototype.dragListGroup_;
+app.ui.Tabs.prototype.dragListGroup_;
 
 
 /**
  * @type {Element}
  */
-app.controller.Tabs.prototype.contentElement_;
+app.ui.Tabs.prototype.contentElement_;
 
 
 /** @inheritDoc */
-app.controller.Tabs.prototype.getContentElement = function () {
+app.ui.Tabs.prototype.getContentElement = function () {
   return this.contentElement_;
 };
 
 
-app.controller.Tabs.prototype.setupDragListGroup_ = function () {
+app.ui.Tabs.prototype.setupDragListGroup_ = function () {
   if (this.dragListGroup_) {
     this.dragListGroup_.dispose();
   }
@@ -260,9 +260,9 @@ app.controller.Tabs.prototype.setupDragListGroup_ = function () {
 
 /**
  * @param {Element} element
- * @return {app.controller.Tab}
+ * @return {app.ui.Tab}
  */
-app.controller.Tabs.prototype.findChildByElement_ = function (element) {
+app.ui.Tabs.prototype.findChildByElement_ = function (element) {
   var child;
   goog.array.find(this.getChildIds(), function (id) {
     var c = this.getChild(id);
@@ -272,11 +272,11 @@ app.controller.Tabs.prototype.findChildByElement_ = function (element) {
     }
     return false;
   }, this);
-  return /** @type {app.controller.Tab} */(child);
+  return /** @type {app.ui.Tab} */(child);
 };
 
 
-app.controller.Tabs.prototype.createFixTabWidthStylesheet_ = function (width) {
+app.ui.Tabs.prototype.createFixTabWidthStylesheet_ = function (width) {
   var styleString = '.tabs-content > .tab,.' + 
                     this.draggingClassName_ +
                     '{width: ' + width + 'px;}';
@@ -284,7 +284,7 @@ app.controller.Tabs.prototype.createFixTabWidthStylesheet_ = function (width) {
 };
 
 
-app.controller.Tabs.prototype.canDecorate = function (element) {
+app.ui.Tabs.prototype.canDecorate = function (element) {
   var dh = this.getDomHelper();
   var content = dh.getElementByClass('tabs-content', element);
   if (content) {
@@ -296,7 +296,7 @@ app.controller.Tabs.prototype.canDecorate = function (element) {
 };
 
 
-app.controller.Tabs.prototype.disposeInternal = function () {
+app.ui.Tabs.prototype.disposeInternal = function () {
   if (this.adder_) {
     this.adder_.dispose();
     this.adder_ = null;

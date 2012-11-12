@@ -1,5 +1,5 @@
 
-goog.provide('app.controller.TabAdder');
+goog.provide('app.ui.TabAdder');
 
 goog.require('app.events.EventCenter');
 goog.require('goog.ui.Component');
@@ -12,40 +12,40 @@ goog.require('app.string');
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.controller.TabAdder = function (opt_domHelper) {
+app.ui.TabAdder = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
 };
-goog.inherits(app.controller.TabAdder, goog.ui.Component);
+goog.inherits(app.ui.TabAdder, goog.ui.Component);
 
 
 /**
  * @enum {string}
  */
-app.controller.TabAdder.EventType = {
+app.ui.TabAdder.EventType = {
   CLICK: 'tabadderclicked'
 };
 
 
-app.controller.TabAdder.prototype.isVisible_ = true;
+app.ui.TabAdder.prototype.isVisible_ = true;
 
 
-app.controller.TabAdder.prototype.setVisible = function (show) {
+app.ui.TabAdder.prototype.setVisible = function (show) {
   if (this.isVisible_ == show) return;
   goog.style.showElement(this.getElement(), this.isVisible_ = show);
 };
 
 
 /** @inheritDoc */
-app.controller.TabAdder.prototype.enterDocument = function () {
+app.ui.TabAdder.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK, function () {
-    this.dispatchEvent(app.controller.TabAdder.EventType.CLICK);
+    this.dispatchEvent(app.ui.TabAdder.EventType.CLICK);
   });
 };
 
 
 /** @inheritDoc */
-app.controller.TabAdder.prototype.createDom = function () {
+app.ui.TabAdder.prototype.createDom = function () {
   var dh = this.getDomHelper();
   var element = dh.createDom('div', 'tab-adder');
   this.setElementInternal(element);

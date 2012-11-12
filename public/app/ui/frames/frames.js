@@ -1,21 +1,21 @@
 
-goog.provide('app.controller.Frames');
+goog.provide('app.ui.Frames');
 
-goog.require('app.controller.Frame');
+goog.require('app.ui.Frame');
 
 
 /**
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.controller.Frames = function (firstFrameId, opt_domHelper) {
+app.ui.Frames = function (firstFrameId, opt_domHelper) {
   goog.base(this, opt_domHelper);
   this.currSelectedFrame_ = this.createFrame(firstFrameId, false);
 }
-goog.inherits(app.controller.Frames, goog.ui.Component);
+goog.inherits(app.ui.Frames, goog.ui.Component);
 
 
-app.controller.Frames.prototype.renderFrame = function (id) {
+app.ui.Frames.prototype.renderFrame = function (id) {
   var frame = this.getChild(id);
   if (frame && !frame.isInDocument()) {
     frame.render(this.getContentElement());
@@ -26,9 +26,9 @@ app.controller.Frames.prototype.renderFrame = function (id) {
 /**
  * @param {string} id
  */
-app.controller.Frames.prototype.selectFrame = function (id) {
+app.ui.Frames.prototype.selectFrame = function (id) {
   goog.dom.classes.enable(this.currSelectedFrame_.getElement(), 'selected', false);
-  var frame = /** @type {?app.controller.Frame} */(this.getChild(id));
+  var frame = /** @type {?app.ui.Frame} */(this.getChild(id));
   if (!frame) {
     // When it rendered, always be selected state.
     frame = this.createFrame(id, true);
@@ -41,15 +41,15 @@ app.controller.Frames.prototype.selectFrame = function (id) {
 
 
 /**
- * @type {?app.controller.Frame}
+ * @type {?app.ui.Frame}
  */
-app.controller.Frames.prototype.currSelectedFrame_;
+app.ui.Frames.prototype.currSelectedFrame_;
 
 
 /**
- * @return {app.controller.Frame}
+ * @return {app.ui.Frame}
  */
-app.controller.Frames.prototype.getCurrSelectedFrame = function () {
+app.ui.Frames.prototype.getCurrSelectedFrame = function () {
   return this.currSelectedFrame_;
 };
 
@@ -57,23 +57,23 @@ app.controller.Frames.prototype.getCurrSelectedFrame = function () {
 /**
  * @param {string} id Tab id the frame belonging to.
  * @param {boolean} render
- * @return {app.controller.Frame}
+ * @return {app.ui.Frame}
  */
-app.controller.Frames.prototype.createFrame = function (id, render) {
-  var frame = new app.controller.Frame(id, this.getDomHelper());
+app.ui.Frames.prototype.createFrame = function (id, render) {
+  var frame = new app.ui.Frame(id, this.getDomHelper());
   this.addChild(frame, render);
   return frame;
 };
 
 
 /** @inheritDoc */
-app.controller.Frames.prototype.createDom = function () {
+app.ui.Frames.prototype.createDom = function () {
   goog.asserts.fail('Doesn\'t support render() method.');
 }
 
 
 /** @inheritDoc */
-app.controller.Frames.prototype.decorateInternal = function (element) {
+app.ui.Frames.prototype.decorateInternal = function (element) {
   goog.base(this, 'decorateInternal', element);
   var dh = this.getDomHelper();
   
@@ -89,7 +89,7 @@ app.controller.Frames.prototype.decorateInternal = function (element) {
 };
 
 
-app.controller.Frames.prototype.canDecorate = function (element) {
+app.ui.Frames.prototype.canDecorate = function (element) {
   if (element) {
     var dh = this.getDomHelper();
     // can be none.

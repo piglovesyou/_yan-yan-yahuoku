@@ -1,33 +1,33 @@
 
-goog.provide('app.controller.Searchbar');
+goog.provide('app.ui.Searchbar');
 
-goog.require('app.controller.searchbar.Switch');
-goog.require('app.controller.Category');
-goog.require('app.controller.QueryInput');
+goog.require('app.ui.searchbar.Switch');
+goog.require('app.ui.Category');
+goog.require('app.ui.QueryInput');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
 goog.require('goog.string');
-goog.require('app.controller.searchbar.Label');
+goog.require('app.ui.searchbar.Label');
 
 
 /**
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.controller.Searchbar = function (opt_domHelper) {
+app.ui.Searchbar = function (opt_domHelper) {
   goog.base(this, opt_domHelper);
   var dh = this.getDomHelper();
 
-  this.switch_ = new app.controller.searchbar.Switch(dh);
+  this.switch_ = new app.ui.searchbar.Switch(dh);
   this.addChild(this.switch_);
 
-  this.categorySuggest_ = new app.controller.Category(dh);
+  this.categorySuggest_ = new app.ui.Category(dh);
   this.addChild(this.categorySuggest_);
 
-  this.queryInput_ = new app.controller.QueryInput(dh);
+  this.queryInput_ = new app.ui.QueryInput(dh);
   this.addChild(this.queryInput_);
   
-  this.label_ = new app.controller.searchbar.Label(dh);
+  this.label_ = new app.ui.searchbar.Label(dh);
   this.addChild(this.label_);
 
   this.button_ = new goog.ui.Button('s', null, dh);
@@ -35,26 +35,26 @@ app.controller.Searchbar = function (opt_domHelper) {
   this.button_.addClassName('i');
   this.addChild(this.button_);
 }
-goog.inherits(app.controller.Searchbar, goog.ui.Component);
+goog.inherits(app.ui.Searchbar, goog.ui.Component);
 
 
-app.controller.Searchbar.EventType = {
+app.ui.Searchbar.EventType = {
   SEARCH: 'search'
 };
 
 
-app.controller.Searchbar.prototype.enterDocument = function () {
+app.ui.Searchbar.prototype.enterDocument = function () {
   goog.base(this, 'enterDocument');
   this.getHandler()
     .listen(this, goog.ui.Component.EventType.ACTION, function(e) {
       // XXX: e.preventDefault() causes goog.structs.Pool error
       // XXX: .. fixed?
-      this.dispatchEvent(app.controller.Searchbar.EventType.SEARCH);
+      this.dispatchEvent(app.ui.Searchbar.EventType.SEARCH);
     });
 };
 
   
-app.controller.Searchbar.prototype.getQuery = function () {
+app.ui.Searchbar.prototype.getQuery = function () {
   return this.queryInput_.getValue();
 };
 
@@ -62,12 +62,12 @@ app.controller.Searchbar.prototype.getQuery = function () {
 /**
  * TODO: Delete this method. Just let label listens.
  */
-app.controller.Searchbar.prototype.updateLabel = function (total, query, category) {
+app.ui.Searchbar.prototype.updateLabel = function (total, query, category) {
   this.label_.updateContent(total, query, category);
 };
 
 
-app.controller.Searchbar.prototype.createDom = function () {
+app.ui.Searchbar.prototype.createDom = function () {
   var dh = this.getDomHelper();
 
   // Prepare to append
@@ -95,7 +95,7 @@ app.controller.Searchbar.prototype.createDom = function () {
   this.setElementInternal(element);
 };
 
-app.controller.Searchbar.prototype.disposeInternal = function () {
+app.ui.Searchbar.prototype.disposeInternal = function () {
   if (this.categorySuggest_) {
     this.categorySuggest_.dispose();
     this.categorySuggest_ = null;

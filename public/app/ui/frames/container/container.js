@@ -128,8 +128,6 @@ app.ui.Container.prototype.processSelected_ = function(selected) {
   var eh = this.getHandler();
   var fn = selected ? eh.listen : eh.unlisten;
   fn.call(eh, app.dom.ViewportSizeMonitor.getInstance(),
-          goog.events.EventType.RESIZE, this.handleViewportResize_);
-  fn.call(eh, app.dom.ViewportSizeMonitor.getInstance(),
           app.dom.ViewportSizeMonitor.EventType.DELAYED_RESIZE,
           this.handleDelayedResize_);
   fn.call(eh, this, app.ui.ThousandRows.EventType.ROW_CLICKED,
@@ -148,21 +146,11 @@ app.ui.Container.prototype.processSelected_ = function(selected) {
 
 /**
  * @private
- * @param {goog.events.Event} e A resize event provided by ViewportSizeMonitor.
- */
-app.ui.Container.prototype.handleViewportResize_ = function(e) {
-  this.thousandRows_.update();
-  this.detail_.update();
-};
-
-
-/**
- * @private
  * @param {goog.events.Event} e A resize event provided by SplitPane.
  * We can't use 'handleDragEnd_' for its name.. which used by superClass.
  */
 app.ui.Container.prototype.handlePaneResized_ = function(e) {
-  // this.thousandRows_.update(); Something wrong..
+  this.thousandRows_.update();
   this.detail_.update();
   var w = this.detail_.getWidth();
   if (goog.isNumber(w)) {
@@ -218,6 +206,8 @@ app.ui.Container.prototype.getOffsetTop_ = function() {
  */
 app.ui.Container.prototype.handleDelayedResize_ = function(e) {
   this.setDetailpainSize_();
+  this.thousandRows_.update();
+  this.detail_.update();
 };
 
 

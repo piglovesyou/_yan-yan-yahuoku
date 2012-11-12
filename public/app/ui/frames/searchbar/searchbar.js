@@ -1,20 +1,20 @@
 
 goog.provide('app.ui.Searchbar');
 
-goog.require('app.ui.searchbar.Switch');
 goog.require('app.ui.Category');
 goog.require('app.ui.QueryInput');
+goog.require('app.ui.searchbar.Label');
+goog.require('app.ui.searchbar.Switch');
+goog.require('goog.string');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
-goog.require('goog.string');
-goog.require('app.ui.searchbar.Label');
 
 
 /**
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.ui.Searchbar = function (opt_domHelper) {
+app.ui.Searchbar = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
   var dh = this.getDomHelper();
 
@@ -26,7 +26,7 @@ app.ui.Searchbar = function (opt_domHelper) {
 
   this.queryInput_ = new app.ui.QueryInput(dh);
   this.addChild(this.queryInput_);
-  
+
   this.label_ = new app.ui.searchbar.Label(dh);
   this.addChild(this.label_);
 
@@ -34,7 +34,7 @@ app.ui.Searchbar = function (opt_domHelper) {
   this.button_.addClassName('btn');
   this.button_.addClassName('i');
   this.addChild(this.button_);
-}
+};
 goog.inherits(app.ui.Searchbar, goog.ui.Component);
 
 
@@ -43,7 +43,7 @@ app.ui.Searchbar.EventType = {
 };
 
 
-app.ui.Searchbar.prototype.enterDocument = function () {
+app.ui.Searchbar.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.getHandler()
     .listen(this, goog.ui.Component.EventType.ACTION, function(e) {
@@ -53,8 +53,8 @@ app.ui.Searchbar.prototype.enterDocument = function () {
     });
 };
 
-  
-app.ui.Searchbar.prototype.getQuery = function () {
+
+app.ui.Searchbar.prototype.getQuery = function() {
   return this.queryInput_.getValue();
 };
 
@@ -62,12 +62,12 @@ app.ui.Searchbar.prototype.getQuery = function () {
 /**
  * TODO: Delete this method. Just let label listens.
  */
-app.ui.Searchbar.prototype.updateLabel = function (total, query, category) {
+app.ui.Searchbar.prototype.updateLabel = function(total, query, category) {
   this.label_.updateContent(total, query, category);
 };
 
 
-app.ui.Searchbar.prototype.createDom = function () {
+app.ui.Searchbar.prototype.createDom = function() {
   var dh = this.getDomHelper();
 
   // Prepare to append
@@ -80,7 +80,7 @@ app.ui.Searchbar.prototype.createDom = function () {
   var element = dh.createDom('div', 'searchbar',
         dh.createDom('form', {
             className: 'form-inline',
-            onsubmit: function () {return false}
+            onsubmit: function() {return false}
           },
           this.switch_.getElement(),
           dh.createTextNode('\n'),
@@ -95,7 +95,7 @@ app.ui.Searchbar.prototype.createDom = function () {
   this.setElementInternal(element);
 };
 
-app.ui.Searchbar.prototype.disposeInternal = function () {
+app.ui.Searchbar.prototype.disposeInternal = function() {
   if (this.categorySuggest_) {
     this.categorySuggest_.dispose();
     this.categorySuggest_ = null;

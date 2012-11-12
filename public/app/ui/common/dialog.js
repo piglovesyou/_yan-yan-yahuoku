@@ -9,7 +9,7 @@ goog.require('goog.ui.Dialog');
  * @constructor
  * @extends {goog.ui.Dialog}
  */
-app.ui.common.Dialog = function (opt_domHelper) {
+app.ui.common.Dialog = function(opt_domHelper) {
   goog.base(this, 'modal', false, opt_domHelper);
   this.setBackgroundElementOpacity(.15);
   this.setButtonSet(null);
@@ -25,10 +25,10 @@ app.ui.common.Dialog.prototype.decorateLoadedContent_;
 /**
  * @param {string} url
  */
-app.ui.common.Dialog.prototype.launch = function (url) {
+app.ui.common.Dialog.prototype.launch = function(url) {
   if (!this.wasContentLoaded_) {
     app.model.getRemoteHtml(url, this.handleHtmlLoad_, this);
-    this.setContent('Loading..')
+    this.setContent('Loading..');
   }
   this.setVisible(true);
 };
@@ -41,7 +41,7 @@ app.ui.common.Dialog.prototype.wasContentLoaded_ = false;
  * @param {boolean} err
  * @param {string} html
  */
-app.ui.common.Dialog.prototype.handleHtmlLoad_ = function (err, html) {
+app.ui.common.Dialog.prototype.handleHtmlLoad_ = function(err, html) {
   if (err) {
     this.setVisible(false);
     return;
@@ -62,7 +62,7 @@ app.ui.common.Dialog.prototype.handleHtmlLoad_ = function (err, html) {
 /**
  * TODO: We can just override all process in dialog's createDom
  */
-app.ui.common.Dialog.prototype.createDom = function () {
+app.ui.common.Dialog.prototype.createDom = function() {
   goog.base(this, 'createDom');
   var dh = this.getDomHelper();
   goog.dom.classes.add(this.getTitleElement(),

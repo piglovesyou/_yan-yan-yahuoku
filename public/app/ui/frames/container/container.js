@@ -1,19 +1,19 @@
 
 goog.provide('app.ui.Container');
 
-goog.require('goog.ui.SplitPane');
-goog.require('goog.style');
-goog.require('app.ui.ThousandRows');
-goog.require('app.ui.Detail');
 goog.require('app.Model');
+goog.require('app.ui.Detail');
+goog.require('app.ui.ThousandRows');
 goog.require('goog.Timer');
+goog.require('goog.style');
+goog.require('goog.ui.SplitPane');
 
 
 /**
  * @constructor
  * @extends {goog.ui.SplitPane}
  */
-app.ui.Container = function (opt_domHelper) {
+app.ui.Container = function(opt_domHelper) {
 
   /**
    * @type {app.ui.ThousandRows}
@@ -33,7 +33,7 @@ app.ui.Container = function (opt_domHelper) {
   goog.base(this, this.thousandRows_, this.detail_, opt_domHelper);
   this.setHandleSize(0);
 
-}
+};
 goog.inherits(app.ui.Container, goog.ui.SplitPane);
 
 
@@ -50,12 +50,12 @@ app.ui.Container.prototype.offsetTopCache_;
 app.ui.Container.prototype.iframeOverlayCache_;
 
 
-app.ui.Container.prototype.getThousandRows = function () {
+app.ui.Container.prototype.getThousandRows = function() {
   return this.thousandRows_;
 };
 
 
-app.ui.Container.prototype.refreshByQuery = function (query, categoryId) {
+app.ui.Container.prototype.refreshByQuery = function(query, categoryId) {
   var old = this.thousandRows_.getModel();
   if (old) {
     old.dispose(); // TODO: Enable it to be used again.
@@ -81,7 +81,7 @@ app.ui.Container.prototype.refreshByQuery = function (query, categoryId) {
 };
 
 
-app.ui.Container.prototype.createDom = function () {
+app.ui.Container.prototype.createDom = function() {
   goog.base(this, 'createDom');
   var dh = this.getDomHelper();
   this.detailPaneElement_ = this.getElementByClass('goog-splitpane-second-container');
@@ -91,14 +91,14 @@ app.ui.Container.prototype.createDom = function () {
 };
 
 
-app.ui.Container.prototype.enterDocument = function () {
+app.ui.Container.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
-  var tab = app.ui.util.getTab(this)
+  var tab = app.ui.util.getTab(this);
   this.getHandler()
-    .listen(app.events.EventCenter.getInstance(), app.events.EventCenter.EventType.TAB_CHANGED, function (e) {
+    .listen(app.events.EventCenter.getInstance(), app.events.EventCenter.EventType.TAB_CHANGED, function(e) {
       this.processSelected_(tab.isSelected());
     })
-    .listen(this, [goog.ui.Component.EventType.FOCUS, goog.ui.Component.EventType.BLUR], function (e) {
+    .listen(this, [goog.ui.Component.EventType.FOCUS, goog.ui.Component.EventType.BLUR], function(e) {
       // We want to show thousandrows upper by z-index.
       goog.dom.classes.enable(this.getElement(), 'firstComponentFocused',
         e.type == goog.ui.Component.EventType.FOCUS);
@@ -111,14 +111,14 @@ app.ui.Container.prototype.enterDocument = function () {
 };
 
 
-app.ui.Container.prototype.processSelected_ = function (selected) {
-  var eh = this.getHandler()
+app.ui.Container.prototype.processSelected_ = function(selected) {
+  var eh = this.getHandler();
   var fn = selected ? eh.listen : eh.unlisten;
-  fn.call(eh,  app.dom.ViewportSizeMonitor.getInstance(), goog.events.EventType.RESIZE, this.handleViewportResize_)
-  fn.call(eh,  this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
-  fn.call(eh,  this, app.ui.ThousandRows.EventType.COL_CLICKED, this.handleColClicked_)
-  fn.call(eh,  this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, this.handlePaneResized_)
-  fn.call(eh,  this.resizeTimer_, goog.Timer.TICK, this.handleResizeTimerTick_);
+  fn.call(eh, app.dom.ViewportSizeMonitor.getInstance(), goog.events.EventType.RESIZE, this.handleViewportResize_);
+  fn.call(eh, this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_);
+  fn.call(eh, this, app.ui.ThousandRows.EventType.COL_CLICKED, this.handleColClicked_);
+  fn.call(eh, this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, this.handlePaneResized_);
+  fn.call(eh, this.resizeTimer_, goog.Timer.TICK, this.handleResizeTimerTick_);
 
   if (selected) {
     this.setDetailpainSize_(app.model.getDetailPaneWidth(app.ui.util.getTab(this).getId()));
@@ -126,7 +126,7 @@ app.ui.Container.prototype.processSelected_ = function (selected) {
 };
 
 
-app.ui.Container.prototype.handleViewportResize_ = function (e) {
+app.ui.Container.prototype.handleViewportResize_ = function(e) {
   this.resize_();
   this.thousandRows_.update();
   this.detail_.update();
@@ -136,7 +136,7 @@ app.ui.Container.prototype.handleViewportResize_ = function (e) {
 /**
  * We can't use 'handleDragEnd_' for its name.. which used by superClass.
  */
-app.ui.Container.prototype.handlePaneResized_ = function (e) {
+app.ui.Container.prototype.handlePaneResized_ = function(e) {
   // this.thousandRows_.update(); Something wrong..
   this.detail_.update();
   var w = this.detail_.getWidth();
@@ -144,19 +144,19 @@ app.ui.Container.prototype.handlePaneResized_ = function (e) {
 };
 
 
-app.ui.Container.prototype.handleRowClicked_ = function (e) {
+app.ui.Container.prototype.handleRowClicked_ = function(e) {
   this.renderItemInDetail_(e.row.getAuctionId());
 };
 
 
-app.ui.Container.prototype.handleColClicked_ = function (e) {
+app.ui.Container.prototype.handleColClicked_ = function(e) {
   this.renderItemInDetail_(e.col.getAuctionId());
 };
 
 
-app.ui.Container.prototype.renderItemInDetail_ = function (auctionId) {
+app.ui.Container.prototype.renderItemInDetail_ = function(auctionId) {
   if (auctionId) {
-    app.model.getAuctionItem(auctionId, function (err, data) {
+    app.model.getAuctionItem(auctionId, function(err, data) {
       if (!err) this.detail_.renderContent(data);
     }, this);
   }
@@ -166,22 +166,22 @@ app.ui.Container.prototype.renderItemInDetail_ = function (auctionId) {
 /**
  * @return {number}
  */
-app.ui.Container.prototype.getOffsetTop_ = function () {
+app.ui.Container.prototype.getOffsetTop_ = function() {
   return this.offsetTopCache_ || (this.offsetTopCache_ = this.getElement().offsetTop);
 };
 
 
-app.ui.Container.prototype.resize = function () {
+app.ui.Container.prototype.resize = function() {
   this.resize_();
 };
 
 
 /**
  * Resize splitPane layout on delay.
- * We don't use setSize() because we want to resize 
+ * We don't use setSize() because we want to resize
  *    based on this.detailPaneElement_.offsetWidth.
  */
-app.ui.Container.prototype.resize_ = function () {
+app.ui.Container.prototype.resize_ = function() {
   if (this.resizeTimer_.enabled) {
     this.resizeTimer_.stop();
   }
@@ -189,7 +189,7 @@ app.ui.Container.prototype.resize_ = function () {
 };
 
 
-app.ui.Container.prototype.handleResizeTimerTick_ = function (e) {
+app.ui.Container.prototype.handleResizeTimerTick_ = function(e) {
   this.resizeTimer_.stop();
   this.setDetailpainSize_();
 };
@@ -199,13 +199,13 @@ app.ui.Container.prototype.handleResizeTimerTick_ = function (e) {
  * If an argument passed, use it.
  * @param {?number=} opt_width
  */
-app.ui.Container.prototype.setDetailpainSize_ = function (opt_width) {
+app.ui.Container.prototype.setDetailpainSize_ = function(opt_width) {
   var size = app.dom.ViewportSizeMonitor.getInstance().getSize();
   size.height -= this.getOffsetTop_();
   goog.style.setBorderBoxSize(this.getElement(), size);
 
-  var leftPaneWidth = Math.max(240, size.width - 
-      (goog.isDefAndNotNull(opt_width) ? 
+  var leftPaneWidth = Math.max(240, size.width -
+      (goog.isDefAndNotNull(opt_width) ?
         opt_width : this.detailPaneElement_.offsetWidth));
 
   this.setFirstComponentSize(leftPaneWidth);
@@ -222,13 +222,13 @@ app.ui.Container.prototype.setDetailpainSize_ = function (opt_width) {
 /**
  * @return {?Element}
  */
-app.ui.Container.prototype.getIframeOverlay_ = function () {
+app.ui.Container.prototype.getIframeOverlay_ = function() {
   if (this.iframeOverlayCache_) return this.iframeOverlayCache_;
 
   var last = goog.dom.getLastElementChild(this.getElement());
   if (!last.className) return this.iframeOverlayCache_ = last; // He must be..
 
-  return  null;
+  return null;
 };
 
 
@@ -246,7 +246,7 @@ app.ui.Container.gridRowCount_ =
       app.ui.ThousandRows.ModelForGrid.gridCols_;
 
 
-app.ui.Container.createThousandRows_ = function (opt_domHelper) {
+app.ui.Container.createThousandRows_ = function(opt_domHelper) {
   var thousandRows = new app.ui.ThousandRows(
       app.ui.Container.listRowHeigt_,
       app.ui.Container.listRowCount_,
@@ -264,7 +264,7 @@ app.ui.Container.createThousandRows_ = function (opt_domHelper) {
 };
 
 
-app.ui.Container.createNewModel_ = function (query, categoryId, isGrid) {
+app.ui.Container.createNewModel_ = function(query, categoryId, isGrid) {
   var endPoint = query ? '/api/search' : '/api/categoryLeaf';
   var uri = new goog.Uri(endPoint); // goog.Uri.create escape its argument.. Why?
   var q = uri.getQueryData();
@@ -272,7 +272,7 @@ app.ui.Container.createNewModel_ = function (query, categoryId, isGrid) {
   if (goog.isDefAndNotNull(categoryId)) {
     q.set('category', categoryId);
   }
-  return isGrid ? 
+  return isGrid ?
     new app.ui.ThousandRows.ModelForGrid(uri.toString(), undefined, true) :
     new app.ui.ThousandRows.Model(uri.toString(), undefined, true);
 };

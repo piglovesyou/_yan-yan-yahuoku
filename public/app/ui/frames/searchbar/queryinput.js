@@ -8,7 +8,7 @@ goog.require('goog.events.InputHandler');
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.ui.QueryInput = function (opt_domHelper) {
+app.ui.QueryInput = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
   var dh = this.getDomHelper();
 };
@@ -27,20 +27,20 @@ app.ui.QueryInput.prototype.inputHandler_;
 /**
  * @return {!string}
  */
-app.ui.QueryInput.prototype.getValue = function () {
+app.ui.QueryInput.prototype.getValue = function() {
   var elm = this.getElement();
   return elm ? goog.string.trim(elm.value) : '';
 };
 
 
-app.ui.QueryInput.prototype.enterDocument = function () {
+app.ui.QueryInput.prototype.enterDocument = function() {
   var frame = this.getParent().getParent();
   goog.asserts.assert(frame instanceof app.ui.Frame, 'Wrong parent for QueryInput!!!');
   goog.base(this, 'enterDocument');
 };
 
 
-app.ui.QueryInput.prototype.createDom = function () {
+app.ui.QueryInput.prototype.createDom = function() {
   var frame = this.getParent().getParent();
   goog.asserts.assert(frame instanceof app.ui.Frame, 'Wrong parent for queryInput!!');
   var condition = app.model.getTabQuery(frame.getId());
@@ -56,7 +56,7 @@ app.ui.QueryInput.prototype.createDom = function () {
 };
 
 
-app.ui.QueryInput.prototype.disposeInternal = function () {
+app.ui.QueryInput.prototype.disposeInternal = function() {
   if (this.inputHandler_) {
     this.inputHandler_.dispose();
     this.inputHandler_ = null;

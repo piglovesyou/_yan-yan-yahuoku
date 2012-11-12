@@ -1,25 +1,25 @@
 
 goog.provide('app.ui.searchbar.Label');
 
-goog.require('goog.ui.Component');
 goog.require('goog.string.format');
+goog.require('goog.ui.Component');
 
 
 /**
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.ui.searchbar.Label = function (opt_domHelper) {
+app.ui.searchbar.Label = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
 };
 goog.inherits(app.ui.searchbar.Label, goog.ui.Component);
 
 
 /** @inheritDoc */
-app.ui.searchbar.Label.prototype.enterDocument = function () {
+app.ui.searchbar.Label.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   var tab = app.ui.util.getTab(this);
-  this.getHandler().listen(tab.getThousandRows(), goog.ui.ThousandRows.EventType.UPDATE_TOTAL, function (e) {
+  this.getHandler().listen(tab.getThousandRows(), goog.ui.ThousandRows.EventType.UPDATE_TOTAL, function(e) {
     var q = app.model.getTabQuery(tab.getId());
     var total = app.model.getAlignmentStyle(app.ui.util.getTabId(this)) ?
         e.total * app.ui.ThousandRows.ModelForGrid.gridCols_ : e.total;
@@ -30,7 +30,7 @@ app.ui.searchbar.Label.prototype.enterDocument = function () {
 
 /**
  */
-app.ui.searchbar.Label.prototype.updateContent = function (total, query, category) {
+app.ui.searchbar.Label.prototype.updateContent = function(total, query, category) {
   this.clearContent();
 
   var dh = this.getDomHelper();
@@ -54,12 +54,12 @@ app.ui.searchbar.Label.prototype.updateContent = function (total, query, categor
 };
 
 
-app.ui.searchbar.Label.prototype.clearContent = function () {
+app.ui.searchbar.Label.prototype.clearContent = function() {
   this.getDomHelper().removeChildren(this.getElement());
 };
 
 
-app.ui.searchbar.Label.prototype.createDom = function () {
+app.ui.searchbar.Label.prototype.createDom = function() {
   var dh = this.getDomHelper();
   var element = dh.createDom('div', 'searchbar-label muted');
   this.setElementInternal(element);

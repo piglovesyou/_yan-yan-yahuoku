@@ -25,7 +25,7 @@ goog.require('goog.ui.ButtonRenderer');
  * @constructor
  * @extends {goog.ui.ButtonRenderer}
  */
-app.ui.common.ButtonRenderer = function () {
+app.ui.common.ButtonRenderer = function() {
   goog.base(this);
   this.tagName = 'a';
 };
@@ -33,7 +33,7 @@ goog.inherits(app.ui.common.ButtonRenderer, goog.ui.ButtonRenderer);
 goog.addSingletonGetter(app.ui.common.ButtonRenderer);
 
 
-app.ui.common.ButtonRenderer.prototype.canDecorate = function (element) {
+app.ui.common.ButtonRenderer.prototype.canDecorate = function(element) {
   return true;
 };
 
@@ -42,7 +42,7 @@ app.ui.common.ButtonRenderer.prototype.canDecorate = function (element) {
  * For this.tagName.
  * @param {goog.ui.Button} button
  */
-app.ui.common.ButtonRenderer.prototype.createDom = function (button) {
+app.ui.common.ButtonRenderer.prototype.createDom = function(button) {
   var dh = button.getDomHelper();
 
   // Create and return DIV wrapping contents.

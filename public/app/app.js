@@ -1,32 +1,32 @@
 
 goog.provide('App');
 
-goog.require('goog.ui.Component');
-goog.require('goog.events.EventType');
-goog.require('app.ui.ThousandRows');
-
-goog.require('app.ui.WelcomeDialog');
-goog.require('app.events.EventCenter');
-goog.require('app.ui.Frames');
-goog.require('app.ui.Container');
-goog.require('app.ui.Tabs');
-goog.require('app.dom.ViewportSizeMonitor');
-goog.require('app.ui.ContextMenu');
-goog.require('app.ui.common.Dialog');
 goog.require('app.Model');
+goog.require('app.dom.ViewportSizeMonitor');
+goog.require('app.events.EventCenter');
+goog.require('app.ui.Container');
+goog.require('app.ui.ContextMenu');
+goog.require('app.ui.Frames');
+goog.require('app.ui.Tabs');
+goog.require('app.ui.ThousandRows');
+goog.require('app.ui.WelcomeDialog');
+goog.require('app.ui.common.Dialog');
+goog.require('goog.events.EventType');
+goog.require('goog.ui.Component');
 
 
 /**
- * @param {goog.dom.DomHelper=} opt_domHelper
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
  */
-App = function (opt_domHelper) {
+App = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
 
   this.initModel_();
 
   /**
+   * @private
    * @type {app.ui.common.Dialog}
    */
   this.dialog_ = new app.ui.WelcomeDialog(opt_domHelper);
@@ -35,7 +35,10 @@ goog.inherits(App, goog.ui.Component);
 goog.addSingletonGetter(App);
 
 
-App.prototype.initModel_ = function () {
+/**
+ * @private
+ */
+App.prototype.initModel_ = function() {
   var tabIds = app.model.getTabIds();
   if (!tabIds) {
     var tabId = goog.ui.IdGenerator.getInstance().getNextUniqueId();
@@ -46,24 +49,33 @@ App.prototype.initModel_ = function () {
 
 
 /** @inheritDoc */
-App.prototype.enterDocument = function () {
+App.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
-  this.getHandler().listen(this.logoElement_, goog.events.EventType.CLICK, this.handleLogoClicked_);
+  this.getHandler().listen(this.logoElement_,
+      goog.events.EventType.CLICK, this.handleLogoClicked_);
 };
 
 
-App.prototype.handleLogoClicked_ = function (e) {
+/**
+ * @private
+ * @param {goog.events.Event} e A click event.
+ */
+App.prototype.handleLogoClicked_ = function(e) {
   this.dialog_.launch();
   e.preventDefault();
 };
 
 
 /** @inheritDoc */
-App.prototype.decorateInternal = function (element) {
+App.prototype.decorateInternal = function(element) {
   this.initTabAndFrame_();
 };
 
-App.prototype.initTabAndFrame_ = function () {
+
+/**
+ * @private
+ */
+App.prototype.initTabAndFrame_ = function() {
   var dh = this.getDomHelper();
 
   var tabs;
@@ -76,13 +88,16 @@ App.prototype.initTabAndFrame_ = function () {
 };
 
 
-App.prototype.getFrameContainerElement = function () {
+/**
+ * @return {Element} A wrapper element for frames.
+ */
+App.prototype.getFrameContainerElement = function() {
   return this.framesElement_;
 };
 
 
 /** @inheritDoc */
-App.prototype.canDecorate = function (element) {
+App.prototype.canDecorate = function(element) {
   if (element) {
     var dh = this.getDomHelper();
     var toolbar = dh.getElementByClass('toolbar', element);
@@ -109,23 +124,23 @@ App.prototype.affiliateBase_;
 
 
 /**
- * @param {string} base
+ * @param {string} base Used for item link.
  */
-App.prototype.setAffiliateBase = function (base) {
+App.prototype.setAffiliateBase = function(base) {
   this.affiliateBase_ = base;
 };
 
 
 /**
- * @return {string} base
+ * @return {string} base.
  */
-App.prototype.getAffiliateBase = function () {
+App.prototype.getAffiliateBase = function() {
   return this.affiliateBase_;
 };
 
 
 /** @inheritDoc */
-App.prototype.disposeInternal = function () {
+App.prototype.disposeInternal = function() {
   if (this.frames_) {
     this.frames_.dispose();
     this.frames_ = null;

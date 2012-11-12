@@ -2,11 +2,11 @@
 goog.provide('app.ui.ThousandRows');
 goog.provide('app.ui.ThousandRows.Model');
 
-goog.require('goog.ui.ThousandRows');
-goog.require('goog.events.EventTarget');
-goog.require('goog.ui.Tooltip');
-goog.require('goog.date.relative');
 goog.require('goog.date');
+goog.require('goog.date.relative');
+goog.require('goog.events.EventTarget');
+goog.require('goog.ui.ThousandRows');
+goog.require('goog.ui.Tooltip');
 
 
 /**
@@ -17,11 +17,11 @@ goog.require('goog.date');
  * @constructor
  * @extends {goog.ui.ThousandRows}
  */
-app.ui.ThousandRows = function (rowHeight, rowCountInPage, opt_orient, opt_domHelper) {
+app.ui.ThousandRows = function(rowHeight, rowCountInPage, opt_orient, opt_domHelper) {
   goog.base(this, rowHeight, rowCountInPage, opt_orient, opt_domHelper);
   this.setDispatchTransitionEvents(goog.ui.Component.State.FOCUSED, true);
 };
-goog.inherits(app.ui.ThousandRows, goog.ui.ThousandRows)
+goog.inherits(app.ui.ThousandRows, goog.ui.ThousandRows);
 
 
 /**
@@ -42,7 +42,7 @@ app.ui.ThousandRows.prototype.selectedRowId_;
 /**
  * @return {?string}
  */
-app.ui.ThousandRows.prototype.getSelectedRowId = function () {
+app.ui.ThousandRows.prototype.getSelectedRowId = function() {
   return this.selectedRowId_;
 };
 
@@ -96,7 +96,7 @@ app.ui.ThousandRows.prototype.getChildAt;
 /**
  * @return {number}
  */
-app.ui.ThousandRows.prototype.getSelectedColIndex = function () {
+app.ui.ThousandRows.prototype.getSelectedColIndex = function() {
   return this.selectedColIndex_;
 };
 
@@ -104,13 +104,13 @@ app.ui.ThousandRows.prototype.getSelectedColIndex = function () {
 /**
  * @return {boolean}
  */
-app.ui.ThousandRows.prototype.isGrid = function () {
+app.ui.ThousandRows.prototype.isGrid = function() {
   return !!this.isGrid_;
 };
 
 
 /** @inheritDoc */
-app.ui.ThousandRows.prototype.setModel = function (model) {
+app.ui.ThousandRows.prototype.setModel = function(model) {
   this.selectedRowId_ =
     this.selectedRow_ =
     this.selectedColId_ = null;
@@ -119,7 +119,7 @@ app.ui.ThousandRows.prototype.setModel = function (model) {
 };
 
 
-app.ui.ThousandRows.prototype.updateAlignment = function () {
+app.ui.ThousandRows.prototype.updateAlignment = function() {
   var isGrid = this.isGrid_ = app.model.getAlignmentStyle(app.ui.util.getTabId(this));
   goog.dom.classes.enable(this.getElement(), 'isListAlignment', !isGrid);
   goog.dom.classes.enable(this.getElement(), 'isGridAlignment', isGrid);
@@ -131,7 +131,7 @@ app.ui.ThousandRows.prototype.updateAlignment = function () {
  * So, we can find it ONLY when it is in the document.
  * @return {?app.ui.ThousandRows.Row}
  */
-app.ui.ThousandRows.prototype.findSelectedRow_ = function () {
+app.ui.ThousandRows.prototype.findSelectedRow_ = function() {
 
   // First, we use cache.
   if (this.selectedRow_ && !this.selectedRow_.isDisposed()) {
@@ -141,10 +141,10 @@ app.ui.ThousandRows.prototype.findSelectedRow_ = function () {
   // Then, we search it (but can be none in the children).
   var selectedRowId = this.selectedRowId_;
   var foundRow = null;
-  goog.array.find(this.getChildIds(), function (pageId) {
+  goog.array.find(this.getChildIds(), function(pageId) {
     var page = this.getChild(pageId);
     if (page) {
-      return !!goog.array.find(page.getChildIds(), function (rowId) {
+      return !!goog.array.find(page.getChildIds(), function(rowId) {
         var row = page.getChild(rowId);
         if (row && row.getId() == selectedRowId) {
           return !!(foundRow = row);
@@ -159,7 +159,7 @@ app.ui.ThousandRows.prototype.findSelectedRow_ = function () {
 
 
 /** @inheritDoc */
-app.ui.ThousandRows.prototype.enterDocument = function () {
+app.ui.ThousandRows.prototype.enterDocument = function() {
   this.getHandler()
     .listen(this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowSelected_)
     .listen(this, app.ui.ThousandRows.EventType.COL_CLICKED, this.handleColSelected_);
@@ -167,9 +167,9 @@ app.ui.ThousandRows.prototype.enterDocument = function () {
 };
 
 
-app.ui.ThousandRows.prototype.handleColSelected_ = function (e) {
+app.ui.ThousandRows.prototype.handleColSelected_ = function(e) {
   var newRow = e.row;
-  var newCol = e.col
+  var newCol = e.col;
   if (!newRow || !newCol) return;
 
   var oldRow = this.findSelectedRow_();
@@ -178,7 +178,7 @@ app.ui.ThousandRows.prototype.handleColSelected_ = function (e) {
     var oldCol = oldRow.getChild(this.selectedColId_);
     if (oldCol) {
       if (oldRow.getId() == newRow.getId() &&
-          oldCol.getId() == newCol.getId()) return; 
+          oldCol.getId() == newCol.getId()) return;
       oldCol.asSelected(false);
     }
   }
@@ -197,7 +197,7 @@ app.ui.ThousandRows.prototype.handleColSelected_ = function (e) {
  * Same as findSelectedRow_.
  * @return {?app.ui.ThousandRows.RowColumn}
  */
-app.ui.ThousandRows.prototype.findSelectedCol_ = function () {
+app.ui.ThousandRows.prototype.findSelectedCol_ = function() {
   if (this.selectedCol_ && !this.selectedCol_.isDisposed()) {
     return this.selectedCol_;
   }
@@ -210,11 +210,11 @@ app.ui.ThousandRows.prototype.findSelectedCol_ = function () {
 };
 
 
-app.ui.ThousandRows.prototype.handleRowSelected_ = function (e) {
+app.ui.ThousandRows.prototype.handleRowSelected_ = function(e) {
   var row = e.row;
   var oldRow = this.findSelectedRow_();
   if (oldRow) {
-    if (oldRow.getId() == row.getId()) return; 
+    if (oldRow.getId() == row.getId()) return;
     oldRow.asSelected(false);
   }
   this.selectedRowId_ = row.getId();
@@ -223,26 +223,26 @@ app.ui.ThousandRows.prototype.handleRowSelected_ = function (e) {
 };
 
 
-app.ui.ThousandRows.prototype.makeRowSelected_ = function (row, enable) {
+app.ui.ThousandRows.prototype.makeRowSelected_ = function(row, enable) {
   goog.dom.classes.enable(row.getElement(), 'active', enable);
 };
 
 
-app.ui.ThousandRows.prototype.createPage_ = function (pageIndex) {
+app.ui.ThousandRows.prototype.createPage_ = function(pageIndex) {
   return new app.ui.ThousandRows.Page(pageIndex,
         this.rowCountInPage_, this.rowHeight_, this.getDomHelper());
 };
 
 
-app.ui.ThousandRows.prototype.clearContent = function () {
-  goog.array.forEach(this.removeChildren(), function (child) {
+app.ui.ThousandRows.prototype.clearContent = function() {
+  goog.array.forEach(this.removeChildren(), function(child) {
     child.dispose();
   });
 };
 
 
 /** @inheritDoc */
-app.ui.ThousandRows.prototype.disposeInternal = function () {
+app.ui.ThousandRows.prototype.disposeInternal = function() {
   this.selectedRow_ = null;
   goog.base(this, 'disposeInternal');
 };
@@ -254,7 +254,7 @@ app.ui.ThousandRows.prototype.disposeInternal = function () {
  * @constructor
  * @extends {goog.ui.thousandrows.Page}
  */
-app.ui.ThousandRows.Page = function (pageIndex, rowCount, rowHeight, opt_domHelper) {
+app.ui.ThousandRows.Page = function(pageIndex, rowCount, rowHeight, opt_domHelper) {
   goog.base(this, pageIndex, rowCount, rowHeight, opt_domHelper);
 };
 goog.inherits(app.ui.ThousandRows.Page, goog.ui.thousandrows.Page);
@@ -275,15 +275,15 @@ app.ui.ThousandRows.Page.prototype.getChildAt;
 
 
 /** @inheritDoc */
-app.ui.ThousandRows.Page.prototype.createDom = function () {
+app.ui.ThousandRows.Page.prototype.createDom = function() {
   var dh = this.getDomHelper();
   var elm = this.getDomHelper().createDom('ul', [this.getCssName(), 'nav', 'nav-list']);
   this.setElementInternal(elm);
 
   var parent = this.getParent();
   var isGrid = parent.isGrid();
-  var selectedRowId =  parent.getSelectedRowId();
-	this.forEachChild(function (row) {
+  var selectedRowId = parent.getSelectedRowId();
+	this.forEachChild(function(row) {
     // If grid, we don't need to make row selectd.
 		row.createDom(!isGrid && row.getId() == selectedRowId);
     dh.appendChild(this.getContentElement(), row.getElement());
@@ -292,7 +292,7 @@ app.ui.ThousandRows.Page.prototype.createDom = function () {
 
 
 /** @inheritDoc */
-app.ui.ThousandRows.Page.prototype.createRow_ = function (id, rowHeight) {
+app.ui.ThousandRows.Page.prototype.createRow_ = function(id, rowHeight) {
   return new app.ui.ThousandRows.Row(id, rowHeight,
       app.ui.ThousandRows.RowRenderer.getInstance(), this.getDomHelper());
 };
@@ -307,7 +307,7 @@ app.ui.ThousandRows.Page.prototype.createRow_ = function (id, rowHeight) {
  * @constructor
  * @extends {goog.ui.thousandrows.Row}
  */
-app.ui.ThousandRows.Row = function (rowIndex, height, opt_renderer, opt_domHelper) {
+app.ui.ThousandRows.Row = function(rowIndex, height, opt_renderer, opt_domHelper) {
   goog.base(this, rowIndex, height, opt_renderer, opt_domHelper);
 };
 goog.inherits(app.ui.ThousandRows.Row, goog.ui.thousandrows.Row);
@@ -335,11 +335,11 @@ app.ui.ThousandRows.Row.prototype.isGrid_ = function() {
 };
 
 
-/** 
+/**
  * @override
  * @param {boolean} selected
  */
-app.ui.ThousandRows.Row.prototype.createDom = function (selected) {
+app.ui.ThousandRows.Row.prototype.createDom = function(selected) {
   goog.base(this, 'createDom');
   if (selected) this.asSelected(true);
 };
@@ -348,15 +348,15 @@ app.ui.ThousandRows.Row.prototype.createDom = function (selected) {
 /**
  * @param {boolean} selected
  */
-app.ui.ThousandRows.Row.prototype.asSelected = function (selected) {
+app.ui.ThousandRows.Row.prototype.asSelected = function(selected) {
   this.renderer_.asSelected(this, selected);
 };
 
 
 /** @inheritDoc */
-app.ui.ThousandRows.Row.prototype.enterDocument = function () {
+app.ui.ThousandRows.Row.prototype.enterDocument = function() {
   this.getHandler()
-    .listen(this.getElement(), goog.events.EventType.CLICK, function (e) {
+    .listen(this.getElement(), goog.events.EventType.CLICK, function(e) {
       if (this.hasContent()) {
         if (!this.isGrid_()) {
           this.dispatchEvent({
@@ -382,10 +382,10 @@ app.ui.ThousandRows.Row.prototype.enterDocument = function () {
 };
 
 
-app.ui.ThousandRows.Row.prototype.getColIndex_ = function (col) {
+app.ui.ThousandRows.Row.prototype.getColIndex_ = function(col) {
   var colId = col.getId();
   var index = -1;
-  goog.array.forEach(this.getChildIds(), function (id, i) {
+  goog.array.forEach(this.getChildIds(), function(id, i) {
     if (colId == id) {
       index = i;
       return true;
@@ -399,12 +399,12 @@ app.ui.ThousandRows.Row.prototype.getColIndex_ = function (col) {
  * @param {?Node} et
  * @return {?Node}
  */
-app.ui.ThousandRows.Row.prototype.getColumnFromEventTarget_ = function (et) {
+app.ui.ThousandRows.Row.prototype.getColumnFromEventTarget_ = function(et) {
   et = app.dom.getAncestorFromEventTargetByClass(this.getElement(), 'grid-col', et);
   if (!et) return null;
 
   var col;
-  goog.array.find(this.getChildIds(), function (id) {
+  goog.array.find(this.getChildIds(), function(id) {
     var child = this.getChild(id);
     if (child && child.getElement() == et) return !!(col = child);
     return false;
@@ -419,7 +419,7 @@ app.ui.ThousandRows.Row.prototype.getColumnFromEventTarget_ = function (et) {
 app.ui.ThousandRows.Row.prototype.titleTooltip_;
 
 
-app.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {
+app.ui.ThousandRows.Row.prototype.setTitleTooltip = function(string) {
   if (this.titleTooltip_) {
     this.titleTooltip_.dispose();
   }
@@ -431,7 +431,7 @@ app.ui.ThousandRows.Row.prototype.setTitleTooltip = function (string) {
 /**
  * @param {Object} record
  */
-app.ui.ThousandRows.Row.prototype.renderContent_ = function (record) {
+app.ui.ThousandRows.Row.prototype.renderContent_ = function(record) {
   var dh;
   var stuff;
 
@@ -447,11 +447,11 @@ app.ui.ThousandRows.Row.prototype.renderContent_ = function (record) {
       tabIndex: -1
     });
 
-    var thousandrows = this.getParent().getParent()
+    var thousandrows = this.getParent().getParent();
     var hasSelectedCol = this.getId() == thousandrows.getSelectedRowId();
     var selectedColIndex = thousandrows.getSelectedColIndex();
 
-    goog.array.forEach(record, function (r, index) {
+    goog.array.forEach(record, function(r, index) {
       var col = new app.ui.ThousandRows.RowColumn(dh);
       this.addChild(col);
       col.createDom(r);
@@ -474,13 +474,13 @@ app.ui.ThousandRows.Row.prototype.auctionId_;
 /**
  * @return {?string}
  */
-app.ui.ThousandRows.Row.prototype.getAuctionId = function () {
+app.ui.ThousandRows.Row.prototype.getAuctionId = function() {
   return this.auctionId_;
 };
 
 
 /** @inheritDoc */
-app.ui.ThousandRows.Row.prototype.renderContent = function (record) {
+app.ui.ThousandRows.Row.prototype.renderContent = function(record) {
   goog.base(this, 'renderContent', record);
   if (record && record['AuctionID']) {
     this.auctionId_ = record['AuctionID'];
@@ -488,7 +488,7 @@ app.ui.ThousandRows.Row.prototype.renderContent = function (record) {
 };
 
 
-app.ui.ThousandRows.Row.prototype.disposeInternal = function () {
+app.ui.ThousandRows.Row.prototype.disposeInternal = function() {
   if (this.titleTooltip_) {
     this.titleTooltip_.dispose();
     this.titleTooltip_ = null;
@@ -503,7 +503,7 @@ app.ui.ThousandRows.Row.prototype.disposeInternal = function () {
  * @constructor
  * @extends {goog.ui.thousandrows.RowRenderer}
  */
-app.ui.ThousandRows.RowRenderer = function () {
+app.ui.ThousandRows.RowRenderer = function() {
   goog.base(this);
 };
 goog.inherits(app.ui.ThousandRows.RowRenderer, goog.ui.thousandrows.RowRenderer);
@@ -514,14 +514,14 @@ goog.addSingletonGetter(app.ui.ThousandRows.RowRenderer);
  * @param {app.ui.ThousandRows.Row} row
  * @param {boolean} selected
  */
-app.ui.ThousandRows.RowRenderer.prototype.asSelected = function (row, selected) {
+app.ui.ThousandRows.RowRenderer.prototype.asSelected = function(row, selected) {
   goog.dom.classes.enable(row.getElement(), 'active', selected);
 };
 
 
 /** @inheritDoc */
-app.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
-  var dh = row.getDomHelper()
+app.ui.ThousandRows.RowRenderer.prototype.createDom = function(row) {
+  var dh = row.getDomHelper();
   return dh.createDom('li', {
     className: [row.getCssName()]
     // style: 'height: ' + this.height_ + 'px'
@@ -539,27 +539,27 @@ app.ui.ThousandRows.RowRenderer.prototype.createDom = function (row) {
  * @param {app.ui.ThousandRows.Row} row
  * @param {Object|Array} record If grid, array will be passed.
  */
-app.ui.ThousandRows.RowRenderer.prototype.renderContent = function (row, record) {
+app.ui.ThousandRows.RowRenderer.prototype.renderContent = function(row, record) {
   var dh = row.getDomHelper();
   var esc = goog.string.htmlEscape;
   var element;
-  
+
   // if (!goog.isArray(record)) {
   var detailFragment = this.createDetailFragment(row, record, true);
-  element = 
+  element =
       dh.createDom('a', {
             className: 'row',
             href: 'javascript:void(0)',
             tabIndex: -1
           },
-          dh.createDom('a', ['span3', 'goods-image'], 
+          dh.createDom('a', ['span3', 'goods-image'],
             dh.createDom('img', {
               className: 'img-polaroid',
               src: record['Image']
             })),
           dh.createDom('h4', null, record['Title']),
           dh.createDom('div', 'row-detail', detailFragment)
-          
+
           );
   row.setTitleTooltip(record['Title']);
 
@@ -579,11 +579,11 @@ app.ui.ThousandRows.RowRenderer.prototype.renderContent = function (row, record)
  * @param {Object} record
  * @param {boolean=} icons
  */
-app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment = function (row, record, icons) {
+app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment = function(row, record, icons) {
   var dh = row.getDomHelper();
   var esc = goog.string.htmlEscape;
   var html = '<strong>' + app.string.renderPrice(esc(record['CurrentPrice'])) + '</strong>';
-  if (goog.string.isNumeric(record['Bids']) && +record['Bids']>=1) {
+  if (goog.string.isNumeric(record['Bids']) && +record['Bids'] >= 1) {
     html += ' | ';
     html += '入札 ' + record['Bids'];
   }
@@ -592,7 +592,7 @@ app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment = function (row, 
 
   if (icons && record['Option']) {
     html += '&nbsp;';
-    goog.array.forEach(['EasyPaymentIcon', 'FeaturedIcon', 'GiftIcon'], function (k) {
+    goog.array.forEach(['EasyPaymentIcon', 'FeaturedIcon', 'GiftIcon'], function(k) {
       var url = record['Option'][k];
       if (url) html += '<img src=' + url + ' />';
     });
@@ -609,9 +609,9 @@ app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment = function (row, 
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.ui.ThousandRows.RowColumn = function (opt_domHelper) {
+app.ui.ThousandRows.RowColumn = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
-  
+
   this.renderer_ = app.ui.ThousandRows.RowColumnRenderer.getInstance();
 };
 goog.inherits(app.ui.ThousandRows.RowColumn, goog.ui.Component);
@@ -627,7 +627,7 @@ app.ui.ThousandRows.RowColumn.prototype.auctionId_;
  * @override
  * @param {Object} record
  */
-app.ui.ThousandRows.RowColumn.prototype.createDom = function (record) {
+app.ui.ThousandRows.RowColumn.prototype.createDom = function(record) {
   var element = this.renderer_.createDom(this, record);
   this.setElementInternal(element);
   this.auctionId_ = record['AuctionID'];
@@ -637,7 +637,7 @@ app.ui.ThousandRows.RowColumn.prototype.createDom = function (record) {
 /**
  * @return {?string}
  */
-app.ui.ThousandRows.RowColumn.prototype.getAuctionId = function () {
+app.ui.ThousandRows.RowColumn.prototype.getAuctionId = function() {
   return this.auctionId_;
 };
 
@@ -650,14 +650,14 @@ app.ui.ThousandRows.RowColumn.prototype.asSelected =
 /**
  * @constructor
  */
-app.ui.ThousandRows.RowColumnRenderer = function () {};
+app.ui.ThousandRows.RowColumnRenderer = function() {};
 goog.addSingletonGetter(app.ui.ThousandRows.RowColumnRenderer);
 
 
 /**
  * @param {Object} record
  */
-app.ui.ThousandRows.RowColumnRenderer.prototype.createDom = function (col, record) {
+app.ui.ThousandRows.RowColumnRenderer.prototype.createDom = function(col, record) {
   var dh = col.getDomHelper();
   var element = dh.createDom('a', {
                     'className': 'grid-col span',
@@ -681,7 +681,7 @@ app.ui.ThousandRows.RowColumnRenderer.prototype.createDom = function (col, recor
  * @param {Object} record
  * @param {boolean=} icons
  */
-app.ui.ThousandRows.RowColumnRenderer.prototype.createDetailFragment = 
+app.ui.ThousandRows.RowColumnRenderer.prototype.createDetailFragment =
     app.ui.ThousandRows.RowRenderer.prototype.createDetailFragment;
 
 
@@ -709,25 +709,25 @@ app.ui.ThousandRows.RowColumnRenderer.prototype.asSelected =
  * @constructor
  * @extends {goog.ui.thousandrows.Model}
  */
-app.ui.ThousandRows.Model = function (uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager) {
+app.ui.ThousandRows.Model = function(uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager) {
   goog.base(this, uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager);
 };
 goog.inherits(app.ui.ThousandRows.Model, goog.ui.thousandrows.Model);
 
 
-app.ui.ThousandRows.Model.prototype.buildUri_ = function (index, rowCountInPage) {
+app.ui.ThousandRows.Model.prototype.buildUri_ = function(index, rowCountInPage) {
 	var uri = goog.Uri.parse(this.uri_);
 	uri.setParameterValue('page', index + 1);
 	return uri.toString();
 };
 
 
-app.ui.ThousandRows.Model.prototype.extractTotalFromJson = function (json) {
+app.ui.ThousandRows.Model.prototype.extractTotalFromJson = function(json) {
   return json['ResultSet']['@attributes']['totalResultsAvailable'] || 0;
 };
 
 
-app.ui.ThousandRows.Model.prototype.extractRowsDataFromJson = function (json) {
+app.ui.ThousandRows.Model.prototype.extractRowsDataFromJson = function(json) {
   var result = json['ResultSet']['Result'];
   if (result) {
     if (goog.isArray(result['Item'])) return result['Item'];
@@ -749,7 +749,7 @@ app.ui.ThousandRows.Model.prototype.extractRowsDataFromJson = function (json) {
  * @constructor
  * @extends {app.ui.ThousandRows.Model}
  */
-app.ui.ThousandRows.ModelForGrid = function (uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager) {
+app.ui.ThousandRows.ModelForGrid = function(uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager) {
   goog.base(this, uri, opt_totalRowCount, opt_updateTotalWithJson, opt_xhrManager);
 };
 goog.inherits(app.ui.ThousandRows.ModelForGrid, app.ui.ThousandRows.Model);
@@ -758,7 +758,7 @@ goog.inherits(app.ui.ThousandRows.ModelForGrid, app.ui.ThousandRows.Model);
 app.ui.ThousandRows.ModelForGrid.gridCols_ = 4;
 
 
-app.ui.ThousandRows.ModelForGrid.prototype.extractRowsDataFromJson = function (json) {
+app.ui.ThousandRows.ModelForGrid.prototype.extractRowsDataFromJson = function(json) {
   var items = goog.base(this, 'extractRowsDataFromJson', json);
   var rows = [];
   while (items && !goog.array.isEmpty(items)) {
@@ -767,7 +767,7 @@ app.ui.ThousandRows.ModelForGrid.prototype.extractRowsDataFromJson = function (j
   return rows;
 };
 
-app.ui.ThousandRows.ModelForGrid.prototype.getTotal = function () {
+app.ui.ThousandRows.ModelForGrid.prototype.getTotal = function() {
   // TODO: How do I ? For now, the last row is not shown in a container.
   return Math.ceil(this.totalDs_.get() / app.ui.ThousandRows.ModelForGrid.gridCols_);
 };

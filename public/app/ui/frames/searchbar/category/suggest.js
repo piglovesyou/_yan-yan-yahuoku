@@ -1,20 +1,20 @@
 
 goog.provide('app.ui.category.Suggest');
 
-goog.require('goog.ui.ac.RemoteArrayMatcher');
-goog.require('goog.ui.ac.AutoComplete');
-goog.require('goog.ui.ac.Renderer');
-goog.require('goog.ui.ac.InputHandler');
+goog.require('goog.Timer');
 goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.Tooltip');
-goog.require('goog.Timer');
+goog.require('goog.ui.ac.AutoComplete');
+goog.require('goog.ui.ac.InputHandler');
+goog.require('goog.ui.ac.RemoteArrayMatcher');
+goog.require('goog.ui.ac.Renderer');
 
 
 /**
  * @constructor
  * @extends {goog.ui.ac.AutoComplete}
  */
-app.ui.category.Suggest = function (url, inputElement, lastCategory, opt_domHelper) {
+app.ui.category.Suggest = function(url, inputElement, lastCategory, opt_domHelper) {
   var u = undefined;
 
   var matcher = new goog.ui.ac.RemoteArrayMatcher(url, false);
@@ -28,7 +28,7 @@ app.ui.category.Suggest = function (url, inputElement, lastCategory, opt_domHelp
   inputHandler.attachAutoComplete(this);
   inputHandler.attachInput(inputElement);
 
-  var defaultLabel = '全てのカテゴリから'
+  var defaultLabel = '全てのカテゴリから';
   var labelInput;
   /**
    * @type {goog.ui.LabelInput}
@@ -52,7 +52,7 @@ app.ui.category.Suggest = function (url, inputElement, lastCategory, opt_domHelp
    * @type {Object}
    */
   this.lastSelectedRow_ = lastCategory;
-}
+};
 goog.inherits(app.ui.category.Suggest, goog.ui.ac.AutoComplete);
 
 
@@ -73,12 +73,12 @@ app.ui.category.Suggest.DefaultRow = {
 };
 
 
-app.ui.category.Suggest.prototype.processBeforeInputBlur = function (inputHandler) {
+app.ui.category.Suggest.prototype.processBeforeInputBlur = function(inputHandler) {
   this.getBackInputTextIfNeeded_(inputHandler);
 };
 
 
-app.ui.category.Suggest.prototype.clearSelection = function (inputHandler) {
+app.ui.category.Suggest.prototype.clearSelection = function(inputHandler) {
   if (inputHandler.getActiveElement()) inputHandler.setValue('');
   this.tooltip_.setText('全てのカテゴリから');
   this.lastSelectedRow_ = app.ui.category.Suggest.DefaultRow;
@@ -89,7 +89,7 @@ app.ui.category.Suggest.prototype.clearSelection = function (inputHandler) {
 /**
  * @param {app.ui.category.Suggest.InputHandler} inputHandler
  */
-app.ui.category.Suggest.prototype.getBackInputTextIfNeeded_ = function (inputHandler) {
+app.ui.category.Suggest.prototype.getBackInputTextIfNeeded_ = function(inputHandler) {
   var value = inputHandler.getActiveElement() && inputHandler.getValue();
   if (goog.isString(value) && this.lastSelectedRow_['CategoryPath'] !== value) {
     if (goog.string.isEmpty(value)) {
@@ -106,7 +106,7 @@ app.ui.category.Suggest.prototype.getBackInputTextIfNeeded_ = function (inputHan
 /**
  * @param {Object} e
  */
-app.ui.category.Suggest.prototype.handleSelected = function (e) {
+app.ui.category.Suggest.prototype.handleSelected = function(e) {
   var row = e.row;
   if (row) {
     this.lastSelectedRow_ = row;
@@ -119,7 +119,7 @@ app.ui.category.Suggest.prototype.handleSelected = function (e) {
 /**
  * @param {Object}
  */
-app.ui.category.Suggest.prototype.dispatchUpdate_ = function (row) {
+app.ui.category.Suggest.prototype.dispatchUpdate_ = function(row) {
   this.dispatchEvent({
     type: app.ui.category.Suggest.EventType.UPDATE_CATEGORY,
     category: row
@@ -128,7 +128,7 @@ app.ui.category.Suggest.prototype.dispatchUpdate_ = function (row) {
 
 
 /** @inheritDoc */
-app.ui.category.Suggest.prototype.disposeInternal = function () {
+app.ui.category.Suggest.prototype.disposeInternal = function() {
   if (this.labelInput_) {
     this.labelInput_.dispose();
     this.labelInput_ = null;
@@ -146,14 +146,14 @@ app.ui.category.Suggest.prototype.disposeInternal = function () {
  * @constructor
  * @extends {goog.ui.ac.InputHandler}
  */
-app.ui.category.Suggest.InputHandler = function (opt_separators, opt_literals, opt_multi, opt_throttleTime) {
+app.ui.category.Suggest.InputHandler = function(opt_separators, opt_literals, opt_multi, opt_throttleTime) {
   goog.base(this, opt_separators, opt_literals, opt_multi, opt_throttleTime);
 };
 goog.inherits(app.ui.category.Suggest.InputHandler, goog.ui.ac.InputHandler);
 
 
 /** @inheritDoc */
-app.ui.category.Suggest.InputHandler.prototype.processFocus = function (target) {
+app.ui.category.Suggest.InputHandler.prototype.processFocus = function(target) {
   goog.base(this, 'processFocus', target);
   if (this.activeElement_ = target) {
     this.activeElement_.value = this.activeElement_.value;
@@ -161,7 +161,7 @@ app.ui.category.Suggest.InputHandler.prototype.processFocus = function (target) 
 };
 
 
-app.ui.category.Suggest.InputHandler.prototype.handleBlur = function (e) {
+app.ui.category.Suggest.InputHandler.prototype.handleBlur = function(e) {
   this.getAutoComplete().processBeforeInputBlur(this);
   var input = this.getActiveElement();
   goog.base(this, 'handleBlur', e);
@@ -174,16 +174,16 @@ app.ui.category.Suggest.InputHandler.prototype.handleBlur = function (e) {
 /**
  * @param {Element} inputElement
  */
-app.ui.category.Suggest.InputHandler.showEndOfValue = function (inputElement) {
+app.ui.category.Suggest.InputHandler.showEndOfValue = function(inputElement) {
   // I don't understand why it needs defer (but it does)
-  goog.Timer.callOnce(function () {
+  goog.Timer.callOnce(function() {
     inputElement.scrollLeft = inputElement.scrollWidth; // It's bigger, but who cares.
   });
 };
 
 
 /** @inheritDoc */
-app.ui.category.Suggest.InputHandler.prototype.handleKeyUp = function (e) {
+app.ui.category.Suggest.InputHandler.prototype.handleKeyUp = function(e) {
   if (e.target == this.activeElement_ && e.target.value == '') {
     this.getAutoComplete().clearSelection(this);
   }
@@ -191,12 +191,12 @@ app.ui.category.Suggest.InputHandler.prototype.handleKeyUp = function (e) {
 
 
 /** @inheritDoc */
-app.ui.category.Suggest.InputHandler.prototype.needKeyUpListener = function () {
+app.ui.category.Suggest.InputHandler.prototype.needKeyUpListener = function() {
   return true;
 };
 
 
-app.ui.category.Suggest.InputHandler.prototype.selectRow = function (row, opt_multi) {
+app.ui.category.Suggest.InputHandler.prototype.selectRow = function(row, opt_multi) {
   this.setTokenText(row['CategoryPath'], opt_multi);
   var inputElement = this.getActiveElement();
   if (inputElement) app.ui.category.Suggest.InputHandler.showEndOfValue(inputElement);
@@ -209,15 +209,15 @@ app.ui.category.Suggest.InputHandler.prototype.selectRow = function (row, opt_mu
 /**
  * @constructor
  */
-app.ui.category.Suggest.CustomRenderer = function () {};
+app.ui.category.Suggest.CustomRenderer = function() {};
 
-app.ui.category.Suggest.CustomRenderer.prototype.render = function (renderer, element, rows, token) {
+app.ui.category.Suggest.CustomRenderer.prototype.render = function(renderer, element, rows, token) {
   var dh = goog.dom.getDomHelper();
   var ul = dh.createDom('ul', 'dropdown-menu');
 
   token = goog.string.htmlEscape(token);
-  goog.array.forEach(rows, function (row) {
-    var data = row.data
+  goog.array.forEach(rows, function(row) {
+    var data = row.data;
     // var hasSubRows = data['IsLeaf'] == 'false' && goog.isArray(data['ChildCategory']);
 
     var li = app.ui.category.Suggest.CustomRenderer.createLi(renderer, data, token, dh, false, false);
@@ -240,7 +240,7 @@ app.ui.category.Suggest.CustomRenderer.prototype.render = function (renderer, el
 };
 
 
-app.ui.category.Suggest.CustomRenderer.createLi = function (renderer, row, token, dh, hasSubRows, onlyName) {
+app.ui.category.Suggest.CustomRenderer.createLi = function(renderer, row, token, dh, hasSubRows, onlyName) {
 
   var content = app.ui.category.Suggest.CustomRenderer.hiliteMatchingText(
       onlyName ? row['CategoryName'] : row['CategoryPath'], token);
@@ -253,7 +253,7 @@ app.ui.category.Suggest.CustomRenderer.createLi = function (renderer, row, token
 };
 
 
-app.ui.category.Suggest.CustomRenderer.hiliteMatchingText = function (text, token) {
-  return goog.string.htmlEscape(text).replace(token, function (t) {return '<b>' + t + '</b>'});
+app.ui.category.Suggest.CustomRenderer.hiliteMatchingText = function(text, token) {
+  return goog.string.htmlEscape(text).replace(token, function(t) {return '<b>' + t + '</b>'});
 };
 

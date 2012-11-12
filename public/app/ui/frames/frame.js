@@ -1,15 +1,15 @@
 
 goog.provide('app.ui.Frame');
 
-goog.require('app.ui.Searchbar');
 goog.require('app.ui.Container');
+goog.require('app.ui.Searchbar');
 
 
 /**
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.ui.Frame = function (id, opt_domHelper) {
+app.ui.Frame = function(id, opt_domHelper) {
   goog.base(this, opt_domHelper);
   this.setId(id);
 
@@ -23,16 +23,16 @@ app.ui.Frame = function (id, opt_domHelper) {
    * @type {Object}
    */
   this.currCategory_ = app.model.getTabQuery(this.getId())['category'];
-}
+};
 goog.inherits(app.ui.Frame, goog.ui.Component);
 
 
-app.ui.Frame.prototype.getContainer = function () {
+app.ui.Frame.prototype.getContainer = function() {
   return this.container_;
 };
 
 
-app.ui.Frame.prototype.enterDocument = function () {
+app.ui.Frame.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.getHandler()
     .listen(this, app.ui.Searchbar.EventType.SEARCH, this.handleSearch_)
@@ -40,7 +40,7 @@ app.ui.Frame.prototype.enterDocument = function () {
 };
 
 
-app.ui.Frame.prototype.handleSearch_ = function (e) {
+app.ui.Frame.prototype.handleSearch_ = function(e) {
   var searchbar = e.target;
   var query = searchbar.getQuery();
   if (goog.isString(query)) {
@@ -55,7 +55,7 @@ app.ui.Frame.prototype.handleSearch_ = function (e) {
 };
 
 
-app.ui.Frame.prototype.handleUpdateCategory_ = function (e) {
+app.ui.Frame.prototype.handleUpdateCategory_ = function(e) {
   var category = /** @type {Object} */(e.category);
   if (category) {
     this.currCategory_ = category;
@@ -63,7 +63,7 @@ app.ui.Frame.prototype.handleUpdateCategory_ = function (e) {
 };
 
 
-app.ui.Frame.prototype.createDom = function () {
+app.ui.Frame.prototype.createDom = function() {
   var dh = this.getDomHelper();
   this.searchbar_.createDom();
   this.container_.createDom();
@@ -73,13 +73,13 @@ app.ui.Frame.prototype.createDom = function () {
 };
 
 
-app.ui.Frame.prototype.decorateInternal = function (element) {
+app.ui.Frame.prototype.decorateInternal = function(element) {
   goog.base(this, 'decorateInternal', element);
   this.container_.decorateInternal(this.containerElement_);
 };
 
 
-app.ui.Frame.prototype.canDecorate = function (element) {
+app.ui.Frame.prototype.canDecorate = function(element) {
   if (element) {
     var dh = this.getDomHelper();
     var searchbar = dh.getElementByClass('searchbar', element);

@@ -4,10 +4,10 @@ goog.provide('app.ui.Detail');
 goog.require('app.ui.common.ButtonRenderer');
 goog.require('goog.ui.SplitPane');
 goog.require('goog.style');
-goog.require('app.ui.common.ThousandRows');
+goog.require('app.ui.ThousandRows');
 goog.require('goog.ui.ToggleButton');
 goog.require('app.ui.util');
-goog.require('app.ui.common.ContextMenu');
+goog.require('app.ui.ContextMenu');
 goog.require('goog.window');
 
 
@@ -316,7 +316,7 @@ app.ui.Detail.prototype.performActionInternal = function (e) {
       app.dom.getAncestorFromEventTargetByClass(
         this.getElement(), 'goog-scroller-bar', e.target) == this.getElement()) {
     this.enableMenuEvents_(true);
-    app.ui.common.ContextMenu.getInstance().launch(e, app.ui.Detail.MenuRecords_);
+    app.ui.ContextMenu.getInstance().launch(e, app.ui.Detail.MenuRecords_);
   }
   goog.base(this, 'performActionInternal', e);
 };
@@ -331,11 +331,11 @@ app.ui.Detail.MenuRecords_ = [
 
 
 app.ui.Detail.prototype.enableMenuEvents_ = function (enable) {
-  var menu = app.ui.common.ContextMenu.getInstance();
+  var menu = app.ui.ContextMenu.getInstance();
   var eh = this.getHandler();
   var fn = enable ? eh.listen : eh.unlisten;
-  fn.call(eh, menu, app.ui.common.ContextMenu.EventTarget.DISMISS, this.handleMenuDismiss_);
-  fn.call(eh, menu, app.ui.common.ContextMenu.EventTarget.SELECT, this.handleMenuSelect_);
+  fn.call(eh, menu, app.ui.ContextMenu.EventTarget.DISMISS, this.handleMenuDismiss_);
+  fn.call(eh, menu, app.ui.ContextMenu.EventTarget.SELECT, this.handleMenuSelect_);
 };
 
 

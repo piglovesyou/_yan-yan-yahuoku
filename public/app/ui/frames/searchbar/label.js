@@ -22,7 +22,7 @@ app.ui.searchbar.Label.prototype.enterDocument = function () {
   this.getHandler().listen(tab.getThousandRows(), goog.ui.ThousandRows.EventType.UPDATE_TOTAL, function (e) {
     var q = app.model.getTabQuery(tab.getId());
     var total = app.model.getAlignmentStyle(app.ui.util.getTabId(this)) ?
-        e.total * app.ui.common.ThousandRows.ModelForGrid.gridCols_ : e.total;
+        e.total * app.ui.ThousandRows.ModelForGrid.gridCols_ : e.total;
     this.updateContent(total, q['query'], q['category']['CategoryPath']);
   });
 };

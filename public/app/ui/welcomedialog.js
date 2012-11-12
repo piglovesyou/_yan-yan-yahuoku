@@ -2,7 +2,7 @@
 goog.provide('app.ui.WelcomeDialog');
 
 goog.require('app.ui.common.Dialog');
-goog.require('app.ui.common.TabPane');
+goog.require('app.ui.TabPane');
 
 
 /**
@@ -14,9 +14,9 @@ app.ui.WelcomeDialog = function (opt_domHelper) {
   this.setModel(false);
 
   /**
-   * @type {app.ui.common.TabPane}
+   * @type {app.ui.TabPane}
    */
-  this.tabPane_ = new app.ui.common.TabPane(opt_domHelper);
+  this.tabPane_ = new app.ui.TabPane(opt_domHelper);
 };
 goog.inherits(app.ui.WelcomeDialog, app.ui.common.Dialog);
 

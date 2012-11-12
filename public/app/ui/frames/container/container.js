@@ -3,7 +3,7 @@ goog.provide('app.ui.Container');
 
 goog.require('goog.ui.SplitPane');
 goog.require('goog.style');
-goog.require('app.ui.common.ThousandRows');
+goog.require('app.ui.ThousandRows');
 goog.require('app.ui.Detail');
 goog.require('app.Model');
 goog.require('goog.Timer');
@@ -16,7 +16,7 @@ goog.require('goog.Timer');
 app.ui.Container = function (opt_domHelper) {
 
   /**
-   * @type {app.ui.common.ThousandRows}
+   * @type {app.ui.ThousandRows}
    */
   this.thousandRows_ = app.ui.Container.createThousandRows_(opt_domHelper);
 
@@ -115,8 +115,8 @@ app.ui.Container.prototype.processSelected_ = function (selected) {
   var eh = this.getHandler()
   var fn = selected ? eh.listen : eh.unlisten;
   fn.call(eh,  app.dom.ViewportSizeMonitor.getInstance(), goog.events.EventType.RESIZE, this.handleViewportResize_)
-  fn.call(eh,  this, app.ui.common.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
-  fn.call(eh,  this, app.ui.common.ThousandRows.EventType.COL_CLICKED, this.handleColClicked_)
+  fn.call(eh,  this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowClicked_)
+  fn.call(eh,  this, app.ui.ThousandRows.EventType.COL_CLICKED, this.handleColClicked_)
   fn.call(eh,  this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END, this.handlePaneResized_)
   fn.call(eh,  this.resizeTimer_, goog.Timer.TICK, this.handleResizeTimerTick_);
 
@@ -233,7 +233,7 @@ app.ui.Container.prototype.getIframeOverlay_ = function () {
 
 
 /**
- * @type {app.ui.common.ThousandRows.Model}
+ * @type {app.ui.ThousandRows.Model}
  */
 app.ui.Container.prototype.thousandRowsModel_;
 
@@ -243,16 +243,16 @@ app.ui.Container.listRowCount_ = 50;
 app.ui.Container.gridRowHeigt_ = 168;
 app.ui.Container.gridRowCount_ =
     app.ui.Container.listRowCount_ /
-      app.ui.common.ThousandRows.ModelForGrid.gridCols_;
+      app.ui.ThousandRows.ModelForGrid.gridCols_;
 
 
 app.ui.Container.createThousandRows_ = function (opt_domHelper) {
-  var thousandRows = new app.ui.common.ThousandRows(
+  var thousandRows = new app.ui.ThousandRows(
       app.ui.Container.listRowHeigt_,
       app.ui.Container.listRowCount_,
       goog.ui.Scroller.ORIENTATION.BOTH, opt_domHelper);
 
-  // var thousandRows = new app.ui.common.ThousandRows(
+  // var thousandRows = new app.ui.ThousandRows(
   //     isGrid ? app.ui.Container.listRowHeigt_ :
   //              app.ui.Container.gridRowHeigt_,
   //     isGrid ? app.ui.Container.listRowCount_ :
@@ -273,7 +273,7 @@ app.ui.Container.createNewModel_ = function (query, categoryId, isGrid) {
     q.set('category', categoryId);
   }
   return isGrid ? 
-    new app.ui.common.ThousandRows.ModelForGrid(uri.toString(), undefined, true) :
-    new app.ui.common.ThousandRows.Model(uri.toString(), undefined, true);
+    new app.ui.ThousandRows.ModelForGrid(uri.toString(), undefined, true) :
+    new app.ui.ThousandRows.Model(uri.toString(), undefined, true);
 };
 

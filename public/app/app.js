@@ -3,7 +3,7 @@ goog.provide('App');
 
 goog.require('goog.ui.Component');
 goog.require('goog.events.EventType');
-goog.require('app.ui.common.ThousandRows');
+goog.require('app.ui.ThousandRows');
 
 goog.require('app.ui.WelcomeDialog');
 goog.require('app.events.EventCenter');
@@ -11,7 +11,7 @@ goog.require('app.ui.Frames');
 goog.require('app.ui.Container');
 goog.require('app.ui.Tabs');
 goog.require('app.dom.ViewportSizeMonitor');
-goog.require('app.ui.common.ContextMenu');
+goog.require('app.ui.ContextMenu');
 goog.require('app.ui.common.Dialog');
 goog.require('app.Model');
 

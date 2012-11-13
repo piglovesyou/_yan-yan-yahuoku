@@ -40,7 +40,7 @@ app.ui.ThousandRows.prototype.selectedRowId_;
 
 
 /**
- * @return {?string}
+ * @return {?string} A row id if any was selected.
  */
 app.ui.ThousandRows.prototype.getSelectedRowId = function() {
   return this.selectedRowId_;
@@ -161,12 +161,18 @@ app.ui.ThousandRows.prototype.findSelectedRow_ = function() {
 /** @inheritDoc */
 app.ui.ThousandRows.prototype.enterDocument = function() {
   this.getHandler()
-    .listen(this, app.ui.ThousandRows.EventType.ROW_CLICKED, this.handleRowSelected_)
-    .listen(this, app.ui.ThousandRows.EventType.COL_CLICKED, this.handleColSelected_);
+    .listen(this, app.ui.ThousandRows.EventType.ROW_CLICKED,
+            this.handleRowSelected_)
+    .listen(this, app.ui.ThousandRows.EventType.COL_CLICKED,
+            this.handleColSelected_);
   goog.base(this, 'enterDocument');
 };
 
 
+/**
+ * @private
+ * @param {goog.events.Event} e Dispatched by ThousandRows.Col.
+ */
 app.ui.ThousandRows.prototype.handleColSelected_ = function(e) {
   var newRow = e.row;
   var newCol = e.col;

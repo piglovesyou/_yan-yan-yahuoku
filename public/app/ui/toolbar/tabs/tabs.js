@@ -342,6 +342,7 @@ app.ui.Tabs.prototype.canDecorate = function(element) {
 };
 
 
+/** @inheritDoc */
 app.ui.Tabs.prototype.disposeInternal = function() {
   if (this.adder_) {
     this.adder_.dispose();

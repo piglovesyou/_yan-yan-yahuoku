@@ -165,6 +165,7 @@ public/app/ui/toolbar/tabs/tab.js
 public/app/ui/toolbar/tabs/tabadder.js
 public/closure-library/closure/goog/fx/draglistgroup.js
 public/app/ui/toolbar/tabs/tabs.js
+public/app/ui/authwindow.js
 public/closure-library/closure/goog/string/stringformat.js
 public/app/ui/frames/searchbar/label.js
 public/closure-library/closure/goog/events/inputhandler.js

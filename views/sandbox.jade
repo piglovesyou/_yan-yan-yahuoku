@@ -10,22 +10,32 @@ style
   }
 
 
-div#target
-  | yeah
+a(href="javascript:pop();")
+  div#target
+    | yeah
 
 script
-  var menu = app.ui.ContextMenu.getInstance();
-  var component = new goog.ui.Component();
-  component.decorate(goog.dom.getElement('target'));
-  goog.events.listen(component.getElement(), 'mousedown', function (e) {
-    menu.launch(e, [
-      {content: '9', desc: '9999999999999'},
-      {content: 'b', desc: 'bbbbbbbbbbbb'},
-      {content: 'g', desc: 'gggggggggggggg'},
-      {content: 'l', desc: 'zzzzzzzzzzzzz'},
-      {content: 'j', desc: 'ooooooooooo'}
-    ]);
-  });
+  goog.events.listen(app.ui.common.AuthWindow.getInstance(),
+    app.ui.common.AuthWindow.EventType.AUTH_COMPLETE, function(e) {
+      console.log('yeah...');
+    });
+  function pop() {
+    app.ui.common.AuthWindow.getInstance().launch();
+    return false;
+  }
+
+  // var menu = app.ui.ContextMenu.getInstance();
+  // var component = new goog.ui.Component();
+  // component.decorate(goog.dom.getElement('target'));
+  // goog.events.listen(component.getElement(), 'mousedown', function (e) {
+  //   menu.launch(e, [
+  //     {content: '9', desc: '9999999999999'},
+  //     {content: 'b', desc: 'bbbbbbbbbbbb'},
+  //     {content: 'g', desc: 'gggggggggggggg'},
+  //     {content: 'l', desc: 'zzzzzzzzzzzzz'},
+  //     {content: 'j', desc: 'ooooooooooo'}
+  //   ]);
+  // });
 
   // var dialog = new app.ui.Dialog();
   // goog.events.listen(goog.dom.getElement('target'), 'mousedown', function (e) {

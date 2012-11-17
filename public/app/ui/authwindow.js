@@ -51,6 +51,26 @@ app.ui.common.AuthWindow.prototype.window_;
 
 /**
  */
+app.ui.common.AuthWindow.prototype.launch = function() {
+  this.window_ = goog.window.open('/login',
+                                  app.ui.common.AuthWindow.Options, window);
+};
+
+
+/**
+ */
+app.ui.common.AuthWindow.prototype.closeWindow = function() {
+  goog.asserts.assert(this.window_, 'Why you don\'t have one?');
+  this.window_.close();
+};
+
+
+/*
+ * Methods below can be only called from auth window.
+ */
+
+/**
+ */
 app.ui.common.AuthWindow.prototype.dispatchAuthCompolete = function() {
   goog.asserts.assert(this.window_,
       '\'dispatchAuthCompolete\' should be called by a popup window.');
@@ -59,17 +79,11 @@ app.ui.common.AuthWindow.prototype.dispatchAuthCompolete = function() {
 
 
 /**
- */
-app.ui.common.AuthWindow.prototype.launch = function() {
-  this.window_ = goog.window.open('/login',
-                                  app.ui.common.AuthWindow.Options, window);
-};
-
-
-/**
  * This should be called only in a popup window.
  */
-app.ui.common.authwindow.dispatchAuthCompolete = function() {
-  app.ui.common.AuthWindow.getInstance().dispatchAuthCompolete();
+app.ui.common.authwindow.authCompolete = function() {
+  var win = app.ui.common.AuthWindow.getInstance();
+  win.closeWindow();
+  win.dispatchAuthCompolete();
 };
 goog.exportSymbol('app.ui.common.authwindow.dispatchAuthCompolete');

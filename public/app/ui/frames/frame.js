@@ -27,6 +27,9 @@ app.ui.Frame = function(id, opt_domHelper) {
 goog.inherits(app.ui.Frame, goog.ui.Component);
 
 
+/**
+ * @return {app.ui.Container} A container instance.
+ */
 app.ui.Frame.prototype.getContainer = function() {
   return this.container_;
 };

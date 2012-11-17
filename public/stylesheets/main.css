@@ -70,8 +70,9 @@
 .toolbar-left{width:62px;float:left}
 .toolbar-right{width:100px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding-right:6px;float:right;text-align:right}
 .tabs{margin-left:62px;margin-right:100px;padding-top:8px}
-.tab{position:relative;float:left;padding:0 15px;margin-right:-17px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;width:18%;height:25px;min-width:180px;color:#444;cursor:default;border-bottom:1px #f2f2f2 solid;background:url("../images/aa/bg_tableft.png") left top no-repeat,url("../images/aa/bg_tabright.png") right top no-repeat;}
-.tab.selected{background:url("../images/bg_tableft.png") left top no-repeat,url("../images/bg_tabright.png") right top no-repeat;z-index:10 !important;}
+.tab{position:relative;float:left;padding:0 15px;margin-right:-17px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;width:18%;height:25px;min-width:180px;color:#444;cursor:default;border-bottom:1px #f2f2f2 solid;background:url("../images/bg_tab.png") left 0 no-repeat,url("../images/bg_tab.png") right -48px no-repeat;}
+.tab.watch{background:url("../images/bg_tab.png") left -144px no-repeat,url("../images/bg_tab.png") right -192px no-repeat}
+.tab.selected{background:url("../images/bg_tab.png") left -72px no-repeat,url("../images/bg_tab.png") right -120px no-repeat;z-index:10 !important;}
 .tab.selected .del-btn{display:block;position:absolute;top:6px;right:14px;width:14px;height:14px;line-height:14px;text-align:center;font-size:14px;color:#ccc;text-decoration:none;}
 .tab.selected .del-btn:hover{background:#aaa;-webkit-border-radius:14px;border-radius:14px;color:#fff}
 .tab.selected .del-btn:active{background:#666;-webkit-border-radius:14px;border-radius:14px}
@@ -82,8 +83,9 @@
 .tab:nth-child(3){z-index:2}
 .tab:nth-child(4){z-index:1}
 .tab:nth-child(5){z-index:0}
-.tab-content{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;height:24px;padding:3px 0 0 3px;line-height:20px;white-space:nowrap;overflow:hidden;-o-text-overflow:ellipsis;text-overflow:ellipsis;background:url("../images/aa/bg_tabcenter.png") left top repeat-x}
-.selected .tab-content{background:url("../images/bg_tabcenter.png") left top repeat-x}
+.tab-content{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;height:24px;padding:3px 0 0 3px;line-height:20px;white-space:nowrap;overflow:hidden;-o-text-overflow:ellipsis;text-overflow:ellipsis;background:url("../images/bg_tab.png") 0 -24px repeat-x}
+.watch .tab-content{background:url("../images/bg_tab.png") 0 -168px repeat-x}
+.selected .tab-content{background:url("../images/bg_tab.png") 0 -96px repeat-x}
 .tab-dragging{top:8px !important}
 .tabs-content{position:relative;zoom:1}
 .tabs-content:before,.tabs-content:after{content:"";display:table}

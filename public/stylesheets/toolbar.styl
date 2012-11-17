@@ -90,11 +90,16 @@ tabHeight = 24px
   color: #444
   cursor: default
   border-bottom 1px #f2f2f2 solid
-  background: url(../images/aa/bg_tableft.png) left top no-repeat,
-              url(../images/aa/bg_tabright.png) right top no-repeat
+  background: url(../images/bg_tab.png) left 0 no-repeat,
+              url(../images/bg_tab.png) right -48px no-repeat
+
+  &.watch
+    background: url(../images/bg_tab.png) left -144px no-repeat,
+                url(../images/bg_tab.png) right -192px no-repeat
+    
   &.selected
-    background: url(../images/bg_tableft.png) left top no-repeat,
-                url(../images/bg_tabright.png) right top no-repeat
+    background: url(../images/bg_tab.png) left -72px no-repeat,
+                url(../images/bg_tab.png) right -120px no-repeat
     z-index: 10 !important
     delBtnWidth = 14px
     .del-btn
@@ -135,10 +140,13 @@ for i in 1 2 3 4 5
   line-height: tabHeight - 4px
   ellipsis(true)
   tabUnselectedStyle()
-  background: url(../images/aa/bg_tabcenter.png) left top repeat-x
+  background: url(../images/bg_tab.png) 0 -24px repeat-x
+
+.watch .tab-content
+  background: url(../images/bg_tab.png) 0 -168px repeat-x
 
 .selected .tab-content
-  background: url(../images/bg_tabcenter.png) left top repeat-x
+  background: url(../images/bg_tab.png) 0 -96px repeat-x
 
 .tab-dragging
   top: toolbarHeight - tabHeight !important

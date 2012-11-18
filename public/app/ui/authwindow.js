@@ -22,7 +22,8 @@ goog.addSingletonGetter(app.ui.common.AuthWindow);
  * @enum {string}
  */
 app.ui.common.AuthWindow.EventType = {
-  AUTH_COMPLETE: 'authcomplete'
+  AUTHORIZED: 'authorized',
+  UNAUTHORIZED: 'unauthorized'
 };
 
 
@@ -74,7 +75,7 @@ app.ui.common.AuthWindow.prototype.closeWindow = function() {
 app.ui.common.AuthWindow.prototype.dispatchAuthCompolete = function() {
   goog.asserts.assert(this.window_,
       '\'dispatchAuthCompolete\' should be called by a popup window.');
-  this.dispatchEvent(app.ui.common.AuthWindow.EventType.AUTH_COMPLETE);
+  this.dispatchEvent(app.ui.common.AuthWindow.EventType.AUTHORIZED);
 };
 
 

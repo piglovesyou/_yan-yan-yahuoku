@@ -67,6 +67,8 @@
 .toolbar .watch-tab{color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:none}
 .toolbar .watch-tab:hover{color:rgba(255,255,255,0.6)}
 .toolbar .watch-tab:focus{color:#fff}
+.username > span{display:inline-block;height:32px;vertical-align:top;line-height:30px;}
+.username > span.i{margin-right:2px;line-height:34px}
 .toolbar-left{width:62px;float:left}
 .toolbar-right{width:100px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding-right:6px;float:right;text-align:right}
 .tabs{margin-left:62px;margin-right:100px;padding-top:8px}

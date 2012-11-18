@@ -22,7 +22,7 @@ app.ui.Username.prototype.enterDocument = function() {
   this.getHandler()
     .listen(this.getElement(), goog.events.EventType.CLICK, this.handleClick_)
     .listen(app.ui.common.AuthWindow.getInstance(),
-            app.ui.common.AuthWindow.EventType.AUTH_COMPLETE,
+            app.ui.common.AuthWindow.EventType.AUTHORIZED,
             this.handleAuthComplete_);
 };
 

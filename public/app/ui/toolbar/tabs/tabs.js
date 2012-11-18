@@ -28,8 +28,26 @@ app.ui.Tabs.prototype.enterDocument = function() {
   this.getHandler()
       .listen(this, app.ui.Tab.EventType.SELECT, this.handleTabSelected_)
       .listen(this, app.ui.Tab.EventType.DELETE, this.handleTabDelBtnClicked_)
-      .listen(this, app.ui.TabAdder.EventType.CLICK, this.handleAdderClicked_);
+      .listen(this, app.ui.TabAdder.EventType.CLICK, this.handleAdderClicked_)
+      .listen(app.ui.common.AuthWindow.getInstance(),
+              app.ui.common.AuthWindow.EventType.AUTHORIZED,
+              this.handleAuthorized_);
 };
+
+
+/**
+ * @private
+ * @param {goog.events.Event} e Dispatched by AuthWindow.
+ */
+app.ui.Tabs.prototype.handleAuthorized_ = function(e) {
+};
+
+
+/**
+ * @private
+ * @param {goog.events.Event} e Dispatched by AuthWindow.
+ */
+app.ui.Tabs.prototype.handleUnauthorized_ = function(e) { };
 
 
 /**

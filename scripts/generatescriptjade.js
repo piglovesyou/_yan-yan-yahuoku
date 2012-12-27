@@ -1,9 +1,14 @@
 
-var fs = require('fs');
+var fs = require('fs'),
+    scripts = process.argv[2];
 
-var scriptlist = fs
-    .readFileSync(__dirname + '/scriptlist')
+if (!scripts) {
+  throw new Error('I need one argument for a script filename.');
+  process.exit();
+}
+
+console.log(
+  fs.readFileSync(scripts)
     .toString()
-    .replace(/public\/(.+?)[\n\r]/g, "script(src='$1')\n");
-
-console.log(scriptlist);
+    .replace(/public\/(.+?)[\n\r]/g, "script(src='/$1')\n")
+);

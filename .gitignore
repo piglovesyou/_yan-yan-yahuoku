@@ -5,6 +5,5 @@ closure-compiler
 .DS_Store
 redis/dump.rdb
 redis/redis.log
-scripts/scriptlist
 public/javascripts/main-min.js
 jsdoc-toolkit

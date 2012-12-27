@@ -53,7 +53,7 @@ app.ui.common.AuthWindow.prototype.window_;
 /**
  */
 app.ui.common.AuthWindow.prototype.launch = function() {
-  this.window_ = goog.window.open('/login',
+  this.window_ = goog.window.open('/auth/login',
                                   app.ui.common.AuthWindow.Options, window);
 };
 

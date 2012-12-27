@@ -21,7 +21,6 @@ COMMAND_CLOSURE_BUILDER_ = $(CLOSURELIB_DIR)/closure/bin/build/closurebuilder.py
 
 
 
-
 setup: setup-closurecompiler setup-closurelibrary setup-jsdoctoolkit
 
 setup-closurecompiler:;
@@ -51,9 +50,13 @@ compile:;
 	--output_mode=compiled \
 	> public/javascripts/main-min.js
 
+
+
 calcdeps:;
 	$(COMMAND_CLOSURE_BUILDER_) \
 	--output_mode=list \
-	> scripts/scriptlist && \
-	node scripts/generatescriptjade > views/_scripts.jade
+	> scripts/_scripts && \
+	node scripts/generatescriptjade.js scripts/_scripts \
+	> views/_scripts.jade && \
+	rm scripts/_scripts
 

@@ -49,24 +49,3 @@ if (!isProduction) {
 
 
 
-
-// exports.post = function (req, res) {
-//   if(req.session.oauth && req.session.oauth.access_token) {
-//     var text = req.body.text;
-//     oa.post(
-//       'https://api.twitter.com/1/statuses/update.json',
-//       req.session.oauth.access_token,
-//       req.session.oauth.access_token_secret,
-//       {"status": text},
-//       function (err, data, response) {
-//         if (err) {
-//           res.send('too bad.' + JSON.stringify(err));
-//         } else {
-//           res.send('posted successfully...!');
-//         }
-//       });
-//   } else {
-//     res.send('fail.');
-//   }
-// };
-//

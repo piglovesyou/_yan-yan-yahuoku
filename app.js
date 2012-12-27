@@ -31,7 +31,7 @@ app.configure(function() {
   app.use(express.session({
     secret: 'your secret here',
     store: new RedisStore(),
-    cookie: {maxAge: 8 * 60 * 60 * 1000}
+    cookie: {maxAge: 3600 * 1000}
   }));
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
@@ -57,17 +57,17 @@ _.each(require('./routes/auth'), function(listener, path) {
   app.get('/auth/' + path, listener);
 });
 
-_.each(require('./routes/yahoo'), function(listener, path) {
+_.each(require('./routes/yahoo_get'), function(listener, path) {
   app.get('/y/' + path, listener);
+});
+
+_.each(require('./routes/yahoo_post'), function(listener, path) {
+  app.post('/y/' + path, listener);
 });
 
 _.each(require('./routes/suggest'), function(listener, path) {
   app.get('/s/' + path, listener);
 });
-
-
-
-
 
 
 app.listen(port, function() {

@@ -22,9 +22,6 @@ exports.logout = function(req, res) {
   res.render('logout');
 };
 
-var requestAuthEndpoint =
-    'https://auth.login.yahoo.co.jp/oauth/v2/request_auth?oauth_token=';
-
 /**
  * @param {Object} req A request object.
  * @param {Object} res A response object.
@@ -38,7 +35,8 @@ exports.auth = function(req, res) {
       req.session.oauth = {};
       req.session.oauth.token = oauth_token;
       req.session.oauth.token_secret = oauth_token_secret;
-      res.redirect(requestAuthEndpoint + oauth_token);
+      req.session.oauth.oauth_expires_in = results.oauth_expires_in;
+      res.redirect(results.xoauth_request_auth_url);
     }
   });
 };

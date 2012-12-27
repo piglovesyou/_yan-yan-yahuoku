@@ -36,7 +36,7 @@ app.ui.Category.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
 
   var condition = this.getCondition_();
-  var suggest = this.suggest_ = new app.ui.category.Suggest('/api/categorySuggest',
+  var suggest = this.suggest_ = new app.ui.category.Suggest('/s/suggest',
       this.inputElement_, condition['category'], this.getDomHelper());
   suggest.setParentEventTarget(this);
 };

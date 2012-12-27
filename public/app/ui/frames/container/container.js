@@ -306,7 +306,7 @@ app.ui.Container.createThousandRows_ = function(opt_domHelper) {
  * @return {app.ui.ThousandRows.Model} A brand new model for thousandrows.
  */
 app.ui.Container.createNewModel_ = function(query, categoryId, isGrid) {
-  var endPoint = query ? '/api/search' : '/api/categoryLeaf';
+  var endPoint = query ? '/y/search' : '/y/categoryLeaf';
   var uri = new goog.Uri(endPoint); //goog.Uri.create escape its argument.. Why?
   var q = uri.getQueryData();
   if (query) q.set('query', query);

@@ -45,6 +45,8 @@ app.configure('production', function() {
   app.use(express.errorHandler());
 });
 
+
+
 // Routes
 
 _.each(require('./routes'), function(listener, path) {
@@ -55,8 +57,12 @@ _.each(require('./routes/auth'), function(listener, path) {
   app.get('/auth/' + path, listener);
 });
 
-_.each(require('./routes/api'), function(listener, path) {
-  app.get('/api/' + path, listener);
+_.each(require('./routes/yahoo'), function(listener, path) {
+  app.get('/y/' + path, listener);
+});
+
+_.each(require('./routes/suggest'), function(listener, path) {
+  app.get('/s/' + path, listener);
 });
 
 

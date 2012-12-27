@@ -199,7 +199,7 @@ app.model.getAuctionItem = function(id, callback, opt_obj) {
   if (data) {
     callback.call(opt_obj, false, data);
   } else {
-    app.model.Xhr.getInstance().get('/api/auctionItem', {
+    app.model.Xhr.getInstance().get('/y/auctionItem', {
       'auctionID': id
     }, function(err, json) {
       var itemData;

@@ -15,8 +15,10 @@ goog.require('goog.storage.mechanism.HTML5SessionStorage');
  */
 app.Model = function() {
   goog.base(this);
-  this.sessionStore_ = new goog.storage.CollectableStorage(new goog.storage.mechanism.HTML5SessionStorage());
-  this.localStore_ = new goog.storage.CollectableStorage(new goog.storage.mechanism.HTML5LocalStorage());
+  this.sessionStore_ = new goog.storage.CollectableStorage(
+      new goog.storage.mechanism.HTML5SessionStorage());
+  this.localStore_ = new goog.storage.CollectableStorage(
+      new goog.storage.mechanism.HTML5LocalStorage());
 };
 goog.inherits(app.Model, goog.events.EventTarget);
 goog.addSingletonGetter(app.Model);
@@ -33,7 +35,7 @@ app.Model.EventType = {
 
 
 /**
- * @return {goog.storage.CollectableStorage}
+ * @return {goog.storage.CollectableStorage} .
  */
 app.Model.prototype.getSessionStore = function() {
   return this.sessionStore_;
@@ -41,7 +43,7 @@ app.Model.prototype.getSessionStore = function() {
 
 
 /**
- * @return {goog.storage.CollectableStorage}
+ * @return {goog.storage.CollectableStorage} .
  */
 app.Model.prototype.getLocalStore = function() {
   return this.localStore_;
@@ -56,7 +58,7 @@ app.Model.prototype.getLocalStore = function() {
 
 /**
  * @private
- * @return {goog.storage.CollectableStorage}
+ * @return {goog.storage.CollectableStorage} .
  */
 app.model.getLocalStore_ = function() {
   return app.Model.getInstance().getLocalStore();
@@ -65,7 +67,7 @@ app.model.getLocalStore_ = function() {
 
 /**
  * @private
- * @return {goog.storage.CollectableStorage}
+ * @return {goog.storage.CollectableStorage} .
  */
 app.model.getSessionStore_ = function() {
   return app.Model.getInstance().getSessionStore();
@@ -81,7 +83,9 @@ app.model.ExpireTime = {
 
 
 /**
- * @param {app.model.ExpireTime} baseTime
+ * @param {app.model.ExpireTime} baseTime .
+ * @return {number} .
+ * @private
  */
 app.model.getLifeTime_ = function(baseTime) {
   return baseTime + goog.now();
@@ -109,8 +113,9 @@ app.model.KeyPrefix = {
 
 
 /**
- * @param {string} id
- * @return {string}
+ * @param {string} id .
+ * @return {string} .
+ * @private
  */
 app.model.getAuctionItemKey_ = function(id) {
   return app.model.KeyPrefix.AUCTION_ITEM_ + id;
@@ -118,7 +123,7 @@ app.model.getAuctionItemKey_ = function(id) {
 
 
 /**
- * @return {?Array}
+ * @return {?Array} .
  */
 app.model.getTabIds = function() {
   var ids = app.model.getLocalStore_().get(app.model.Key.TAB_IDS);
@@ -127,7 +132,7 @@ app.model.getTabIds = function() {
 
 
 /**
- * @param {Array.<string>} ids
+ * @param {Array.<string>} ids .
  */
 app.model.setTabIds = function(ids) {
   goog.asserts.assert(goog.isArray(ids) && goog.array.every(ids, function(id) {
@@ -139,7 +144,7 @@ app.model.setTabIds = function(ids) {
 
 
 /**
- * @param {string} tabId
+ * @param {string} tabId .
  * @return {?Object} Query and category data.
  */
 app.model.getTabQuery = function(tabId) {
@@ -149,26 +154,29 @@ app.model.getTabQuery = function(tabId) {
 
 
 /**
- * @param {string} tabId
+ * @param {string} tabId .
  */
 app.model.deleteTabQuery = function(tabId) {
   var storage = app.model.getLocalStore_();
   storage.remove(app.model.KeyPrefix.TAB_ + tabId);
-  storage.remove(app.model.KeyPrefix.TAB_ + tabId + app.model.KeyPrefix._DETAILPANEWIDTH_);
-  storage.remove(app.model.KeyPrefix.TAB_ + tabId + app.model.KeyPrefix._ISGRID_);
+  storage.remove(app.model.KeyPrefix.TAB_ +
+                 tabId + app.model.KeyPrefix._DETAILPANEWIDTH_);
+  storage.remove(app.model.KeyPrefix.TAB_ +
+                 tabId + app.model.KeyPrefix._ISGRID_);
 };
 
 
 /**
- * @param {string} tabId
+ * @param {string} tabId .
  * @param {Object} data Query and category data.
  */
 app.model.setTabQuery = function(tabId, data) {
+  var ref;
   goog.asserts.assert(
       goog.isString(data['query']) &&
-      goog.isObject(data['category']) &&
-      (goog.isString(data['category']['CategoryId']) || goog.isNumber(data['category']['CategoryId'])) &&
-      goog.isString(data['category']['CategoryPath']),
+      goog.isObject(ref = data['category']) &&
+      (goog.isString(ref['CategoryId']) || goog.isNumber(ref['CategoryId'])) &&
+      goog.isString(ref['CategoryPath']),
       'Wrong data to store');
   app.model.getLocalStore_().set(app.model.KeyPrefix.TAB_ + tabId, data);
   app.Model.getInstance().dispatchEvent({
@@ -178,6 +186,11 @@ app.model.setTabQuery = function(tabId, data) {
 };
 
 
+/**
+ * @param {string} url .
+ * @param {Function} callback .
+ * @param {Object=} opt_obj .
+ */
 app.model.getRemoteHtml = function(url, callback, opt_obj) {
   app.model.Xhr.getInstance().get(url, {
     'noLayout': 1
@@ -188,9 +201,9 @@ app.model.getRemoteHtml = function(url, callback, opt_obj) {
 
 
 /**
- * @param {string} id
- * @param {Function} callback
- * @param {Object=} opt_obj
+ * @param {string} id .
+ * @param {Function} callback .
+ * @param {Object=} opt_obj .
  */
 app.model.getAuctionItem = function(id, callback, opt_obj) {
   var storage = app.model.getSessionStore_();
@@ -206,10 +219,12 @@ app.model.getAuctionItem = function(id, callback, opt_obj) {
       if (!err) {
         itemData = json['ResultSet']['Result'];
         try {
-          storage.set(key, itemData, app.model.getLifeTime_(app.model.ExpireTime.AUCTION_ITEM));
+          storage.set(key, itemData,
+            app.model.getLifeTime_(app.model.ExpireTime.AUCTION_ITEM));
         } catch (e) {
           storage.collect();
-          storage.set(key, itemData, app.model.getLifeTime_(app.model.ExpireTime.AUCTION_ITEM));
+          storage.set(key, itemData,
+            app.model.getLifeTime_(app.model.ExpireTime.AUCTION_ITEM));
         }
       }
       callback.call(opt_obj, err, itemData);
@@ -221,6 +236,9 @@ app.model.getAuctionItem = function(id, callback, opt_obj) {
 };
 
 
+/**
+ * @param {boolean} fixed .
+ */
 app.model.setDetailTitleFixedState = function(fixed) {
   var storage = app.model.getLocalStore_();
   storage.set(app.model.KeyPrefix.DETAILTITLEFIXEDSTATE_, !!fixed);
@@ -228,7 +246,7 @@ app.model.setDetailTitleFixedState = function(fixed) {
 
 
 /**
- * @return {boolean}
+ * @return {boolean} .
  */
 app.model.getDetailTitleFixedState = function() {
   var storage = app.model.getLocalStore_();
@@ -237,8 +255,8 @@ app.model.getDetailTitleFixedState = function() {
 
 
 /**
- * @param {string} tabId
- * @param {number} width
+ * @param {string} tabId .
+ * @param {number} width .
  */
 app.model.setDetailPaneWidth = function(tabId, width) {
   goog.asserts.assertNumber(width, 'Invalid type for detail pane width.');
@@ -250,8 +268,8 @@ app.model.setDetailPaneWidth = function(tabId, width) {
 
 
 /**
- * @param {string} tabId
- * @return {?number}
+ * @param {string} tabId .
+ * @return {?number} .
  */
 app.model.getDetailPaneWidth = function(tabId) {
   var storage = app.model.getLocalStore_();
@@ -261,9 +279,8 @@ app.model.getDetailPaneWidth = function(tabId) {
 };
 
 
-
 /**
- * @return {Object}
+ * @return {Object} .
  */
 app.model.createEmptyTab = function() {
   return {
@@ -277,8 +294,8 @@ app.model.createEmptyTab = function() {
 
 
 /**
- * @param {string} tabId
- * @param {boolean} isGrid
+ * @param {string} tabId .
+ * @param {boolean} isGrid .
  */
 app.model.setAlignmentStyle = function(tabId, isGrid) {
   goog.asserts.assertBoolean(isGrid, 'Invalid type to set list or grid.');
@@ -289,8 +306,8 @@ app.model.setAlignmentStyle = function(tabId, isGrid) {
 
 
 /**
- * @param {string} tabId
- * @return {boolean}
+ * @param {string} tabId .
+ * @return {boolean} .
  */
 app.model.getAlignmentStyle = function(tabId) {
   var storage = app.model.getLocalStore_();
@@ -301,6 +318,8 @@ app.model.getAlignmentStyle = function(tabId) {
 
 /**
  * @param {string} itemId to add to watch list.
+ * @param {Function} callback .
+ * @param {Object=} opt_obj .
  */
 app.model.addWatchList = function(itemId, callback, opt_obj) {
   app.model.Xhr.getInstance().post('/y/watchList', {

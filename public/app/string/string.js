@@ -7,12 +7,16 @@ goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.NumberFormat');
 
 
+/**
+ * Utility name space to manipulate string.
+ * @type {Object}
+ */
 app.string = {};
 
 
 /**
- * @param {string} escapedString
- * @return {?string}
+ * @param {string} escapedString .
+ * @return {?string} .
  */
 app.string.renderPrice = function(escapedString) {
   var value = +escapedString;
@@ -22,8 +26,8 @@ app.string.renderPrice = function(escapedString) {
 
 
 /**
- * @type {string} escapedUrl
- * @return {string}
+ * @param {string} escapedUrl .
+ * @return {string} .
  */
 app.string.createAuctionItemLink = function(escapedUrl) {
   var uri = new goog.Uri.parse(App.getInstance().getAffiliateBase());
@@ -45,8 +49,8 @@ app.string.numberFormatter_;
 
 
 /**
- * @param {string} escapedString
- * @return {string}
+ * @param {string} escapedString .
+ * @return {string} .
  */
 app.string.renderDate = function(escapedString) {
   if (!app.string.dateFormatter_) {
@@ -58,13 +62,18 @@ app.string.renderDate = function(escapedString) {
 
 /**
  * TODO: use it.
- * @param {string} escapedString
+ * @param {string} escapedString .
+ * @return {string} .
  */
 app.string.renderBoolean = function(escapedString) {
   return escapedString == 'true' ? 'あり' : 'なし';
 };
 
 
+/**
+ * @param {string} escapedString .
+ * @return {string} .
+ */
 app.string.renderItemCondition = function(escapedString) {
   switch (escapedString) {
     case 'new': return '新品';
@@ -76,8 +85,8 @@ app.string.renderItemCondition = function(escapedString) {
 
 
 /**
- * @param {string} escapedString
- * @return {string}
+ * @param {string} escapedString .
+ * @return {string} .
  */
 app.string.renderEndDate = function(escapedString) {
   var formatted = goog.date.relative.format(new Date(escapedString).getTime());
@@ -102,7 +111,10 @@ app.string.renderEndDate = function(escapedString) {
 };
 
 
-
+/**
+ * @param {string} path .
+ * @return {string} .
+ */
 app.string.getCategoryNameByPath = function(path) {
   if (path) {
     var arr = path.split(' > ');
@@ -113,15 +125,11 @@ app.string.getCategoryNameByPath = function(path) {
 
 
 /**
- * @param {number} num
+ * @param {number} num .
+ * @return {string} .
  */
 app.string.toDecimal = function(num) {
   var formatter = app.string.numberFormatter_ || (app.string.numberFormatter_ =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL));
   return formatter.format(num);
-};
-
-
-app.string.relativeDateFormat = function(ms) {
-  // goog.date.relative.format(ms);
 };

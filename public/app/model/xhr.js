@@ -16,10 +16,25 @@ app.model.Xhr = function() {
 goog.inherits(app.model.Xhr, goog.Disposable);
 goog.addSingletonGetter(app.model.Xhr);
 
+
 /**
- * @param {string} url
- * @param {!Object} content
- * @param {Function} callback
+ * @param {string} url .
+ * @param {Object} param .
+ * @param {Function} callback .
+ * @param {Object=} opt_obj .
+ */
+app.model.Xhr.prototype.get = function(url, param, callback, opt_obj) {
+  var uri = goog.Uri.parse(url);
+  uri.getQueryData().extend(param);
+  this.request_('GET', uri.toString(), null, callback, opt_obj);
+};
+
+
+/**
+ * @param {string} url .
+ * @param {!Object} content .
+ * @param {Function} callback .
+ * @param {Object} opt_obj .
  */
 app.model.Xhr.prototype.post = function(url, content, callback, opt_obj) {
   var query = goog.Uri.QueryData.createFromMap(content);
@@ -28,24 +43,10 @@ app.model.Xhr.prototype.post = function(url, content, callback, opt_obj) {
 
 
 /**
- * @param {string} url
- * @param {Object} param
- * @param {Function} callback
- * @param {Object=} opt_obj
- */
-app.model.Xhr.prototype.get = function(url, param, callback, opt_obj) {
-  var uri = goog.Uri.parse(url);
-  uri.getQueryData().extend(param);
-  this.request_('GET', uri.toString(), null, callback, opt_obj);
-};
-
-app.model.Xhr.prototype.id_ = 0;
-
-/**
- * @param {string} uri
- * @param {?string} opt_content
- *
+ * @param {string} uri .
+ * @param {?string} opt_content .
  * @return {?string} Id. If the id is in use, return null.
+ * @private
  */
 app.model.Xhr.prototype.getId_ = function(uri, opt_content) {
   var id = uri + opt_content;
@@ -53,14 +54,17 @@ app.model.Xhr.prototype.getId_ = function(uri, opt_content) {
   return !goog.array.contains(ids, id) ? id : null;
 };
 
+
 /**
- * @param {string} method
- * @param {string} uri
- * @param {?string} content
- * @param {Function} callback
- * @param {Object=} opt_obj
+ * @param {string} method .
+ * @param {string} uri .
+ * @param {?string} content .
+ * @param {Function(boolean, Object)} callback Args are err and JSON object.
+ * @param {Object=} opt_obj .
+ * @private
  */
-app.model.Xhr.prototype.request_ = function(method, uri, content, callback, opt_obj) {
+app.model.Xhr.prototype.request_ = function(method,
+                                            uri, content, callback, opt_obj) {
   var xhr = this.xhr_;
   var u = undefined;
   var isGet = method == 'GET';

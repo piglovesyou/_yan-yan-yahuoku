@@ -24,8 +24,8 @@ app.events.EventCenter.EventType = {
 
 
 /**
- * @param {string} type
- * @param {Object} data
+ * @param {string} type .
+ * @param {Object} data .
  */
 app.events.EventCenter.prototype.dispatch = function(type, data) {
   this.dispatchEvent({

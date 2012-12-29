@@ -21,7 +21,7 @@ COMMAND_CLOSURE_BUILDER_ = $(CLOSURELIB_DIR)/closure/bin/build/closurebuilder.py
 
 
 
-setup: setup-closurecompiler setup-closurelibrary setup-jsdoctoolkit
+setup: setup-closurecompiler setup-closurelibrary setup-thirdpartymodule setup-jsdoctoolkit
 
 setup-closurecompiler:;
 	rm -rf $(COMPILER_DIR) && \
@@ -31,9 +31,12 @@ setup-closurecompiler:;
 
 setup-closurelibrary:;
 	rm -rf $(CLOSURELIB_DIR)
-	svn checkout $(CLOSURELIB_REMOTE_DIR) $(CLOSURELIB_DIR) && \
+	svn checkout $(CLOSURELIB_REMOTE_DIR) $(CLOSURELIB_DIR)
+
+setup-thirdpartymodule:;
 	git submodule init && \
-	git submodule update
+	git submodule update && \
+	git submodule foreach 'git fetch; git checkout master; git pull;'
 
 setup-jsdoctoolkit:;
 	rm -rf $(JSDOCTOOLKIT_DIR) && \

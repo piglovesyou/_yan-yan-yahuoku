@@ -32,10 +32,14 @@ exports.auth = function(req, res) {
     if (error) {
       res.send("didn't work.<br />" + JSON.stringify(error));
     } else {
-      req.session.oauth = {};
-      req.session.oauth.token = oauth_token;
-      req.session.oauth.token_secret = oauth_token_secret;
-      req.session.oauth.oauth_expires_in = results.oauth_expires_in;
+      req.session.oauth = {
+        token: oauth_token,
+        token_secret: oauth_token_secret,
+        expires_at: Date.now() +
+                    (/* '3600' */results.oauth_expires_in * 1000) -
+                    /* Less is fine. */5 * 60 * 1000
+      };
+
       res.redirect(results.xoauth_request_auth_url);
     }
   });

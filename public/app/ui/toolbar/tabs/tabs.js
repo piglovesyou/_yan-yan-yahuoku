@@ -1,6 +1,7 @@
 
 goog.provide('app.ui.Tabs');
 
+goog.require('app.Model');
 goog.require('app.events.EventCenter');
 goog.require('app.string');
 goog.require('app.ui.Tab');
@@ -25,12 +26,12 @@ goog.inherits(app.ui.Tabs, goog.ui.Component);
 app.ui.Tabs.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.adder_.enterDocument();
+
   this.getHandler()
       .listen(this, app.ui.Tab.EventType.SELECT, this.handleTabSelected_)
       .listen(this, app.ui.Tab.EventType.DELETE, this.handleTabDelBtnClicked_)
       .listen(this, app.ui.TabAdder.EventType.CLICK, this.handleAdderClicked_)
-      .listen(app.ui.common.AuthWindow.getInstance(),
-              app.ui.common.AuthWindow.EventType.AUTHORIZED,
+      .listen(app.model, app.events.EventType.AUTH_STATE_CHANGED,
               this.handleAuthorized_);
 };
 
@@ -40,6 +41,7 @@ app.ui.Tabs.prototype.enterDocument = function() {
  * @param {goog.events.Event} e Dispatched by AuthWindow.
  */
 app.ui.Tabs.prototype.handleAuthorized_ = function(e) {
+
 };
 
 

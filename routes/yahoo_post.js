@@ -14,7 +14,7 @@ var yahoo = require('../sources/net/yahoo');
   module.exports[path] = function(req, res) {
     var oauth = req.session && req.session.oauth;
     if (oauth && oauth.access_token && oauth.access_token_secret) {
-      yahoo.post(oauth, path, req.body, function (err, data, response) {
+      yahoo.postWithOAuth(oauth, path, req.body, function(err, data, response) {
         if (err) {
           // TODO: Care this.
           res.send('too bad.' + JSON.stringify(err));

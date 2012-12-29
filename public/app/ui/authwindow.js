@@ -2,6 +2,7 @@
 goog.provide('app.ui.common.AuthWindow');
 goog.provide('app.ui.common.authwindow');
 
+goog.require('app.events.EventType');
 goog.require('goog.events.EventTarget');
 goog.require('goog.window');
 
@@ -13,18 +14,18 @@ goog.require('goog.window');
  */
 app.ui.common.AuthWindow = function() {
   goog.base(this);
+
+  /**
+   * @type {goog.events.EventHandler}
+   * @private
+   */
+  this.eh_ = new goog.events.EventHandler(this);
+
+  this.eh_.listen(app.model, app.events.EventType.AUTH_STATE_CHANGED,
+                  this.handleAuthStateChanged_);
 };
 goog.inherits(app.ui.common.AuthWindow, goog.events.EventTarget);
 goog.addSingletonGetter(app.ui.common.AuthWindow);
-
-
-/**
- * @enum {string}
- */
-app.ui.common.AuthWindow.EventType = {
-  AUTHORIZED: 'authorized',
-  UNAUTHORIZED: 'unauthorized'
-};
 
 
 /**
@@ -45,46 +46,54 @@ app.ui.common.AuthWindow.Options = {
 
 
 /**
- * @type {Window}
+ * @type {Window} A child popup window.
  */
 app.ui.common.AuthWindow.prototype.window_;
 
 
 /**
+ * @param {goog.events.Event} e .
+ * @private
  */
-app.ui.common.AuthWindow.prototype.launch = function() {
-  this.window_ = goog.window.open('/auth/login',
+app.ui.common.AuthWindow.prototype.handleAuthStateChanged_ = function(e) {
+  if (this.window_) {
+    this.closePopupWindow_();
+  }
+};
+
+
+/**
+ * @param {boolean} toLogin .
+ */
+app.ui.common.AuthWindow.prototype.launch = function(toLogin) {
+  this.window_ = goog.window.open(toLogin ? '/auth/login' : '/auth/logout',
                                   app.ui.common.AuthWindow.Options, window);
 };
 
 
 /**
+ * @private
  */
-app.ui.common.AuthWindow.prototype.closeWindow = function() {
+app.ui.common.AuthWindow.prototype.closePopupWindow_ = function() {
   goog.asserts.assert(this.window_, 'Why you don\'t have one?');
   this.window_.close();
-};
-
-
-/*
- * Methods below can be only called from auth window.
- */
-
-/**
- */
-app.ui.common.AuthWindow.prototype.dispatchAuthCompolete = function() {
-  goog.asserts.assert(this.window_,
-      '\'dispatchAuthCompolete\' should be called by a popup window.');
-  this.dispatchEvent(app.ui.common.AuthWindow.EventType.AUTHORIZED);
+  this.window_ = null;
 };
 
 
 /**
- * This should be called only in a popup window.
  */
-app.ui.common.authwindow.authCompolete = function() {
-  var win = app.ui.common.AuthWindow.getInstance();
-  win.closeWindow();
-  win.dispatchAuthCompolete();
+app.ui.common.AuthWindow.prototype.processAuthCompleted = function() {
+  this.closePopupWindow_();
+  app.model.updateAuthState(true); // XXX: Always true? Really?
 };
-goog.exportSymbol('app.ui.common.authwindow.dispatchAuthCompolete');
+
+
+/** @inheritDoc */
+app.ui.common.AuthWindow.prototype.disposeInternal = function() {
+  if (this.eh_) {
+    this.eh_.dispose();
+    this.eh_ = null;
+  }
+  goog.base(this, 'disposeInternal');
+};

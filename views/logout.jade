@@ -3,5 +3,7 @@ div.login-wrap.container
     div.span8.offset3
       h1 Completely logged out.
     div.span6.offset3
-      a.btn.btn-primary.btn-large.btn-block(href='/auth/auth') login again
+      a.btn.btn-primary.btn-large.btn-block(href='/') Top page
 
+script
+  (window.opener || window).app.model.flushAll();

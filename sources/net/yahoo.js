@@ -19,7 +19,6 @@ var sliceExtraString = (function() {
 })();
 
 
-
 /**
  * @param {string} path .
  * @param {Object} param .
@@ -43,19 +42,44 @@ module.exports.get = function(path, param, callback) {
 };
 
 
+/**
+ * @param {string} method .
+ * @param {{oauth_token: string, oauth_token_secret: string}} oauth .
+ * @param {string} path .
+ * @param {Object} param .
+ * @param {function(boolean, Object, Object)} callback Arguments are
+ *                                            err, data, response.
+ */
+var requestWithOAuth = function(method, oauth, path, param, callback) {
+  var fn = method === 'GET' ? oa.get : oa.post;
+  fn.call(oa,
+    'https://auctions.yahooapis.jp/AuctionWebService/V1/' + path,
+    oauth.access_token,
+    oauth.access_token_secret,
+    param,
+    callback);
+};
+
+
+/**
+ * @param {{oauth_token: string, oauth_token_secret: string}} oauth .
+ * @param {string} path .
+ * @param {Object} param .
+ * @param {function(boolean, Object, Object)} callback Arguments are
+ *                                            err, data, response.
+ */
+module.exports.getWithAuth = function(oauth, path, param, callback) {
+  requestWithOAuth('GET', oauth, path, param, callback);
+};
+
 
 /**
  * @param {{oauth_token: string, oauth_token_secret: string}} oauth .
  * @param {string} path .
  * @param {Object} content .
  * @param {function(boolean, Object, Object)} callback Arguments are
- *                                        err, data, response.
+ *                                            err, data, response.
  */
-module.exports.post = function(oauth, path, content, callback) {
-  oa.post(
-    'https://auctions.yahooapis.jp/AuctionWebService/V1/' + path,
-    oauth.access_token,
-    oauth.access_token_secret,
-    content,
-    callback);
+module.exports.postWithOAuth = function(oauth, path, content, callback) {
+  requestWithOAuth('POST', oauth, path, content, callback);
 };

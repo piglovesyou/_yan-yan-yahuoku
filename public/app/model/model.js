@@ -297,3 +297,13 @@ app.model.getAlignmentStyle = function(tabId) {
   return !!storage.get(app.model.KeyPrefix.TAB_ + tabId +
               app.model.KeyPrefix._ISGRID_);
 };
+
+
+/**
+ * @param {string} itemId to add to watch list.
+ */
+app.model.addWatchList = function(itemId, callback, opt_obj) {
+  app.model.Xhr.getInstance().post('/y/watchList', {
+    auctionID: itemId
+  }, callback, opt_obj);
+};

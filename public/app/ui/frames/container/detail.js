@@ -103,6 +103,8 @@ app.ui.Detail.prototype.renderContent = function(data) {
   var container = this.getContentElement();
   this.prepareContent_(true);
 
+  this.auctionId_ = esc(data['AuctionID']);
+
   var safe_itemLink = this.safeItemLink_ = app.string.createAuctionItemLink(esc(data['AuctionItemUrl']));
   var safe_itemTitle = esc(data['Title']);
   dh.append(/** @type {Element} */(this.titleInnerElement_),
@@ -258,6 +260,9 @@ app.ui.Detail.prototype.renderContent = function(data) {
 };
 
 
+app.ui.Detail.prototype.auctionId_;
+
+
 app.ui.Detail.prototype.safeItemLink_;
 
 
@@ -326,7 +331,8 @@ app.ui.Detail.MenuRecords_ = [
   {content: 'o', key: 'goToAuction', desc: 'オークションの商品ページを表示します'},
   {content: 'A', key: 'showPicture', desc: '写真を表示します'},
   {content: 'K', key: 'showDesc', desc: '商品説明を表示します'},
-  {content: 'J', key: 'showDetail', desc: '価格、残り時間を表示します'}
+  {content: 'J', key: 'showDetail', desc: '価格、残り時間を表示します'},
+  {content: 'E', key: 'addWatchList', desc: 'この商品をウォッチリストに追加します'}
 ];
 
 
@@ -352,6 +358,7 @@ app.ui.Detail.prototype.handleMenuSelect_ = function(e) {
     case 'showPicture': this.jumpToElement(this.imagesElementRef_); break;
     case 'showDesc': this.jumpToElement(this.descriptionElementRef_); break;
     case 'showDetail': this.jumpToElement(this.tableElementRef_); break;
+    case 'addWatchList': app.model.addWatchList(this.auctionId_, function(){}, this); break;
   }
 };
 

@@ -1,5 +1,5 @@
 
-var yapi = require('../sources/net/yahooapi');
+var yahoo = require('../sources/net/yahoo');
 var redis = require('redis').createClient();
 var stack = require('../sources/util/queue');
 
@@ -8,7 +8,7 @@ var stack = require('../sources/util/queue');
 
 
 var request = function (id, callback) {
-  yapi.requestGet('categoryTree', {category: id}, function (err, responseText) {
+  yahoo.get('categoryTree', {category: id}, function (err, responseText) {
     if (err) return;
     try {
       callback(err, JSON.parse(responseText).ResultSet.Result);

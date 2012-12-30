@@ -39,7 +39,7 @@
 .ac-renderer > .dropdown-menu{position:static;display:block}
 .goog-tooltip{-webkit-box-shadow:2px 2px 2px rgba(0,0,0,0.3);box-shadow:2px 2px 2px rgba(0,0,0,0.3);z-index:10}
 .btn.goog-button-checked,.btn.goog-button-selected{background-color:#e6e6e6;background-color:#d9d9d9 9;background-image:none;-webkit-box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);-moz-box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);-webkit-box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);box-shadow:inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05)}
-.modal{position:absolute;margin:0}
+.modal{position:absolute;width:40%;margin:0}
 .modal a,.modal alink,.modal avisited{color:#06c;cursor:pointer}
 .modal-bg{background:#666;left:0;position:absolute;top:0;z-index:1000}
 .modal-header{border:none;cursor:move}
@@ -54,14 +54,14 @@
 .logo a{-webkit-transition:opacity .1s linear;-moz-transition:opacity .1s linear;-o-transition:opacity .1s linear;-ms-transition:opacity .1s linear;transition:opacity .1s linear}
 .logo a:hover{opacity:.7;-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70);filter:alpha(opacity=70)}
 .logo a:active{-webkit-transition:opacity .01s linear;-moz-transition:opacity .01s linear;-o-transition:opacity .01s linear;-ms-transition:opacity .01s linear;transition:opacity .01s linear;opacity:.4;-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=40);filter:alpha(opacity=40)}
-.modal{height:358px;}
 .modal:focus{outline:none;border-color:rgba(82,168,236,0.8);-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6);box-shadow:inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6)}
 .modal-title h1{margin-bottom:20px}
 .modal-title .nav-tabs{margin-bottom:0}
-.modal-content{height:166px}
 .modal-content-content{overflow:auto;}
 .modal-content-content .tab-belonging{display:none;}
 .modal-content-content .tab-belonging.active{display:block}
+.modal-welcome{width:560px;height:358px;}
+.modal-welcome .modal-content{height:166px}
 .toolbar{background:-webkit-gradient(linear, left top, left bottom, color-stop(0, #000), color-stop(1, #444));background:-webkit-linear-gradient(top, #000 0%, #444 100%);background:-moz-linear-gradient(top, #000 0%, #444 100%);background:-o-linear-gradient(top, #000 0%, #444 100%);background:-ms-linear-gradient(top, #000 0%, #444 100%);background:linear-gradient(top, #000 0%, #444 100%);height:32px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;border-bottom:kpx #b6b6b6 solid;line-height:32px;}
 .toolbar .logo,.toolbar .logout,.toolbar .username,.toolbar .watch-tab{display:inline-block;padding:0 3px}
 .toolbar .watch-tab{color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:none}

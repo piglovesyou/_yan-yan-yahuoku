@@ -6,26 +6,28 @@ goog.require('goog.ui.Dialog');
 
 
 /**
+ * @param {goog.dom.DomHelper=} opt_domHelper .
  * @constructor
  * @extends {goog.ui.Dialog}
  */
 app.ui.common.Dialog = function(opt_domHelper) {
   goog.base(this, 'modal', false, opt_domHelper);
-  this.setBackgroundElementOpacity(.15);
-  this.setButtonSet(null);
+  // this.setBackgroundElementOpacity(.15);
 };
 goog.inherits(app.ui.common.Dialog, goog.ui.Dialog);
 
 
 /**
+ * @type {?Function}
+ * @protected
  */
-app.ui.common.Dialog.prototype.decorateLoadedContent_;
+app.ui.common.Dialog.prototype.decorateLoadedContent;
 
 
 /**
- * @param {string} url
+ * @param {string} url .
  */
-app.ui.common.Dialog.prototype.launch = function(url) {
+app.ui.common.Dialog.prototype.showWithRemoteContent = function(url) {
   if (!this.wasContentLoaded_) {
     app.model.getRemoteHtml(url, this.handleHtmlLoad_, this);
     this.setContent('Loading..');
@@ -34,12 +36,17 @@ app.ui.common.Dialog.prototype.launch = function(url) {
 };
 
 
+/**
+ * @type {boolean}
+ * @private
+ */
 app.ui.common.Dialog.prototype.wasContentLoaded_ = false;
 
 
 /**
- * @param {boolean} err
- * @param {string} html
+ * @param {boolean} err .
+ * @param {string} html .
+ * @private
  */
 app.ui.common.Dialog.prototype.handleHtmlLoad_ = function(err, html) {
   if (err) {
@@ -52,7 +59,9 @@ app.ui.common.Dialog.prototype.handleHtmlLoad_ = function(err, html) {
   dh.append(this.getTitleElement(),
       dh.getElementByClass('modal-content-title', this.getContentElement()));
 
-  if (goog.isFunction(this.decorateLoadedContent_)) this.decorateLoadedContent_();
+  if (goog.isFunction(this.decorateLoadedContent)) {
+    this.decorateLoadedContent();
+  }
   this.reposition();
 
   this.wasContentLoaded_ = true;
@@ -64,13 +73,21 @@ app.ui.common.Dialog.prototype.handleHtmlLoad_ = function(err, html) {
  */
 app.ui.common.Dialog.prototype.createDom = function() {
   goog.base(this, 'createDom');
-  var dh = this.getDomHelper();
-  goog.dom.classes.add(this.getTitleElement(),
-      goog.getCssName(this.getCssClass(), 'header'));
-  goog.dom.classes.add(this.getContentElement(),
-      goog.getCssName(this.getCssClass(), 'body'));
-  goog.dom.classes.add(this.getButtonElement(),
-      goog.getCssName(this.getCssClass(), 'footer'));
-  goog.dom.classes.add(this.getTitleCloseElement(), 'close');
-  dh.setTextContent(this.getTitleCloseElement(), '×');
+  app.ui.common.Dialog.addCssNameForBootstrap(this);
+};
+
+
+/**
+ * @param {goog.ui.Dialog} dialog .
+ */
+app.ui.common.Dialog.addCssNameForBootstrap = function(dialog) {
+  var dh = dialog.getDomHelper();
+  goog.dom.classes.add(dialog.getTitleElement(),
+      goog.getCssName(dialog.getCssClass(), 'header'));
+  goog.dom.classes.add(dialog.getContentElement(),
+      goog.getCssName(dialog.getCssClass(), 'body'));
+  goog.dom.classes.add(dialog.getButtonElement(),
+      goog.getCssName(dialog.getCssClass(), 'footer'));
+  goog.dom.classes.add(dialog.getTitleCloseElement(), 'close');
+  dh.setTextContent(dialog.getTitleCloseElement(), '×');
 };

@@ -7,7 +7,8 @@ goog.require('goog.ui.Component');
 
 
 /**
- * @param {goog.dom.DomHelper=} opt_domHelper
+ * @param {string} id .
+ * @param {goog.dom.DomHelper=} opt_domHelper .
  * @constructor
  * @extends {goog.ui.Component}
  */

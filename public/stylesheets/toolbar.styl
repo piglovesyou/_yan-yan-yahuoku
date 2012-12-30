@@ -13,7 +13,6 @@
 
 
 .modal
-  height 358px
   &:focus
     outline none
     border-color rgba(82, 168, 236, 0.8)
@@ -23,8 +22,6 @@
     margin-bottom 20px
   .nav-tabs
     margin-bottom 0
-.modal-content
-  height 166px
 .modal-content-content
   overflow auto
   .tab-belonging
@@ -32,6 +29,11 @@
     &.active
       display block
 
+.modal-welcome
+  width 560px
+  height 358px
+  .modal-content
+    height 166px
 
 toolbarHeight = 32px
 tabBorderColor = #b6b6b6

@@ -95,7 +95,7 @@ App.prototype.enterDocument = function() {
  * @param {goog.events.Event} e A click event.
  */
 App.prototype.handleLogoClicked_ = function(e) {
-  this.dialog_.launch();
+  this.dialog_.show();
   e.preventDefault();
 };
 

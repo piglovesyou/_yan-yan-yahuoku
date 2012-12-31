@@ -24,15 +24,6 @@ exports.index = function(req, res) {
     isAuthed: isAuthed(req),
     affiliateBase: require('secret-strings').AUC_PRO.AFFILIATE_BASE
   });
-
-  // if(req.session.oauth && req.session.oauth.access_token) {
-  //   res.render('index', {
-  //     isProduction: isProduction
-  //     // screen_name: req.session.yahoo.screen_name
-  //   });
-  // } else {
-  //   res.redirect("/login");
-  // }
 };
 
 /**

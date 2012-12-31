@@ -3,20 +3,64 @@ var APPID = require('secret-strings').AUC_PRO.CONSUMER_KEY;
 var http = require('http');
 var querystring = require('querystring');
 var oa = require('../core/oauth');
+var xmlParser = require('xml2json');
+var u = require('url');
+
+
+var ENDPOINTS = require('../model/model').getApiEndpoints();
+var ERROR_MESSAGE = '{"Error":{"Message":"Request was not sent."}}';
+
+
+
 
 
 
 /**
- * @param {string} responseText .
+ * @param {string} text JSON or XML.
+ * @param {boolean} opt_isXml .
  * @return {string} .
  */
-var sliceExtraString = (function() {
-  var left = 'loaded('.length;
+var parseResponseText = (function() {
+  var prefix = 'loaded(';
+  var left = prefix.length;
   var right = ')'.length;
-  return function(responseText) {
-    return responseText.slice(left, responseText.length - right);
+  return function(text, opt_isXml) {
+    if (!opt_isXml) {
+      if (text.slice(0, prefix.length) === prefix) {
+        return text.slice(left, text.length - right);
+      } else {
+        return text;
+      }
+    } else {
+      // XXX: I'm not sure if it works.
+      try {
+        return xmlParser.toJson(text);
+      } catch (err) {
+        return text;
+      }
+    }
   };
 })();
+
+
+/**
+ * @param {string} path .
+ * @return {?Object} Url object.
+ */
+var grabEndpointUrl = function(path) {
+  var formats = ENDPOINTS[path];
+  if (!formats) {
+    return null;
+  }
+  if (formats.JSONP) {
+    return u.parse(formats.JSONP);
+  } else if (formats.XML) {
+    var url = u.parse(formats.XML);
+    url.useXML = true;
+    return url;
+  }
+  return null;
+};
 
 
 /**
@@ -25,18 +69,19 @@ var sliceExtraString = (function() {
  * @param {function} callback .
  */
 module.exports.get = function(path, param, callback) {
+  var url = grabEndpointUrl(path);
+  if (!url) callback(true, ERROR_MESSAGE);
   var body = '';
   param.appid = APPID;
   http.request({
-      host: 'auctions.yahooapis.jp',
+      host: url.host,
       method: 'GET',
-      path: '/AuctionWebService/V2/json/' +
-        path + '?' + querystring.stringify(param)
+      path: url.path + '?' + querystring.stringify(param)
     }, function(res) {
     res.on('data', function(chunk) { body += chunk });
     res.on('error', function() { callback(true) });
     res.on('end', function() {
-      callback(false, sliceExtraString(body));
+      callback(false, parseResponseText(body, url.useXML));
     });
   }).end();
 };
@@ -51,13 +96,18 @@ module.exports.get = function(path, param, callback) {
  *                                            err, data, response.
  */
 var requestWithOAuth = function(method, oauth, path, param, callback) {
+  var url = grabEndpointUrl(path);
+  if (!url) callback(true, ERROR_MESSAGE);
   var fn = method === 'GET' ? oa.get : oa.post;
   fn.call(oa,
-    'https://auctions.yahooapis.jp/AuctionWebService/V1/' + path,
+    url.href,
     oauth.access_token,
     oauth.access_token_secret,
     param,
-    callback);
+    function(err, response, data) {
+      if (err) callback(true, response);
+      callback.call(null, false, parseResponseText(response, url.useXML), data);
+    });
 };
 
 

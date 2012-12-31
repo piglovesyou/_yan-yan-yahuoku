@@ -1,6 +1,7 @@
 
 var oa = require('../sources/core/oauth.js');
 
+
 /**
  * @param {Object} req A request object.
  * @param {Object} res A response object.
@@ -13,6 +14,7 @@ exports.login = function(req, res) {
   }
 };
 
+
 /**
  * @param {Object} req A request object.
  * @param {Object} res A response object.
@@ -22,28 +24,40 @@ exports.logout = function(req, res) {
   res.render('logout');
 };
 
+
 /**
  * @param {Object} req A request object.
  * @param {Object} res A response object.
  */
-exports.auth = function(req, res) {
-  oa.getOAuthRequestToken(function(error,
-                                   oauth_token, oauth_token_secret, results) {
-    if (error) {
-      res.send("didn't work.<br />" + JSON.stringify(error));
-    } else {
-      req.session.oauth = {
-        token: oauth_token,
-        token_secret: oauth_token_secret,
-        expires_at: Date.now() +
-                    (/* '3600' */results.oauth_expires_in * 1000) -
-                    /* Less is fine. */5 * 60 * 1000
-      };
+exports.auth = (function() {
 
-      res.redirect(results.xoauth_request_auth_url);
-    }
-  });
-};
+  /**
+   * @param {string|number} expiresIn .
+   * @return {number} .
+   */
+  var createExpireTime = function(expiresIn) {
+    return Date.now() +
+        /* '3600' */expiresIn * 1000;
+  };
+
+  return function(req, res) {
+    oa.getOAuthRequestToken(function(error, oauth_token,
+                                     oauth_token_secret, results) {
+      if (error) {
+        res.send("didn't work.<br />" + JSON.stringify(error));
+      } else {
+        req.session.oauth = {
+          token: oauth_token,
+          token_secret: oauth_token_secret,
+          expires_at: createExpireTime(results.oauth_expires_in)
+        };
+        res.redirect(results.xoauth_request_auth_url);
+      }
+    });
+  };
+
+})();
+
 
 /**
  * @param {Object} req A request object.

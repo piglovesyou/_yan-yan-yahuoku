@@ -293,12 +293,28 @@ app.Model.prototype.getAlignmentStyle = function(tabId) {
 
 
 /**
+ * @param {string} method .
+ * @param {string} path .
+ * @param {Object} params .
+ * @param {Function} callback .
+ * @param {Object=} opt_obj .
+ * @private
+ */
+app.Model.prototype.requestWithOAuth_ = function(method, path,
+                                                 params, callback, opt_obj) {
+  var xhr = app.model.Xhr.getInstance();
+  var fn = method === 'GET' ? xhr.get : xhr.post;
+  fn.call(xhr, path, params, callback, opt_obj);
+};
+
+
+/**
  * @param {string} itemId to add to watch list.
  * @param {Function} callback .
  * @param {Object=} opt_obj .
  */
 app.Model.prototype.addWatchList = function(itemId, callback, opt_obj) {
-  app.model.Xhr.getInstance().post('/y/watchList', {
+  this.requestWithOAuth_('POST', '/y/watchList', {
     auctionID: itemId
   }, callback, opt_obj);
 };

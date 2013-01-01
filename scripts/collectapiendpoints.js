@@ -4,10 +4,14 @@ var p = require('path');
 var fs = require('fs');
 var assert = require('assert');
 var _ = require('underscore');
+var beautifier = require('beautifier');
+
 
 
 assert(fs.existsSync(__dirname + '/../package.json'),
        'CALL IT FROM PROJECT BASE DIRECTORY.');
+
+USE_OLD = true; // Use OAuth1.0
 
 
 var baseUrl = u.parse('http://developer.yahoo.co.jp/'); // webapi/auctions/';
@@ -30,8 +34,8 @@ var fetch = function(path, callback) {
  * @param {Object} obj .
  */
 var out = function(obj) {
-  fs.writeFileSync(__dirname +
-                   '/../sources/model/apiendpoints.json', JSON.stringify(obj));
+  fs.writeFileSync(__dirname + '/../sources/model/apiendpoints.json',
+                   beautifier.js_beautify(JSON.stringify(obj)));
 };
 
 
@@ -51,16 +55,24 @@ fetch('/webapi/auctions/', function(err, win) {
   urls.forEach(function(url) {
     fetch(url, function(err, win) {
       var table = {};
-      win.$('.reqUrl .gp').each(function(i, el) {
-        table[win.$('> .format', el).text()] =
-          win.$('> .url', el).text();
-      });
+      var reqUrlEl = win.$('.reqUrl');
+      var siblingText;
+      if (USE_OLD && (siblingText = win.$(reqUrlEl).next().text())
+                      .indexOf('OAuth1.0') >= 0) {
+        // Old version is always XML.
+        // Rough regexp!
+        table['XML'] = siblingText.match(/http[^ ]+/)[0];
+      } else {
+        win.$('.gp', reqUrlEl).each(function(i, el) {
+          table[win.$('> .format', el).text()] = win.$('> .url', el).text();
+        });
+      }
       assert(!_.isEmpty(table));
       apiTable[p.basename(take(table), '.html')] = table;
       if (!--len) {
         assert(!_.isEmpty(apiTable));
         out(apiTable);
-        // process.exit();
+        console.log('  ..done.');
       }
     });
   });

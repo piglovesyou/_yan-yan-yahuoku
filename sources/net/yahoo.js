@@ -65,6 +65,19 @@ var grabEndpointUrl = function(path) {
 
 
 /**
+ * Resolve url & query perfectly.
+ * (I feel like nodejs will change spec of `url.resolve' in the future..)
+ *
+ * @param {Object} url Url Object.
+ * @param {Object} query Get parameters.
+ * @return {string} Perfect url string.
+ */
+var resolveUrl = function(url, query) {
+  return u.resolve(url.href, '?' + querystring.stringify(query));
+};
+
+
+/**
  * @param {string} path .
  * @param {Object} query .
  * @param {function} callback .
@@ -98,7 +111,7 @@ module.exports.get = function(path, query, callback) {
 module.exports.getWithOAuth = function(oauth, path, query, callback) {
   var url = grabEndpointUrl(path);
   oa.get(
-    u.resolve(url.href, querystring.stringify(query)),
+    resolveUrl(url, query),
     oauth.access_token,
     oauth.access_token_secret,
     function(err, response, data) {

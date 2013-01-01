@@ -11,7 +11,7 @@ goog.require('goog.net.XhrManager');
  */
 app.model.Xhr = function() {
   goog.base(this);
-  this.xhr_ = new goog.net.XhrManager;
+  this.xhr_ = new goog.net.XhrManager(0); // Never retry!
 };
 goog.inherits(app.model.Xhr, goog.Disposable);
 goog.addSingletonGetter(app.model.Xhr);

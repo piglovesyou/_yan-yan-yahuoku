@@ -9,13 +9,46 @@ style
     /* background:rgba(0,0,0,.05); */
   }
 
+  // .alert {
+  //   -webkit-animation-duration: 3s;
+  //   -webkit-animation-name: slidein;
+  // }
+   
+  @-webkit-keyframes slidein {
+    from {
+      width: 100%
+    }
+   
+    to {
+      width: 60%;
+    }
+  }
 
-a(href="javascript:pop();")
-  div#target
-    | yeah
+
+// a(href="javascript:pop();")
+//   div#target
+//     | yeah
 
 script
-  var p = new app.ui.common.Dialog();
-  p.setModal(true);
-  p.setContent('are you sure?');
-  p.setVisible(true);
+  app.events.EventCenter.getInstance();
+
+  app.message.alert('oh..');
+  setTimeout(function() {
+    app.message.error('yah..');
+  }, 400);
+  setTimeout(function() {
+    app.message.success('aaa...');
+  }, 800);
+  setTimeout(function() {
+    app.message.info('aaa...');
+  }, 1200);
+
+  var el = document.getElementsByClassName('alert')[0];
+  document.body.addEventListener('webkitAnimationEnd', function(e) { console.log(e.currentTarget.tagName); }, true);
+  el.addEventListener('webkitAnimationEnd', function(e) { console.log(e.currentTarget.tagName); }, true);
+
+
+  // var p = new app.ui.common.Dialog();
+  // p.setModal(true);
+  // p.setContent('are you sure?');
+  // p.setVisible(true);

@@ -7,6 +7,7 @@ goog.require('app.events.EventCenter');
 goog.require('app.ui.Container');
 goog.require('app.ui.ContextMenu');
 goog.require('app.ui.Frames');
+goog.require('app.ui.Message');
 goog.require('app.ui.Tabs');
 goog.require('app.ui.ThousandRows');
 goog.require('app.ui.Username');
@@ -32,6 +33,8 @@ App = function(opt_domHelper) {
    * @type {app.ui.common.Dialog}
    */
   this.dialog_ = new app.ui.WelcomeDialog(opt_domHelper);
+
+  app.events.EventCenter.getInstance();
 };
 goog.inherits(App, goog.ui.Component);
 goog.addSingletonGetter(App);

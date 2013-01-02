@@ -6,6 +6,8 @@ goog.require('goog.events.EventType');
 goog.require('goog.structs.LinkedMap');
 
 
+
+
 /**
  * @constructor
  * @extends {goog.events.EventTarget}
@@ -33,6 +35,7 @@ app.ui.Message = function() {
    * @private
    */
   this.boxes_ = [];
+
 };
 goog.inherits(app.ui.Message, goog.events.EventTarget);
 goog.addSingletonGetter(app.ui.Message);
@@ -44,6 +47,52 @@ goog.addSingletonGetter(app.ui.Message);
 app.ui.Message.EventType = {
   CLOSE: 'close',
   READY_TO_DISPOSE: 'readytodispose'
+};
+
+
+/**
+ * @param {string} content .
+ */
+app.ui.Message.prototype.alert = function(content) {
+  this.create_('', content);
+};
+
+
+/**
+ * @param {string} content .
+ */
+app.ui.Message.prototype.info = function(content) {
+  this.create_('info', content);
+};
+
+
+/**
+ * @param {string} content .
+ */
+app.ui.Message.prototype.error = function(content) {
+  this.create_('error', content);
+};
+
+
+/**
+ * @param {string} content .
+ */
+app.ui.Message.prototype.success = function(content) {
+  this.create_('success', content);
+};
+
+
+/**
+ * @param {string} type .
+ * @param {string} content .
+ * @private
+ */
+app.ui.Message.prototype.create_ = function(type, content) {
+  var box = new app.ui.Message.Box_(type, content);
+  this.boxes_.push(box);
+  box.setParentEventTarget(this);
+  box.render();
+  this.reposition_();
 };
 
 
@@ -91,10 +140,6 @@ app.ui.Message.prototype.handleWindowResize_ = function(e) {
 };
 
 
-// app.ui.Message.prototype.show_ = function(type) {
-// };
-
-
 /**
  * Reposition all boxes.
  * @private
@@ -104,18 +149,6 @@ app.ui.Message.prototype.reposition_ = function() {
   this.forEach_(function(e, i) {
     e.reposition(new goog.math.Coordinate(x, 5 + i * 40));
   });
-};
-
-
-/**
- * @param {string} string .
- */
-app.ui.Message.prototype.alert = function(string) {
-  var box = new app.ui.Message.Box_();
-  this.boxes_.push(box);
-  box.setParentEventTarget(this);
-  box.render();
-  this.reposition_();
 };
 
 
@@ -196,13 +229,31 @@ app.message = app.ui.Message.getInstance();
 
 
 /**
+ * @param {string} type .
+ * @param {string} content .
  * @param {?goog.dom.DomHelper} opt_domHelper .
  * @constructor
  * @private
  */
-app.ui.Message.Box_ = function(opt_domHelper) {
+app.ui.Message.Box_ = function(type, content, opt_domHelper) {
   goog.base(this, opt_domHelper);
 
+  /**
+   * @type {string}
+   * @private
+   */
+  this.type_ = type;
+
+  /**
+   * @type {string} Content string or HTML.
+   * @private
+   */
+  this.content_ = content;
+
+  /**
+   * @type {goog.math.Coordinate}
+   * @private
+   */
   this.pos_ = new goog.math.Coordinate();
 };
 goog.inherits(app.ui.Message.Box_, goog.ui.Component);
@@ -256,9 +307,13 @@ app.ui.Message.Box_.prototype.setVisibleInternal_ = function(visible) {
 /** @inheritDoc */
 app.ui.Message.Box_.prototype.createDom = function() {
   var dh = this.getDomHelper();
-  var element = dh.createDom('div', {
-    className: 'alert'
-  }, this.closeButtonElement_ = dh.createDom('button', 'close', '×'), 'ohh...');
+  var className = ['alert'];
+  if (!goog.string.isEmpty(this.type_)) {
+    className.push('alert-' + this.type_);
+  }
+  var element = dh.createDom('div', className, this.closeButtonElement_ =
+                             dh.createDom('button', 'close', '×'),
+      dh.htmlToDocumentFragment(this.content_));
   this.setElementInternal(element);
   this.setVisibleInternal_(false);
 };
@@ -304,5 +359,6 @@ app.ui.Message.Box_.prototype.handleTransitionEnd_ = function(e) {
 
 /** @inheritDoc */
 app.ui.Message.Box_.prototype.disposeInternal = function() {
+  this.pos_ = null;
   goog.base(this, 'disposeInternal');
 };

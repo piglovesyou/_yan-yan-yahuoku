@@ -55,7 +55,7 @@ app.ui.Message.prototype.handleClickClose_ = function(e) {
   var box = e.target;
   goog.asserts.assertInstanceof(box, app.ui.Message.Box_);
   this.removeFromList_(box);
-  box.willBeRemoved();
+  box.willDisapear();
   if (!goog.array.isEmpty(this.boxes_)) this.reposition_();
 };
 
@@ -78,7 +78,6 @@ app.ui.Message.prototype.removeFromList_ = function(box) {
 app.ui.Message.prototype.handleReadyToDispose_ = function(e) {
   var box = e.target;
   goog.asserts.assertInstanceof(box, app.ui.Message.Box_);
-  this.removeChild(box, true);
   box.dispose();
 };
 
@@ -162,7 +161,17 @@ app.ui.Message.prototype.forEach_ = function(fn) {
 
 /** @inheritDoc */
 app.ui.Message.prototype.disposeInternal = function() {
-  // TODO:
+  if (this.eh_) {
+    this.eh_.dispose();
+    this.eh_ = null;
+  }
+  if (!goog.array.isEmpty(this.boxes_)) {
+    this.forEach_(function(box) {
+      this.removeChild(box, true);
+      box.dispose();
+    });
+  }
+  this.boxes_ = null;
   goog.base(this, 'disposeInternal');
 };
 
@@ -179,6 +188,9 @@ app.ui.Message.prototype.disposeInternal = function() {
  * @type {app.ui.Message}
  */
 app.message = app.ui.Message.getInstance();
+
+
+
 
 
 
@@ -266,14 +278,13 @@ app.ui.Message.Box_.prototype.enterDocument = function() {
 
 /**
  */
-app.ui.Message.Box_.prototype.willBeRemoved = function() {
+app.ui.Message.Box_.prototype.willDisapear = function() {
   this.setVisibleInternal_(false);
   this.getHandler().listenOnce(app.events.EventCenter.getInstance(),
     goog.events.EventType.TRANSITIONEND, function(e) {
       if (e.target === this.getElement() &&
           e.getBrowserEvent().propertyName === 'opacity') {
-        console.log('willBeRemoved');
-        // this.dispatchEvent(app.ui.Message.EventType.READY_TO_DISPOSE);
+        this.dispatchEvent(app.ui.Message.EventType.READY_TO_DISPOSE);
       }
     });
 };

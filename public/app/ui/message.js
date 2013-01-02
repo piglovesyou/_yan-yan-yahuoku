@@ -2,6 +2,7 @@
 goog.provide('app.ui.Message');
 
 goog.require('app.dom.ViewportSizeMonitor');
+goog.require('goog.Timer');
 goog.require('goog.events.EventType');
 goog.require('goog.structs.LinkedMap');
 
@@ -255,6 +256,25 @@ app.ui.Message.Box_ = function(type, content, opt_domHelper) {
    * @private
    */
   this.pos_ = new goog.math.Coordinate();
+
+  var lifetime;
+  switch (type) {
+    case 'info':
+      lifetime = 25 * 1000; break;
+    case '': // alert
+    case 'error':
+    case 'success':
+      lifetime = 8 * 1000; break;
+  }
+
+  lifetime;
+
+  /**
+   * @type {goog.Timer}
+   * @private
+   */
+  this.lifetimer_ = new goog.Timer(lifetime);
+
 };
 goog.inherits(app.ui.Message.Box_, goog.ui.Component);
 
@@ -299,8 +319,12 @@ app.ui.Message.Box_.createTransformValue_ = function(pos) {
  * @private
  */
 app.ui.Message.Box_.prototype.setVisibleInternal_ = function(visible) {
-  this.isVisible_ = visible;
-  this.getElement().style.opacity = visible ? 1 : 0;
+  if (this.isVisible_ = visible) {
+    this.lifetimer_.start();
+    this.getElement().style.opacity = 1;
+  } else {
+    this.getElement().style.opacity = 0;
+  }
 };
 
 
@@ -323,11 +347,20 @@ app.ui.Message.Box_.prototype.createDom = function() {
 app.ui.Message.Box_.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.getHandler()
-    .listen(this.closeButtonElement_, goog.events.EventType.CLICK, function(e) {
-      this.dispatchEvent(app.ui.Message.EventType.CLOSE);
-    }).listen(app.events.EventCenter.getInstance(),
+    .listen(this.closeButtonElement_,
+            goog.events.EventType.CLICK, this.delegateClose_)
+    .listen(this.lifetimer_, goog.Timer.TICK, this.delegateClose_)
+    .listen(app.events.EventCenter.getInstance(),
               goog.events.EventType.TRANSITIONEND, this.handleTransitionEnd_);
 
+};
+
+
+/**
+ * @private
+ */
+app.ui.Message.Box_.prototype.delegateClose_ = function() {
+  this.dispatchEvent(app.ui.Message.EventType.CLOSE);
 };
 
 

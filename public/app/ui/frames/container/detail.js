@@ -2,6 +2,7 @@
 goog.provide('app.ui.Detail');
 
 goog.require('app.ui.ContextMenu');
+goog.require('app.ui.Message');
 goog.require('app.ui.ThousandRows');
 goog.require('app.ui.common.ButtonRenderer');
 goog.require('app.ui.util');
@@ -69,6 +70,13 @@ app.ui.Detail.prototype.innerElement_;
  * @type {string}
  */
 app.ui.Detail.prototype.auctionId_;
+
+
+/**
+ * @private
+ * @type {string}
+ */
+app.ui.Detail.prototype.safeTitle_;
 
 
 /**
@@ -158,7 +166,7 @@ app.ui.Detail.prototype.renderContent = function(data) {
 
   var safe_link = this.safeItemLink_ =
     app.string.createAuctionItemLink(esc(data['AuctionItemUrl']));
-  var safe_title = esc(data['Title']);
+  var safe_title = this.safeTitle_ = esc(data['Title']);
   dh.append(/** @type {Element} */(this.titleInnerElement_),
       app.ui.Detail.createItemLink_(safe_link, safe_title, dh));
 
@@ -454,7 +462,25 @@ app.ui.Detail.prototype.handleMenuSelect_ = function(e) {
     case 'showDesc': this.jumpToElement(this.descriptionElementRef_); break;
     case 'showDetail': this.jumpToElement(this.tableElementRef_); break;
     case 'addWatchList': app.model.addWatchList(this.auctionId_,
-                                                function() {}, this); break;
+                            this.handleCompleteAddWatchList_, this); break;
+  }
+};
+
+
+/**
+ * @param {?goog.net.Xhrio} err .
+ * @param {?Object} response .
+ * @private
+ */
+app.ui.Detail.prototype.handleCompleteAddWatchList_ = function(err, response) {
+  if (err) {
+    // TODO: Shorter method is better.
+    // TODO: Link text wants `popup' icon.
+    app.message.error('ウォッチリストに追加できませんでした。<a href="javascript:app.ui.common.AuthWindow.getInstance().launch(true);">認証</a>する必要があります。');
+  } else if (response['Error']) {
+    app.message.alert(response['Error']['Message']);
+  } else {
+    app.message.success('「' + this.safeTitle_ + '」' + 'をウォッチリストに追加しました。');
   }
 };
 

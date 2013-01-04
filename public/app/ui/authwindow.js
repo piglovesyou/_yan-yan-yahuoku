@@ -66,6 +66,8 @@ app.ui.common.AuthWindow.prototype.handleAuthStateChanged_ = function(e) {
  * @param {boolean} toLogin .
  */
 app.ui.common.AuthWindow.prototype.launch = function(toLogin) {
+  // TODO: No argument needed. (Always to login.)
+  // TODO: Go /auth/auth directory. Who wants login page in popup window?
   this.window_ = goog.window.open(toLogin ? '/auth/login' : '/auth/logout',
                                   app.ui.common.AuthWindow.Options, window);
 };
@@ -97,3 +99,7 @@ app.ui.common.AuthWindow.prototype.disposeInternal = function() {
   }
   goog.base(this, 'disposeInternal');
 };
+
+
+// TODO: Create shorter namespace.
+// app.auth;

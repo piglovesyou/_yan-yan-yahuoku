@@ -72,6 +72,7 @@ app.Model.prototype.updateAuthState = function(authed) {
     type: app.events.EventType.AUTH_STATE_CHANGED,
     isAuthed: authed
   });
+  if (authed) app.message.success('認証が完了しました。<a href="/auth/logout">ログアウト</a>');
 };
 goog.exportSymbol('app.Model.prototype.updateAuthState');
 
@@ -296,7 +297,7 @@ app.Model.prototype.getAlignmentStyle = function(tabId) {
  * @param {string} method .
  * @param {string} path .
  * @param {Object} params .
- * @param {Function} callback .
+ * @param {Function(?goog.net.XhrIo, ?Object)} callback .
  * @param {Object=} opt_obj .
  * @private
  */
@@ -304,7 +305,12 @@ app.Model.prototype.requestWithOAuth_ = function(method, path,
                                                  params, callback, opt_obj) {
   var xhr = app.model.Xhr.getInstance();
   var fn = method === 'GET' ? xhr.get : xhr.post;
-  fn.call(xhr, path, params, callback, opt_obj);
+  fn.call(xhr, path, params, function(err, response) {
+    if (err && err.getStatusText() === 'Unauthorized') {
+      this.updateAuthState(false);
+    }
+    callback.apply(opt_obj, arguments);
+  }, this);
 };
 
 

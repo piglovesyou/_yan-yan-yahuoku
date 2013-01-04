@@ -59,7 +59,8 @@ app.model.Xhr.prototype.getId_ = function(uri, opt_content) {
  * @param {string} method .
  * @param {string} uri .
  * @param {?string} content .
- * @param {Function(boolean, Object)} callback Args are err and JSON object.
+ * @param {Function(?goog.net.XhrIo, ?Object)} callback If error, the first
+ *                                              argument will be xhrio object.
  * @param {Object=} opt_obj .
  * @private
  */
@@ -73,18 +74,29 @@ app.model.Xhr.prototype.request_ = function(method,
   var id = this.getId_(uri, content);
   if (id) {
     xhr.send(id, uri, method, content_, u, u, function(e) {
-      var xhrio = e.target;
-      if (xhrio && xhrio.isSuccess()) {
-        callback.call(opt_obj, false,
-            goog.string.contains(xhrio.getResponseHeader('Content-Type'),
-              'application/json') ?
-                xhrio.getResponseJson() :
-                xhrio.getResponseText());
-      } else {
-        callback.call(opt_obj, true, null);
-      }
+      var xhrio = e.target; // Should be.
+      goog.asserts.assert(xhrio, 'Xhrio object sould be.');
+      callback.call(opt_obj, xhrio.isSuccess() ? null : xhrio,
+          app.model.Xhr.extractResponse_(xhrio));
     });
   } else {
-    callback.call(opt_obj, true, null);
+    callback.call(opt_obj, {
+      Error: {
+        Message: 'The same kind of request is being on fly.'
+      }
+    }, null);
   }
+};
+
+
+/**
+ * @param {goog.net.XhrIo} xhrio .
+ * @return {Object|string} JSON object or just a response text.
+ * @private
+ */
+app.model.Xhr.extractResponse_ = function(xhrio) {
+  return goog.string.contains(
+      xhrio.getResponseHeader('Content-Type'), 'application/json') ?
+        xhrio.getResponseJson() :
+        xhrio.getResponseText();
 };

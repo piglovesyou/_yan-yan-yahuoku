@@ -16,7 +16,9 @@ var yahoo = require('../sources/net/yahoo');
     var oauth = req.session && req.session.oauth || {};
     yahoo.postWithOAuth(oauth, path, req.body, function(err, response, data) {
       res.status(data.statusCode);
-      res.contentType('application/json;charset=UTF8');
+      res.writeHead(data.statusCode, {
+        'Content-Type': 'application/json;charset=UTF8'
+      });
       res.end(response);
     });
   };

@@ -93,7 +93,7 @@ app.ui.Message.prototype.create_ = function(type, content) {
   this.boxes_.push(box);
   box.setParentEventTarget(this);
   box.render();
-  this.reposition_();
+  this.repositionIfAny_();
 };
 
 
@@ -106,7 +106,7 @@ app.ui.Message.prototype.handleClickClose_ = function(e) {
   goog.asserts.assertInstanceof(box, app.ui.Message.Box_);
   this.removeFromList_(box);
   box.willDisapear();
-  if (!goog.array.isEmpty(this.boxes_)) this.reposition_();
+  this.repositionIfAny_();
 };
 
 
@@ -137,7 +137,7 @@ app.ui.Message.prototype.handleReadyToDispose_ = function(e) {
  * @private
  */
 app.ui.Message.prototype.handleWindowResize_ = function(e) {
-  this.reposition_();
+  this.repositionIfAny_();
 };
 
 
@@ -145,7 +145,8 @@ app.ui.Message.prototype.handleWindowResize_ = function(e) {
  * Reposition all boxes.
  * @private
  */
-app.ui.Message.prototype.reposition_ = function() {
+app.ui.Message.prototype.repositionIfAny_ = function() {
+  if (goog.array.isEmpty(this.boxes_)) return;
   var x = this.calcX_();
   this.forEach_(function(e, i) {
     e.reposition(new goog.math.Coordinate(x, 5 + i * 40));
@@ -264,10 +265,10 @@ app.ui.Message.Box_ = function(type, content, opt_domHelper) {
     case '': // alert
     case 'error':
     case 'success':
-      lifetime = 8 * 1000; break;
+      lifetime = 15 * 1000; break;
   }
 
-  lifetime;
+  // lifetime = 1000 * 1000;
 
   /**
    * @type {goog.Timer}
@@ -310,7 +311,7 @@ app.ui.Message.Box_.prototype.reposition = function(newPos) {
  * @private
  */
 app.ui.Message.Box_.createTransformValue_ = function(pos) {
-  return 'translate3d(' + pos.x + 'px,' + pos.y + 'px,0)';
+  return 'translate(' + pos.x + 'px,' + pos.y + 'px)';
 };
 
 

@@ -3,6 +3,7 @@ goog.provide('app.ui.Username');
 
 goog.require('goog.asserts');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.Tooltip');
 
 
 /**
@@ -18,6 +19,12 @@ goog.inherits(app.ui.Username, goog.ui.Component);
 
 /** @type {Element} */
 app.ui.Username.prototype.contentElement_;
+
+
+/**
+ * @type {goog.ui.Tooltip}
+ */
+app.ui.Username.prototype.tooltip_;
 
 
 /** @inheritDoc */
@@ -84,5 +91,23 @@ app.ui.Username.prototype.handleAuthComplete_ = function(e) {
 app.ui.Username.prototype.updateContent_ = function() {
   this.getDomHelper().setTextContent(
       this.getContentElement(),
-        app.model.isAuthed() ? 'logout' : 'login');
+        app.model.isAuthed() ? '認証解除' : '認証');
+  if (!this.tooltip_) {
+    this.tooltip_ = new goog.ui.Tooltip(this.getElement(),
+                                        null, this.getDomHelper());
+    this.tooltip_.className += ' label';
+  }
+  this.tooltip_.setText(app.model.isAuthed() ?
+      'ヤフーオークションとの認証とタブの状態の情報を消去します' :
+      'このページから商品をウォッチリストに追加することができます');
+};
+
+
+/** @inheritDoc */
+app.ui.Username.prototype.disposeInternal = function() {
+  if (this.tooltip_) {
+    this.tooltip_.dispose();
+    this.tooltip_ = null;
+  }
+  goog.base(this, 'disposeInternal');
 };

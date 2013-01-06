@@ -476,7 +476,9 @@ app.ui.Detail.prototype.handleCompleteAddWatchList_ = function(err, response) {
   if (err) {
     // TODO: Shorter method is better.
     // TODO: Link text wants `popup' icon.
-    app.message.error('ウォッチリストに追加できませんでした。<a href="javascript:app.ui.common.AuthWindow.getInstance().launch(true);">認証</a>する必要があります。');
+    app.message.error('ウォッチリストに追加できませんでした。' +
+                      '<a href="javascript:app.auth.popup();">認証</a>' +
+                      'する必要があります。');
   } else if (response['Error']) {
     app.message.alert(response['Error']['Message']);
   } else {

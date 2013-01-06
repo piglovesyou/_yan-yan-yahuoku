@@ -74,7 +74,8 @@ app.Model.prototype.updateAuthState = function(authed) {
   });
   if (authed) app.message.success('認証が完了しました。<a href="/auth/logout">ログアウト</a>');
 };
-goog.exportSymbol('app.Model.prototype.updateAuthState');
+app.Model.prototype['updateAuthState'] =
+  app.Model.prototype.updateAuthState;
 
 
 /**
@@ -321,7 +322,7 @@ app.Model.prototype.requestWithOAuth_ = function(method, path,
  */
 app.Model.prototype.addWatchList = function(itemId, callback, opt_obj) {
   this.requestWithOAuth_('POST', '/y/watchList', {
-    auctionID: itemId
+    'auctionID': itemId
   }, callback, opt_obj);
 };
 
@@ -341,7 +342,7 @@ app.Model.prototype.flushAll = function() {
   this.sessionStore_.mechanism.clear();
   this.localStore_.mechanism.clear();
 };
-goog.exportSymbol('app.Model.prototype.flushAll');
+app.Model.prototype['flushAll'] = app.Model.prototype.flushAll;
 
 
 
@@ -351,13 +352,14 @@ goog.exportSymbol('app.Model.prototype.flushAll');
  */
 var ref = app.model.Xhr;
 
+goog.exportSymbol('app.model');
+
 /**
  * I want this name space in global.
  * @type {app.Model}
  */
 app.model = app.Model.getInstance();
-goog.exportSymbol('app.model');
-
+window['app']['model'] = app.model;
 
 /**
  */

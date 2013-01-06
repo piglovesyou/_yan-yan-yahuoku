@@ -268,8 +268,6 @@ app.ui.Message.Box_ = function(type, content, opt_domHelper) {
       lifetime = 15 * 1000; break;
   }
 
-  // lifetime = 1000 * 1000;
-
   /**
    * @type {goog.Timer}
    * @private

@@ -71,7 +71,7 @@ app.ui.Username.prototype.handleClick_ = function(e) {
     // TODO: I want goog.ui.Prompt before replacing url.
     window.location.href = '/auth/logout';
   } else {
-    app.ui.common.AuthWindow.getInstance().launch(true);
+    app.auth.popup();
   }
 };
 

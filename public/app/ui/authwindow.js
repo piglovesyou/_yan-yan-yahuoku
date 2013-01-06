@@ -1,6 +1,6 @@
 
+goog.provide('app.auth');
 goog.provide('app.ui.common.AuthWindow');
-goog.provide('app.ui.common.authwindow');
 
 goog.require('app.events.EventType');
 goog.require('goog.events.EventTarget');
@@ -63,15 +63,14 @@ app.ui.common.AuthWindow.prototype.handleAuthStateChanged_ = function(e) {
 
 
 /**
- * @param {boolean} toLogin .
  */
-app.ui.common.AuthWindow.prototype.launch = function(toLogin) {
-  // TODO: No argument needed. (Always to login.)
+app.ui.common.AuthWindow.prototype.popup = function() {
   // TODO: Go /auth/auth directory. Who wants login page in popup window?
-  this.window_ = goog.window.open(toLogin ? '/auth/login' : '/auth/logout',
+  this.window_ = goog.window.open('/auth/login',
                                   app.ui.common.AuthWindow.Options, window);
 };
-
+app.ui.common.AuthWindow.prototype['popup'] =
+    app.ui.common.AuthWindow.prototype.popup;
 
 /**
  * @private
@@ -101,5 +100,11 @@ app.ui.common.AuthWindow.prototype.disposeInternal = function() {
 };
 
 
-// TODO: Create shorter namespace.
-// app.auth;
+goog.exportSymbol('app.auth');
+
+/**
+ * @type {app.ui.common.AuthWindow}
+ */
+app.auth = app.ui.common.AuthWindow.getInstance();
+window['app']['auth'] = app.auth;
+

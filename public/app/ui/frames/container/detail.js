@@ -320,8 +320,8 @@ app.ui.Detail.prototype.renderContent = function(data) {
       );
 
   var shippingTable =
-    (ref = data['Shipping'] &&
-     +ref['@attributes']['totalShippingMethodAvailable'] >= 1) ?
+    (ref = data['Shipping']) &&
+     +ref['@attributes']['totalShippingMethodAvailable'] >= 1 ?
       dh.createDom('table', 'table table-bordered table-condensed',
         dh.createDom('tbody', null,
           dh.createDom('tr', null,

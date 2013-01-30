@@ -2,9 +2,9 @@ COMPILER_ZIP					= compiler-latest.zip
 COMPILER_REMOTE_DIR		= http://closure-compiler.googlecode.com/files/$(COMPILER_ZIP)
 COMPILER_DIR					= tools/closure-compiler/
 COMPILER_JAR					= $(COMPILER_DIR)/compiler.jar
-# SELENIUM_JAR					= selenium-server-standalone-2.29.0.jar
-# SELENIUM_REMOTE_DIR		= http://selenium.googlecode.com/files/$(SELENIUM_JAR)
-# SELENIUM_DIR					= tools/selenium/
+SELENIUM_JAR					= selenium-server-standalone-2.29.0.jar
+SELENIUM_REMOTE_JAR		= http://selenium.googlecode.com/files/$(SELENIUM_JAR)
+SELENIUM_DIR					= tools/selenium/
 CLOSURELIB_DIR        = ./public/closure-library
 CLOSURELIB_REMOTE_DIR = http://closure-library.googlecode.com/svn/trunk/
 PLOVR_JAR        = plovr-eba786b34df9.jar
@@ -27,7 +27,7 @@ COMMAND_CLOSURE_BUILDER_ = $(CLOSURELIB_DIR)/closure/bin/build/closurebuilder.py
 
 
 
-setup: setup-closurecompiler setup-plovr setup-closurelibrary setup-thirdpartymodule
+setup: setup-closurecompiler setup-plovr setup-selenium setup-closurelibrary setup-thirdpartymodule
 
 setup-closurecompiler:;
 	rm -rf $(COMPILER_DIR) && \
@@ -39,9 +39,9 @@ setup-plovr:;
 	rm -rf $(PLOVR_DIR) && \
 	wget -P $(PLOVR_DIR) $(PLOVR_REMOTE_JAR)
 
-# setup-selenium-server:;
-# 	rm -rf $(SELENIUM_DIR) && \
-# 	wget -P $(SELENIUM_DIR) $(SELENIUM_REMOTE_DIR)
+setup-selenium:;
+	rm -rf $(SELENIUM_DIR) && \
+	wget -P $(SELENIUM_DIR) $(SELENIUM_REMOTE_JAR)
 
 setup-closurelibrary:;
 	rm -rf $(CLOSURELIB_DIR)

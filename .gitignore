@@ -1,9 +1,8 @@
 node_modules
-closure
-closure-library
-closure-compiler
 .DS_Store
-redis/dump.rdb
-redis/redis.log
-public/javascripts/main-min.js
-jsdoc-toolkit
+/closure
+/tools
+/redis/dump.rdb
+/redis/redis.log
+/public/javascripts/main-min.js
+/public/closure-library

@@ -1,0 +1,14 @@
+{
+  "id": "yan-yan-yahuoku",
+  "closure-library": "./public/closure-library/closure/goog/",
+  "paths": [
+	  "./public/closure-thirdparty/closure-scroller/piglovesyou",
+	  "./public/closure-thirdparty/closure-thousandrows/piglovesyou",
+	  "./public/app",
+	  "./public/javascripts"
+  ],
+  "inputs": "./public/javascripts/main.js",
+  "mode": "ADVANCED",
+  "level": "VERBOSE",
+  "output-file": "public/javascripts/main-min.js"
+}

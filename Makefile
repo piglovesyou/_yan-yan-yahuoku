@@ -2,6 +2,11 @@ COMPILER_ZIP					= compiler-latest.zip
 COMPILER_REMOTE_DIR		= http://closure-compiler.googlecode.com/files/$(COMPILER_ZIP)
 COMPILER_DIR					= tools/closure-compiler/
 COMPILER_JAR					= $(COMPILER_DIR)/compiler.jar
+TEMPLATE_ZIP					= closure-templates-for-javascript-latest.zip
+TEMPLATE_REMOTE_DIR		= http://closure-templates.googlecode.com/files/$(TEMPLATE_ZIP)
+TEMPLATE_DIR					= tools/closure-template/
+TEMPLATE_JAR					= $(TEMPLATE_DIR)/SoyToJsSrcCompiler.jar
+SOY_DIR_IN_PUBLIC			= ./public/app/soy/
 SELENIUM_JAR					= selenium-server-standalone-2.29.0.jar
 SELENIUM_REMOTE_JAR		= http://selenium.googlecode.com/files/$(SELENIUM_JAR)
 SELENIUM_DIR					= tools/selenium/
@@ -27,13 +32,20 @@ COMMAND_CLOSURE_BUILDER_ = $(CLOSURELIB_DIR)/closure/bin/build/closurebuilder.py
 
 
 
-setup: setup-closurecompiler setup-plovr setup-selenium setup-closurelibrary setup-thirdpartymodule
+setup: setup-closurecompiler setup-closuretemplate setup-plovr setup-selenium setup-closurelibrary setup-thirdpartymodule
 
 setup-closurecompiler:;
 	rm -rf $(COMPILER_DIR) && \
 	wget -P $(COMPILER_DIR) $(COMPILER_REMOTE_DIR) && \
 	unzip -d $(COMPILER_DIR) $(COMPILER_DIR)$(COMPILER_ZIP) && \
 	rm $(COMPILER_DIR)$(COMPILER_ZIP)
+
+setup-closuretemplate:;
+	rm -rf $(TEMPLATE_DIR) && \
+	wget -P $(TEMPLATE_DIR) $(TEMPLATE_REMOTE_DIR) && \
+	unzip -d $(TEMPLATE_DIR) $(TEMPLATE_DIR)$(TEMPLATE_ZIP) && \
+	rm $(TEMPLATE_DIR)$(TEMPLATE_ZIP) && \
+	cp $(TEMPLATE_DIR)*.js $(SOY_DIR_IN_PUBLIC)
 
 setup-plovr:;
 	rm -rf $(PLOVR_DIR) && \
@@ -57,6 +69,12 @@ setup-thirdpartymodule:;
 compile:;
 	java -jar $(PLOVR_DIR)$(PLOVR_JAR) build plovr.json
 
+template:;
+	java -jar $(TEMPLATE_JAR) \
+	--outputPathFormat public/app/soy/yeah.js \
+	--srcs public/app/soy/yeah.soy \
+	--shouldGenerateJsdoc \
+	--shouldProvideRequireSoyNamespaces
 
 
 calcdeps:;

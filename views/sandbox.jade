@@ -24,28 +24,28 @@ style
     }
   }
 
-
 // a(href="javascript:pop();")
 //   div#target
 //     | yeah
 
 script
-  app.events.EventCenter.getInstance();
+  document.body.innerHTML = app.soy.yeah()
+  // app.events.EventCenter.getInstance();
 
-  app.message.alert('oh..');
-  setTimeout(function() {
-    app.message.error('yah..');
-  }, 400);
-  setTimeout(function() {
-    app.message.success('aaa...');
-  }, 800);
-  setTimeout(function() {
-    app.message.info('aaa...');
-  }, 1200);
+  // app.message.alert('oh..');
+  // setTimeout(function() {
+  //   app.message.error('yah..');
+  // }, 400);
+  // setTimeout(function() {
+  //   app.message.success('aaa...');
+  // }, 800);
+  // setTimeout(function() {
+  //   app.message.info('aaa...');
+  // }, 1200);
 
-  var el = document.getElementsByClassName('alert')[0];
-  document.body.addEventListener('webkitAnimationEnd', function(e) { console.log(e.currentTarget.tagName); }, true);
-  el.addEventListener('webkitAnimationEnd', function(e) { console.log(e.currentTarget.tagName); }, true);
+  // var el = document.getElementsByClassName('alert')[0];
+  // document.body.addEventListener('webkitAnimationEnd', function(e) { console.log(e.currentTarget.tagName); }, true);
+  // el.addEventListener('webkitAnimationEnd', function(e) { console.log(e.currentTarget.tagName); }, true);
 
 
   // var p = new app.ui.common.Dialog();

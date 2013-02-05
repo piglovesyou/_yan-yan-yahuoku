@@ -4,6 +4,7 @@ goog.provide('App');
 goog.require('app.Model');
 goog.require('app.dom.ViewportSizeMonitor');
 goog.require('app.events.EventCenter');
+goog.require('app.soy');
 goog.require('app.ui.Container');
 goog.require('app.ui.ContextMenu');
 goog.require('app.ui.Frames');
@@ -16,6 +17,7 @@ goog.require('app.ui.common.AuthWindow');
 goog.require('app.ui.common.Dialog');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
+goog.require('soy');
 
 
 /**

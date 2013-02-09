@@ -71,8 +71,8 @@ compile:;
 
 template:;
 	java -jar $(TEMPLATE_JAR) \
-	--outputPathFormat public/app/soy/yeah.js \
-	--srcs public/app/soy/yeah.soy \
+	--outputPathFormat public/app/soy/soy.js \
+	--srcs public/app/soy/soy.soy \
 	--shouldGenerateJsdoc \
 	--shouldProvideRequireSoyNamespaces
 

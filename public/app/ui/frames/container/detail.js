@@ -1,6 +1,7 @@
 
 goog.provide('app.ui.Detail');
 
+goog.require('app.soy');
 goog.require('app.ui.ContextMenu');
 goog.require('app.ui.Message');
 goog.require('app.ui.ThousandRows');
@@ -127,21 +128,25 @@ app.ui.Detail.prototype.createDom = function() {
   var fixed = app.model.getDetailTitleFixedState(app.ui.util.getTabId(this));
   this.titleFixedStateButton_ = new app.ui.Detail.FixedStateButton(dh);
   this.addChild(this.titleFixedStateButton_);
-  var titleFixedStateButtonElement;
 
   var content = this.getContentElement();
   goog.asserts.assert(content, 'should be.');
-  dh.append(content,
-      this.titleElement_ =
-        dh.createDom('h5', {className: 'detail-title', style: 'display:none'},
-          this.buttonsContainerElement_ =
-            dh.createDom('div', 'detail-title-buttons',
-              titleFixedStateButtonElement =
-                dh.createDom('a',
-                             'goog-button btn i detail-title-fixedstatebutton',
-                             fixed ? 'n' : 'q')),
-        this.titleInnerElement_ = dh.createDom('div', 'detail-title-inner')),
-      this.innerElement_ = dh.createDom('div', 'detail-inner'));
+
+  content.innerHTML = app.soy.detailTitle({
+    fixed: fixed
+  });
+  this.titleElement_ = dh.getElementByClass('detail-title', content);
+  this.buttonsContainerElement_ =
+    dh.getElementByClass('detail-title-buttons', content);
+  var titleFixedStateButtonElement =
+    dh.getElementByClass('detail-title-fixedstatebutton', content);
+  this.titleInnerElement_ = dh.getElementByClass('detail-title-inner', content);
+  this.innerElement_ = dh.getElementByClass('detail-inner', content);
+  goog.asserts.assert(this.titleElement_ &&
+                      this.buttonsContainerElement_ &&
+                      titleFixedStateButtonElement &&
+                      this.titleInnerElement_ &&
+                      this.innerElement_, 'should be.');
 
   this.titleFixedStateButton_.decorateInternal(titleFixedStateButtonElement);
 

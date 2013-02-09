@@ -172,8 +172,13 @@ app.ui.Detail.prototype.renderContent = function(data) {
   var safe_link = this.safeItemLink_ =
     app.string.createAuctionItemLink(esc(data['AuctionItemUrl']));
   var safe_title = this.safeTitle_ = esc(data['Title']);
-  dh.append(/** @type {Element} */(this.titleInnerElement_),
-      app.ui.Detail.createItemLink_(safe_link, safe_title, dh));
+
+  this.titleInnerElement_.appendChild(
+    goog.dom.htmlToDocumentFragment(
+      app.soy.detailItemLink({
+        href: safe_link,
+        title: safe_title
+      })));
 
   var images = dh.createDom('div', {
     className: 'detail-images',
@@ -362,25 +367,10 @@ app.ui.Detail.prototype.renderContent = function(data) {
  * @private
  */
 app.ui.Detail.createItemLinkParagraph_ = function(safe_link, safe_title, dh) {
-  return dh.createDom('p', 'detail-item-link',
-          app.ui.Detail.createItemLink_(safe_link, safe_title, dh));
-};
-
-
-/**
- * @param {string} safe_link .
- * @param {string} safe_title .
- * @param {goog.dom.DomHelper} dh .
- * @return {Element} .
- * @private
- */
-app.ui.Detail.createItemLink_ = function(safe_link, safe_title, dh) {
-  return dh.createDom('a', {
-           target: '_blank',
-           href: safe_link
-         },
-         dh.createTextNode(safe_title + ' '),
-         dh.createDom('span', 'i i-text', 'o'));
+  return goog.dom.htmlToDocumentFragment(app.soy.detailItemLinkParagraph({
+    href: safe_link,
+    title: safe_title
+  }));
 };
 
 

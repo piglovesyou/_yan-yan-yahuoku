@@ -18,3 +18,28 @@
 {/template}
 
 
+/**
+ * @param href
+ * @param title
+ */
+{template .detailItemLinkParagraph}
+  <p class="detail-item-link">
+    {call .detailItemLink}
+      {param href: $href /}
+      {param title: $title /}
+    {/call}
+  </p>
+{/template}
+
+
+/**
+ * @param href
+ * @param title
+ */
+{template .detailItemLink}
+  <a href="{$href}" target="_blank">
+    {$title}
+    <span class="i i-text">o</span>
+  </a>
+{/template}
+

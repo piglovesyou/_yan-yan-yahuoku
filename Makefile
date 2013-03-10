@@ -16,6 +16,8 @@ PLOVR_JAR        = plovr-eba786b34df9.jar
 PLOVR_REMOTE_JAR = http://plovr.googlecode.com/files/$(PLOVR_JAR)
 PLOVR_DIR = tools/plovr/
 
+TEMPLATES_CLASS_PATH  = ./soy-functions/closure-templates/build/classes:./soy-functions/closure-templates/java/lib/*:./soy-functions/build/classes:./soy-functions/java/lib/*:./build/tests
+
 # For development, I keep using `calcdeps' command in order to 
 # load javascript files directory from a browser where compilation
 # is not needed. Maybe I should use plovr for that later.
@@ -42,10 +44,13 @@ setup-closurecompiler:;
 
 setup-closuretemplate:;
 	rm -rf $(TEMPLATE_DIR) && \
-	wget -P $(TEMPLATE_DIR) $(TEMPLATE_REMOTE_DIR) && \
-	unzip -d $(TEMPLATE_DIR) $(TEMPLATE_DIR)$(TEMPLATE_ZIP) && \
-	rm $(TEMPLATE_DIR)$(TEMPLATE_ZIP) && \
-	cp $(TEMPLATE_DIR)*.js $(SOY_DIR_IN_PUBLIC)
+	svn checkout http://closure-templates.googlecode.com/svn/trunk/ $(TEMPLATE_DIR) && \
+	ant -buildfile $(TEMPLATE_DIR)build.xml && \
+	ant -buildfile $(TEMPLATE_DIR)build.xml SoyToJsSrcCompiler && \
+	cp $(TEMPLATE_DIR)javascript/*.js $(SOY_DIR_IN_PUBLIC)
+# Copying javascripts into public directory is temporary step.
+# We're going to use Plovr even when developing, so that we can compile sources
+# even from ./tools directory directly.
 
 setup-plovr:;
 	rm -rf $(PLOVR_DIR) && \
@@ -69,12 +74,23 @@ setup-thirdpartymodule:;
 compile:;
 	java -jar $(PLOVR_DIR)$(PLOVR_JAR) build plovr.json
 
+compile-soyfunctions:;
+	javac \
+	-sourcepath ./sources/soyfunctions \
+	-classpath "$(TEMPLATE_DIR)java/lib/*:$(TEMPLATE_DIR)build/classes" \
+	./sources/soyfunctions/SoyFunctions.java
+
 template:;
-	java -jar $(TEMPLATE_JAR) \
-	--outputPathFormat public/app/soy/soy.js \
-	--srcs public/app/soy/soy.soy \
-	--shouldGenerateJsdoc \
-	--shouldProvideRequireSoyNamespaces
+	java \
+		-cp $(TEMPLATES_CLASS_PATH) \
+		com.google.template.soy.SoyToJsSrcCompiler \
+		--pluginModules net.stakam.soy.FunctionsModule \
+		--srcs ./public/app/soy/soy.soy \
+		--allowExternalCalls false \
+		--shouldProvideRequireSoyNamespaces \
+		--shouldGenerateJsdoc \
+		--outputPathFormat ./public/app/soy/soy.js
+
 
 
 calcdeps:;

@@ -3,6 +3,28 @@
 
 
 /**
+ * @param images Array.
+ */
+{template .detailImages}
+  //TODO: Write CSS.
+  <div class="detail-images" style="text-align:center">
+    {foreach $key in keys($images)}
+      <img src="{$images[$key]}" />
+    {/foreach}
+  </div>
+{/template}
+
+
+
+
+
+
+
+
+
+
+
+/**
  * @param fixed Whether the title is fixed positioned on top.
  */
 {template .detailTitle}
@@ -41,5 +63,20 @@
     {$title}
     <span class="i i-text">o</span>
   </a>
+{/template}
+
+
+/**
+ * TODO: Implement.
+ * @param price
+ * @param bidorbuy
+ * @param endtime
+ * @param bids
+ */
+{template .detailPrimaryTable}
+  {$price}
+  {$bidorbuy}
+  {$endtime}
+  {$bids}
 {/template}
 

@@ -180,24 +180,26 @@ app.ui.Detail.prototype.renderContent = function(data) {
         title: safe_title
       })));
 
-  var images = dh.createDom('div', {
-    className: 'detail-images',
-    style: 'text-align:center' //TODO: Write CSS.
-  });
-  var imageCount = 0;
-  var self = this;
-  goog.object.forEach(data['Img'], function(url) {
-    imageCount++;
-    images.appendChild(dh.createDom('img', {
-      'src': esc(url),
-      'onload': function() {
-        if (--imageCount == 0) {
-          self.update();
-        }
-      }
-    }));
-  });
+  var images = goog.dom.htmlToDocumentFragment(app.soy.detailImages({images: data['Img']}));
+  // TODO: Care it.
+  // var imageCount = 0;
+  // var self = this;
+  // goog.object.forEach(goog.array.forEach(dh.getElementsByTagNameAndClass('img', images)),
+  //                                        function(url) {
+  //   imageCount++;
+  //   images.appendChild(dh.createDom('img', {
+  //     'src': esc(url),
+  //     'onload': function() {
+  //       if (--imageCount == 0) {
+  //         self.update();
+  //       }
+  //     }
+  //   }));
+  // });
 
+  // TODO: Implement soy file.
+  // var primaryTable = dh.htmlToDocumentFragment(
+  //     app.soy.detailPrimaryTable(data));
   var primaryTable =
       dh.createDom('table', 'table table-hover',
         // dh.createDom('caption', null, 'caption......'),
@@ -231,6 +233,7 @@ app.ui.Detail.prototype.renderContent = function(data) {
         data['Description'];
   var description = dh.createDom('p', null,
                                  dh.htmlToDocumentFragment(safeDescription));
+
 
   var subTable =
       dh.createDom('table', 'table table-hover table-condensed',

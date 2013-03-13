@@ -197,35 +197,8 @@ app.ui.Detail.prototype.renderContent = function(data) {
   //   }));
   // });
 
-  // TODO: Implement soy file.
-  // var primaryTable = dh.htmlToDocumentFragment(
-  //     app.soy.detailPrimaryTable(data));
-  var primaryTable =
-      dh.createDom('table', 'table table-hover',
-        // dh.createDom('caption', null, 'caption......'),
-        dh.createDom('tbody', null,
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '現在の価格'),
-            dh.createDom('td', null, app.string.renderPrice(esc(data['Price'])))
-          ),
-          goog.string.isNumeric(data['Bidorbuy']) ?
-            dh.createDom('tr', null,
-              dh.createDom('th', null, '即決価格'),
-              dh.createDom('td', null,
-                           app.string.renderPrice(esc(data['Bidorbuy'])))
-            ) : null,
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '残り時間'),
-            dh.createDom('td', null,
-                         app.string.renderEndDate(esc(data['EndTime'])))
-          ),
-          goog.string.isNumeric(data['Bids']) ?
-            dh.createDom('tr', null,
-              dh.createDom('th', null, '入札件数'),
-              dh.createDom('td', null, esc(data['Bids']))
-            ) : null
-        )
-      );
+  var primaryTable = dh.htmlToDocumentFragment(
+      app.soy.detailPrimaryTable(data));
 
   // I believe Yahoo doesn't hurt me but..
   var safeDescription = goog.string.contains(data['Description'], '<script') ?
@@ -235,47 +208,47 @@ app.ui.Detail.prototype.renderContent = function(data) {
                                  dh.htmlToDocumentFragment(safeDescription));
 
 
-  var subTable =
-      dh.createDom('table', 'table table-hover table-condensed',
-        // dh.createDom('caption', null, 'caption......'),
-        dh.createDom('tbody', null,
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '個数'),
-            dh.createDom('td', null, esc(data['Quantity']))),
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '開始時の価格'),
-            dh.createDom('td', null,
-                         app.string.renderPrice(esc(data['InitPrice'])))),
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '開始日時'),
-            dh.createDom('td', null,
-                         app.string.renderDate(esc(data['StartTime'])))),
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '終了日時'),
-            dh.createDom('td', null,
-                         app.string.renderDate(esc(data['EndTime'])))),
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '早期終了'),
-            dh.createDom('td', null,
-                         app.string.renderBoolean(data['IsEarlyClosing']))),
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '自動延長'),
-            dh.createDom('td', null,
-                       app.string.renderBoolean(data['IsAutomaticExtension']))),
-          data['ItemStatus'] ?
-            dh.createDom('tr', null,
-              dh.createDom('th', null, '商品の状態'),
-              dh.createDom('td', null,
-                app.string.renderItemCondition(data['ItemStatus']['Condition']))
-            ) : null,
-          data['ItemReturnable'] ?
-            dh.createDom('tr', null,
-              dh.createDom('th', null, '返品の可否'),
-              dh.createDom('td', null,
-                app.string.renderBoolean(data['ItemReturnable']['Allowed']))
-            ) : null
-        )
-      );
+  var subTable = dh.htmlToDocumentFragment(app.soy.detailSubTable(data));
+  //     dh.createDom('table', 'table table-hover table-condensed',
+  //       // dh.createDom('caption', null, 'caption......'),
+  //       dh.createDom('tbody', null,
+  //         dh.createDom('tr', null,
+  //           dh.createDom('th', null, '個数'),
+  //           dh.createDom('td', null, esc(data['Quantity']))),
+  //         dh.createDom('tr', null,
+  //           dh.createDom('th', null, '開始時の価格'),
+  //           dh.createDom('td', null,
+  //                        app.string.renderPrice(esc(data['InitPrice'])))),
+  //         dh.createDom('tr', null,
+  //           dh.createDom('th', null, '開始日時'),
+  //           dh.createDom('td', null,
+  //                        app.string.renderDate(esc(data['StartTime'])))),
+  //         dh.createDom('tr', null,
+  //           dh.createDom('th', null, '終了日時'),
+  //           dh.createDom('td', null,
+  //                        app.string.renderDate(esc(data['EndTime'])))),
+  //         dh.createDom('tr', null,
+  //           dh.createDom('th', null, '早期終了'),
+  //           dh.createDom('td', null,
+  //                        app.string.renderBoolean(data['IsEarlyClosing']))),
+  //         dh.createDom('tr', null,
+  //           dh.createDom('th', null, '自動延長'),
+  //           dh.createDom('td', null,
+  //                      app.string.renderBoolean(data['IsAutomaticExtension']))),
+  //         data['ItemStatus'] ?
+  //           dh.createDom('tr', null,
+  //             dh.createDom('th', null, '商品の状態'),
+  //             dh.createDom('td', null,
+  //               app.string.renderItemCondition(data['ItemStatus']['Condition']))
+  //           ) : null,
+  //         data['ItemReturnable'] ?
+  //           dh.createDom('tr', null,
+  //             dh.createDom('th', null, '返品の可否'),
+  //             dh.createDom('td', null,
+  //               app.string.renderBoolean(data['ItemReturnable']['Allowed']))
+  //           ) : null
+  //       )
+  //     );
 
   // TODO: data['ShipTime']
   var paymentTable = data['Payment'] ?
@@ -345,7 +318,8 @@ app.ui.Detail.prototype.renderContent = function(data) {
       ) : null;
 
   var descriptionContainer = dh.createDom('div', 'detail-description-container',
-      this.descriptionElementRef_ = description,
+      // For devel.
+      // this.descriptionElementRef_ = description,
       app.ui.Detail.createItemLinkParagraph_(safe_link, safe_title, dh),
       this.tableElementRef_ = primaryTable,
       subTable,
@@ -357,7 +331,10 @@ app.ui.Detail.prototype.renderContent = function(data) {
 
   goog.asserts.assert(this.innerElement_, 'Must be');
   dh.append(this.innerElement_,
-            this.imagesElementRef_ = images, descriptionContainer);
+            // For devel.
+            // this.imagesElementRef_ = images,
+            descriptionContainer
+           );
   this.update();
 };
 

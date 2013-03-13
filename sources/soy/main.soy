@@ -1,0 +1,167 @@
+{namespace app.soy}
+
+
+
+/**
+ * @param images Array.
+ */
+{template .detailImages}
+  //TODO: Write CSS.
+  <div class="detail-images" style="text-align:center">
+    {foreach $key in keys($images)}
+      <img src="{$images[$key]}" />
+    {/foreach}
+  </div>
+{/template}
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @param fixed Whether the title is fixed positioned on top.
+ */
+{template .detailTitle}
+  <h5 class="detail-title" style="display:none">
+    <div class="detail-title-buttons">
+    	<a href="#" class="goog-button btn i detail-title-fixedstatebutton">
+        {if $fixed}n{else}q{/if}
+      </a>
+    </div>
+    <div class="detail-title-inner"></div>
+  </h5>
+  <div class="detail-inner"></div>
+{/template}
+
+
+/**
+ * @param href
+ * @param title
+ */
+{template .detailItemLinkParagraph}
+  <p class="detail-item-link">
+    {call .detailItemLink}
+      {param href: $href /}
+      {param title: $title /}
+    {/call}
+  </p>
+{/template}
+
+
+/**
+ * @param href
+ * @param title
+ */
+{template .detailItemLink}
+  <a href="{$href}" target="_blank">
+    {$title}
+    <span class="i i-text">o</span>
+  </a>
+{/template}
+
+
+/**
+ * TODO: Implement.
+ * @param Price
+ * @param Bidorbuy
+ * @param EndTime
+ * @param Bids
+ */
+{template .detailPrimaryTable}
+  <table class="table table-hover">
+    <tbody>
+      <tr>
+      	<th>現在の価格</th>
+      	<td>{call .price}{param Price: $Price /}{/call}</td>
+      </tr>
+      {if isNonnull($Bidorbuy)}
+        <tr>
+          <th>即決価格</th>
+      	<td>{call .price}{param Price: $Bidorbuy /}{/call}</td>
+        </tr>
+      {/if}
+      <tr>
+      	<th>残り時間</th>
+      	<td>{literalApply(app.string.renderEndDate, [$EndTime])}</td>
+      </tr>
+      {if isNonnull($Bids)}
+        <tr>
+          <th>入札件数</th>
+          <td>{$Bids}</td>
+        </tr>
+      {/if}
+    </tbody>
+  </table>
+{/template}
+
+/**
+ * @param Quantity
+ * @param InitPrice
+ * @param StartTime
+ * @param EndTime
+ * @param IsEarlyClosing
+ * @param IsAutomaticExtension
+ * @param ItemStatus
+ * @param ItemReturnable
+ */
+{template .detailSubTable}
+  <table class="table table-hover table-condensed">
+    <tbody>
+      <tr>
+        <th>個数</th>
+        <td>{$Quantity}</td>
+      </tr>
+      {if isNonnull($InitPrice)}
+        <tr>
+          <th>開始時の価格</th>
+          <td>aaaaaa {$InitPrice}{literalApply(app.string.renderPrice, [$InitPrice])}</td>
+        </tr>
+      {/if}
+      <tr>
+        <th>開始日時</th>
+        <td>{literalApply(app.string.renderDate, [$StartTime])}</td>
+      </tr>
+      <tr>
+        <th>終了日時</th>
+        <td>{literalApply(app.string.renderDate, [$EndTime])}</td>
+      </tr>
+      <tr>
+        <th>早期終了</th>
+        <td>{literalApply(app.string.renderBoolean, [$IsEarlyClosing])}</td>
+      </tr>
+      <tr>
+        <th>自動延長</th>
+        <td>{literalApply(app.string.renderBoolean, [$IsAutomaticExtension])}</td>
+      </tr>
+      {if isNonnull($ItemStatus)}
+        <tr>
+          <th>商品の状態</th>
+          <td>{literalApply(app.string.renderItemCondition, [$ItemStatus])}</td>
+        </tr>
+      {/if}
+      {if isNonnull($ItemReturnable)}
+        <tr>
+          <th>返品の可否</th>
+          <td>{literalApply(app.string.renderBoolean, [$ItemReturnable['Allowed']])}</td>
+        </tr>
+      {/if}
+    </tbody>
+  </table>
+{/template}
+
+/**
+ * @param Price
+ */
+{template .price}
+  {formatNumberWithComma(round($Price))}円
+{/template}
+
+/***/
+{template .endTime}
+{/template}

@@ -85,11 +85,11 @@ template:;
 		-cp $(TEMPLATES_CLASS_PATH) \
 		com.google.template.soy.SoyToJsSrcCompiler \
 		--pluginModules net.stakam.soy.FunctionsModule \
-		--srcs ./public/app/soy/soy.soy \
+		--srcs ./sources/soy/main.soy \
 		--allowExternalCalls false \
 		--shouldProvideRequireSoyNamespaces \
 		--shouldGenerateJsdoc \
-		--outputPathFormat ./public/app/soy/soy.js
+		--outputPathFormat ./public/app/soy/main.js
 
 
 

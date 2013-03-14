@@ -68,87 +68,88 @@
 
 /**
  * TODO: Implement.
- * @param Price
- * @param Bidorbuy
- * @param EndTime
- * @param Bids
+ * @param price
+ * @param bidorbuy
+ * @param endTime
+ * @param bids
  */
 {template .detailPrimaryTable}
   <table class="table table-hover">
     <tbody>
       <tr>
       	<th>現在の価格</th>
-      	<td>{call .price}{param Price: $Price /}{/call}</td>
+      	<td>{call .price}{param price: $price /}{/call}</td>
       </tr>
-      {if isNonnull($Bidorbuy)}
+      {if isNonnull($bidorbuy)}
         <tr>
           <th>即決価格</th>
-      	<td>{call .price}{param Price: $Bidorbuy /}{/call}</td>
+      	<td>{call .price}{param price: $bidorbuy /}{/call}</td>
         </tr>
       {/if}
       <tr>
       	<th>残り時間</th>
-      	<td>{literalApply(app.string.renderEndDate, [$EndTime])}</td>
+      	<td>{literalApply(app.string.renderEndDate, [$endTime])}</td>
       </tr>
-      {if isNonnull($Bids)}
+      {if isNonnull($bids)}
         <tr>
           <th>入札件数</th>
-          <td>{$Bids}</td>
+          <td>{$bids}</td>
         </tr>
       {/if}
     </tbody>
   </table>
 {/template}
 
+
 /**
- * @param Quantity
- * @param InitPrice
- * @param StartTime
- * @param EndTime
- * @param IsEarlyClosing
- * @param IsAutomaticExtension
- * @param ItemStatus
- * @param ItemReturnable
+ * @param quantity
+ * @param initPrice
+ * @param startTime
+ * @param endTime
+ * @param isEarlyClosing
+ * @param isAutomaticExtension
+ * @param itemStatus
+ * @param itemReturnable
  */
 {template .detailSubTable}
   <table class="table table-hover table-condensed">
     <tbody>
       <tr>
         <th>個数</th>
-        <td>{$Quantity}</td>
+        <td>{$quantity}</td>
       </tr>
-      {if isNonnull($InitPrice)}
+      {if isNonnull($initPrice)}
         <tr>
           <th>開始時の価格</th>
-          <td>aaaaaa {$InitPrice}{literalApply(app.string.renderPrice, [$InitPrice])}</td>
+          <td>aaaaaa {$initPrice}{literalApply(app.string.renderPrice, [$initPrice])}</td>
         </tr>
       {/if}
       <tr>
         <th>開始日時</th>
-        <td>{literalApply(app.string.renderDate, [$StartTime])}</td>
+        <td>{literalApply(app.string.renderDate, [$startTime])}</td>
       </tr>
       <tr>
         <th>終了日時</th>
-        <td>{literalApply(app.string.renderDate, [$EndTime])}</td>
+        <td>{literalApply(app.string.renderDate, [$endTime])}</td>
       </tr>
       <tr>
         <th>早期終了</th>
-        <td>{literalApply(app.string.renderBoolean, [$IsEarlyClosing])}</td>
+        <td>{literalApply(app.string.renderBoolean, [$isEarlyClosing])}</td>
       </tr>
       <tr>
         <th>自動延長</th>
-        <td>{literalApply(app.string.renderBoolean, [$IsAutomaticExtension])}</td>
+        <td>{literalApply(app.string.renderBoolean, [$isAutomaticExtension])}</td>
       </tr>
-      {if isNonnull($ItemStatus)}
+      {if isNonnull($itemStatus)}
         <tr>
           <th>商品の状態</th>
-          <td>{literalApply(app.string.renderItemCondition, [$ItemStatus])}</td>
+          <td>{literalApply(app.string.renderItemCondition, [$itemStatus])}</td>
         </tr>
       {/if}
-      {if isNonnull($ItemReturnable)}
+      {if isNonnull($itemReturnable)}
         <tr>
           <th>返品の可否</th>
-          <td>{literalApply(app.string.renderBoolean, [$ItemReturnable['Allowed']])}</td>
+          <td>{literalApply(app.string.renderBoolean, [$itemReturnable['Allowed']])}</td>
         </tr>
       {/if}
     </tbody>
@@ -156,10 +157,10 @@
 {/template}
 
 /**
- * @param Price
+ * @param price
  */
 {template .price}
-  {formatNumberWithComma(round($Price))}円
+  {formatNumberWithComma(round($price))}円
 {/template}
 
 /***/

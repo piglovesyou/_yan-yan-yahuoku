@@ -180,7 +180,10 @@ app.ui.Detail.prototype.renderContent = function(data) {
         title: safe_title
       })));
 
-  var images = goog.dom.htmlToDocumentFragment(app.soy.detailImages({images: data['Img']}));
+  var images = goog.dom.htmlToDocumentFragment(app.soy.detailImages({
+    images: data['Img']
+  }));
+
   // TODO: Care it.
   // var imageCount = 0;
   // var self = this;
@@ -197,8 +200,12 @@ app.ui.Detail.prototype.renderContent = function(data) {
   //   }));
   // });
 
-  var primaryTable = dh.htmlToDocumentFragment(
-      app.soy.detailPrimaryTable(data));
+  var primaryTable = dh.htmlToDocumentFragment(app.soy.detailPrimaryTable({
+    price: data['Price'],
+    bidorbuy: data['Bidorbuy'],
+    endTime: data['EndTime'],
+    bids: data['Bids']
+  }));
 
   // I believe Yahoo doesn't hurt me but..
   var safeDescription = goog.string.contains(data['Description'], '<script') ?
@@ -208,47 +215,16 @@ app.ui.Detail.prototype.renderContent = function(data) {
                                  dh.htmlToDocumentFragment(safeDescription));
 
 
-  var subTable = dh.htmlToDocumentFragment(app.soy.detailSubTable(data));
-  //     dh.createDom('table', 'table table-hover table-condensed',
-  //       // dh.createDom('caption', null, 'caption......'),
-  //       dh.createDom('tbody', null,
-  //         dh.createDom('tr', null,
-  //           dh.createDom('th', null, '個数'),
-  //           dh.createDom('td', null, esc(data['Quantity']))),
-  //         dh.createDom('tr', null,
-  //           dh.createDom('th', null, '開始時の価格'),
-  //           dh.createDom('td', null,
-  //                        app.string.renderPrice(esc(data['InitPrice'])))),
-  //         dh.createDom('tr', null,
-  //           dh.createDom('th', null, '開始日時'),
-  //           dh.createDom('td', null,
-  //                        app.string.renderDate(esc(data['StartTime'])))),
-  //         dh.createDom('tr', null,
-  //           dh.createDom('th', null, '終了日時'),
-  //           dh.createDom('td', null,
-  //                        app.string.renderDate(esc(data['EndTime'])))),
-  //         dh.createDom('tr', null,
-  //           dh.createDom('th', null, '早期終了'),
-  //           dh.createDom('td', null,
-  //                        app.string.renderBoolean(data['IsEarlyClosing']))),
-  //         dh.createDom('tr', null,
-  //           dh.createDom('th', null, '自動延長'),
-  //           dh.createDom('td', null,
-  //                      app.string.renderBoolean(data['IsAutomaticExtension']))),
-  //         data['ItemStatus'] ?
-  //           dh.createDom('tr', null,
-  //             dh.createDom('th', null, '商品の状態'),
-  //             dh.createDom('td', null,
-  //               app.string.renderItemCondition(data['ItemStatus']['Condition']))
-  //           ) : null,
-  //         data['ItemReturnable'] ?
-  //           dh.createDom('tr', null,
-  //             dh.createDom('th', null, '返品の可否'),
-  //             dh.createDom('td', null,
-  //               app.string.renderBoolean(data['ItemReturnable']['Allowed']))
-  //           ) : null
-  //       )
-  //     );
+  var subTable = dh.htmlToDocumentFragment(app.soy.detailSubTable({
+    quantity: data['Quantity'],
+    initPrice: data['InitPrice'],
+    startTime: data['StartTime'],
+    endTime: data['EndTime'],
+    isEarlyClosing: data['IsEarlyClosing'],
+    isAutomaticExtension: data['IsAutomaticExtension'],
+    itemStatus: data['ItemStatus'],
+    itemReturnable: data['ItemReturnable']
+  }));
 
   // TODO: data['ShipTime']
   var paymentTable = data['Payment'] ?

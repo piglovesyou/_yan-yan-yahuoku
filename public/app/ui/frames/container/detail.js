@@ -162,7 +162,6 @@ app.ui.Detail.prototype.createDom = function() {
 app.ui.Detail.prototype.renderContent = function(data) {
   var dh = this.getDomHelper();
   var esc = goog.string.htmlEscape;
-  var ref; // Temporary reference.
 
   var container = this.getContentElement();
   this.prepareContent_(true);
@@ -184,22 +183,6 @@ app.ui.Detail.prototype.renderContent = function(data) {
     images: data['Img']
   }));
 
-  // TODO: Care it.
-  // var imageCount = 0;
-  // var self = this;
-  // goog.object.forEach(goog.array.forEach(dh.getElementsByTagNameAndClass('img', images)),
-  //                                        function(url) {
-  //   imageCount++;
-  //   images.appendChild(dh.createDom('img', {
-  //     'src': esc(url),
-  //     'onload': function() {
-  //       if (--imageCount == 0) {
-  //         self.update();
-  //       }
-  //     }
-  //   }));
-  // });
-
   var primaryTable = dh.htmlToDocumentFragment(app.soy.detailPrimaryTable({
     price: data['Price'],
     bidorbuy: data['Bidorbuy'],
@@ -214,7 +197,6 @@ app.ui.Detail.prototype.renderContent = function(data) {
   var description = dh.createDom('p', null,
                                  dh.htmlToDocumentFragment(safeDescription));
 
-
   var subTable = dh.htmlToDocumentFragment(app.soy.detailSubTable({
     quantity: data['Quantity'],
     initPrice: data['InitPrice'],
@@ -227,75 +209,27 @@ app.ui.Detail.prototype.renderContent = function(data) {
   }));
 
   // TODO: data['ShipTime']
-  var paymentTable = data['Payment'] ?
-      dh.createDom('table', 'table table-bordered table-condensed',
-        // dh.createDom('caption', null, 'caption......'),
-        dh.createDom('tbody', null,
-          (ref = data['Payment']['EasyPayment']) ?
-            dh.createDom('tr', null,
-              dh.createDom('th', {'rowspan': 2}, '決済方法'),
-              dh.createDom('td', {'colspan': 2},
-                dh.htmlToDocumentFragment('Yahoo!簡単決済' +
-                  (ref['IsCreditCard'] == 'true' ?
-                      '<br> - クレジットカード決済' : '') +
-                  (ref['IsNetBank'] == 'true' ?
-                      '<br> - 銀行ネット決済' : '')
-                )
-              )
-            ) : null,
-          ((ref = data['Payment']['Bank']) &&
-           +ref['@attributes']['totalBankMethodAvailable'] >= 1) ?
-            dh.createDom('tr', null,
-              dh.createDom('td', {style: 'width:60px'}, '銀行振込'),
-              dh.createDom('td', 'detail-td-tablecontainer',
-                dh.createDom('table', 'table table-condensed',
-                  dh.createDom('tbody', null,
-                    dh.createDom('tr', null,
-                      dh.createDom('th', null, '対応できる銀行'),
-                      dh.createDom('td', null, ref['Method'])
-                    )
-                  )
-                )
-              )
-            ) : null
-        )
-      ) : null;
+  var paymentTable = goog.dom.htmlToDocumentFragment(app.soy.paymentTable({
+      easyPayment: data['Payment']['EasyPayment'],
+      bank: data['Payment']['Bank']
+    }));
 
   var senddetailTable =
-      dh.createDom('table', 'table table-bordered table-condensed',
-        dh.createDom('tbody', null,
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '送料負担'),
-            dh.createDom('td', null,
-              (data['ChargeForShipping'] == 'winner' ? '落札者' : '出品者'))
-          ),
-          data['Location'] ?
-            dh.createDom('tr', null,
-               dh.createDom('th', null, '商品発送元地域'),
-               dh.createDom('td', null, data['Location'])
-            ) : null,
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '海外発送'),
-            dh.createDom('td', null, data['IsWorldwide'] == 'true' ? '可' : '不可')
-          )
-        )
-      );
+      goog.dom.htmlToDocumentFragment(app.soy.sendDetailTable({
+        chargeForShipping: data['ChargeForShipping'],
+        location: data['Location'],
+        isWorldwide: data['IsWorldwide']
+      }));
 
   var shippingTable =
-    (ref = data['Shipping']) &&
-     +ref['@attributes']['totalShippingMethodAvailable'] >= 1 ?
-      dh.createDom('table', 'table table-bordered table-condensed',
-        dh.createDom('tbody', null,
-          dh.createDom('tr', null,
-            dh.createDom('th', null, '配送方法'),
-            dh.createDom('td', null, data['Shipping']['Method']['Name'])
-          )
-        )
-      ) : null;
+      +goog.getObjectByName('Shipping.@attributes.totalShippingMethodAvailable',
+                            data) ?
+        goog.dom.htmlToDocumentFragment(app.soy.shippingTable({
+          shippingMethodName: goog.getObjectByName('Shipping.Method.Name', data)
+        })) : null;
 
   var descriptionContainer = dh.createDom('div', 'detail-description-container',
-      // For devel.
-      // this.descriptionElementRef_ = description,
+      this.descriptionElementRef_ = description,
       app.ui.Detail.createItemLinkParagraph_(safe_link, safe_title, dh),
       this.tableElementRef_ = primaryTable,
       subTable,
@@ -307,11 +241,30 @@ app.ui.Detail.prototype.renderContent = function(data) {
 
   goog.asserts.assert(this.innerElement_, 'Must be');
   dh.append(this.innerElement_,
-            // For devel.
-            // this.imagesElementRef_ = images,
+            this.imagesElementRef_ = images,
             descriptionContainer
            );
-  this.update();
+
+  this.updateAfterImageLoaded_(
+      goog.dom.getElementsByTagNameAndClass('img', null, this.innerElement_));
+};
+
+/**
+ * @private
+ * @param { {length: number} } images .
+ */
+app.ui.Detail.prototype.updateAfterImageLoaded_ = function(images) {
+  var count = images.length;
+  if (count > 0) {
+    var eh = this.getHandler();
+    goog.array.forEach(images, function(img) {
+      eh.listenOnce(img, goog.events.EventType.LOAD, function(e) {
+        if (!(--count)) this.update();
+      }, this);
+    }, this);
+  } else {
+    this.update();
+  }
 };
 
 

@@ -157,12 +157,105 @@
 {/template}
 
 /**
+ * @param easyPayment
+ * @param bank
+ */
+{template .paymentTable}
+
+  {let $useEasyPament: isNonnull($easyPayment) /}
+  {let $totalBankMethodAvailable: isNonnull($bank) and $bank['@attributes']['totalBankMethodAvailable'] /}
+  {let $useBank: isNonnull($bank) and $totalBankMethodAvailable > 0 /}
+
+  {if $useEasyPament or $useBank}
+    <table class="table table-bordered table-condensed">
+      <tbody>
+        {if $useEasyPament}
+          <tr>
+            <th rowspan="2">決済方法</th>
+            <td colspan="2">
+              Yahoo!簡単決済
+              {if $easyPayment['IsCreditCard']}<br /> - クレジットカード決済{/if}
+              {if $easyPayment['IsNetBank']}<br /> - 銀行ネット決済{/if}
+            </td>
+          </tr>
+        {/if}
+        {if $useBank}
+          <tr>
+            <td style="width:60px;">銀行振込</td>
+            <td class="detail-td-tablecontainer">
+              <table class="table table-condensed">
+              	<tbody>
+              		<tr>
+                    <th>対応できる銀行</th>
+                    <td>
+                      {foreach $b in $bank['Method']}
+                        {if isFirst($b)}
+                          {$b}
+                        {else}
+                          , {$b}
+                        {/if}
+                      {/foreach}
+                    </td>
+                  </tr>
+              	</tbody>
+              </table>
+            </td>
+          </tr>
+        {/if}
+      </tbody>
+    </table>
+  {/if}
+{/template}
+
+/**
+ * @param chargeForShipping
+ * @param location
+ * @param isWorldwide
+ */
+{template .sendDetailTable}
+  <table class="table table-bordered table-condensed">
+    <tbody>
+      <tr>
+      	<th>送料負担</th>
+      	<td>
+          {if $chargeForShipping == 'winner'}
+            落札者
+          {else}
+            出品者
+          {/if}
+        </td>
+      </tr>
+      {if isNonnull($location)}
+        <tr>
+          <th>商品発送元地域</th>
+          <td>{$location}</td>
+        </tr>
+      {/if}
+      <tr>
+      	<th>海外発送</th>
+      	<td>{if isNonnull($isWorldwide)}可{else}不可{/if}</td>
+      </tr>
+    </tbody>
+  </table>
+{/template}
+
+/**
+ * @param shippingMethodName
+ */
+{template .shippingTable}
+  <table class="table table-bordered table-condensed">
+  	<tbody>
+  		<tr>
+  			<th>ohh. 配送方法</th>
+  			<td>{$shippingMethodName}</td>
+  		</tr>
+  	</tbody>
+  </table>
+{/template}
+
+/**
  * @param price
  */
 {template .price}
   {formatNumberWithComma(round($price))}円
-{/template}
-
-/***/
-{template .endTime}
 {/template}

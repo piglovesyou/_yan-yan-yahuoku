@@ -7,6 +7,7 @@ goog.require('app.ui.Message');
 goog.require('app.ui.ThousandRows');
 goog.require('app.ui.common.ButtonRenderer');
 goog.require('app.ui.util');
+goog.require('goog.soy');
 goog.require('goog.style');
 goog.require('goog.ui.SplitPane');
 goog.require('goog.ui.ToggleButton');
@@ -173,31 +174,27 @@ app.ui.Detail.prototype.renderContent = function(data) {
   var safe_title = this.safeTitle_ = esc(data['Title']);
 
   this.titleInnerElement_.appendChild(
-    goog.dom.htmlToDocumentFragment(
-      app.soy.detailItemLink({
-        href: safe_link,
-        title: safe_title
-      })));
+    goog.soy.renderAsFragment(app.soy.detailItemLink, {
+      href: safe_link,
+      title: safe_title
+    }));
 
-  var images = goog.dom.htmlToDocumentFragment(app.soy.detailImages({
+  var images = goog.soy.renderAsFragment(app.soy.detailImages, {
     images: data['Img']
-  }));
+  });
 
-  var primaryTable = dh.htmlToDocumentFragment(app.soy.detailPrimaryTable({
+  var primaryTable = goog.soy.renderAsFragment(app.soy.detailPrimaryTable, {
     price: data['Price'],
     bidorbuy: data['Bidorbuy'],
     endTime: data['EndTime'],
     bids: data['Bids']
-  }));
+  });
 
-  // I believe Yahoo doesn't hurt me but..
-  var safeDescription = goog.string.contains(data['Description'], '<script') ?
-      data['Description'].replace(/<script[\s\S]+?\/script>/gi, '') :
-        data['Description'];
+  // I trust Yahoo.
   var description = dh.createDom('p', null,
-                                 dh.htmlToDocumentFragment(safeDescription));
+      dh.htmlToDocumentFragment(data['Description']));
 
-  var subTable = dh.htmlToDocumentFragment(app.soy.detailSubTable({
+  var subTable = goog.soy.renderAsFragment(app.soy.detailSubTable, {
     quantity: data['Quantity'],
     initPrice: data['InitPrice'],
     startTime: data['StartTime'],
@@ -206,27 +203,27 @@ app.ui.Detail.prototype.renderContent = function(data) {
     isAutomaticExtension: data['IsAutomaticExtension'],
     itemStatus: data['ItemStatus'],
     itemReturnable: data['ItemReturnable']
-  }));
+  });
 
   // TODO: data['ShipTime']
-  var paymentTable = goog.dom.htmlToDocumentFragment(app.soy.paymentTable({
+  var paymentTable = goog.soy.renderAsFragment(app.soy.paymentTable, {
       easyPayment: data['Payment']['EasyPayment'],
       bank: data['Payment']['Bank']
-    }));
+    });
 
   var senddetailTable =
-      goog.dom.htmlToDocumentFragment(app.soy.sendDetailTable({
+      goog.soy.renderAsFragment(app.soy.sendDetailTable, {
         chargeForShipping: data['ChargeForShipping'],
         location: data['Location'],
         isWorldwide: data['IsWorldwide']
-      }));
+      });
 
   var shippingTable =
       +goog.getObjectByName('Shipping.@attributes.totalShippingMethodAvailable',
                             data) ?
-        goog.dom.htmlToDocumentFragment(app.soy.shippingTable({
+        goog.soy.renderAsFragment(app.soy.shippingTable, {
           shippingMethodName: goog.getObjectByName('Shipping.Method.Name', data)
-        })) : null;
+        }) : null;
 
   var descriptionContainer = dh.createDom('div', 'detail-description-container',
       this.descriptionElementRef_ = description,
@@ -259,7 +256,7 @@ app.ui.Detail.prototype.updateAfterImageLoaded_ = function(images) {
     var eh = this.getHandler();
     goog.array.forEach(images, function(img) {
       eh.listenOnce(img, goog.events.EventType.LOAD, function(e) {
-        if (!(--count)) this.update();
+        if (--count <= 0) this.update();
       }, this);
     }, this);
   } else {
@@ -276,10 +273,10 @@ app.ui.Detail.prototype.updateAfterImageLoaded_ = function(images) {
  * @private
  */
 app.ui.Detail.createItemLinkParagraph_ = function(safe_link, safe_title, dh) {
-  return goog.dom.htmlToDocumentFragment(app.soy.detailItemLinkParagraph({
+  return goog.soy.renderAsFragment(app.soy.detailItemLinkParagraph, {
     href: safe_link,
     title: safe_title
-  }));
+  });
 };
 
 

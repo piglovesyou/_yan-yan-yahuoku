@@ -100,6 +100,7 @@
 .tab-adder:active{background-position:center -48px}
 .frame{display:none;}
 .frame.selected{display:block}
+.goog-splitpane{overflow:hidden}
 .goog-splitpane-handle-horizontal{cursor:col-resize}
 .goog-splitpane-handle,.goog-splitpane-first-container,.goog-splitpane-second-container{position:absolute}
 .firstComponentFocused .goog-splitpane-first-container{z-index:1}

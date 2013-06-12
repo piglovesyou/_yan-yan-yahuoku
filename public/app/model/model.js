@@ -261,8 +261,12 @@ app.Model.prototype.getDetailPaneWidth = function(tabId) {
  * @return {Object} .
  */
 app.Model.prototype.createEmptyTab = function() {
+  var defaults = [
+    'そうめん',
+    'ひやむぎ'
+  ];
   return {
-    'query': ['たらば', 'ずわい'][Math.round(Math.random())],
+    'query': defaults[Math.floor(Math.random() * defaults.length)],
     'category': {
       'CategoryId': 0,
       'CategoryPath': ''

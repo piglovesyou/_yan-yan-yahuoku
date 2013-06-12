@@ -235,6 +235,7 @@ app.message = app.ui.Message.getInstance();
  * @param {string} content .
  * @param {?goog.dom.DomHelper} opt_domHelper .
  * @constructor
+ * @extends {goog.ui.Component}
  * @private
  */
 app.ui.Message.Box_ = function(type, content, opt_domHelper) {

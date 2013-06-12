@@ -6,7 +6,6 @@ goog.require('app.dom.ViewportSizeMonitor');
 goog.require('app.events.EventCenter');
 goog.require('app.soy');
 goog.require('app.ui.Container');
-goog.require('app.ui.ContextMenu');
 goog.require('app.ui.Frames');
 goog.require('app.ui.Message');
 goog.require('app.ui.Tabs');

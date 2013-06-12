@@ -12,18 +12,6 @@ detailTitleHeight = 36px
   .detail-emptymessage
     color:lightgray
     text-align:center
-  .detail-title-fixed
-    .detail-title
-      position: absolute
-      box-sizing: border-box
-      width: 100%
-      border-bottom: 1px #CFCFCF solid
-      box-shadow: 0 2px 3px rgba(0, 0, 0, .1)
-      z-index: 1
-    .detail-inner
-      padding-top: detailTitleHeight
-    .detail-title-fixedstatebutton
-      color #999
 
   .detail-title
     clearfix()
@@ -31,6 +19,18 @@ detailTitleHeight = 36px
     padding: 0 20px 0 10px
     background: whiteSmoke;
     line-height: detailTitleHeight
+
+  .detail-title
+    position: absolute
+    box-sizing: border-box
+    width: 100%
+    border-bottom: 1px #CFCFCF solid
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .1)
+    z-index: 1
+  .detail-inner
+    padding-top: detailTitleHeight
+  .detail-title-fixedstatebutton
+    color #999
 
   .detail-title-inner
     ellipsis(true)
@@ -43,11 +43,7 @@ detailTitleHeight = 36px
     margin-bottom: 2px;
     font-size: 22px
 
-  .detail-images
-    cursor pointer
-
   .detail-description-container
-    cursor pointer
     margin: 10px 20px 50px
 
   .detail-item-link

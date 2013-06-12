@@ -535,7 +535,7 @@ app.ui.ThousandRows.RowRenderer.prototype.createDom = function(row) {
         dh.createDom('span', ['span3', 'goods-image'],
           dh.createDom('img', {
             className: 'img-polaroid',
-            src: 'https://raw.github.com/piglovesyou/spacer.gif/master/spacer.gif'
+            src: '/images/spacer.gif'
           }))));
 };
 

@@ -146,17 +146,16 @@
 .goog-splitpane-second-container .goog-scroller-container{position:relative}
 .goog-splitpane-second-container .goog-scroller-bar{z-index:2}
 .goog-splitpane-second-container .detail-emptymessage{color:#d3d3d3;text-align:center}
-.goog-splitpane-second-container .detail-title-fixed .detail-title{position:absolute;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;width:100%;border-bottom:1px #cfcfcf solid;-webkit-box-shadow:0 2px 3px rgba(0,0,0,0.1);box-shadow:0 2px 3px rgba(0,0,0,0.1);z-index:1}
-.goog-splitpane-second-container .detail-title-fixed .detail-inner{padding-top:36px}
-.goog-splitpane-second-container .detail-title-fixed .detail-title-fixedstatebutton{color:#999}
 .goog-splitpane-second-container .detail-title{zoom:1;margin:0;padding:0 20px 0 10px;background:whiteSmoke;line-height:36px}
 .goog-splitpane-second-container .detail-title:before,.goog-splitpane-second-container .detail-title:after{content:"";display:table}
 .goog-splitpane-second-container .detail-title:after{clear:both}
+.goog-splitpane-second-container .detail-title{position:absolute;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;width:100%;border-bottom:1px #cfcfcf solid;-webkit-box-shadow:0 2px 3px rgba(0,0,0,0.1);box-shadow:0 2px 3px rgba(0,0,0,0.1);z-index:1}
+.goog-splitpane-second-container .detail-inner{padding-top:36px}
+.goog-splitpane-second-container .detail-title-fixedstatebutton{color:#999}
 .goog-splitpane-second-container .detail-title-inner{white-space:nowrap;overflow:hidden;-o-text-overflow:ellipsis;text-overflow:ellipsis}
 .goog-splitpane-second-container .detail-title-buttons{float:right}
 .goog-splitpane-second-container .detail-title-fixedstatebutton{border:none;padding:5px;margin-bottom:2px;font-size:22px}
-.goog-splitpane-second-container .detail-images{cursor:pointer}
-.goog-splitpane-second-container .detail-description-container{cursor:pointer;margin:10px 20px 50px}
+.goog-splitpane-second-container .detail-description-container{margin:10px 20px 50px}
 .goog-splitpane-second-container .detail-item-link{text-align:right}
 .goog-splitpane-second-container .table th{width:30%}
 .goog-splitpane-second-container .table-bordered th{font-weight:normal;background:#d9edf7}

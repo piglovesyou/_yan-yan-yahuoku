@@ -94,7 +94,7 @@ app.Model.prototype.getLifeTime_ = function(baseTime) {
 app.Model.KeyPrefix = {
   AUCTION_ITEM_: 'auctionitem:',
   TAB_: 'tab:',
-  DETAILTITLEFIXEDSTATE_: 'detailtitlefixedstate:',
+  // DETAILTITLEFIXEDSTATE_: 'detailtitlefixedstate:',
   _DETAILPANEWIDTH_: ':detailpanewidth',
   _ISGRID_: ':isGrid:'
 };
@@ -214,22 +214,22 @@ app.Model.prototype.getAuctionItem = function(id, callback, opt_obj) {
 };
 
 
-/**
- * @param {boolean} fixed .
- */
-app.Model.prototype.setDetailTitleFixedState = function(fixed) {
-  var storage = this.localStore_;
-  storage.set(app.Model.KeyPrefix.DETAILTITLEFIXEDSTATE_, !!fixed);
-};
+// /**
+//  * @param {boolean} fixed .
+//  */
+// app.Model.prototype.setDetailTitleFixedState = function(fixed) {
+//   var storage = this.localStore_;
+//   storage.set(app.Model.KeyPrefix.DETAILTITLEFIXEDSTATE_, !!fixed);
+// };
 
 
-/**
- * @return {boolean} .
- */
-app.Model.prototype.getDetailTitleFixedState = function() {
-  var storage = this.localStore_;
-  return !!storage.get(app.Model.KeyPrefix.DETAILTITLEFIXEDSTATE_);
-};
+// /**
+//  * @return {boolean} .
+//  */
+// app.Model.prototype.getDetailTitleFixedState = function() {
+//   var storage = this.localStore_;
+//   return !!storage.get(app.Model.KeyPrefix.DETAILTITLEFIXEDSTATE_);
+// };
 
 
 /**

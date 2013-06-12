@@ -2,7 +2,6 @@
 goog.provide('app.ui.Detail');
 
 goog.require('app.soy');
-goog.require('app.ui.ContextMenu');
 goog.require('app.ui.Message');
 goog.require('app.ui.ThousandRows');
 goog.require('app.ui.common.ButtonRenderer');
@@ -23,13 +22,6 @@ app.ui.Detail = function(opt_domHelper) {
   goog.base(this, goog.ui.Scroller.ORIENTATION.BOTH, opt_domHelper);
 };
 goog.inherits(app.ui.Detail, goog.ui.Scroller);
-
-
-/**
- * @private
- * @type {app.ui.Detail.FixedStateButton}
- */
-app.ui.Detail.prototype.titleFixedStateButton_;
 
 
 /**
@@ -109,50 +101,30 @@ app.ui.Detail.prototype.descriptionElementRef_;
 app.ui.Detail.prototype.tableElementRef_;
 
 
-/**
- * @private
- */
-app.ui.Detail.prototype.updateTitleFixedState_ = function() {
-  var dh = this.getDomHelper();
-  var fixed = app.model.getDetailTitleFixedState(app.ui.util.getTabId(this));
-  goog.dom.classes.enable(this.getElement(), 'detail-title-fixed', fixed);
-  dh.insertChildAt(fixed ? this.getElement() : this.getContentElement(),
-                   this.titleElement_, 0);
-};
-
-
 /** @inheritDoc */
 app.ui.Detail.prototype.createDom = function() {
   goog.base(this, 'createDom');
   var dh = this.getDomHelper();
-
-  var fixed = app.model.getDetailTitleFixedState(app.ui.util.getTabId(this));
-  this.titleFixedStateButton_ = new app.ui.Detail.FixedStateButton(dh);
-  this.addChild(this.titleFixedStateButton_);
-
+  var element = this.getElement();
   var content = this.getContentElement();
   goog.asserts.assert(content, 'should be.');
 
-  content.innerHTML = app.soy.detailTitle({
-    fixed: fixed
-  });
-  this.titleElement_ = dh.getElementByClass('detail-title', content);
+  dh.insertChildAt(this.getElement(),
+      dh.htmlToDocumentFragment(app.soy.detailTitle()), 0);
+  this.titleElement_ = dh.getElementByClass('detail-title', element);
   this.buttonsContainerElement_ =
-    dh.getElementByClass('detail-title-buttons', content);
-  var titleFixedStateButtonElement =
-    dh.getElementByClass('detail-title-fixedstatebutton', content);
-  this.titleInnerElement_ = dh.getElementByClass('detail-title-inner', content);
-  this.innerElement_ = dh.getElementByClass('detail-inner', content);
+      dh.getElementByClass('detail-title-buttons', this.titleElement_);
+  this.titleInnerElement_ =
+      dh.getElementByClass('detail-title-inner', this.titleElement_);
+
+  dh.append(content,
+      this.innerElement_ = dh.createDom('div', 'detail-inner'));
+
   goog.asserts.assert(this.titleElement_ &&
                       this.buttonsContainerElement_ &&
-                      titleFixedStateButtonElement &&
                       this.titleInnerElement_ &&
                       this.innerElement_, 'should be.');
-
-  this.titleFixedStateButton_.decorateInternal(titleFixedStateButtonElement);
-
   this.clearContent(true);
-  this.updateTitleFixedState_();
 };
 
 
@@ -283,90 +255,10 @@ app.ui.Detail.createItemLinkParagraph_ = function(safe_link, safe_title, dh) {
 /** @inheritDoc */
 app.ui.Detail.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
-
-  var tab = app.ui.util.getTab(this);
-  this.getHandler().listen(
-    app.events.EventCenter.getInstance(),
-    app.events.EventCenter.EventType.TAB_CHANGED, function(e) {
-      if (!tab.isSelected()) return;
-      this.titleFixedStateButton_.setChecked(
-        app.model.getDetailTitleFixedState(app.ui.util.getTabId(this)));
-      this.updateTitleFixedState_();
-    });
-  this.getHandler().listen(
-    this, goog.ui.Component.EventType.ACTION, function(e) {
-      this.updateTitleFixedState_();
-    });
 };
 
 
-/** @inheritDoc */
-app.ui.Detail.prototype.performActionInternal = function(e) {
-  if (e.type == goog.events.EventType.MOUSEUP &&
-      app.dom.getAncestorFromEventTargetByClass(this.getElement(),
-        'goog-scroller-bar', e.target) == this.getElement()) {
-    this.enableMenuEvents_(true);
-    app.ui.ContextMenu.getInstance().launch(e, app.ui.Detail.MenuRecords_);
-  }
-  goog.base(this, 'performActionInternal', e);
-};
-
-
-/**
- * @const
- * @type {Array}
- * @private
- */
-app.ui.Detail.MenuRecords_ = [
-  {content: 'o', key: 'goToAuction', desc: 'オークションの商品ページを表示します'},
-  {content: 'A', key: 'showPicture', desc: '写真を表示します'},
-  {content: 'K', key: 'showDesc', desc: '商品説明を表示します'},
-  {content: 'J', key: 'showDetail', desc: '価格、残り時間を表示します'},
-  {content: 'E', key: 'addWatchList', desc: 'この商品をウォッチリストに追加します'}
-];
-
-
-/**
- * @param {boolean} enable .
- * @private
- */
-app.ui.Detail.prototype.enableMenuEvents_ = function(enable) {
-  var menu = app.ui.ContextMenu.getInstance();
-  var eh = this.getHandler();
-  var fn = enable ? eh.listen : eh.unlisten;
-  fn.call(eh, menu, app.ui.ContextMenu.EventTarget.DISMISS,
-          this.handleMenuDismiss_);
-  fn.call(eh, menu, app.ui.ContextMenu.EventTarget.SELECT,
-          this.handleMenuSelect_);
-};
-
-
-/**
- * @param {goog.events.Event} e .
- * @private
- */
-app.ui.Detail.prototype.handleMenuDismiss_ = function(e) {
-  this.enableMenuEvents_(false);
-};
-
-
-/**
- * @param {goog.events.Event} e .
- * @private
- */
-app.ui.Detail.prototype.handleMenuSelect_ = function(e) {
-  switch (e.record.key) {
-    case 'goToAuction':
-      if (this.safeItemLink_) goog.window.open(this.safeItemLink_);
-      break; // TODO:
-    case 'showPicture': this.jumpToElement(this.imagesElementRef_); break;
-    case 'showDesc': this.jumpToElement(this.descriptionElementRef_); break;
-    case 'showDetail': this.jumpToElement(this.tableElementRef_); break;
-    case 'addWatchList': app.model.addWatchList(this.auctionId_,
-                            this.handleCompleteAddWatchList_, this); break;
-  }
-};
-
+// case 'addWatchList': app.model.addWatchList(this.auctionId_,
 
 /**
  * @param {?goog.net.Xhrio} err .
@@ -394,11 +286,7 @@ app.ui.Detail.prototype.handleCompleteAddWatchList_ = function(err, response) {
 app.ui.Detail.prototype.jumpToElement = function(el) {
   goog.asserts.assert(goog.dom.isElement(el), 'There must be');
 
-  var top = el.offsetTop;
-  if (this.titleFixedStateButton_.isChecked()) {
-    top - - this.titleElement_.offsetHeight;
-  }
-  var rate = top / this.getScrollableRange();
+  var rate = el.offsetTop / this.getScrollableRange();
   var slider = this.getSlider();
   slider.setValueFromStart(Math.max(slider.getMaximum() * rate, 0));
 };
@@ -432,55 +320,3 @@ app.ui.Detail.prototype.prepareContent_ = function(toShow) {
   this.setZero();
 };
 
-
-
-
-/**
- * @param {?goog.dom.DomHelper=} opt_domHelper .
- * @constructor
- * @extends {goog.ui.ToggleButton}
- */
-app.ui.Detail.FixedStateButton = function(opt_domHelper) {
-  goog.base(this, '', app.ui.common.ButtonRenderer.getInstance(),
-            opt_domHelper);
-};
-goog.inherits(app.ui.Detail.FixedStateButton, goog.ui.ToggleButton);
-
-
-/**
- * @param {boolean} checked .
- */
-app.ui.Detail.FixedStateButton.prototype.setChecked = function(checked) {
-  goog.base(this, 'setChecked', checked);
-  app.model.setDetailTitleFixedState(checked);
-  this.setContent(checked ? 'n' : 'q');
-};
-
-
-/** @inheritDoc */
-app.ui.Detail.FixedStateButton.prototype.decorateInternal = function(element) {
-  goog.base(this, 'decorateInternal', element);
-  this.setState(goog.ui.Component.State.CHECKED,
-                app.model.getDetailTitleFixedState());
-};
-
-
-/** @inheritDoc */
-app.ui.Detail.FixedStateButton.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
-  this.getHandler().listen(this.getElement(),
-                           goog.events.EventType.MOUSEDOWN, function(e) {
-    // Prevent that a parent node steels focus.
-    e.stopPropagation();
-  });
-};
-
-
-/** @inheritDoc */
-app.ui.Detail.FixedStateButton.prototype.disposeInternal = function() {
-  if (this.titleFixedStateButton_) {
-    this.titleFixedStateButton_.dispose();
-    this.titleFixedStateButton_ = null;
-  }
-  goog.base(this, 'disposeInternal');
-};

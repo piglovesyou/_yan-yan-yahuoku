@@ -1,9 +1,11 @@
 node_modules
 .DS_Store
+/libs
 /closure
 /tools
 /redis/dump.rdb
 /redis/redis.log
+/redis/stdout
 /public/javascripts/main-min.js
 /public/closure-library
 /public/app/soy/*.js

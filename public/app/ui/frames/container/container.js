@@ -27,7 +27,8 @@ app.ui.Container = function(opt_domHelper) {
    */
   this.detail_ = new app.ui.Detail(opt_domHelper);
 
-  goog.base(this, this.thousandRows_, this.detail_, opt_domHelper);
+  goog.base(this, this.thousandRows_, this.detail_, null, opt_domHelper);
+
   this.setHandleSize(0);
 
 };

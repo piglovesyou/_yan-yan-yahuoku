@@ -50,10 +50,6 @@ App.prototype.username_;
 
 
 /** @type {Element} */
-App.prototype.username_;
-
-
-/** @type {Element} */
 App.prototype.toolbarElement_;
 
 

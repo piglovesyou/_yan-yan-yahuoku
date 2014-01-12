@@ -251,8 +251,8 @@ app.Model.prototype.setDetailPaneWidth = function(tabId, width) {
  */
 app.Model.prototype.getDetailPaneWidth = function(tabId) {
   var storage = this.localStore_;
-  var num = storage.get(app.Model.KeyPrefix.TAB_ + tabId +
-              app.Model.KeyPrefix._DETAILPANEWIDTH_);
+  var num = /**@type{?number}*/(storage.get(app.Model.KeyPrefix.TAB_ + tabId +
+              app.Model.KeyPrefix._DETAILPANEWIDTH_));
   return num;
 };
 
@@ -321,7 +321,7 @@ app.Model.prototype.requestWithOAuth_ = function(method, path,
 
 /**
  * @param {string} itemId to add to watch list.
- * @param {Function} callback .
+ * @param {function(?goog.net.XhrIo, ?Object)} callback .
  * @param {Object=} opt_obj .
  */
 app.Model.prototype.addWatchList = function(itemId, callback, opt_obj) {

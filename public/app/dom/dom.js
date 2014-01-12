@@ -12,7 +12,7 @@ app.dom.getAncestorFromEventTargetByClass = function(end, hookCssName, et) {
   while (et && et != end && !goog.dom.classes.has(et, hookCssName)) {
     et = /** @type {Element} */(et.parentNode);
   }
-  return et;
+  return /**@type{?Element}*/(et);
 };
 
 
@@ -26,5 +26,5 @@ app.dom.getAncestorFromEventTargetByTagName = function(end, nodeName, et) {
   while (et && et != end && et.nodeName != nodeName) {
     et = /** @type {Element} */(et.parentNode);
   }
-  return et;
+  return /**@type{?Element}*/(et);
 };

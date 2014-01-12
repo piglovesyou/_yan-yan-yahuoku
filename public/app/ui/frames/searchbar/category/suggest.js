@@ -117,7 +117,8 @@ app.ui.category.Suggest.prototype.handleSelected = function(e) {
 
 
 /**
- * @param {Object}
+ * @private
+ * @param {Object} row .
  */
 app.ui.category.Suggest.prototype.dispatchUpdate_ = function(row) {
   this.dispatchEvent({

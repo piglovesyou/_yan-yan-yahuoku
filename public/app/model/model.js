@@ -262,8 +262,8 @@ app.Model.prototype.getDetailPaneWidth = function(tabId) {
  */
 app.Model.prototype.createEmptyTab = function() {
   var defaults = [
-    'そうめん',
-    'ひやむぎ'
+    '牡蠣',
+    'たらば'
   ];
   return {
     'query': defaults[Math.floor(Math.random() * defaults.length)],

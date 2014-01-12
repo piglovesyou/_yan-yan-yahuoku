@@ -71,7 +71,9 @@ setup-thirdpartymodule:;
 
 
 
-compile:;
+compile: template calcdeps compile-script
+
+compile-script:;
 	java -jar $(PLOVR_DIR)$(PLOVR_JAR) build plovr.json
 
 compile-soyfunctions:;
@@ -90,8 +92,6 @@ template:;
 		--shouldProvideRequireSoyNamespaces \
 		--shouldGenerateJsdoc \
 		--outputPathFormat ./public/app/soy/main.js
-
-
 
 calcdeps:;
 	$(COMMAND_CLOSURE_BUILDER_) \

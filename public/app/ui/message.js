@@ -5,6 +5,7 @@ goog.require('app.dom.ViewportSizeMonitor');
 goog.require('goog.Timer');
 goog.require('goog.events.EventType');
 goog.require('goog.structs.LinkedMap');
+goog.require('goog.ui.Component');
 
 
 

@@ -2,9 +2,7 @@
 node_modules
 .DS_Store
 /closure
-/tools
 /redis/dump.rdb
 /redis/redis.log
 /public/javascripts/main-min.js
-/public/closure-library
-/public/app/soy/*.js
+/public/stylesheets/main.css

@@ -129,11 +129,9 @@ case $1 in
 
     serve) java -jar ${PLOVR_JAR_PATH} serve plovr.json;;
 
-    # build) java -jar ${PLOVR_JAR_PATH} build plovr.json;;
+    build) java -jar ${PLOVR_JAR_PATH} build plovr.json;;
 
     extract_msg) extract_msg;;
-
-
 
     soyweb) java -jar ${PLOVR_JAR_PATH} soyweb --dir ./public;;
 

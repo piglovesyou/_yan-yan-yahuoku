@@ -19,7 +19,7 @@ html
     - if (isProduction)
       script(src='/javascripts/main-min.js')
     - else
-      include _scripts
+      script(src='http://localhost:9810/compile?id=yan-yan-yahuoku&mode=WHITESPACE')
 
   body!= body
 

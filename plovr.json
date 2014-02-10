@@ -1,6 +1,6 @@
 {
   "id": "yan-yan-yahuoku",
-  "closure-library": "./public/closure-library/closure/goog/",
+  "debug": true,
   "paths": [
 	  "./public/closure-thirdparty/closure-scroller/piglovesyou",
 	  "./public/closure-thirdparty/closure-thousandrows/piglovesyou",

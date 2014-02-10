@@ -86,7 +86,8 @@
       {/if}
       <tr>
       	<th>残り時間</th>
-      	<td>{literalApply(app.string.renderEndDate, [$endTime])}</td>
+        // TODO: app.string.renderEndDate $endTime
+      	<td>{$endTime}</td>
       </tr>
       {if isNonnull($bids)}
         <tr>
@@ -119,35 +120,35 @@
       {if isNonnull($initPrice)}
         <tr>
           <th>開始時の価格</th>
-          <td>aaaaaa {$initPrice}{literalApply(app.string.renderPrice, [$initPrice])}</td>
+          <td>aaaaaa {$initPrice}{$initPrice}/*app.string.renderPrice*/</td>
         </tr>
       {/if}
       <tr>
         <th>開始日時</th>
-        <td>{literalApply(app.string.renderDate, [$startTime])}</td>
+        <td>{$startTime}</td> //app.string.renderDate
       </tr>
       <tr>
         <th>終了日時</th>
-        <td>{literalApply(app.string.renderDate, [$endTime])}</td>
+        <td>{$endTime}</td> // app.string.renderDate
       </tr>
       <tr>
         <th>早期終了</th>
-        <td>{literalApply(app.string.renderBoolean, [$isEarlyClosing])}</td>
+        <td>{$isEarlyClosing}</td> // app.string.renderBoolean
       </tr>
       <tr>
         <th>自動延長</th>
-        <td>{literalApply(app.string.renderBoolean, [$isAutomaticExtension])}</td>
+        <td>{$isAutomaticExtension}</td> // app.string.renderBoolean
       </tr>
       {if isNonnull($itemStatus)}
         <tr>
           <th>商品の状態</th>
-          <td>{literalApply(app.string.renderItemCondition, [$itemStatus])}</td>
+          <td>{$itemStatus}</td> // app.string.renderItemCondition
         </tr>
       {/if}
       {if isNonnull($itemReturnable)}
         <tr>
           <th>返品の可否</th>
-          <td>{literalApply(app.string.renderBoolean, [$itemReturnable['Allowed']])}</td>
+          <td>{$itemReturnable['Allowed']}</td> // app.string.renderBoolean
         </tr>
       {/if}
     </tbody>
@@ -255,5 +256,5 @@
  * @param price
  */
 {template .price}
-  {formatNumberWithComma(round($price))}円
+  {round($price)}円 // formatNumberWithComma
 {/template}

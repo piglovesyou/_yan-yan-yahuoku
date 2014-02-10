@@ -49,27 +49,27 @@ App.prototype.tabs_;
 App.prototype.username_;
 
 
-/** @type {Element */
+/** @type {Element} */
 App.prototype.username_;
 
 
-/** @type {Element */
+/** @type {Element} */
 App.prototype.toolbarElement_;
 
 
-/** @type {Element */
+/** @type {Element} */
 App.prototype.logoElement_;
 
 
-/** @type {Element */
+/** @type {Element} */
 App.prototype.tabsElement_;
 
 
-/** @type {Element */
+/** @type {Element} */
 App.prototype.framesElement_;
 
 
-/** @type {Element */
+/** @type {Element} */
 App.prototype.usernameElement_;
 
 

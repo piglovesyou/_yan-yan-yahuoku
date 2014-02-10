@@ -302,7 +302,7 @@ app.Model.prototype.getAlignmentStyle = function(tabId) {
  * @param {string} method .
  * @param {string} path .
  * @param {Object} params .
- * @param {Function(?goog.net.XhrIo, ?Object)} callback .
+ * @param {function(?goog.net.XhrIo, ?Object)} callback .
  * @param {Object=} opt_obj .
  * @private
  */

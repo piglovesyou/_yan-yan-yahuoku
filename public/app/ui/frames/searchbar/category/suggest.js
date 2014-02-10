@@ -117,7 +117,7 @@ app.ui.category.Suggest.prototype.handleSelected = function(e) {
 
 
 /**
- * @param {Object}
+ * @param {Object} row .
  */
 app.ui.category.Suggest.prototype.dispatchUpdate_ = function(row) {
   this.dispatchEvent({

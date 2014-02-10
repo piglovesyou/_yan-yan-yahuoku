@@ -262,7 +262,7 @@ app.ui.Container.listRowHeigt_ = 138;
 
 
 /** @private */
-app.ui.Container.listRowCount_ = 50;
+app.ui.Container.listRowCount_ = 25;
 
 
 /** @private */

@@ -108,7 +108,7 @@ case $1 in
         cleanup_lib
         setup_plovr
         setup_closurelibrary
-        setup_closurestylesheets
+        # setup_closurestylesheets
         setup_closuretemplates
         setup_closurecompiler
         ;;

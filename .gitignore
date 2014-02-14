@@ -6,3 +6,4 @@ node_modules
 /redis/redis.log
 /public/javascripts/main-min.js
 /public/stylesheets/main.css
+/redis/stdout

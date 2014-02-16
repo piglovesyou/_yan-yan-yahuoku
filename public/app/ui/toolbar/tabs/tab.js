@@ -131,14 +131,6 @@ app.ui.Tab.prototype.processSelected = function(select) {
 };
 
 
-/**
- * @return {Element}
- */
-app.ui.Tab.prototype.getContentElement = function() {
-  return this.contentElement_;
-};
-
-
 app.ui.Tab.prototype.dispatchSelect = function() {
   this.dispatchEvent(app.ui.Tab.EventType.SELECT);
 };
@@ -155,11 +147,10 @@ app.ui.Tab.prototype.decorateInternal = function(element) {
 app.ui.Tab.prototype.createDom = function() {
   var dh = this.getDomHelper();
   var element = dh.createDom('div', 'tab',
-      this.contentElement_ = dh.createDom('div', 'tab-content'),
       this.delBtnElement_ = dh.createDom('a', {
         'href': 'javascript:void(0)',
         'className': 'i del-btn'
-      }, 'X'));
+      }, '×'));
   this.setElementInternal(element);
 };
 
@@ -168,10 +159,8 @@ app.ui.Tab.prototype.createDom = function() {
 app.ui.Tab.prototype.canDecorate = function(element) {
   if (element) {
     var dh = this.getDomHelper();
-    var content = dh.getElementByClass('tab-content', element);
     var delButtn = dh.getElementByClass('del-btn', element);
-    if (content) {
-      this.contentElement_ = content;
+    if (delButtn) {
       this.delBtnElement_ = delButtn;
       return true;
     }

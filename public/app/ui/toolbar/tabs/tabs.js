@@ -188,9 +188,8 @@ app.ui.Tabs.prototype.repositionAdder_ = function() {
 
   var lastEl = this.getLastTab_().getElement();
   var pos = goog.style.getPageOffset(lastEl);
-  var minusMargin = 3;
   goog.style.setPageOffset(this.adder_.getElement(),
-      pos.x + lastEl.offsetWidth - minusMargin, pos.y + 1);
+      pos.x + lastEl.offsetWidth, pos.y + 1);
 };
 
 

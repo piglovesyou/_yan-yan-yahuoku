@@ -1,6 +1,6 @@
 
 .logo
-  margin 0 0 0 7px
+  margin 0 0 0 10px
   font-size 1em
   line-height 1em
   a
@@ -35,13 +35,13 @@
   .modal-content
     height 166px
 
-toolbarHeight = 32px
+toolbarHeight = 38px
 tabBorderColor = #b6b6b6
 
-toolbarLeftWidth = 62px
+toolbarLeftWidth = 78px
 toolbarRightWidth = 110px
 .toolbar
-  background: linear-gradient(top, black, #444);
+  // background: linear-gradient(top, black, #444);
   height: toolbarHeight
   box-sizing: border-box
   border-bottom: kpx tabBorderColor solid
@@ -83,7 +83,7 @@ toolbarRightWidth = 110px
   float: right
   text-align: right
 
-tabHeight = 24px
+tabHeight = 32px
   
 .tabs
   margin-left: toolbarLeftWidth
@@ -94,26 +94,29 @@ tabHeight = 24px
   position: relative
   float: left
   padding: 0 15px
-  margin-right: -17px
+  // margin-right: -17px
   box-sizing: border-box
   width: 18%
   height: tabHeight + 1px
-  min-width: 180px
+  min-width: 140px
+  box-sizing: border-box
   color: #444
   cursor: default
+  line-height: tabHeight
   border-bottom 1px #f2f2f2 solid
-  background: url(../images/bg_tab.png) left 0 no-repeat,
-              url(../images/bg_tab.png) right -48px no-repeat
+  // background: url(../images/bg_tab.png) left 0 no-repeat,
+  //             url(../images/bg_tab.png) right -48px no-repeat
 
   &.watch
-    background: url(../images/bg_tab.png) left -144px no-repeat,
-                url(../images/bg_tab.png) right -192px no-repeat
+    // background: url(../images/bg_tab.png) left -144px no-repeat,
+    //             url(../images/bg_tab.png) right -192px no-repeat
     
   &.selected
-    background: url(../images/bg_tab.png) left -72px no-repeat,
-                url(../images/bg_tab.png) right -120px no-repeat
+    background: white
+    // background: url(../images/bg_tab.png) left -72px no-repeat,
+    //             url(../images/bg_tab.png) right -120px no-repeat
     z-index: 10 !important
-    delBtnWidth = 14px
+    delBtnWidth = 18px
     .del-btn
       display: block;
       position: absolute
@@ -123,7 +126,7 @@ tabHeight = 24px
       height: delBtnWidth
       line-height delBtnWidth
       text-align center
-      font-size: 14px
+      font-size: delBtnWidth
       color #ccc
       text-decoration none
       &:hover
@@ -145,22 +148,24 @@ for i in 1 2 3 4 5
   .tab:nth-child({i})
     z-index: 5 - i
 
-.tab-content
-  box-sizing: border-box
-  height: tabHeight
-  padding: 3px 0 0 3px
-  line-height: tabHeight - 4px
-  ellipsis(true)
-  tabUnselectedStyle()
-  background: url(../images/bg_tab.png) 0 -24px repeat-x
+// .tab-content
+//   box-sizing: border-box
+//   height: tabHeight
+//   padding: 3px 0 0 3px
+//   line-height: tabHeight - 4px
+//   ellipsis(true)
+//   tabUnselectedStyle()
+//   // background: url(../images/bg_tab.png) 0 -24px repeat-x
 
-.watch .tab-content
-  background: url(../images/bg_tab.png) 0 -168px repeat-x
-
-.selected .tab-content
-  background: url(../images/bg_tab.png) 0 -96px repeat-x
+// .watch .tab-content
+//   // background: url(../images/bg_tab.png) 0 -168px repeat-x
+// 
+// .selected .tab-content
+//   // background: url(../images/bg_tab.png) 0 -96px repeat-x
 
 .tab-dragging
+  height: tabHeight
+  line-height: tabHeight
   top: toolbarHeight - tabHeight !important
 
 .tabs-content
@@ -171,9 +176,16 @@ for i in 1 2 3 4 5
   position: absolute
   top: 0
   height: tabHeight
-  width: 22px
-  background: url(../images/bg_tabadder.png) center top no-repeat
+  line-height: tabHeight
+  width: 32px
+  text-align: center
+  color: #999
+  // background: url(../images/bg_tabadder.png) center top no-repeat
   &:hover
-    background-position: center -24px
+    background: #ddd
+    color: #666
+    // background-position: center -24px
   &:active
-    background-position: center -48px
+    // background-position: center -48px
+  &:after
+    content: '+'

@@ -155,7 +155,6 @@ app.ui.Container.prototype.processSelected_ = function(selected) {
  * We can't use 'handleDragEnd_' for its name.. which used by superClass.
  */
 app.ui.Container.prototype.handlePaneResized_ = function(e) {
-  this.list_.update();
   this.detail_.update();
   var w = this.detail_.getWidth();
   if (goog.isNumber(w)) {
@@ -211,7 +210,6 @@ app.ui.Container.prototype.getOffsetTop_ = function() {
  */
 app.ui.Container.prototype.handleDelayedResize_ = function(e) {
   this.setDetailpainSize_();
-  this.list_.update();
   this.detail_.update();
 };
 

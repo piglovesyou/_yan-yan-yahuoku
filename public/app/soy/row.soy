@@ -1,0 +1,51 @@
+{namespace app.soy.row}
+
+
+/***/
+{template .createDom}
+  <div class="goog-thousandrows-row">
+    <a href="#" class="row">
+      <span class="span3 googs-image">
+        <img src="/images/spacer.gif" alt="" class="img-polaroid" />
+      </span>
+    </a>
+  </div>
+{/template}
+
+/**
+ * @param Image
+ * @param Title
+ */
+{template .renderContent}
+  <a href="javascript:void(0)" class="row" tabIndex="-1">
+    <a href="#" class="span3 googds-image">
+      <img src="{$Image}" alt="" class="img-polaroid" />
+    </a>
+    <h4>{$Title}</h4>
+    <div class="row-detail">
+      {call .detail data="all" /}
+    </div>
+  </a>
+{/template}
+
+/**
+ * TODO: CurrentPriceDisp
+ * TODO: EndTimeDisp
+ * @param CurrentPrice
+ * @param Bids
+ * @param EndTime
+ * @param Option
+ */
+{template .detail}
+  <strong>{$CurrentPrice}</strong>
+  {if isNonnull($Bids) and $Bids > 0}
+    {sp}|{sp}入札 {$Bids}
+  {/if}
+  {sp}|{sp}{$EndTime}{sp}
+  {foreach $key in ['EasyPaymentIcon', 'FeaturedIcon', 'GiftIcon']}
+    {if $Option[$key]}
+      <img src="{$Option[$key]}" alt="" />
+    {/if}
+  {/foreach}
+{/template}
+

@@ -7,7 +7,6 @@ var port = process.argv[2] || 3000;
 
 var express = require('express'),
     stylus = require('stylus'),
-    RedisStore = require('connect-redis')(express),
     _ = require('underscore'),
     app = express.createServer();
 
@@ -29,8 +28,7 @@ app.configure(function() {
   app.use(express.methodOverride());
   app.use(express.cookieParser());
   app.use(express.session({
-    secret: 'your secret here',
-    store: new RedisStore(),
+    secret: require('secret-strings').AUC_PRO.CONSUMER_SECRET,
     cookie: {maxAge: 3600 * 1000}
   }));
   app.use(app.router);

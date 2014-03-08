@@ -1,9 +1,9 @@
 
 var Q = require('q');
 Q.longStackSupport = true;
-var yahoo = require('./sources/net/yahoo');
+var yahoo = require('../sources/net/yahoo');
 var Datastore = require('nedb');
-var db = new Datastore({ filename: './categories.nedb', autoload: true });
+var db = new Datastore({ filename: './nedb/categories.nedb', autoload: true });
 
 var update = Q.denodeify(db.update.bind(db));
 var findOne = Q.denodeify(db.findOne.bind(db));

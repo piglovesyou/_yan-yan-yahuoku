@@ -7,5 +7,5 @@ node_modules
 /public/javascripts/main-min.js
 /public/stylesheets/main.css
 /redis/stdout
-/categories.nedb
-/categories.log
+/nedb/categories.nedb
+/nedb/categories.log

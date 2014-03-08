@@ -9,7 +9,6 @@ goog.require('app.ui.Container');
 goog.require('app.ui.Frames');
 goog.require('app.ui.Message');
 goog.require('app.ui.Tabs');
-goog.require('app.ui.ThousandRows');
 goog.require('app.ui.Username');
 goog.require('app.ui.WelcomeDialog');
 goog.require('app.ui.common.AuthWindow');

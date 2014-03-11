@@ -4,36 +4,45 @@ var port = process.argv[2] || 3000;
 /**
  * Module dependencies.
  */
+var express = require('express');
+var routes = require('./routes');
+var http = require('http');
+var path = require('path');
 
-var express = require('express'),
-    stylus = require('stylus'),
+
+var stylus = require('stylus'),
     _ = require('underscore'),
-    app = express.createServer();
+    app = express();
 
 // Configuration
 
-app.configure(function() {
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(stylus.middleware({
-    src: __dirname + '/public',
-    compile: function(str, path) {
-      return stylus(str)
-        .set('filename', path)
-        .set('compress', true)
-        .use(require('nib')());
-    }
-  }));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.cookieParser());
-  app.use(express.session({
-    secret: require('secret-strings').AUC_PRO.CONSUMER_SECRET,
-    cookie: {maxAge: 3600 * 1000}
-  }));
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
-});
+
+
+app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.methodOverride());
+app.use(stylus.middleware({
+  src: __dirname + '/public',
+  compile: function(str, path) {
+    return stylus(str)
+      .set('filename', path)
+      .set('compress', true)
+      .use(require('nib')());
+  }
+}));
+app.use(express.cookieParser(require('secret-strings').AUC_PRO.CONSUMER_SECRET));
+app.use(express.session());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+
 
 app.configure('development', function() {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
@@ -76,7 +85,6 @@ _.each(require('./routes/suggest'), function(listener, path) {
 });
 
 
-app.listen(port, function() {
-  console.log('Express server listening on port %d in %s mode',
-              app.address().port, app.settings.env);
+http.createServer(app).listen(app.get('port'), function() {
+  console.log('Express server listening on port ' + app.get('port'));
 });

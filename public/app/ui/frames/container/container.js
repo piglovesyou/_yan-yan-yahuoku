@@ -311,13 +311,13 @@ app.ui.Container.createListData_ = function(query, categoryId, isGrid) {
    * @type {goog.ui.list.Data}
    */
   var data = new goog.ui.list.Data(
-      '/y/search?query=' + query + '&category=0&page=2');
+      '/auction/search?query=' + query + '&category=0&page=2');
   data.setObjectNameTotalInJson('ResultSet.@attributes.totalResultsAvailable');
   data.setObjectNameRowsInJson('ResultSet.Result.Item');
   return data;
 
 
-  var endPoint = query ? '/y/search' : '/y/categoryLeaf';
+  var endPoint = query ? '/auction/search' : '/y/categoryLeaf';
   var uri = new goog.Uri(endPoint);
   var q = uri.getQueryData();
   if (query) q.set('query', query);
@@ -339,8 +339,8 @@ app.ui.Container.createListData_ = function(query, categoryId, isGrid) {
  * @return {app.ui.ThousandRows.Model} A brand new model for thousandrows.
  */
 app.ui.Container.createNewModel_ = function(query, categoryId, isGrid) {
-  var endPoint = query ? '/y/search' : '/y/categoryLeaf';
-  var uri = new goog.Uri(endPoint); //goog.Uri.create escape its argument.. Why?
+  var endPoint = query ? '/auction/search' : '/y/categoryLeaf';
+  var uri = new goog.Uri(endPoint);
   var q = uri.getQueryData();
   if (query) q.set('query', query);
   if (goog.isDefAndNotNull(categoryId)) {
@@ -350,4 +350,5 @@ app.ui.Container.createNewModel_ = function(query, categoryId, isGrid) {
     new app.ui.ThousandRows.ModelForGrid(uri.toString(), undefined, true) :
     new app.ui.ThousandRows.Model(uri.toString(), undefined, true);
 };
+
 

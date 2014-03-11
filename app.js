@@ -55,6 +55,14 @@ _.each(require('./routes/auth'), function(listener, path) {
   app.get('/auth/' + path, listener);
 });
 
+
+_.each(require('./routes/auction'), function(listener, path) {
+  app.get('/auction/' + path, listener);
+});
+
+
+
+// Deprecated
 _.each(require('./routes/yahoo_get'), function(listener, path) {
   app.get('/y/' + path, listener);
 });

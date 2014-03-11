@@ -21,10 +21,7 @@ app.ui.Container = function(opt_domHelper) {
    * @private
    * @type {app.ui.ThousandRows}
    */
-  this.list_ = new app.ui.List(function(data) {
-    console.log(data);
-    return 'xxx';
-  });
+  this.list_ = new app.ui.List;
 
   /**
    * @private

@@ -21,26 +21,28 @@ request("0")
 
 function request(id, parent, child) {
   return findOne({CategoryId: id})
-  .then(function(doc) {
-    if (doc) {
-      console.log('[exists]', doc.CategoryPath, i++);
-      // throw new Error(doc);
-      return doc;
-    } else {
-      return yahooGet('categoryTree', {category: id})
-      .then(JSON.parse)
-      .get('ResultSet')
-      .get('Result')
-      .catch(outError)
-      .then(upsertStore)
-      .then(function(doc) {
-        console.log('[insert]', doc.CategoryPath, i++);
-        return doc;
-      })
-    }
-  })
+  .then(sendRequestIfNeeded.bind(null, id))
   .then(requestChildrenIfAny);
 };
+
+function sendRequestIfNeeded(id, doc) {
+  if (doc) {
+    console.log('[exists]', doc.CategoryPath, i++);
+    // throw new Error(doc);
+    return doc;
+  } else {
+    return yahooGet('categoryTree', {category: id})
+    .then(JSON.parse)
+    .get('ResultSet')
+    .get('Result')
+    .catch(outError)
+    .then(upsertStore)
+    .then(function(doc) {
+      console.log('[insert]', doc.CategoryPath, i++);
+      return doc;
+    })
+  }
+}
 
 function outError(reason) {
   throw new Error(err + '\n' + err.stack);

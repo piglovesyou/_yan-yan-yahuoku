@@ -17,17 +17,18 @@ fetchFromIds(["0"]).then(console.log);
 
 function fetchFromIds(ids) {
   if (ids.length > 0) {
-    return ids.reduce(function(q, id) {
-      return q.then(function(childIds) {
-        return fetchFromId(id)
-        .then(function(cids) {
-          return childIds.concat(cids)
-        });
-      })
-    }, Q([])).then(fetchFromIds);
+    return ids.reduce(fetchItemAndConcat, Q([]))
+    .then(fetchFromIds);
   } else {
     return 'done!';
   }
+}
+
+function fetchItemAndConcat(q, id) {
+  return q.then(function(childIds) {
+    return fetchFromId(id)
+    .then(childIds.concat.bind(childIds))
+  })
 }
 
 function fetchFromId(id, parent, child) {
@@ -35,7 +36,6 @@ function fetchFromId(id, parent, child) {
   .then(function(doc) {
     if (doc) {
       console.log('[exists]', doc.CategoryPath);
-      // throw new Error(doc);
       return extractChildIds(doc);
     } else {
       return yahooGet('categoryTree', {category: id})
@@ -51,6 +51,11 @@ function fetchFromId(id, parent, child) {
     }
   })
 };
+
+function showMessageAndExtractChildIds(msgPrefix, doc) {
+  console.log('[insert]', doc.CategoryPath);
+  return extractChildIds(doc)
+}
 
 function extractChildIds(parent) {
   if (parent.IsLeaf == 'false' && parent.IsLink == 'false' && parent.ChildCategory.length > 0) {

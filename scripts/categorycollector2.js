@@ -16,18 +16,18 @@ fetchFromIds(["0"]).then(console.log);
 
 
 function fetchFromIds(ids) {
-  var childIds = [];
-  return ids.reduce(function(q, id) {
-    return q.then(fetchFromId.bind(null, id))
-    .then(function(cids) {
-      if (cids) childIds = childIds.concat(cids);
-    });
-  }, Q()).then(function() {
-    if (childIds.length > 0) {
-      return fetchFromIds(childIds)
-    }
+  if (ids.length > 0) {
+    return ids.reduce(function(q, id) {
+      return q.then(function(childIds) {
+        return fetchFromId(id)
+        .then(function(cids) {
+          return childIds.concat(cids)
+        });
+      })
+    }, Q([])).then(fetchFromIds);
+  } else {
     return 'done!';
-  });
+  }
 }
 
 function fetchFromId(id, parent, child) {
@@ -61,7 +61,7 @@ function extractChildIds(parent) {
       return arr;
     }, []);
   }
-  return null;
+  return [];
 }
 
 function outError(reason) {

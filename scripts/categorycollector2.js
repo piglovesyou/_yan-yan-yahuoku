@@ -16,12 +16,14 @@ fetchFromIds(["0"]).then(console.log);
 
 
 function fetchFromIds(ids) {
-  if (ids.length > 0) {
-    return ids.reduce(fetchItemAndConcat, Q([]))
-    .then(fetchFromIds);
-  } else {
-    return 'done!';
-  }
+  return ids.reduce(fetchItemAndConcat, Q([]))
+  .then(function(childIds) {
+    if (childIds.length > 0) {
+      return fetchFromIds(childIds);
+    } else {
+      return 'done!';
+    }
+  });
 }
 
 function fetchItemAndConcat(q, id) {
@@ -35,7 +37,7 @@ function fetchFromId(id, parent, child) {
   return findOne({CategoryId: id})
   .then(function(doc) {
     if (doc) {
-      console.log('[exists]', doc.CategoryPath);
+      return showMessageAndExtractChildIds('[exists]', doc);
       return extractChildIds(doc);
     } else {
       return yahooGet('categoryTree', {category: id})
@@ -44,16 +46,13 @@ function fetchFromId(id, parent, child) {
       .get('Result')
       .catch(outError)
       .then(upsertStore)
-      .then(function(doc) {
-        console.log('[insert]', doc.CategoryPath);
-        return extractChildIds(doc);
-      });
+      .then(showMessageAndExtractChildIds.bind(null, '[insert]'));
     }
   })
 };
 
-function showMessageAndExtractChildIds(msgPrefix, doc) {
-  console.log('[insert]', doc.CategoryPath);
+function showMessageAndExtractChildIds(messagePrefix, doc) {
+  console.log(messagePrefix, doc.CategoryPath);
   return extractChildIds(doc)
 }
 

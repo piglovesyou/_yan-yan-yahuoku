@@ -11,13 +11,13 @@ var yahooGet = Q.denodeify(yahoo.get.bind(yahoo));
 
 
 
-var i = 0;
-
 request("0")
 .catch(outError)
 .done(function() {
-  console.log('[done]', i, 'items.');
+  console.log('[done.]');
 });
+
+
 
 function request(id, parent, child) {
   return getDocument(id)
@@ -28,7 +28,7 @@ function getDocument(id) {
   return findOne({CategoryId: id})
   .then(function (doc) {
     if (doc) {
-      console.log('[exists]', doc.CategoryPath, i++);
+      console.log('[exists]', doc.CategoryPath);
       // throw new Error(doc);
       return doc;
     } else {
@@ -39,7 +39,7 @@ function getDocument(id) {
       .catch(outError)
       .then(upsertStore)
       .then(function(doc) {
-        console.log('[insert]', doc.CategoryPath, i++);
+        console.log('[insert]', doc.CategoryPath);
         return doc;
       })
     }

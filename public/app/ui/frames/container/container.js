@@ -6,6 +6,8 @@ goog.require('app.ui.Detail');
 goog.require('app.ui.ThousandRows');
 goog.require('goog.style');
 goog.require('goog.ui.SplitPane');
+goog.require('app.ui.List');
+goog.require('goog.ui.list.Data');
 
 
 /**
@@ -19,7 +21,7 @@ app.ui.Container = function(opt_domHelper) {
    * @private
    * @type {app.ui.ThousandRows}
    */
-  this.thousandRows_ = app.ui.Container.createThousandRows_(opt_domHelper);
+  this.list_ = new app.ui.List;
 
   /**
    * @private
@@ -27,7 +29,7 @@ app.ui.Container = function(opt_domHelper) {
    */
   this.detail_ = new app.ui.Detail(opt_domHelper);
 
-  goog.base(this, this.thousandRows_, this.detail_, opt_domHelper);
+  goog.base(this, this.list_, this.detail_, opt_domHelper);
   this.setHandleSize(0);
 
 };
@@ -51,7 +53,7 @@ app.ui.Container.prototype.iframeOverlayCache_;
  * @return {app.ui.ThousandRows} A belonging thousandrows.
  */
 app.ui.Container.prototype.getThousandRows = function() {
-  return this.thousandRows_;
+  return this.list_;
 };
 
 
@@ -60,26 +62,26 @@ app.ui.Container.prototype.getThousandRows = function() {
  * @param {string} categoryId As it is.
  */
 app.ui.Container.prototype.refreshByQuery = function(query, categoryId) {
-  var old = this.thousandRows_.getModel();
+  var old = this.list_.getData();
   if (old) {
     old.dispose(); // TODO: Enable it to be used again.
   }
   if (goog.string.isEmpty(query) && categoryId == 0) {
-    this.thousandRows_.clearContent();
+    this.list_.clearContent();
   } else {
     var isGrid = app.model.getAlignmentStyle(app.ui.util.getTabId(this));
-    var model = app.ui.Container.createNewModel_(query, categoryId, isGrid);
+    var data = app.ui.Container.createListData_(query, categoryId, isGrid);
 
-    this.thousandRows_.setRowHeight(!isGrid ?
-        app.ui.Container.listRowHeigt_ :
-        app.ui.Container.gridRowHeigt_);
-    this.thousandRows_.setRowCountInPane(!isGrid ?
-        app.ui.Container.listRowCount_ :
-        app.ui.Container.gridRowCount_);
-    this.thousandRows_.updateAlignment();
+    // this.list_.setRowHeight(!isGrid ?
+    //     app.ui.Container.listRowHeigt_ :
+    //     app.ui.Container.gridRowHeigt_);
+    // this.list_.setRowCountInPane(!isGrid ?
+    //     app.ui.Container.listRowCount_ :
+    //     app.ui.Container.gridRowCount_);
+    // this.list_.updateAlignment();
 
-    this.thousandRows_.setModel(model);
-    this.thousandRows_.setZero();
+    this.list_.setData(data);
+    // this.list_.setZero();
     this.detail_.clearContent();
   }
 };
@@ -99,8 +101,11 @@ app.ui.Container.prototype.createDom = function() {
 
 /** @inheritDoc */
 app.ui.Container.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
   var tab = app.ui.util.getTab(this);
+  var data = app.model.getTabQuery(tab.getId());
+  this.refreshByQuery(data['query'], data['category']['CategoryId']);
+
+  goog.base(this, 'enterDocument');
   this.getHandler()
     .listen(app.events.EventCenter.getInstance(),
             app.events.EventCenter.EventType.TAB_CHANGED, function(e) {
@@ -114,9 +119,6 @@ app.ui.Container.prototype.enterDocument = function() {
     });
   this.processSelected_(tab.isSelected());
 
-  // First request by thousand rows.
-  var data = app.model.getTabQuery(tab.getId());
-  this.refreshByQuery(data['query'], data['category']['CategoryId']);
 };
 
 
@@ -150,7 +152,6 @@ app.ui.Container.prototype.processSelected_ = function(selected) {
  * We can't use 'handleDragEnd_' for its name.. which used by superClass.
  */
 app.ui.Container.prototype.handlePaneResized_ = function(e) {
-  this.thousandRows_.update();
   this.detail_.update();
   var w = this.detail_.getWidth();
   if (goog.isNumber(w)) {
@@ -206,7 +207,6 @@ app.ui.Container.prototype.getOffsetTop_ = function() {
  */
 app.ui.Container.prototype.handleDelayedResize_ = function(e) {
   this.setDetailpainSize_();
-  this.thousandRows_.update();
   this.detail_.update();
 };
 
@@ -300,14 +300,47 @@ app.ui.Container.createThousandRows_ = function(opt_domHelper) {
 
 /**
  * @private
+ * @param {string} query .
+ * @param {string} categoryId .
+ * @param {boolean} isGrid .
+ * @return {app.ui.ThousandRows.Model} A brand new model for thousandrows.
+ */
+app.ui.Container.createListData_ = function(query, categoryId, isGrid) {
+  /**
+   * @private
+   * @type {goog.ui.list.Data}
+   */
+  var data = new goog.ui.list.Data(
+      '/auction/search?query=' + query + '&category=0&page=2');
+  data.setObjectNameTotalInJson('ResultSet.@attributes.totalResultsAvailable');
+  data.setObjectNameRowsInJson('ResultSet.Result.Item');
+  return data;
+
+
+  var endPoint = query ? '/auction/search' : '/y/categoryLeaf';
+  var uri = new goog.Uri(endPoint);
+  var q = uri.getQueryData();
+  if (query) q.set('query', query);
+  if (goog.isDefAndNotNull(categoryId)) {
+    q.set('category', categoryId);
+  }
+  // return isGrid ?
+  //   new app.ui.ThousandRows.ModelForGrid(uri.toString(), undefined, true) :
+  //   new app.ui.ThousandRows.Model(uri.toString(), undefined, true);
+  return new goog.ui.list.Data(uri.toString());
+};
+
+
+/**
+ * @private
  * @param {string} query A query.
  * @param {string} categoryId A categoryId.
  * @param {boolean} isGrid If true, a model creates grid style records.
  * @return {app.ui.ThousandRows.Model} A brand new model for thousandrows.
  */
 app.ui.Container.createNewModel_ = function(query, categoryId, isGrid) {
-  var endPoint = query ? '/y/search' : '/y/categoryLeaf';
-  var uri = new goog.Uri(endPoint); //goog.Uri.create escape its argument.. Why?
+  var endPoint = query ? '/auction/search' : '/y/categoryLeaf';
+  var uri = new goog.Uri(endPoint);
   var q = uri.getQueryData();
   if (query) q.set('query', query);
   if (goog.isDefAndNotNull(categoryId)) {
@@ -317,4 +350,5 @@ app.ui.Container.createNewModel_ = function(query, categoryId, isGrid) {
     new app.ui.ThousandRows.ModelForGrid(uri.toString(), undefined, true) :
     new app.ui.ThousandRows.Model(uri.toString(), undefined, true);
 };
+
 

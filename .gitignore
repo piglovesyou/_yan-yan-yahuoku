@@ -1,6 +1,7 @@
 /libs
 node_modules
 .DS_Store
+npm-debug.log
 /closure
 /redis/dump.rdb
 /redis/redis.log

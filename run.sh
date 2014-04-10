@@ -140,7 +140,7 @@ case $1 in
     serve) java -jar ${PLOVR_JAR_PATH} serve plovr.json;;
 
     all)
-        redis-server redis/redis.conf
+        # redis-server redis/redis.conf
         ./run.sh soyweb &
         # ./run.sh sass &
         ./run.sh serve &
@@ -148,7 +148,7 @@ case $1 in
         ;;
 
     killall)
-        pidof redis | xargs kill -9
+        # pidof redis | xargs kill -9
         # pidof mongo | xargs kill -9
         # pidof ruby | xargs kill -9
         pidof java | xargs kill -9

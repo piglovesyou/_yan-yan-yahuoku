@@ -21,7 +21,8 @@ html
     - else
       script(src='http://localhost:9810/compile?id=yan-yan-yahuoku&mode=WHITESPACE')
 
-  body!= body
+  body
+    block content
 
   - if (isProduction)
     include _googleAnalytics

@@ -1,4 +1,12 @@
 
+/**
+ * @type {Object}
+ */
+global.goog = require('closure').Closure({
+  CLOSURE_BASE_PATH: 'libs/closure-library/closure/goog/'
+});
+
+
 var port = process.argv[2] || 3000;
 
 /**

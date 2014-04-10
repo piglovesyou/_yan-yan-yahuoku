@@ -16,7 +16,7 @@ fetchFromIds(["0"]).then(console.log);
 
 
 function fetchFromIds(ids) {
-  return ids.reduce(fetchItemAndConcat, Q([]))
+  return ids.reduce(reduceFetchItem, Q([]))
   .then(function(childIds) {
     if (childIds.length > 0) {
       return fetchFromIds(childIds);
@@ -26,7 +26,7 @@ function fetchFromIds(ids) {
   });
 }
 
-function fetchItemAndConcat(q, id) {
+function reduceFetchItem(q, id) {
   return q.then(function(childIds) {
     return fetchFromId(id)
     .then(childIds.concat.bind(childIds))

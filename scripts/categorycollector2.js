@@ -4,21 +4,58 @@ Q.longStackSupport = true;
 var yahoo = require('../sources/net/yahoo');
 var Datastore = require('nedb');
 var db = new Datastore({ filename: './nedb/categories.nedb', autoload: true });
+var assert = require('assert');
+var _ = require('underscore');
 
 var update = Q.denodeify(db.update.bind(db));
 var findOne = Q.denodeify(db.findOne.bind(db));
 var yahooGet = Q.denodeify(yahoo.get.bind(yahoo));
 
+var start = Date.now();
+var depth = 3;
 
 
-fetchFromIds(["0"]).then(console.log);
+
+// fetchFromIds(["0"]).then(messageDone);
+fetchSimultaneouslyFromIds(["0"]).then(messageDone);
 
 
+
+function messageDone(msg) {
+  console.log(msg, (Date.now() - start) / 1000, '秒');
+}
+
+function fetchSimultaneouslyFromIds(ids) {
+  return ids.reduce(reduceChunkBind(1), [])
+  .reduce(function (q, set) {
+    return q.then(function(childIds) {
+      return Q.all(set.map(fetchFromId)).then(function(collected) {
+        return childIds.concat(_.flatten(collected))
+      });
+    })
+  }, Q([]))
+  .then(function(childIds) {
+    if (childIds.length > 0 && --depth) {
+      return fetchSimultaneouslyFromIds(childIds);
+    } else {
+      return 'done!';
+    }
+  });
+}
+
+function reduceChunkBind(size) {
+  return function(sum, e, i, arr) {
+    return sum.concat(i % size ? [] : [arr.slice(i, i + size)]);
+  }
+}
+assert.deepEqual(
+    [255,1,2,3,4,5,6].reduce(reduceChunkBind(3), []),
+    [[255,1,2],[3,4,5],[6]]);
 
 function fetchFromIds(ids) {
   return ids.reduce(reduceFetchItem, Q([]))
   .then(function(childIds) {
-    if (childIds.length > 0) {
+    if (childIds.length > 0 && --depth) {
       return fetchFromIds(childIds);
     } else {
       return 'done!';

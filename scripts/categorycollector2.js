@@ -12,6 +12,14 @@ var update = Q.denodeify(db.update.bind(db));
 var findOne = Q.denodeify(db.findOne.bind(db));
 var yahooGet = Q.denodeify(yahoo.get.bind(yahoo));
 
+Array.prototype.chunk = function(size) {
+  return this.reduce(function(result, e, i, arr) {
+    return i % size ? result : result.concat([arr.slice(i, i + size)]);
+  }, []);
+};
+
+assert.deepEqual([255, 1, 2, 3, 4, 5, 6].chunk(3), [[255, 1, 2], [3, 4, 5], [6]]);
+
 var start = Date.now();
 var depth = 3;
 
@@ -19,13 +27,13 @@ var depth = 3;
 
 // collectSequential(["0"]).then(messageDone);
 // collectSimultaneous(["0"]).then(messageDone);
-collectRace(['0']).then(messageDone);
+// collectRace(['0']).then(messageDone);
 
 
 
 function collectRace(ids) {
   return Q.all(
-    ids.reduce(reduceChunkBind(10), [])
+    ids.chunk(10)
     .map(function(set) {
       return set.reduce(function(q, id) {
         return q.then(function(childIds) {
@@ -70,6 +78,7 @@ function reduceChunkBind(size) {
     return sum.concat(i % size ? [] : [arr.slice(i, i + size)]);
   }
 }
+
 assert.deepEqual(
     [255, 1, 2, 3, 4, 5, 6].reduce(reduceChunkBind(3), []),
     [[255, 1, 2], [3, 4, 5], [6]]);
@@ -100,8 +109,8 @@ function fetchFromId(id, parent, child) {
   return findOne({CategoryId: id})
   .then(function(doc) {
     if (doc) {
-      return showMessageAndExtractChildIds('[exists]', doc);
-      return extractChildIds(doc);
+      return Q(showMessage('[exists]', doc))
+      .then(extractChildIds);
     } else {
       return yahooGet('categoryTree', {category: id})
       .then(JSON.parse)
@@ -109,14 +118,15 @@ function fetchFromId(id, parent, child) {
       .get('Result')
       .catch (outError)
       .then(upsertStore)
-      .then(showMessageAndExtractChildIds.bind(null, '[insert]'));
+      .then(showMessage.bind(null, '[insert]'))
+      .then(extractChildIds);
     }
   });
 }
 
-function showMessageAndExtractChildIds(messagePrefix, doc) {
-  console.log(messagePrefix, doc.CategoryPath);
-  return extractChildIds(doc);
+function showMessage(prefix, doc) {
+  console.log(prefix, doc.CategoryPath);
+  return doc;
 }
 
 function extractChildIds(parent) {

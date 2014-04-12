@@ -6,6 +6,7 @@ var Datastore = require('nedb');
 var db = new Datastore({ filename: './nedb/categories.nedb', autoload: true });
 var assert = require('assert');
 var _ = require('underscore');
+var argv = require('minimist')(process.argv.slice(2));
 
 var update = Q.denodeify(db.update.bind(db));
 var findOne = Q.denodeify(db.findOne.bind(db));
@@ -16,27 +17,48 @@ var depth = 3;
 
 
 
-// fetchFromIds(["0"]).then(messageDone);
-fetchSimultaneouslyFromIds(["0"]).then(messageDone);
+// collectSequential(["0"]).then(messageDone);
+// collectSimultaneous(["0"]).then(messageDone);
+collectRace(['0']).then(messageDone);
 
 
 
-function messageDone(msg) {
-  console.log(msg, (Date.now() - start) / 1000, '秒');
+function collectRace(ids) {
+  return Q.all(
+    ids.reduce(reduceChunkBind(10), [])
+    .map(function(set) {
+      return set.reduce(function(q, id) {
+        return q.then(function(childIds) {
+          return fetchFromId(id)
+          .then(function(cids) {
+            return childIds.concat(cids);
+          });
+        });
+      }, Q([]));
+    })
+  )
+  .then(_.flatten)
+  .then(function(childIds) {
+    if (childIds.length > 0 && --depth) {
+      return collectRace(childIds);
+    } else {
+      return 'done!';
+    }
+  });
 }
 
-function fetchSimultaneouslyFromIds(ids) {
-  return ids.reduce(reduceChunkBind(1), [])
-  .reduce(function (q, set) {
+function collectSimultaneous(ids) {
+  return ids.reduce(reduceChunkBind(10), [])
+  .reduce(function(q, set) {
     return q.then(function(childIds) {
       return Q.all(set.map(fetchFromId)).then(function(collected) {
-        return childIds.concat(_.flatten(collected))
+        return childIds.concat(_.flatten(collected));
       });
-    })
+    });
   }, Q([]))
   .then(function(childIds) {
     if (childIds.length > 0 && --depth) {
-      return fetchSimultaneouslyFromIds(childIds);
+      return collectSimultaneous(childIds);
     } else {
       return 'done!';
     }
@@ -49,14 +71,18 @@ function reduceChunkBind(size) {
   }
 }
 assert.deepEqual(
-    [255,1,2,3,4,5,6].reduce(reduceChunkBind(3), []),
-    [[255,1,2],[3,4,5],[6]]);
+    [255, 1, 2, 3, 4, 5, 6].reduce(reduceChunkBind(3), []),
+    [[255, 1, 2], [3, 4, 5], [6]]);
 
-function fetchFromIds(ids) {
+function messageDone(msg) {
+  console.log(msg, (Date.now() - start) / 1000, '秒');
+}
+
+function collectSequential(ids) {
   return ids.reduce(reduceFetchItem, Q([]))
   .then(function(childIds) {
     if (childIds.length > 0 && --depth) {
-      return fetchFromIds(childIds);
+      return collectSequential(childIds);
     } else {
       return 'done!';
     }
@@ -66,8 +92,8 @@ function fetchFromIds(ids) {
 function reduceFetchItem(q, id) {
   return q.then(function(childIds) {
     return fetchFromId(id)
-    .then(childIds.concat.bind(childIds))
-  })
+    .then(childIds.concat.bind(childIds));
+  });
 }
 
 function fetchFromId(id, parent, child) {
@@ -81,16 +107,16 @@ function fetchFromId(id, parent, child) {
       .then(JSON.parse)
       .get('ResultSet')
       .get('Result')
-      .catch(outError)
+      .catch (outError)
       .then(upsertStore)
       .then(showMessageAndExtractChildIds.bind(null, '[insert]'));
     }
-  })
-};
+  });
+}
 
 function showMessageAndExtractChildIds(messagePrefix, doc) {
   console.log(messagePrefix, doc.CategoryPath);
-  return extractChildIds(doc)
+  return extractChildIds(doc);
 }
 
 function extractChildIds(parent) {
@@ -112,7 +138,7 @@ function outError(reason) {
 function upsertStore(result) {
   return update({CategoryId: result.CategoryId}, result, {upsert: true})
   .then(function() {
-    return result
+    return result;
   });
 }
 

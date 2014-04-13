@@ -8,5 +8,4 @@ npm-debug.log
 /public/javascripts/main-min.js
 /public/stylesheets/main.css
 /redis/stdout
-/nedb/categories.nedb
 /nedb/categories.log

@@ -19,7 +19,8 @@ Array.prototype.chunk = function(size) {
   }, []);
 };
 
-assert.deepEqual([255, 1, 2, 3, 4, 5, 6].chunk(3), [[255, 1, 2], [3, 4, 5], [6]]);
+assert.deepEqual([255, 1, 2, 3, 4, 5, 6].chunk(3),
+                 [[255, 1, 2], [3, 4, 5], [6]]);
 
 var start = Date.now();
 var depth = null;
@@ -27,8 +28,8 @@ var depth = null;
 
 
 // collectSequential(["0"]).then(messageDone);
-// collectSimultaneous(["0"]).then(messageDone);
-collectRace(['0']).then(messageDone);
+collectSimultaneous(["0"]).then(messageDone);
+// collectRace(['0']).then(messageDone);
 
 
 

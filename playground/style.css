@@ -1,0 +1,129 @@
+
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"],
+.pure-g-r [class *= "pure-u"] {
+    /* Set your content font stack here: */
+    /* font-family: Georgia, Times, "Times New Roman", serif; */
+  font-family: 'Sorts Mill Goudy', serif;
+}
+
+
+/* extend pure */
+.pure-table-simple {
+  border: none;
+}
+.pure-table-simple tr:last-child th {
+  border-bottom: none;
+}
+
+
+
+
+
+
+
+
+
+
+h1 {
+  text-indent: .5em;
+  display: inline;
+  margin: 0;
+}
+
+.header .header-toolbar {
+  padding: 1.5em 0 .67em;
+  border-bottom: 1px #ccc solid;
+}
+
+.header-input {
+  padding: .8em  0 .8em 1.3em;
+  border-bottom: 1px #e9e9e9 solid;
+}
+.header-toolbar-rightcontent,
+.header-input-rightcontent {
+  float: right;
+}
+
+.header-input-suggest {
+  resize: none;
+  border: none;
+  outline: none;
+}
+
+
+
+
+
+
+
+.main {
+  overflow: hidden;
+}
+/* tmp */
+.main-list,
+.main-detail {
+  height: 400px;
+  overflow: auto;
+}
+.main-list {
+  border-right: 1px #e9e9e9 solid;
+  box-sizing: border-box;
+}
+
+.main-list-row {
+  margin: 2em 1.5em;
+}
+.main-list-row-image {
+  text-align: center;
+}
+.main-list-row-image img {
+  max-width: 100%;
+}
+.main-list-row-title,
+.main-list-row-description {
+  font-size: 85%;
+  padding-left: 1.5em;
+}
+.main-list-row-title {
+  padding-top: 1em;
+  padding-bottom: .4em;
+  font-size: 85%;
+}
+
+.main-detail .pure-table {
+  width: 92%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.main-detail .pure-table tr:last-child th {
+  border-bottom: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* tag  */
+.button-tag {
+  opacity: 1 !important;
+}
+.button-tag,
+.header-input-suggest {
+  font-size: 85%;
+  padding: .4em .5em;
+}
+.button-tag-remove {
+  font-family: sans-serif;
+}
+
+

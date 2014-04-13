@@ -7,6 +7,7 @@ var db = new Datastore({ filename: './nedb/categories.nedb', autoload: true });
 var assert = require('assert');
 var _ = require('underscore');
 var argv = require('minimist')(process.argv.slice(2));
+// argv.quiet
 
 var update = Q.denodeify(db.update.bind(db));
 var findOne = Q.denodeify(db.findOne.bind(db));
@@ -27,7 +28,7 @@ var depth = 3;
 
 // collectSequential(["0"]).then(messageDone);
 // collectSimultaneous(["0"]).then(messageDone);
-// collectRace(['0']).then(messageDone);
+collectRace(['0']).then(messageDone);
 
 
 
@@ -35,14 +36,7 @@ function collectRace(ids) {
   return Q.all(
     ids.chunk(10)
     .map(function(set) {
-      return set.reduce(function(q, id) {
-        return q.then(function(childIds) {
-          return fetchFromId(id)
-          .then(function(cids) {
-            return childIds.concat(cids);
-          });
-        });
-      }, Q([]));
+      return set.reduce(reduceFetchItem, Q([]));
     })
   )
   .then(_.flatten)
@@ -56,7 +50,7 @@ function collectRace(ids) {
 }
 
 function collectSimultaneous(ids) {
-  return ids.reduce(reduceChunkBind(10), [])
+  return ids.chunk(10)
   .reduce(function(q, set) {
     return q.then(function(childIds) {
       return Q.all(set.map(fetchFromId)).then(function(collected) {
@@ -125,7 +119,7 @@ function fetchFromId(id, parent, child) {
 }
 
 function showMessage(prefix, doc) {
-  console.log(prefix, doc.CategoryPath);
+  if (!argv.quiet) console.log(prefix, doc.CategoryPath);
   return doc;
 }
 

@@ -22,7 +22,7 @@ Array.prototype.chunk = function(size) {
 assert.deepEqual([255, 1, 2, 3, 4, 5, 6].chunk(3), [[255, 1, 2], [3, 4, 5], [6]]);
 
 var start = Date.now();
-var depth = 3;
+var depth = null;
 
 
 
@@ -41,7 +41,7 @@ function collectRace(ids) {
   )
   .then(_.flatten)
   .then(function(childIds) {
-    if (childIds.length > 0 && --depth) {
+    if (childIds.length > 0 && (!_.isNumber(depth) || --depth)) {
       return collectRace(childIds);
     } else {
       return 'done!';

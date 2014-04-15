@@ -12,8 +12,7 @@
   font-style: normal;
   font-weight: 400;
   src: local('Sorts Mill Goudy Regular'),
-       local('SortsMillGoudy-Regular'),
-       url(.woff) format('woff');
+       local('SortsMillGoudy-Regular');
 }
        /* url(http://themes.googleusercontent.com/static/fonts/sortsmillgoudy/v4/JzRrPKdwEnE8F1TDmDLMUtsZ51dqzBwIdH2JuTl9mv4.woff) format('woff'); */
 

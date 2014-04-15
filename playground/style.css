@@ -1,4 +1,29 @@
 
+
+
+
+
+
+
+
+
+@font-face {
+  font-family: 'Sorts Mill Goudy';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Sorts Mill Goudy Regular'),
+       local('SortsMillGoudy-Regular'),
+       url(.woff) format('woff');
+}
+       /* url(http://themes.googleusercontent.com/static/fonts/sortsmillgoudy/v4/JzRrPKdwEnE8F1TDmDLMUtsZ51dqzBwIdH2JuTl9mv4.woff) format('woff'); */
+
+
+
+
+
+
+
+
 html, button, input, select, textarea,
 .pure-g [class *= "pure-u"],
 .pure-g-r [class *= "pure-u"] {

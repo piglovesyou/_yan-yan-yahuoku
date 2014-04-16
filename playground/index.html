@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="pure-min.css">
 
   <link rel="stylesheet" href="style.css" />
-  <script src="http://localhost:9810/compile?id=yan-yan-yahuoku&mode=WHITESPACE"></script>
 </head>
 <body>
 
@@ -36,27 +35,32 @@
         yeah right content
       </div>
 
-      <a class="button-tag pure-button pure-button-disabled pure-button-primary  " href="#">
-        [category] A Primary Button
-        <span class="button-tag-remove">×</span>
-      </a>
 
-      <a class="button-tag pure-button pure-button-disabled" href="#">
-        やきそば
-        <span class="button-tag-remove">×</span>
-      </a>
+      <div class="header-input-leftcontent">
 
-      <textarea id="aaa"
-          class="header-input-suggest"
-          name=""
-          rows="1"
-          placeholder="おためし" 
-          spellcheck="false"
-          autocomplete="false"
-          autocapitalize="off"
-          autocorrect="off"
-          tabindex="1"
-          dir="ltr"></textarea>
+        <a class="button-tag pure-button pure-button-disabled pure-button-primary  " href="#">
+          [category] A Primary Button
+          <span class="button-tag-remove">×</span>
+        </a><!--
+
+        --><a class="button-tag pure-button pure-button-disabled" href="#">
+          やきそば
+          <span class="button-tag-remove">×</span>
+        </a><!--
+
+        --><input type="text" id="aaa"
+            class="header-input-textbox"
+            name=""
+            rows="1"
+            placeholder="キーワードを入力" 
+            spellcheck="false"
+            autocomplete="false"
+            autocapitalize="off"
+            autocorrect="off"
+            tabindex="1"
+            dir="ltr" />
+      </div>
+
 
 
 
@@ -140,7 +144,8 @@
 
 
 
-<script type="text/javascript">
+<script src="http://localhost:9810/compile?id=yan-yan-yahuoku&mode=WHITESPACE"></script>
+<!--script type="text/javascript">
   WebFontConfig = {
     google: { families: [ 'Sorts+Mill+Goudy::latin' ] }
   };
@@ -152,6 +157,6 @@
     wf.async = 'true';
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(wf, s);
-  })(); </script>
+  })(); </script-->
 </body>
 </html>

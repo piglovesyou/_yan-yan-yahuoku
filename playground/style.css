@@ -68,11 +68,15 @@ h1 {
 .header-input-rightcontent {
   float: right;
 }
+.header-input-leftcontent {
+  overflow: hidden;
+}
 
-.header-input-suggest {
+.header-input-textbox {
   resize: none;
   border: none;
   outline: none;
+  height: auto !important;
 }
 
 
@@ -140,11 +144,15 @@ h1 {
 /* tag  */
 .button-tag {
   opacity: 1 !important;
+  margin-right: 4px;
+  padding: .4em .5em;
 }
 .button-tag,
-.header-input-suggest {
+.header-input-textbox {
   font-size: 85%;
-  padding: .4em .5em;
+}
+.header-input-textbox {
+  padding: .4em .5em .4em 0;
 }
 .button-tag-remove {
   font-family: sans-serif;

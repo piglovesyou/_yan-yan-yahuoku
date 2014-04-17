@@ -139,6 +139,8 @@ case $1 in
 
     serve) java -jar ${PLOVR_JAR_PATH} serve plovr.json;;
 
+    serve_playground) java -jar ${PLOVR_JAR_PATH} serve playground_plovr.json;;
+
     all)
         # redis-server redis/redis.conf
         ./run.sh soyweb &

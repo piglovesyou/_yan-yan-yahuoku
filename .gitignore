@@ -9,3 +9,4 @@ npm-debug.log
 /public/stylesheets/main.css
 /redis/stdout
 /nedb/categories.log
+/solr/collection1/data

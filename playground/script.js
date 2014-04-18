@@ -99,7 +99,7 @@ function handleKey(e) {
   switch (e.keyCode) {
     case goog.events.KeyCodes.ENTER:
       if (e.target.value) {
-        insertTagWithValue(e.target.value);
+        insertTagWithValue(e.target);
         e.preventDefault();
       }
       break;
@@ -123,8 +123,9 @@ function handleKey(e) {
   }
 }
 
-function insertTagWithValue(value) {
-  textBox.style.display = 'none';
+function insertTagWithValue(input) {
+  var value = input.value;
+  input.style.display = 'none';
 
   var lastTag = getLastTag();
   if (lastTag) {
@@ -134,9 +135,9 @@ function insertTagWithValue(value) {
   }
 
   repositionTextBox();
-  textBox.value = '';
+  input.value = '';
 
-  textBox.style.display = 'inline-block';
+  input.style.display = 'inline-block';
 }
 
 function createTagNode(value) {

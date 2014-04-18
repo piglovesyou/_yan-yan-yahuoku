@@ -4,6 +4,7 @@ goog.require('goog.events');
 goog.require('goog.style');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.events.InputHandler');
+goog.require('goog.asserts');
 
 
 
@@ -21,6 +22,56 @@ repositionTextBox();
 
 
 
+function onTagFocus(el) {
+  if (el.eh) el.eh.dispose();
+  var eh = el.eh = new goog.events.EventHandler;
+
+  eh.listen(el, 'blur', onTagBlur);
+  eh.listen(new goog.events.KeyHandler(el), goog.events.KeyHandler.EventType.KEY, handleTagKey);
+}
+
+function handleTagKey(e) {
+  var el = e.target;
+  switch (e.keyCode) {
+    case goog.events.KeyCodes.LEFT:
+      var sibling = getPreviousFocusableEl(el);
+      if (sibling) {
+        sibling.focus();
+        e.preventDefault();
+      }
+      break;
+    case goog.events.KeyCodes.RIGHT:
+      var sibling = getNextFocusableEl(el);
+      if (sibling) {
+        sibling.focus();
+        e.preventDefault();
+      }
+      break;
+    case goog.events.KeyCodes.BACKSPACE:
+      var sibling = getPreviousFocusableEl(el);
+      if (sibling) {
+        sibling.focus();
+      } 
+      removeTag(el);
+      e.preventDefault();
+      break;
+  }
+}
+
+// ;
+
+function removeTag(el) {
+  if (el.tagName == goog.dom.TagName.INPUT) return;
+  if (el.eh) el.eh.dispose();
+  goog.dom.removeNode(el);
+}
+
+function onTagBlur(e) {
+  goog.asserts.assert(e.target);
+  e.target.eh.dispose();
+  e.target.eh = null;
+}
+
 function handleKey(e) {
   switch (e.keyCode) {
     case goog.events.KeyCodes.ENTER:
@@ -29,12 +80,24 @@ function handleKey(e) {
     case goog.events.KeyCodes.BACKSPACE:
       handleKeyBackspace(e);
       break;
+    case goog.events.KeyCodes.LEFT:
+      handleKeyLeft(e);
+      break;
+  }
+}
+
+function handleKeyLeft(e) {
+  var lastTag = getLastTag();
+  if (lastTag) {
+    lastTag.focus();
+    e.preventDefault();
   }
 }
 
 function handleKeyEnter(e) {
   if (e.target.value) {
     insertTagWithValue(e.target.value);
+    e.preventDefault();
   }
 }
 
@@ -42,8 +105,9 @@ function handleKeyBackspace(e) {
   if (!e.target.value) {
     var lastTag = getLastTag();
     if (lastTag) {
-      goog.dom.removeNode(lastTag);
+      removeTag(lastTag);
       repositionTextBox();
+      e.preventDefault();
     }
   }
 }
@@ -65,12 +129,12 @@ function insertTagWithValue(value) {
 }
 
 function createTagNode(value) {
-  return goog.dom.createDom('a', {
-    className: 'button-tag pure-button pure-button-disabled',
-    href: "javascript:void 0"
-  }, 
-      value,
-      goog.dom.createDom('span', 'button-tag-remove', 'x '));
+  return goog.dom.htmlToDocumentFragment(
+    '<a tabindex="0" onFocus="return onTagFocus(this);"' +
+        'class="button-tag pure-button pure-button-disabled" href="#">' +
+            value +
+            '<span class="button-tag-remove">×</span>' +
+    '</a>');
 }
 
 function repositionTextBox() {
@@ -90,6 +154,22 @@ function repositionTextBox() {
       wrapSize.width : width ;
 
   goog.style.setBorderBoxSize(textBox, new goog.math.Size(width, 0));
+}
+
+function getPreviousFocusableEl(target) {
+  return getSiblingFocusableEl_(target, goog.dom.getPreviousElementSibling);
+}
+
+function getNextFocusableEl(target) {
+  return getSiblingFocusableEl_(target, goog.dom.getNextElementSibling);
+}
+
+function getSiblingFocusableEl_(target, method) {
+  var el;
+  while (el = method(target))
+    if (goog.dom.isFocusableTabIndex(el))
+      return el;
+  return null;
 }
 
 function getLastTag() {

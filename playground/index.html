@@ -38,27 +38,30 @@
 
       <div class="header-input-leftcontent">
 
-        <a class="button-tag pure-button pure-button-disabled pure-button-primary  " href="#">
+        <a tabindex="0" onFocus="return onTagFocus(this);"
+           class="button-tag pure-button pure-button-disabled pure-button-primary" href="#">
           [category] A Primary Button
           <span class="button-tag-remove">×</span>
         </a><!--
 
-        --><a class="button-tag pure-button pure-button-disabled" href="#">
+        --><a tabindex="0" onFocus="return onTagFocus(this);"
+              class="button-tag pure-button pure-button-disabled" href="#">
           やきそば
           <span class="button-tag-remove">×</span>
         </a><!--
 
-        --><input type="text" id="aaa"
-            class="header-input-textbox"
-            name=""
-            rows="1"
-            placeholder="キーワードを入力" 
-            spellcheck="false"
-            autocomplete="false"
-            autocapitalize="off"
-            autocorrect="off"
-            tabindex="1"
-            dir="ltr" />
+        --><input tabindex="0" onFocus="return onTagFocus(this);"
+                  type="text" id="aaa"
+                  class="header-input-textbox"
+                  name=""
+                  rows="1"
+                  placeholder="キーワードを入力" 
+                  spellcheck="false"
+                  autocomplete="false"
+                  autocapitalize="off"
+                  autocorrect="off"
+                  tabindex="1"
+                  dir="ltr" />
       </div>
 
 

@@ -42,14 +42,12 @@ function onTagFocus(el) {
 function handleInputKey(e) {
   var el = e.target;
   switch (e.keyCode) {
-    case goog.events.KeyCodes.LEFT:
-      if (goog.dom.selection.getStart(el)) return;
-      // When a cursor is at the left edge, change focus.
-      break;
     case goog.events.KeyCodes.RIGHT:
       return;
+    case goog.events.KeyCodes.LEFT:
     case goog.events.KeyCodes.BACKSPACE:
       if (goog.dom.selection.getStart(el)) return;
+      // When a cursor is at the left edge, change focus.
       break;
   }
   handleTagKey(e);

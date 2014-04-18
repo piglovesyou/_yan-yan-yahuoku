@@ -5,6 +5,7 @@ goog.require('goog.style');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.events.InputHandler');
 goog.require('goog.asserts');
+goog.require('goog.dom.selection');
 
 
 
@@ -22,6 +23,14 @@ repositionTextBox();
 
 
 
+function onInputFocus(el) {
+  if (el.eh) el.eh.dispose();
+  var eh = el.eh = new goog.events.EventHandler;
+
+  eh.listen(el, 'blur', onTagBlur);
+  eh.listen(new goog.events.KeyHandler(el), goog.events.KeyHandler.EventType.KEY, handleInputKey);
+}
+
 function onTagFocus(el) {
   if (el.eh) el.eh.dispose();
   var eh = el.eh = new goog.events.EventHandler;
@@ -30,25 +39,41 @@ function onTagFocus(el) {
   eh.listen(new goog.events.KeyHandler(el), goog.events.KeyHandler.EventType.KEY, handleTagKey);
 }
 
+function handleInputKey(e) {
+  var el = e.target;
+  switch (e.keyCode) {
+    case goog.events.KeyCodes.LEFT:
+      if (goog.dom.selection.getStart(el)) return;
+      // When a cursor is at the left edge, change focus.
+      break;
+    case goog.events.KeyCodes.RIGHT:
+      return;
+    case goog.events.KeyCodes.BACKSPACE:
+      if (goog.dom.selection.getStart(el)) return;
+      break;
+  }
+  handleTagKey(e);
+}
+
 function handleTagKey(e) {
   var el = e.target;
   switch (e.keyCode) {
     case goog.events.KeyCodes.LEFT:
-      var sibling = getPreviousFocusableEl(el);
+      var sibling = getPreviousFocusable(el);
       if (sibling) {
         sibling.focus();
         e.preventDefault();
       }
       break;
     case goog.events.KeyCodes.RIGHT:
-      var sibling = getNextFocusableEl(el);
+      var sibling = getNextFocusable(el);
       if (sibling) {
         sibling.focus();
         e.preventDefault();
       }
       break;
     case goog.events.KeyCodes.BACKSPACE:
-      var sibling = getPreviousFocusableEl(el);
+      var sibling = getPreviousFocusable(el);
       if (sibling) {
         sibling.focus();
       } 
@@ -156,15 +181,15 @@ function repositionTextBox() {
   goog.style.setBorderBoxSize(textBox, new goog.math.Size(width, 0));
 }
 
-function getPreviousFocusableEl(target) {
-  return getSiblingFocusableEl_(target, goog.dom.getPreviousElementSibling);
+function getPreviousFocusable(target) {
+  return getSiblingFocusable_(target, goog.dom.getPreviousElementSibling);
 }
 
-function getNextFocusableEl(target) {
-  return getSiblingFocusableEl_(target, goog.dom.getNextElementSibling);
+function getNextFocusable(target) {
+  return getSiblingFocusable_(target, goog.dom.getNextElementSibling);
 }
 
-function getSiblingFocusableEl_(target, method) {
+function getSiblingFocusable_(target, method) {
   var el;
   while (el = method(target))
     if (goog.dom.isFocusableTabIndex(el))

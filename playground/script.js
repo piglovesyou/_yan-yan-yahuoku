@@ -127,9 +127,9 @@ function insertTagWithValue(input) {
   var value = input.value;
   input.style.display = 'none';
 
-  var lastTag = getLastTag();
-  if (lastTag) {
-    goog.dom.insertSiblingAfter(createTagNode(value), lastTag);
+  var tag = getPreviousFocusable(input);
+  if (tag) {
+    goog.dom.insertSiblingAfter(createTagNode(value), tag);
   } else {
     goog.dom.insertChildAt(wrap, createTagNode(value), 0);
   }

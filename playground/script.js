@@ -98,40 +98,28 @@ function onTagBlur(e) {
 function handleKey(e) {
   switch (e.keyCode) {
     case goog.events.KeyCodes.ENTER:
-      handleKeyEnter(e);
+      if (e.target.value) {
+        insertTagWithValue(e.target.value);
+        e.preventDefault();
+      }
       break;
     case goog.events.KeyCodes.BACKSPACE:
-      handleKeyBackspace(e);
+      if (!e.target.value) {
+        var lastTag = getLastTag();
+        if (lastTag) {
+          removeTag(lastTag);
+          repositionTextBox();
+          e.preventDefault();
+        }
+      }
       break;
     case goog.events.KeyCodes.LEFT:
-      handleKeyLeft(e);
+      var lastTag = getLastTag();
+      if (lastTag) {
+        lastTag.focus();
+        e.preventDefault();
+      }
       break;
-  }
-}
-
-function handleKeyLeft(e) {
-  var lastTag = getLastTag();
-  if (lastTag) {
-    lastTag.focus();
-    e.preventDefault();
-  }
-}
-
-function handleKeyEnter(e) {
-  if (e.target.value) {
-    insertTagWithValue(e.target.value);
-    e.preventDefault();
-  }
-}
-
-function handleKeyBackspace(e) {
-  if (!e.target.value) {
-    var lastTag = getLastTag();
-    if (lastTag) {
-      removeTag(lastTag);
-      repositionTextBox();
-      e.preventDefault();
-    }
   }
 }
 

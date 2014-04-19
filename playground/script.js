@@ -10,12 +10,9 @@ goog.require('goog.dom.selection');
 
 
 var wrap = document.querySelector('.header-input-leftcontent');
-var tag = document.querySelector('.button-tag');
-var textBox = document.querySelector('.header-input-textbox');
+var inputBox = document.querySelector('.header-input-textbox');
 
 
-
-// goog.events.listen(new goog.events.KeyHandler(textBox), goog.events.KeyHandler.EventType.KEY, handleKey);
 
 repositionTextBox();
 
@@ -93,8 +90,6 @@ function handleTagKey(e) {
   }
 }
 
-// ;
-
 function removeTag(el) {
   if (el.tagName == goog.dom.TagName.INPUT) return;
   if (el.eh) el.eh.dispose();
@@ -107,77 +102,47 @@ function onFocusableBlur(e) {
   e.target.eh = null;
 }
 
-function handleKey(e) {
-  switch (e.keyCode) {
-    case goog.events.KeyCodes.ENTER:
-      if (e.target.value) {
-        insertTagWithValue(e.target);
-        e.preventDefault();
-      }
-      break;
-    case goog.events.KeyCodes.BACKSPACE:
-      if (!e.target.value) {
-        var lastTag = getLastTag();
-        if (lastTag) {
-          removeTag(lastTag);
-          repositionTextBox();
-          e.preventDefault();
-        }
-      }
-      break;
-    case goog.events.KeyCodes.LEFT:
-      var lastTag = getLastTag();
-      if (lastTag) {
-        lastTag.focus();
-        e.preventDefault();
-      }
-      break;
-  }
-}
-
 function insertTagWithValue(input) {
   var value = input.value;
   input.style.display = 'none';
-
   var tag = getPreviousFocusable(input);
   if (tag) {
     goog.dom.insertSiblingAfter(createTagNode(value), tag);
   } else {
     goog.dom.insertChildAt(wrap, createTagNode(value), 0);
   }
-
   repositionTextBox();
   input.value = '';
-
   input.style.display = 'inline-block';
 }
 
 function createTagNode(value) {
   return goog.dom.htmlToDocumentFragment(
     '<a tabindex="0" onFocus="return onTagFocus(this);"' +
-        'class="button-tag pure-button pure-button-disabled" href="#">' +
-            value +
-            '<span class="button-tag-remove">×</span>' +
+          'class="button-tag pure-button pure-button-disabled" href="#">' +
+        value +
+        '<span class="button-tag-remove">×</span>' +
     '</a>');
 }
 
 function repositionTextBox() {
+  goog.style.setBorderBoxSize(inputBox,
+      new goog.math.Size(calcInputWidth(), 0));
+}
+
+function calcInputWidth() {
   var lastTag = getLastTag();
   var wrapSize = goog.style.getContentBoxSize(wrap);
+  if (!lastTag) return wrapSize.width;
 
-  if (lastTag) {
-    var tagPos = goog.style.getRelativePosition(lastTag, wrap);
-    var tagSize = goog.style.getBorderBoxSize(lastTag);
-  }
+  var tagPos = goog.style.getRelativePosition(lastTag, wrap);
+  var tagSize = goog.style.getBorderBoxSize(lastTag);
   var BETWEEN_TAG_AND_TEXTBOX = 10;
   var MINIMUM_WIDTH = 80;
 
-  var width;
-  width = !lastTag || (width = wrapSize.width - tagPos.x -
-      tagSize.width - BETWEEN_TAG_AND_TEXTBOX) < MINIMUM_WIDTH ?
-      wrapSize.width : width ;
-
-  goog.style.setBorderBoxSize(textBox, new goog.math.Size(width, 0));
+  var width = wrapSize.width - tagPos.x - tagSize.width - BETWEEN_TAG_AND_TEXTBOX;
+  if (width < MINIMUM_WIDTH) return wrapSize.width;
+  return width;
 }
 
 function getPreviousFocusable(target) {
@@ -188,15 +153,15 @@ function getNextFocusable(target) {
   return getSiblingFocusable_(target, goog.dom.getNextElementSibling);
 }
 
-function getSiblingFocusable_(target, method) {
+function getSiblingFocusable_(target, getSibling) {
   var el;
-  while (el = method(target))
+  while (el = getSibling(target))
     if (goog.dom.isFocusableTabIndex(el))
       return el;
   return null;
 }
 
 function getLastTag() {
-  return wrap.querySelector('.button-tag:last-of-type');
+  return getPreviousFocusable(inputBox);
 }
 

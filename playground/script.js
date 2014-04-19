@@ -22,20 +22,18 @@ repositionTextBox();
 
 
 function onInputFocus(el) {
-  console.log('on input focus');
-  if (el.eh) el.eh.dispose();
-  var eh = el.eh = new goog.events.EventHandler;
-
-  eh.listen(el, 'blur', onTagBlur);
-  eh.listen(new goog.events.KeyHandler(el), goog.events.KeyHandler.EventType.KEY, handleInputKey);
+  decorateFocusable_(el, handleInputKey);
 }
 
 function onTagFocus(el) {
-  if (el.eh) el.eh.dispose();
-  var eh = el.eh = new goog.events.EventHandler;
+  decorateFocusable_(el, handleTagKey);
+}
 
-  eh.listen(el, 'blur', onTagBlur);
-  eh.listen(new goog.events.KeyHandler(el), goog.events.KeyHandler.EventType.KEY, handleTagKey);
+function decorateFocusable_(el, keyHandler) {
+  if (el.eh) el.eh.dispose();
+  (el.eh = new goog.events.EventHandler)
+    .listen(el, 'blur', onFocusableBlur)
+    .listen(new goog.events.KeyHandler(el), goog.events.KeyHandler.EventType.KEY, keyHandler);
 }
 
 function handleInputKey(e) {
@@ -103,7 +101,7 @@ function removeTag(el) {
   goog.dom.removeNode(el);
 }
 
-function onTagBlur(e) {
+function onFocusableBlur(e) {
   goog.asserts.assert(e.target);
   e.target.eh.dispose();
   e.target.eh = null;

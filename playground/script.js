@@ -18,13 +18,17 @@ repositionTextBox();
 
 
 
+/** @param {Element} el .  */
 function onInputFocus(el) {
   decorateFocusable_(el, handleInputKey);
 }
+goog.exportSymbol('onInputFocus', onInputFocus);
 
+/** @param {Element} el .  */
 function onTagFocus(el) {
   decorateFocusable_(el, handleTagKey);
 }
+goog.exportSymbol('onTagFocus', onTagFocus);
 
 function decorateFocusable_(el, keyHandler) {
   if (el.eh) el.eh.dispose();

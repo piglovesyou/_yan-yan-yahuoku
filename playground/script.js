@@ -6,6 +6,7 @@ goog.require('goog.events.KeyHandler');
 goog.require('goog.events.InputHandler');
 goog.require('goog.asserts');
 goog.require('goog.dom.selection');
+goog.require('goog.dom.classes');
 
 
 
@@ -15,6 +16,7 @@ var inputBox = document.querySelector('.header-input-textbox');
 
 
 repositionTextBox();
+goog.events.listen(wrap, 'click', handleWrapClick);
 
 
 
@@ -162,3 +164,18 @@ function getLastTag() {
   return getPreviousFocusable(inputBox);
 }
 
+function handleWrapClick(e) {
+  var el = findTagFromEventTarget(e.target);
+  if (el) {
+    removeTag(el);
+    e.preventDefault();
+  }
+}
+
+function findTagFromEventTarget(et) {
+  return goog.dom.getAncestor(et, isTagEl);
+}
+
+function isTagEl(node) {
+  return goog.dom.classes.has(node, 'button-tag');
+}

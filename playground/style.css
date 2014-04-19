@@ -150,9 +150,9 @@ h1 {
 .button-tag:hover {
   cursor: pointer !important;
 }
-
 .button-tag.pure-button { border: 1px transparent solid }
 .button-tag:focus { border-color: orange }
+.button-tag:active { border-color: transparent }
 
 .button-tag,
 .header-input-textbox {
@@ -163,7 +163,19 @@ h1 {
 }
 .button-tag-remove {
   font-family: sans-serif;
-  margin: 0 .2em;
+  margin: .2em;
+  border-radius: .6em;
+  display: inline-block;
+  min-height: 1.2em;
+  min-width: 1.2em;
+  line-height: 1.2em;
+}
+.button-tag-remove:hover {
+  background: #888;
+  color: #fcfcfc;
+}
+.button-tag-remove:active {
+  background: #444;
 }
 
 

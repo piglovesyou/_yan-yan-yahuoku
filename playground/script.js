@@ -34,60 +34,53 @@ function decorateFocusable_(el, keyHandler) {
 }
 
 function handleInputKey(e) {
-  console.log('handle input keys');
   var el = e.target;
   switch (e.keyCode) {
-    case goog.events.KeyCodes.RIGHT:
-      return;
     case goog.events.KeyCodes.ENTER:
-      if (e.target.value) {
-        insertTagWithValue(e.target);
-        return;
-      }
+      if (e.target.value) insertTagWithValue(e.target);
       break;
     case goog.events.KeyCodes.BACKSPACE:
-      if (goog.dom.selection.getStart(el)) return;
-      var sibling = getPreviousFocusable(el);
-      if (sibling) {
-        sibling.focus();
-        e.preventDefault();
-      }
-      break;
     case goog.events.KeyCodes.LEFT:
       if (goog.dom.selection.getStart(el)) return;
-      // When a cursor is at the left edge, change focus.
+      if (focusPrevious(el)) e.preventDefault();
       break;
   }
-  handleTagKey(e);
 }
 
 function handleTagKey(e) {
   var el = e.target;
   switch (e.keyCode) {
     case goog.events.KeyCodes.LEFT:
-      var sibling = getPreviousFocusable(el);
-      if (sibling) {
-        sibling.focus();
-        e.preventDefault();
-      }
+      if (focusPrevious(el)) e.preventDefault();
       break;
     case goog.events.KeyCodes.RIGHT:
-      var sibling = getNextFocusable(el);
-      if (sibling) {
-        sibling.focus();
-        e.preventDefault();
-      }
+      if (focusNext(el)) e.preventDefault();
       break;
     case goog.events.KeyCodes.BACKSPACE:
-      var sibling = getPreviousFocusable(el);
-      if (sibling) {
-        sibling.focus();
-      } 
+      focusPrevious(el);
       removeTag(el);
       repositionTextBox();
       e.preventDefault();
       break;
   }
+}
+
+function focusPrevious(el) {
+  var sibling = getPreviousFocusable(el);
+  if (sibling) {
+    sibling.focus();
+    return true;
+  }
+  return false;
+}
+
+function focusNext(el) {
+  var sibling = getNextFocusable(el);
+  if (sibling) {
+    sibling.focus();
+    return true;
+  }
+  return false;
 }
 
 function removeTag(el) {

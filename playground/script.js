@@ -15,15 +15,14 @@ var textBox = document.querySelector('.header-input-textbox');
 
 
 
-var h = new goog.events.KeyHandler(textBox);
-
-goog.events.listen(h, goog.events.KeyHandler.EventType.KEY, handleKey);
+// goog.events.listen(new goog.events.KeyHandler(textBox), goog.events.KeyHandler.EventType.KEY, handleKey);
 
 repositionTextBox();
 
 
 
 function onInputFocus(el) {
+  console.log('on input focus');
   if (el.eh) el.eh.dispose();
   var eh = el.eh = new goog.events.EventHandler;
 
@@ -40,12 +39,26 @@ function onTagFocus(el) {
 }
 
 function handleInputKey(e) {
+  console.log('handle input keys');
   var el = e.target;
   switch (e.keyCode) {
     case goog.events.KeyCodes.RIGHT:
       return;
-    case goog.events.KeyCodes.LEFT:
+    case goog.events.KeyCodes.ENTER:
+      if (e.target.value) {
+        insertTagWithValue(e.target);
+        return;
+      }
+      break;
     case goog.events.KeyCodes.BACKSPACE:
+      if (goog.dom.selection.getStart(el)) return;
+      var sibling = getPreviousFocusable(el);
+      if (sibling) {
+        sibling.focus();
+        e.preventDefault();
+      }
+      break;
+    case goog.events.KeyCodes.LEFT:
       if (goog.dom.selection.getStart(el)) return;
       // When a cursor is at the left edge, change focus.
       break;
@@ -76,6 +89,7 @@ function handleTagKey(e) {
         sibling.focus();
       } 
       removeTag(el);
+      repositionTextBox();
       e.preventDefault();
       break;
   }

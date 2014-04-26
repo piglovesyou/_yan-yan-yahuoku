@@ -9,28 +9,9 @@ goog.require('goog.style');
 
 
 
-// var input = document.querySelector('.header-input-textbox');
-// goog.style.setWidth(input, 500);
-
-
-
-// app.taginput.Suggest.prototype.onInputFocus = function(el) {
-//   disposeInputDecoration(el);
-// 
-//   if (!el.suggest) el.suggest = new app.taginput.Suggest(el);
-//   (el.eh = new goog.events.EventHandler)
-//     .listen(el, 'blur', handleFocusableBlur)
-// }
-
-// app.taginput.Suggest.prototype.handleFocusableBlur = function(e) {
-//   disposeInputDecoration(e.target)
-// }
-
-// app.taginput.Suggest.prototype.disposeInputDecoration = function(el) {
-//   // if (el.suggest) el.suggest.dispose();
-//   if (el.eh) el.eh.dispose(); // Finally, dispose eh.
-// }
-
+/**
+ * @constructor
+ */
 app.taginput.Suggest = function (input) {
   var url = '/category/indexed/select?wt=json';
   var opt_multi = false;
@@ -40,7 +21,6 @@ app.taginput.Suggest = function (input) {
   this.matcher_ = matcher;
 
   var renderer = new goog.ui.ac.Renderer(undefined, new app.taginput.Suggest.CustomRenderer);
-  // renderer.activeClassName
 
   var inputhandler = new goog.ui.ac.InputHandler(null, null, !!opt_multi, 300);
 
@@ -52,8 +32,6 @@ app.taginput.Suggest = function (input) {
   inputhandler.attachInputs(input);
 };
 goog.inherits(app.taginput.Suggest, goog.ui.ac.AutoComplete);
-
-
 
 /**
  * @constructor
@@ -92,7 +70,9 @@ app.taginput.Suggest.CustomRenderer.prototype.render = function(renderer, elemen
 /**
  * @constructor
  */
-app.taginput.Suggest.RemoteArrayMatcher = function (url, opt_noSimilar) { goog.base(this, url, opt_noSimilar) }
+app.taginput.Suggest.RemoteArrayMatcher = function (url, opt_noSimilar) {
+  goog.base(this, url, opt_noSimilar) 
+}
 goog.inherits(app.taginput.Suggest.RemoteArrayMatcher, goog.ui.ac.RemoteArrayMatcher);
 
 /** @inheritDoc */

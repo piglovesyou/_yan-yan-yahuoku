@@ -2,6 +2,7 @@
 goog.provide('app.TagInput');
 goog.provide('app.taginput');
 
+goog.require('app.taginput.Suggest');
 goog.require('goog.ui.Component');
 
 goog.require('goog.dom');
@@ -84,23 +85,22 @@ app.TagInput.prototype.disposeInternal = function() {
 
 
 
-// app.TagInput.prototype.monitor = function (wrapEl) {
-//   var p = app.TagInput.getInstance();
-//   p.wrapEl = wrapEl;
-//   p.inputEl = goog.dom.getElementByClass('header-input-textbox', wrapEl);
-//   p.reposition();
-//   goog.events.listen(wrapEl, 'click', p.handleWrapClick, null, this);
-// };
-
 app.taginput.onInputFocus = function (el) {
-  var t = app.TagInput.getInstance();
-  t.decorateFocusable(el, t.handleInputKey);
+  app.TagInput.getInstance().decorateInputEl(el);
 };
 
 /** @param {Element} el .  */
 app.taginput.onTagFocus = function(el) {
-  var t = app.TagInput.getInstance();
-  t.decorateFocusable(el, t.handleTagKey);
+  app.TagInput.getInstance().decorateTagEl(el);
+}
+
+app.TagInput.prototype.decorateInputEl = function(el) {
+  this.decorateFocusable(el, this.handleInputKey);
+  this.suggest = new app.taginput.Suggest(el);
+}
+
+app.TagInput.prototype.decorateTagEl = function(el) {
+  this.decorateFocusable(el, this.handleTagKey);
 }
 
 app.TagInput.prototype.reposition = function() {

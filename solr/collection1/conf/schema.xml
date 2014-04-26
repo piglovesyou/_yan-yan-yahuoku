@@ -122,7 +122,9 @@
     -->
     <field name="CategoryId" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
+    <!-- <field name="CategoryName" type="text_ja" indexed="true" stored="true"/> -->
     <field name="CategoryName" type="text_cjk" indexed="true" stored="true"/>
+
     <field name="CategoryPath" type="string" indexed="false" stored="true"/>
     <field name="CategoryIdPath" type="string" indexed="false" stored="true"/>
     <field name="ParentCategoryId" type="string" indexed="false" stored="true"/>

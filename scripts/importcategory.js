@@ -30,7 +30,7 @@ findAndInsert()
 
 
 
-var count = 20;
+var count = 50;
 
 var skip = 0;
 var limit = count;

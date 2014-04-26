@@ -179,3 +179,22 @@ h1 {
 }
 
 
+
+
+
+.ac-renderer {
+  position: absolute;
+}
+.ac-renderer .pure-menu-heading .right {
+  color: #a9a9a9;
+  float: right;
+  font-size: 77%;
+}
+.ac-renderer .mute {
+  font-size: 77%;
+  color: #a9a9a9;
+  margin: 0 .6em;
+}
+.ac-renderer .ac-active a {
+  background: #eee;
+}

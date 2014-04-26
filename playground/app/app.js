@@ -9,6 +9,6 @@ goog.require('app.TagInput');
  * @constructor
  */
 app.App = function () {
-  var taginput = new app.TagInput;
+  var taginput = app.TagInput.getInstance();
   taginput.decorate(goog.dom.getElementByClass('header-input'));
 };

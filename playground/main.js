@@ -1,9 +1,9 @@
 
 goog.require('app.App');
-goog.require('app.taginput.Positioning');
+goog.require('app.taginput');
 
 
-goog.exportSymbol('onInputFocus', app.taginput.positioning.onInputFocus);
-goog.exportSymbol('onTagFocus', app.taginput.positioning.onTagFocus);
+goog.exportSymbol('onInputFocus', app.taginput.onInputFocus);
+goog.exportSymbol('onTagFocus', app.taginput.onTagFocus);
 
 new app.App;

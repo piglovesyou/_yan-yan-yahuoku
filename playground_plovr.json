@@ -7,9 +7,9 @@
 	  "./public/closure-thirdparty/closure-thousandrows/piglovesyou",
 	  "./public/closure-thirdparty/closure-list/piglovesyou",
 	  "./public/app",
+	  "./playground/app",
   ],
-  // "inputs": "./playground/tags.js",
-  "inputs": "./playground/suggest.js",
+  "inputs": "./playground/main.js",
   "mode": "ADVANCED",
   "level": "VERBOSE",
   "output-file": "public/javascripts/main-min.js"

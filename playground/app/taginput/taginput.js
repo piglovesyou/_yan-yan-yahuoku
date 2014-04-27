@@ -5,6 +5,7 @@ goog.provide('app.taginput');
 goog.require('app.taginput.Suggest');
 goog.require('goog.ui.Component');
 
+goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');
@@ -192,16 +193,18 @@ app.TagInput.prototype.onFocusableBlur_ = function(e) {
 }
 
 app.TagInput.prototype.insertTagWithValue_ = function(value, category) {
+  var displayStyle = this.inputEl.style.display;
   this.inputEl.style.display = 'none';
-  var tag = this.getPreviousFocusable_(this.inputEl);
-  if (tag) {
-    goog.dom.insertSiblingAfter(this.createTagNode_(value, category), tag);
+  var tagEl = this.getPreviousFocusable_(this.inputEl);
+  if (tagEl) {
+    goog.dom.insertSiblingAfter(this.createTagNode_(value, category), tagEl);
   } else {
     goog.dom.insertChildAt(this.wrapEl, this.createTagNode_(value, category), 0);
   }
   this.reposition();
-  this.inputEl.value = '';
-  this.inputEl.style.display = 'inline-block';
+
+  this.inputEl.style.display = displayStyle;
+  goog.Timer.callOnce(function() { this.inputEl.value = '' }, null, this);
 }
 
 app.TagInput.prototype.createTagNode_ = function(value, category) {

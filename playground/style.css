@@ -197,5 +197,9 @@ h1 {
 }
 .ac-renderer .ac-active a {
   background: #0078e7; /* same as primary-button */
+}
+.ac-renderer .ac-active a,
+.ac-renderer .ac-active a .mute {
   color: white;
 }
+

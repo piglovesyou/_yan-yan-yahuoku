@@ -90,7 +90,10 @@ app.taginput.Suggest.RemoteArrayMatcher.prototype.buildUrl = function(uri,
     token, maxMatches, useSimilar, opt_fullString) {
   var url = new goog.Uri(uri);
 
-  url.setParameterValue('q', 'CategoryName:' + token);
+  var q = token ? '(CategoryName:"' + token + '" OR CategoryName:*' + token + '*)' : '';
+  url.setParameterValue('q', q);
+  url.setParameterValue('sort', 'CategoryName asc');
+
   return url.toString();
 };
 

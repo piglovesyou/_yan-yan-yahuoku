@@ -73,7 +73,7 @@ app.TagInput.prototype.enterDocument = function() {
 app.TagInput.prototype.handleSuggestUpdate = function(e) {
   if (e.row) {
     // Append category tag.
-    this.insertTagWithValue_('[category] ' + e.row.CategoryName, true);
+    this.insertTagWithValue_('[カテゴリ] ' + e.row.CategoryName, true);
   } else if (this.inputEl.value) {
     // Append token tag.
     this.insertTagWithValue_(this.inputEl.value);

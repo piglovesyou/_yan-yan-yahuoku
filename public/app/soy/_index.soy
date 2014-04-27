@@ -1,0 +1,260 @@
+{namespace app.soy}
+
+
+
+/**
+ * @param images Array.
+ */
+{template .detailImages}
+  //TODO: Write CSS.
+  <div class="detail-images" style="text-align:center">
+    {foreach $key in keys($images)}
+      <img src="{$images[$key]}" />
+    {/foreach}
+  </div>
+{/template}
+
+
+
+
+
+
+
+
+
+
+
+/**
+ */
+{template .detailTitle}
+  <h5 class="detail-title" style="display:none">
+    <div class="detail-title-buttons">
+    	// <a href="#" class="goog-button btn i detail-title-fixedstatebutton">
+      //   {if $fixed}n{else}q{/if}
+      // </a>
+    </div>
+    <div class="detail-title-inner"></div>
+  </h5>
+{/template}
+
+
+/**
+ * @param href
+ * @param title
+ */
+{template .detailItemLinkParagraph}
+  <p class="detail-item-link">
+    {call .detailItemLink}
+      {param href: $href /}
+      {param title: $title /}
+    {/call}
+  </p>
+{/template}
+
+
+/**
+ * @param href
+ * @param title
+ */
+{template .detailItemLink}
+  <a href="{$href}" target="_blank">
+    {$title}
+    <span class="i i-text">o</span>
+  </a>
+{/template}
+
+
+/**
+ * TODO: Implement.
+ * @param price
+ * @param bidorbuy
+ * @param endTime
+ * @param bids
+ */
+{template .detailPrimaryTable}
+  <table class="table table-hover">
+    <tbody>
+      <tr>
+      	<th>現在の価格</th>
+      	<td>{call .price}{param price: $price /}{/call}</td>
+      </tr>
+      {if isNonnull($bidorbuy)}
+        <tr>
+          <th>即決価格</th>
+      	<td>{call .price}{param price: $bidorbuy /}{/call}</td>
+        </tr>
+      {/if}
+      <tr>
+      	<th>残り時間</th>
+        // TODO: app.string.renderEndDate $endTime
+      	<td>{$endTime}</td>
+      </tr>
+      {if isNonnull($bids)}
+        <tr>
+          <th>入札件数</th>
+          <td>{$bids}</td>
+        </tr>
+      {/if}
+    </tbody>
+  </table>
+{/template}
+
+
+/**
+ * @param quantity
+ * @param initPrice
+ * @param startTime
+ * @param endTime
+ * @param isEarlyClosing
+ * @param isAutomaticExtension
+ * @param itemStatus
+ * @param itemReturnable
+ */
+{template .detailSubTable}
+  <table class="table table-hover table-condensed">
+    <tbody>
+      <tr>
+        <th>個数</th>
+        <td>{$quantity}</td>
+      </tr>
+      {if isNonnull($initPrice)}
+        <tr>
+          <th>開始時の価格</th>
+          <td>aaaaaa {$initPrice}{$initPrice}/*app.string.renderPrice*/</td>
+        </tr>
+      {/if}
+      <tr>
+        <th>開始日時</th>
+        <td>{$startTime}</td> //app.string.renderDate
+      </tr>
+      <tr>
+        <th>終了日時</th>
+        <td>{$endTime}</td> // app.string.renderDate
+      </tr>
+      <tr>
+        <th>早期終了</th>
+        <td>{$isEarlyClosing}</td> // app.string.renderBoolean
+      </tr>
+      <tr>
+        <th>自動延長</th>
+        <td>{$isAutomaticExtension}</td> // app.string.renderBoolean
+      </tr>
+      {if isNonnull($itemStatus)}
+        <tr>
+          <th>商品の状態</th>
+          <td>{$itemStatus}</td> // app.string.renderItemCondition
+        </tr>
+      {/if}
+      {if isNonnull($itemReturnable)}
+        <tr>
+          <th>返品の可否</th>
+          <td>{$itemReturnable['Allowed']}</td> // app.string.renderBoolean
+        </tr>
+      {/if}
+    </tbody>
+  </table>
+{/template}
+
+/**
+ * @param easyPayment
+ * @param bank
+ */
+{template .paymentTable}
+
+  {let $useEasyPament: isNonnull($easyPayment) /}
+  {let $totalBankMethodAvailable: isNonnull($bank) and $bank['@attributes']['totalBankMethodAvailable'] /}
+  {let $useBank: isNonnull($bank) and $totalBankMethodAvailable > 0 /}
+
+  {if $useEasyPament or $useBank}
+    <table class="table table-bordered table-condensed">
+      <tbody>
+        {if $useEasyPament}
+          <tr>
+            <th rowspan="2">決済方法</th>
+            <td colspan="2">
+              Yahoo!簡単決済
+              {if $easyPayment['IsCreditCard']}<br /> - クレジットカード決済{/if}
+              {if $easyPayment['IsNetBank']}<br /> - 銀行ネット決済{/if}
+            </td>
+          </tr>
+        {/if}
+        {if $useBank}
+          <tr>
+            <td style="width:60px;">銀行振込</td>
+            <td class="detail-td-tablecontainer">
+              <table class="table table-condensed">
+              	<tbody>
+              		<tr>
+                    <th>対応できる銀行</th>
+                    <td>
+                      {foreach $b in $bank['Method']}
+                        {if isFirst($b)}
+                          {$b}
+                        {else}
+                          , {$b}
+                        {/if}
+                      {/foreach}
+                    </td>
+                  </tr>
+              	</tbody>
+              </table>
+            </td>
+          </tr>
+        {/if}
+      </tbody>
+    </table>
+  {/if}
+{/template}
+
+/**
+ * @param chargeForShipping
+ * @param location
+ * @param isWorldwide
+ */
+{template .sendDetailTable}
+  <table class="table table-bordered table-condensed">
+    <tbody>
+      <tr>
+      	<th>送料負担</th>
+      	<td>
+          {if $chargeForShipping == 'winner'}
+            落札者
+          {else}
+            出品者
+          {/if}
+        </td>
+      </tr>
+      {if isNonnull($location)}
+        <tr>
+          <th>商品発送元地域</th>
+          <td>{$location}</td>
+        </tr>
+      {/if}
+      <tr>
+      	<th>海外発送</th>
+      	<td>{if isNonnull($isWorldwide)}可{else}不可{/if}</td>
+      </tr>
+    </tbody>
+  </table>
+{/template}
+
+/**
+ * @param shippingMethodName
+ */
+{template .shippingTable}
+  <table class="table table-bordered table-condensed">
+  	<tbody>
+  		<tr>
+  			<th>ohh. 配送方法</th>
+  			<td>{$shippingMethodName}</td>
+  		</tr>
+  	</tbody>
+  </table>
+{/template}
+
+/**
+ * @param price
+ */
+{template .price}
+  {round($price)}円 // formatNumberWithComma
+{/template}

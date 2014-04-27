@@ -1,19 +1,24 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "*"
-    , "stylus": "*"
-    , "jade": "*"
-    , "oauth": "*"
-    , "connect-redis": "*"
-    , "underscore": "*"
-    , "redis": "*"
-    , "nib": "*"
-    , "jsdom": "*"
-    , "xml2json": "*"
-    , "nedb": "*"
-    , "q": "*"
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "*",
+    "stylus": "*",
+    "jade": "*",
+    "oauth": "*",
+    "connect-redis": "*",
+    "underscore": "*",
+    "redis": "*",
+    "nib": "*",
+    "jsdom": "*",
+    "xml2json": "*",
+    "nedb": "*",
+    "q": "*",
+    "static-favicon": "~1.0.2",
+    "morgan": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "body-parser": "~1.0.2",
+    "soynode": "~0.3.5"
   }
 }

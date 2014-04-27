@@ -196,5 +196,6 @@ h1 {
   margin: 0 .6em;
 }
 .ac-renderer .ac-active a {
-  background: #eee;
+  background: #0078e7; /* same as primary-button */
+  color: white;
 }

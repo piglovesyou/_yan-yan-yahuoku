@@ -22,7 +22,7 @@ app.taginput.Suggest = function (input) {
 
   var renderer = new goog.ui.ac.Renderer(undefined, new app.taginput.Suggest.CustomRenderer);
 
-  var inputhandler = new goog.ui.ac.InputHandler(null, null, !!opt_multi, 300);
+  var inputhandler = new app.taginput.Suggest.InputHandler(null, null, !!opt_multi, 300);
 
   this.setAllowFreeSelect(true);
   this.setAutoHilite(false);
@@ -32,6 +32,7 @@ app.taginput.Suggest = function (input) {
   inputhandler.attachInputs(input);
 };
 goog.inherits(app.taginput.Suggest, goog.ui.ac.AutoComplete);
+
 
 /**
  * @constructor
@@ -91,4 +92,39 @@ app.taginput.Suggest.RemoteArrayMatcher.prototype.buildUrl = function(uri,
 
   url.setParameterValue('q', 'CategoryName:' + token);
   return url.toString();
+};
+
+
+
+
+/**
+ * @param {?string=} opt_separators Separators to split multiple entries.
+ *     If none passed, uses ',' and ';'.
+ * @param {?string=} opt_literals Characters used to delimit text literals.
+ * @param {?boolean=} opt_multi Whether to allow multiple entries
+ *     (Default: true).
+ * @param {?number=} opt_throttleTime Number of milliseconds to throttle
+ *     keyevents with (Default: 150). Use -1 to disable updates on typing. Note
+ *     that typing the separator will update autocomplete suggestions.
+ * @constructor
+ * @extends {goog.Disposable}
+ */
+app.taginput.Suggest.InputHandler = function (opt_separators, opt_literals,
+    opt_multi, opt_throttleTime) {
+  goog.base(this, opt_separators, opt_literals, opt_multi, opt_throttleTime);
+}
+goog.inherits(app.taginput.Suggest.InputHandler, goog.ui.ac.InputHandler);
+
+app.taginput.Suggest.InputHandler.EventType = {
+  KEY: 'kkk'
+};
+
+app.taginput.Suggest.InputHandler.prototype.handleKeyEvent = function (e) {
+  goog.mixin(e, { 'type': app.taginput.Suggest.InputHandler.EventType.KEY });
+  if (!this.getAutoComplete().dispatchEvent(e)) return;
+  goog.base(this, 'handleKeyEvent', e);
+};
+
+app.taginput.Suggest.InputHandler.prototype.selectRow = function (row, opt_multi) {
+  return false;
 };

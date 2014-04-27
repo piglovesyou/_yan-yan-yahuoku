@@ -58,10 +58,26 @@ app.TagInput.prototype.enterDocument = function() {
   var eh = this.getHandler();
   eh.listen(this.wrapEl, 'click', this.handleWrapClick);
 
+  this.suggest = new app.taginput.Suggest(this.inputEl);
+
+  eh.listen(this.suggest, goog.ui.ac.AutoComplete.EventType.UPDATE, this.handleSuggestUpdate);
+  eh.listen(this.suggest, app.taginput.Suggest.InputHandler.EventType.KEY, this.handleInputKey);
+
   goog.base(this, 'enterDocument');
 
   this.reposition();
 };
+
+
+app.TagInput.prototype.handleSuggestUpdate = function(e) {
+  if (e.row) {
+    // Append category tag.
+    this.insertTagWithValue_('[category] ' + e.row.CategoryName, true);
+  } else if (this.inputEl.value) {
+    // Append token tag.
+    this.insertTagWithValue_(this.inputEl.value);
+  }
+}
 
 
 /** @inheritDoc */
@@ -85,18 +101,9 @@ app.TagInput.prototype.disposeInternal = function() {
 
 
 
-app.taginput.onInputFocus = function (el) {
-  app.TagInput.getInstance().decorateInputEl(el);
-};
-
 /** @param {Element} el .  */
 app.taginput.onTagFocus = function(el) {
   app.TagInput.getInstance().decorateTagEl(el);
-}
-
-app.TagInput.prototype.decorateInputEl = function(el) {
-  this.decorateFocusable(el, this.handleInputKey);
-  this.suggest = new app.taginput.Suggest(el);
 }
 
 app.TagInput.prototype.decorateTagEl = function(el) {
@@ -121,9 +128,10 @@ app.TagInput.prototype.decorateFocusable = function(el, keyHandler) {
 app.TagInput.prototype.handleInputKey = function(e) {
   var el = e.target;
   switch (e.keyCode) {
+    // Steel ENTER key from a "ac.InputHandler".
     case goog.events.KeyCodes.ENTER:
-      if (e.target.value) this.insertTagWithValue_(e.target);
-      break;
+      this.suggest.selectHilited(); // Always fires "UPDATE" event.
+      e.preventDefault();
     case goog.events.KeyCodes.BACKSPACE:
     case goog.events.KeyCodes.LEFT:
       if (goog.dom.selection.getStart(el)) return;
@@ -183,24 +191,24 @@ app.TagInput.prototype.onFocusableBlur_ = function(e) {
   e.target.eh = null;
 }
 
-app.TagInput.prototype.insertTagWithValue_ = function(input) {
-  var value = input.value;
-  input.style.display = 'none';
-  var tag = this.getPreviousFocusable_(input);
+app.TagInput.prototype.insertTagWithValue_ = function(value, category) {
+  this.inputEl.style.display = 'none';
+  var tag = this.getPreviousFocusable_(this.inputEl);
   if (tag) {
-    goog.dom.insertSiblingAfter(this.createTagNode_(value), tag);
+    goog.dom.insertSiblingAfter(this.createTagNode_(value, category), tag);
   } else {
-    goog.dom.insertChildAt(this.wrapEl, this.createTagNode_(value), 0);
+    goog.dom.insertChildAt(this.wrapEl, this.createTagNode_(value, category), 0);
   }
   this.reposition();
-  input.value = '';
-  input.style.display = 'inline-block';
+  this.inputEl.value = '';
+  this.inputEl.style.display = 'inline-block';
 }
 
-app.TagInput.prototype.createTagNode_ = function(value) {
+app.TagInput.prototype.createTagNode_ = function(value, category) {
   return goog.dom.htmlToDocumentFragment(
-    '<a tabindex="0" onFocus="return onTagFocus(this);"' +
-          'class="button-tag pure-button pure-button-disabled" href="#">' +
+    '<a tabindex="0"' +
+        'onFocus="return onTagFocus(this);"' +
+          'class="button-tag pure-button pure-button-disabled' + (category ? ' pure-button-primary' : '')+ '" href="#">' +
         value +
         '<span class="button-tag-remove">×</span>' +
     '</a>');

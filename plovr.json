@@ -2,8 +2,6 @@
   "id": "yan-yan-yahuoku",
   "debug": true,
   "paths": [
-	  "./public/closure-thirdparty/closure-scroller/piglovesyou",
-	  "./public/closure-thirdparty/closure-thousandrows/piglovesyou",
 	  "./public/closure-thirdparty/closure-list/piglovesyou",
 	  "./public/app",
 	  "./public/javascripts"

@@ -46,7 +46,6 @@ CLOSURECOMPILER_REMOTE_DIR=http://dl.google.com/closure-compiler/
 CLOSURECOMPILER_ZIP=compiler-latest.zip
 
 
-
 cleanup_lib() {
     mkdir ${LIBS_DIR} > /dev/null 2>&1
 }
@@ -101,6 +100,24 @@ extract_msg() {
 }
 
 
+SOLR_VERSION=4.7.2
+SOLR_REMOTE=http://ftp.kddilabs.jp/infosystems/apache/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz
+SOLR_DIR=$LIBS_DIR/solr-${SOLR_VERSION}
+solr_arch() {
+    java \
+        -Dsolr.solr.home="./solr/" \
+        -Djetty.home="${SOLR_DIR}/example/" \
+        -jar ${SOLR_DIR}/example/start.jar
+}
+
+setup_solr() {
+    PWD=`pwd`
+    cd $LIBS_DIR
+    wget $SOLR_REMOTE -O - | tar zxvf -
+    cd $PWD
+}
+
+
 
 case $1 in
 
@@ -112,18 +129,14 @@ case $1 in
         setup_closuretemplates
         setup_closurecompiler
         ;;
-
     cleanup_lib) cleanup_lib;;
-
     setup_plovr) setup_plovr;;
-
     setup_closurelibrary) setup_closurelibrary;;
-
     setup_closurestylesheets) setup_closurestylesheets;;
-
     setup_closuretemplates) setup_closuretemplates;;
-
     setup_closurecompiler) setup_closurecompiler;;
+    setup_plovr) setup_plovr;;
+    setup_solr) setup_solr;;
 
     soyweb) java -jar ${PLOVR_JAR_PATH} soyweb --dir ./public;;
 
@@ -134,6 +147,8 @@ case $1 in
     extract_msg) extract_msg;;
 
     soyweb) java -jar ${PLOVR_JAR_PATH} soyweb --dir ./public;;
+
+    solr_arch) solr_arch;;
 
     # sass) sass --watch public/sass/main.sass:public/stylesheets/main.css;;
 

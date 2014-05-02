@@ -10,3 +10,4 @@ npm-debug.log
 /redis/stdout
 /nedb/categories.log
 /solr/collection1/data
+/logs

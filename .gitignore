@@ -11,3 +11,4 @@ npm-debug.log
 /nedb/categories.log
 /solr/collection1/data
 /logs
+/solr-webapp

@@ -103,18 +103,24 @@ extract_msg() {
 SOLR_VERSION=4.7.2
 SOLR_REMOTE=http://ftp.kddilabs.jp/infosystems/apache/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz
 SOLR_DIR=$LIBS_DIR/solr-${SOLR_VERSION}
-solr_arch() {
-    java \
-        -Dsolr.solr.home="./solr/" \
-        -Djetty.home="${SOLR_DIR}/example/" \
-        -jar ${SOLR_DIR}/example/start.jar
-}
 
+# for linux
 setup_solr() {
     PWD=`pwd`
     cd $LIBS_DIR
     wget $SOLR_REMOTE -O - | tar zxvf -
     cd $PWD
+}
+
+solr() {
+    if [[ `uname` -eq Linux ]]; then
+        java \
+            -Dsolr.solr.home="./solr/" \
+            -Djetty.home="${SOLR_DIR}/example/" \
+            -jar ${SOLR_DIR}/example/start.jar
+    elif [[ `uname` -eq Darwin ]]; then
+        solr `pwd`/solr
+    fi
 }
 
 
@@ -148,7 +154,7 @@ case $1 in
 
     soyweb) java -jar ${PLOVR_JAR_PATH} soyweb --dir ./public;;
 
-    solr_arch) solr_arch;;
+    solr) solr;;
 
     # sass) sass --watch public/sass/main.sass:public/stylesheets/main.css;;
 

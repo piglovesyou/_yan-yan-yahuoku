@@ -1,15 +1,11 @@
 {namespace app.soy.row}
 
 
-/***/
+/**
+ * @param height
+ */
 {template .createDom}
-  <div class="goog-thousandrows-row">
-    <a href="#" class="row">
-      <span class="span3 googs-image">
-        <img src="/images/spacer.gif" alt="" class="img-polaroid" />
-      </span>
-    </a>
-  </div>
+  <div class="pure-g main-list-row" style="height:{$height}px"></div>
 {/template}
 
 /**
@@ -17,15 +13,22 @@
  * @param Title
  */
 {template .renderContent}
-  <a href="javascript:void(0)" class="row" tabIndex="-1">
-    <div href="#" class="span3 googds-image">
-      <img src="{$Image}" alt="" class="img-polaroid" />
-    </div>
-    <h4>{$Title}</h4>
-    <div class="row-detail">
-      {call .detail data="all" /}
-    </div>
-  </a>
+  <div class="pure-u-6-24 main-list-row-image">
+    <img class="img-polaroid" src="{$Image}" />
+  </div>
+  <div class="pure-u-18-24">
+    <div class="main-list-row-title">{$Title}</div>
+    <div class="main-list-row-description"><strong>21円</strong> | 入札 3 | あと2 時間&nbsp;<img src="http://i.yimg.jp/images/pay/icon_s16.gif"><img src="http://image.auctions.yahoo.co.jp/images/featured.gif"></div>
+  </div>
+  // <a href="javascript:void(0)" class="row" tabIndex="-1">
+  //   <div href="#" class="span3 googds-image">
+  //     <img src="{$Image}" alt="" class="img-polaroid" />
+  //   </div>
+  //   <h4>{$Title}</h4>
+  //   <div class="row-detail">
+  //     {call .detail data="all" /}
+  //   </div>
+  // </a>
 {/template}
 
 /**

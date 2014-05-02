@@ -14,6 +14,7 @@ app.App = function () {
   taginput.decorate(goog.dom.getElementByClass('header-input'));
 
   var data = new app.list.Data('/items/search'); // Url to request remote JSON
+                                                     // Must be 20 because of Yahoo.
   data.setObjectNameTotalInJson('ResultSet.@attributes.totalResultsAvailable');
   data.setObjectNameRowsInJson('ResultSet.Result.Item');
   var list = new app.List;

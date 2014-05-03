@@ -14,6 +14,7 @@ goog.require('goog.events.InputHandler');
 goog.require('goog.asserts');
 goog.require('goog.dom.selection');
 goog.require('goog.dom.classes');
+goog.require('app.soy.taginput');
 
 
 
@@ -73,12 +74,23 @@ app.TagInput.prototype.enterDocument = function() {
 app.TagInput.prototype.handleSuggestUpdate = function(e) {
   if (e.row) {
     // Append category tag.
-    this.insertTagWithValue_('[カテゴリ] ' + e.row.CategoryName, true);
+    this.updateCategoryTag_(e.row);
   } else if (this.inputEl.value) {
     // Append token tag.
-    this.insertTagWithValue_(this.inputEl.value);
+    // this.insertTag_(this.inputEl.value);
+    this.insertTag_(
+        goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'value': this.inputEl.value }));
   }
 }
+
+
+app.TagInput.prototype.updateCategoryTag_ = function(row) {
+  var oldTag = this.getElementByClass('button-tag-category');
+  if (oldTag) goog.dom.removeNode(oldTag);
+  this.insertTag_(
+      goog.soy.renderAsFragment(app.soy.taginput.categoryTag,
+        /** @type {ObjectInterface.Category} */(row)), true);
+};
 
 
 /** @inheritDoc */
@@ -192,30 +204,35 @@ app.TagInput.prototype.onFocusableBlur_ = function(e) {
   e.target.eh = null;
 }
 
-app.TagInput.prototype.insertTagWithValue_ = function(value, category) {
+/**
+ * @param {Element} tagEl .
+ * @param {boolean} first .
+ */
+app.TagInput.prototype.insertTag_ = function(tagEl, first) {
   var displayStyle = this.inputEl.style.display;
   this.inputEl.style.display = 'none';
-  var tagEl = this.getPreviousFocusable_(this.inputEl);
-  if (tagEl) {
-    goog.dom.insertSiblingAfter(this.createTagNode_(value, category), tagEl);
-  } else {
-    goog.dom.insertChildAt(this.wrapEl, this.createTagNode_(value, category), 0);
-  }
-  this.reposition();
+  var lastTagEl;
 
+  if (first || !(lastTagEl = this.getPreviousFocusable_(this.inputEl))) {
+    goog.dom.insertChildAt(this.wrapEl, tagEl, 0);
+  } else {
+    goog.dom.insertSiblingAfter(tagEl, lastTagEl);
+  }
+
+  this.reposition();
   this.inputEl.style.display = displayStyle;
   goog.Timer.callOnce(function() { this.inputEl.value = '' }, null, this);
-}
+};
 
-app.TagInput.prototype.createTagNode_ = function(value, category) {
-  return goog.dom.htmlToDocumentFragment(
-    '<a tabindex="0"' +
-        'onFocus="return onTagFocus(this);"' +
-          'class="button-tag pure-button pure-button-disabled' + (category ? ' pure-button-primary' : '')+ '" href="#">' +
-        value +
-        '<span class="button-tag-remove">×</span>' +
-    '</a>');
-}
+// app.TagInput.prototype.createTagNode_ = function(value, category) {
+//   return goog.dom.htmlToDocumentFragment(
+//     '<a tabindex="0"' +
+//         'onFocus="return onTagFocus(this);"' +
+//           'class="button-tag pure-button pure-button-disabled' + (category ? ' pure-button-primary' : '')+ '" href="#">' +
+//         value +
+//         '<span class="button-tag-remove">×</span>' +
+//     '</a>');
+// }
 
 app.TagInput.prototype.calcInputWidth_ = function() {
   var lastTag = this.getLastTag_();

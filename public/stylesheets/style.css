@@ -100,7 +100,7 @@ h1 {
 }
 
 .main-list-row {
-  margin: 2em 1.5em;
+  padding: 2em 1.5em;
 }
 .main-list-row-image {
   text-align: center;
@@ -114,7 +114,7 @@ h1 {
   padding-left: 1.5em;
 }
 .main-list-row-title {
-  padding-top: 1em;
+  /* padding-top: 1em; */
   padding-bottom: .4em;
   font-size: 85%;
 }

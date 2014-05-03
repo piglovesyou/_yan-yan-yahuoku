@@ -2,12 +2,15 @@
   "id": "yan-yan-yahuoku",
   "debug": true,
   "paths": [
-	  "./public/closure-thirdparty/closure-list/piglovesyou",
+	  "../closure-list/piglovesyou",
 	  "./public/app",
 	  "./public/javascripts"
   ],
   "inputs": "./public/javascripts/main.js",
   "mode": "ADVANCED",
   "level": "VERBOSE",
+  "externs": [
+    "./public/app/objectinterface.js"
+  ],
   "output-file": "public/javascripts/main-min.js"
 }

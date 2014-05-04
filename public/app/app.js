@@ -1,15 +1,15 @@
 
 goog.provide('app.App');
 
-goog.require('app.TagInput');
 goog.require('app.List');
+goog.require('app.TagInput');
 
 
 
 /**
  * @constructor
  */
-app.App = function () {
+app.App = function() {
   var taginput = app.TagInput.getInstance();
   taginput.decorate(goog.dom.getElementByClass('header-input'));
 
@@ -19,5 +19,7 @@ app.App = function () {
 
   goog.events.listen(taginput, app.TagInput.EventType.TAG_UPDATE, function(e) {
     list.search(taginput.buildUrl());
-  })
+  });
+  goog.events.listen(list, goog.ui.list.EventType.UPDATE_TOTAL,
+      taginput.updateRightContent, false, taginput);
 };

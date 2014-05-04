@@ -71,6 +71,7 @@ app.TagInput.prototype.decorateInternal = function(element) {
 
   this.inputEl = this.getElementByClass('header-input-textbox');
   this.wrapEl = this.getElementByClass('header-input-leftcontent');
+  this.rightEl = this.getElementByClass('header-input-rightcontent');
 };
 
 
@@ -309,3 +310,8 @@ app.TagInput.isTagEl_ = function(node) {
   return goog.dom.classes.has(node, 'button-tag');
 };
 
+app.TagInput.prototype.updateRightContent = function(data) {
+  if (!this.isInDocument()) return;
+  goog.soy.renderElement(this.rightEl,
+      app.soy.taginput.rightContent, data);
+};

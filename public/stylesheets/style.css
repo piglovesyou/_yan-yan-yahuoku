@@ -71,6 +71,13 @@ h1 {
 .header-input-leftcontent {
   overflow: hidden;
 }
+.header-input-rightcontent {
+  font-size: 85%;
+  color: #777;
+  padding: .4em .5em .4em 0;
+  width: 8em;
+  text-align: right;
+}
 
 .header-input-textbox {
   resize: none;

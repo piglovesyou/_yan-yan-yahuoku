@@ -1,0 +1,54 @@
+{namespace app.soy.taginput}
+
+
+
+/**
+ * @param value
+ */
+{template .tokenTag}
+  {call .tagBase data="all"}
+    {param type: 'query' /}
+    {param label: $value /}
+  {/call}
+{/template}
+
+/**
+ * @param CategoryName
+ * @param CategoryId
+ */
+{template .categoryTag}
+  {call .tagBase}
+    {param type: 'category' /}
+    {param value: $CategoryId /}
+    {param label: '[カテゴリ] ' + $CategoryName /}
+    {param className: 'button-tag-category pure-button-primary' /}
+    // {param extraDataset: [ ['category-id', $CategoryId] ] /}
+  {/call}
+{/template}
+
+
+
+/**
+ * @param? className
+ * @param value
+ * @param label
+ * @param type
+ * param extraDataset [ ['key', 'value'] ]
+ */
+{template .tagBase}
+  <a tabindex="0"
+     onFocus="return onTagFocus(this)"
+     class="button-tag pure-button pure-button-disabled{$className ? ' ' + $className : ''}"
+     href="#"
+     data-type="{$type}"
+     data-value="{$value}"
+     // {if $extraDataset}
+     //    {foreach $pair in $extraDataset}
+     //      data-{$pair[0]}="{$pair[1]}"
+     //    {/foreach}
+     // {/if}
+  >
+      {$label}
+    <span class="button-tag-remove">×</span>
+  </a>
+{/template}

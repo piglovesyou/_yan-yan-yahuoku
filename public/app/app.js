@@ -13,12 +13,11 @@ app.App = function () {
   var taginput = app.TagInput.getInstance();
   taginput.decorate(goog.dom.getElementByClass('header-input'));
 
-  var data = new app.list.Data('/items/search'); // Url to request remote JSON
-                                                     // Must be 20 because of Yahoo.
-  data.setObjectNameTotalInJson('ResultSet.@attributes.totalResultsAvailable');
-  data.setObjectNameRowsInJson('ResultSet.Result.Item');
   var list = new app.List;
-  list.setData(data);
+  list.search(taginput.buildUrl());
   list.decorate(goog.dom.getElementByClass('main-list'));
 
+  goog.events.listen(taginput, app.TagInput.EventType.TAG_UPDATE, function(e) {
+    list.search(taginput.buildUrl());
+  })
 };

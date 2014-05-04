@@ -17,7 +17,7 @@ app.List = function() {
 goog.inherits(app.List, goog.ui.List);
 
 app.List.prototype.search = function(url) {
-  this.setData(app.List.createData(url));
+  this.setData(app.List.createData(url, this.rowCountPerPage));
   if (this.isInDocument()) {
     this.redraw();
   }
@@ -26,8 +26,8 @@ app.List.prototype.search = function(url) {
 /**
  * @param {goog.Uri} url .
  */
-app.List.createData = function(url) {
-  var data = new app.list.Data(url, '/items/search'); // Url to request remote JSON
+app.List.createData = function(url, rowCountPerPage) {
+  var data = new app.list.Data(url, rowCountPerPage); // Url to request remote JSON
                                                  // Must be 20 because of Yahoo.
   data.setObjectNameTotalInJson('ResultSet.@attributes.totalResultsAvailable');
   data.setObjectNameRowsInJson('ResultSet.Result.Item');
@@ -55,6 +55,7 @@ app.List.Item.prototype.createDom = function() {
   var element = goog.soy.renderAsFragment(app.soy.row.createDom);
   var dh = this.getDomHelper();
   this.setElementInternal(element);
+  // element.setAttribute('index', this.index_);
 };
 
 
@@ -67,8 +68,13 @@ app.List.Item.prototype.createDom = function() {
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-app.list.Data = function(url,
+app.list.Data = function(url, rowCountPerPage,
     opt_totalRowCount, opt_keepTotalUptodate, opt_xhrManager) {
+
+  /**
+   * We have to create "page" parameter..
+   */
+  this.rowCountPerPage = rowCountPerPage;
 
   goog.base(this, url,
     opt_totalRowCount, opt_keepTotalUptodate, opt_xhrManager);
@@ -77,6 +83,10 @@ goog.inherits(app.list.Data, goog.ui.list.Data);
 
 app.list.Data.prototype.buildUrl = function(from, count) {
   var url = goog.Uri.parse(this.url_);
-  url.setParameterValue('page', Math.floor(from / count) + 1);
+
+  var pageIndex = from % this.rowCountPerPage ?
+      count : from / this.rowCountPerPage;
+
+  url.setParameterValue('page', pageIndex + 1);
   return url.toString();
 };

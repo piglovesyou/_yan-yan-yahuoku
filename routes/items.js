@@ -5,6 +5,7 @@ var Q = require('q');
 var yahoo = require('../sources/net/yahoo');
 var outError = require('../sources/promise/promise');
 var string = require('../sources/string/string');
+var _ = require('underscore');
 
 var yahooGet = Q.denodeify(yahoo.get);
 
@@ -26,6 +27,15 @@ function asYahooRequest(yahooPath) {
     .then(JSON.parse)
     .then(function(data) {
       // TODO: Add properties by using "string" utility.
+      var items = goog.getObjectByName('ResultSet.Result.Item', data);
+      if (items) {
+        _(items).each(function(i) {
+          if (i.CurrentPrice)
+              i.displayCurrentPrice = string.renderPrice(i.CurrentPrice);
+          if (i.EndTime) // Use "moment"
+              i.displayEndTime = string.renderEndDate(i.EndTime);
+        });
+      }
       return data;
     })
     .then(function(data) {

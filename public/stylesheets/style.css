@@ -125,6 +125,9 @@ h1 {
   padding-bottom: .4em;
   font-size: 85%;
 }
+.main-list-row-description > img {
+  vertical-align: middle;
+}
 
 .main-detail .pure-table {
   width: 92%;

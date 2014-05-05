@@ -142,8 +142,8 @@ app.taginput.Suggest.InputHandler.EventType = {
 /** @inheritDoc */
 app.taginput.Suggest.InputHandler.prototype.handleKeyEvent = function(e) {
   goog.mixin(e, { 'type': app.taginput.Suggest.InputHandler.EventType.KEY });
-  if (!this.getAutoComplete().dispatchEvent(e)) return;
-  goog.base(this, 'handleKeyEvent', e);
+  if (!this.getAutoComplete().dispatchEvent(e)) return true;
+  return goog.base(this, 'handleKeyEvent', e);
 };
 
 /** @inheritDoc */

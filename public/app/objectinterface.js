@@ -16,3 +16,6 @@ ObjectInterface.Category.prototype.IsLeaf;
 ObjectInterface.Category.prototype.IsLeafToLink;
 ObjectInterface.Category.prototype.IsLink;
 ObjectInterface.Category.prototype.Order;
+
+/** @constructor */
+ObjectInterface.Detail = function() {};

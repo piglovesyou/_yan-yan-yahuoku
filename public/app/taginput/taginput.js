@@ -56,9 +56,9 @@ app.TagInput.prototype.buildUrl = function() {
 
   if (q.containsKey('query')) {
     q.set('query', q.getValues('query').join(' '));
-    url.setPath('/items/search');
+    url.setPath('/auction/search');
   } else {
-    url.setPath('/items/categoryLeaf');
+    url.setPath('/auction/categoryLeaf');
   }
 
   return url;

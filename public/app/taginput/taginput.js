@@ -119,7 +119,9 @@ app.TagInput.prototype.enterDocument = function() {
   this.reposition();
 };
 
-
+/**
+ * @param {goog.events.Event} e .
+ */
 app.TagInput.prototype.handleSuggestUpdate = function(e) {
   if (e.row) {
     // Append category tag.
@@ -344,4 +346,5 @@ app.TagInput.prototype.updateRightContent = function(data) {
   if (!this.isInDocument()) return;
   goog.soy.renderElement(this.rightEl,
       app.soy.taginput.rightContent, data);
+  this.reposition();
 };

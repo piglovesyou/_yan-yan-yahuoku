@@ -75,7 +75,7 @@ h1 {
   font-size: 85%;
   color: #777;
   padding: .4em .5em .4em 0;
-  width: 8em;
+  /* width: 8em; */
   text-align: right;
 }
 

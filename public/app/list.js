@@ -2,7 +2,7 @@
 goog.provide('app.List');
 goog.provide('app.list.Data');
 
-goog.require('app.soy.row');
+goog.require('app.soy.item');
 goog.require('goog.ui.List');
 goog.require('goog.ui.list.Data');
 
@@ -50,7 +50,7 @@ app.List.createData = function(url, rowCountPerPage) {
  * @extends {goog.ui.List.Item}
  */
 app.List.Item = function(index, opt_renderer, opt_domHelper) {
-  goog.base(this, index, app.soy.row.renderContent, opt_domHelper);
+  goog.base(this, index, app.soy.item.renderContent, opt_domHelper);
 };
 goog.inherits(app.List.Item, goog.ui.List.Item);
 
@@ -58,7 +58,7 @@ goog.inherits(app.List.Item, goog.ui.List.Item);
 /** @inheritDoc */
 app.List.Item.prototype.createDom = function() {
   var element =
-      /** @type {Element} */(goog.soy.renderAsFragment(app.soy.row.createDom));
+      /** @type {Element} */(goog.soy.renderAsFragment(app.soy.item.createDom));
   var dh = this.getDomHelper();
   this.setElementInternal(element);
   // element.setAttribute('index', this.index_);

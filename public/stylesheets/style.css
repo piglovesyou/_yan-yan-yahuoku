@@ -106,33 +106,33 @@ h1 {
   box-sizing: border-box;
 }
 
-.main-list-row {
+.main-list-item {
   padding: 2em 1.5em;
   cursor: pointer;
 }
-.main-list-row:hover {
+.main-list-item:hover {
   background: #eee;
 }
 
-.main-list-row-image {
+.main-list-item-image {
   text-align: center;
   min-height: 70px;
 }
-.main-list-row-image img {
+.main-list-item-image img {
   max-width: 100%;
   vertical-align: bottom;
 }
-.main-list-row-title,
-.main-list-row-description {
+.main-list-item-title,
+.main-list-item-description {
   font-size: 85%;
   padding-left: 1.5em;
 }
-.main-list-row-title {
+.main-list-item-title {
   /* padding-top: 1em; */
   padding-bottom: .4em;
   font-size: 85%;
 }
-.main-list-row-description > img {
+.main-list-item-description > img {
   vertical-align: middle;
 }
 

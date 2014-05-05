@@ -108,12 +108,19 @@ h1 {
 
 .main-list-row {
   padding: 2em 1.5em;
+  cursor: pointer;
 }
+.main-list-row:hover {
+  background: #eee;
+}
+
 .main-list-row-image {
   text-align: center;
+  min-height: 70px;
 }
 .main-list-row-image img {
   max-width: 100%;
+  vertical-align: bottom;
 }
 .main-list-row-title,
 .main-list-row-description {

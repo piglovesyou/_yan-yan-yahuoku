@@ -28,19 +28,25 @@ app.TagInput = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
 };
 goog.inherits(app.TagInput, goog.ui.Component);
-goog.addSingletonGetter(app.TagInput);
 
-
+/**
+ * @enum {string}
+ */
 app.TagInput.EventType = {
   TAG_UPDATE: 'tagupdate'
 };
 
+/**
+ * @return {goog.Uri} .
+ */
 app.TagInput.prototype.buildUrl = function() {
   var dh = this.getDomHelper();
 
-  var tagEls = goog.array.filter(goog.dom.getChildren(this.wrapEl), app.TagInput.isTagEl_);
+  var tagEls = this.collectTagEls_();
 
-  var datasetList = goog.array.map(tagEls, goog.dom.dataset.getAll);
+  var datasetList = goog.array.map(tagEls,
+      /** @type {function ((Element|null), number, ?): ?|null} */
+      (goog.dom.dataset.getAll));
 
   var url = new goog.Uri;
   var q = url.getQueryData();
@@ -58,6 +64,14 @@ app.TagInput.prototype.buildUrl = function() {
   return url;
 };
 
+/**
+ * @private
+ * @return {Array.<Element>} .
+ */
+app.TagInput.prototype.collectTagEls_ = function() {
+  return goog.array.filter(
+      goog.dom.getChildren(this.wrapEl), app.TagInput.isTagEl_);
+};
 
 /** @inheritDoc */
 app.TagInput.prototype.createDom = function() {
@@ -86,17 +100,22 @@ app.TagInput.prototype.canDecorate = function(element) {
 
 /** @inheritDoc */
 app.TagInput.prototype.enterDocument = function() {
-
   var eh = this.getHandler();
+
+  // this.wrapEl
   eh.listen(this.wrapEl, 'click', this.handleWrapClick);
 
+  // suggest
   this.suggest = new app.taginput.Suggest(this.inputEl);
+  eh.listen(this.suggest,
+      goog.ui.ac.AutoComplete.EventType.UPDATE, this.handleSuggestUpdate);
+  eh.listen(this.suggest,
+      app.taginput.Suggest.InputHandler.EventType.KEY, this.handleInputKey);
 
-  eh.listen(this.suggest, goog.ui.ac.AutoComplete.EventType.UPDATE, this.handleSuggestUpdate);
-  eh.listen(this.suggest, app.taginput.Suggest.InputHandler.EventType.KEY, this.handleInputKey);
+  // tags
+  goog.array.forEach(this.collectTagEls_(), this.attachKeyEventOnTag_, this);
 
   goog.base(this, 'enterDocument');
-
   this.reposition();
 };
 
@@ -104,24 +123,25 @@ app.TagInput.prototype.enterDocument = function() {
 app.TagInput.prototype.handleSuggestUpdate = function(e) {
   if (e.row) {
     // Append category tag.
-    this.updateCategoryTag_(e.row);
+    this.updateCategoryTag_(/** @type {ObjectInterface.Category} */(e.row));
     this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
   } else if (this.inputEl.value) {
     // Append token tag.
-    // this.insertTag_(this.inputEl.value);
-    this.insertTag_(
+    this.insertTagEl_(
         goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'value': this.inputEl.value }));
     this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
   }
 };
 
-
+/**
+ * @private
+ * @param {ObjectInterface.Category} row .
+ */
 app.TagInput.prototype.updateCategoryTag_ = function(row) {
   var oldTag = this.getElementByClass('button-tag-category');
   if (oldTag) goog.dom.removeNode(oldTag);
-  this.insertTag_(
-      goog.soy.renderAsFragment(app.soy.taginput.categoryTag,
-        /** @type {ObjectInterface.Category} */(row)), true);
+  this.insertTagEl_(
+      goog.soy.renderAsFragment(app.soy.taginput.categoryTag, row), true);
 };
 
 
@@ -146,25 +166,21 @@ app.TagInput.prototype.disposeInternal = function() {
 
 
 
-/** @param {Element} el .  */
-app.taginput.onTagFocus = function(el) {
-  app.TagInput.getInstance().decorateTagEl(el);
-};
-
-app.TagInput.prototype.decorateTagEl = function(el) {
-  this.decorateFocusable(el, this.handleTagKey);
-};
-
+/***/
 app.TagInput.prototype.reposition = function() {
   goog.style.setBorderBoxSize(this.inputEl,
       new goog.math.Size(this.calcInputWidth_(), 0));
 };
 
-app.TagInput.prototype.decorateFocusable = function(el, keyHandler) {
+/**
+ * @private
+ * @param {Element} el .
+ */
+app.TagInput.prototype.attachKeyEventOnTag_ = function(el) {
   if (el.eh) el.eh.dispose();
   (el.eh = new goog.events.EventHandler)
-    .listen(el, 'blur', this.onFocusableBlur_, false, this)
-    .listen(new goog.events.KeyHandler(el), goog.events.KeyHandler.EventType.KEY, keyHandler, false, this);
+    .listen(new goog.events.KeyHandler(el),
+        goog.events.KeyHandler.EventType.KEY, this.handleTagKey, false, this);
 };
 
 /**
@@ -238,25 +254,31 @@ app.TagInput.prototype.onFocusableBlur_ = function(e) {
 };
 
 /**
- * @param {Node} tagEl .
+ * @private
+ * @param {Node} el .
  * @param {boolean=} first .
  */
-app.TagInput.prototype.insertTag_ = function(tagEl, first) {
+app.TagInput.prototype.insertTagEl_ = function(el, first) {
   var displayStyle = this.inputEl.style.display;
   this.inputEl.style.display = 'none';
   var lastTagEl;
 
   if (first || !(lastTagEl = this.getPreviousFocusable_(this.inputEl))) {
-    goog.dom.insertChildAt(this.wrapEl, tagEl, 0);
+    goog.dom.insertChildAt(this.wrapEl, el, 0);
   } else {
-    goog.dom.insertSiblingAfter(tagEl, lastTagEl);
+    goog.dom.insertSiblingAfter(el, lastTagEl);
   }
+  this.attachKeyEventOnTag_(/** @type {Element} */(el));
 
   this.reposition();
   this.inputEl.style.display = displayStyle;
   goog.Timer.callOnce(function() { this.inputEl.value = '' }, undefined, this);
 };
 
+/**
+ * @private
+ * @return {number} .
+ */
 app.TagInput.prototype.calcInputWidth_ = function() {
   var lastTag = this.getLastTag_();
   var wrapSize = goog.style.getContentBoxSize(this.wrapEl);
@@ -267,7 +289,8 @@ app.TagInput.prototype.calcInputWidth_ = function() {
   var BETWEEN_TAG_AND_TEXTBOX = 10;
   var MINIMUM_WIDTH = 80;
 
-  var width = wrapSize.width - tagPos.x - tagSize.width - BETWEEN_TAG_AND_TEXTBOX;
+  var width = wrapSize.width - tagPos.x -
+              tagSize.width - BETWEEN_TAG_AND_TEXTBOX;
   if (width < MINIMUM_WIDTH) return wrapSize.width;
   return width;
 };

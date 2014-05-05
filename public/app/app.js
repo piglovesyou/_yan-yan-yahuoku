@@ -10,7 +10,7 @@ goog.require('app.TagInput');
  * @constructor
  */
 app.App = function() {
-  var taginput = app.TagInput.getInstance();
+  var taginput = new app.TagInput;
   taginput.decorate(goog.dom.getElementByClass('header-input'));
 
   var list = new app.List;
@@ -22,4 +22,5 @@ app.App = function() {
   });
   goog.events.listen(list, goog.ui.list.EventType.UPDATE_TOTAL,
       taginput.updateRightContent, false, taginput);
+
 };

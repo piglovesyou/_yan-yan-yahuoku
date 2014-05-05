@@ -163,15 +163,15 @@ app.TagInput.prototype.reposition = function() {
 app.TagInput.prototype.decorateFocusable = function(el, keyHandler) {
   if (el.eh) el.eh.dispose();
   (el.eh = new goog.events.EventHandler)
-    .listen(el, 'blur', this.onFocusableBlur_, null, this)
-    .listen(new goog.events.KeyHandler(el), goog.events.KeyHandler.EventType.KEY, keyHandler, null, this);
+    .listen(el, 'blur', this.onFocusableBlur_, false, this)
+    .listen(new goog.events.KeyHandler(el), goog.events.KeyHandler.EventType.KEY, keyHandler, false, this);
 };
 
 /**
  * @param {goog.events.Event} e .
  */
 app.TagInput.prototype.handleInputKey = function(e) {
-  var el = e.target;
+  var el = /** @type {Element} */(e.target);
   switch (e.keyCode) {
     // Steel ENTER key from a "ac.InputHandler".
     case goog.events.KeyCodes.ENTER:
@@ -189,7 +189,7 @@ app.TagInput.prototype.handleInputKey = function(e) {
  * @param {goog.events.Event} e .
  */
 app.TagInput.prototype.handleTagKey = function(e) {
-  var el = e.target;
+  var el = /** @type {Element} */(e.target);
   switch (e.keyCode) {
     case goog.events.KeyCodes.LEFT:
       if (this.focusPrevious_(el)) e.preventDefault();
@@ -238,8 +238,8 @@ app.TagInput.prototype.onFocusableBlur_ = function(e) {
 };
 
 /**
- * @param {Element} tagEl .
- * @param {boolean} first .
+ * @param {Node} tagEl .
+ * @param {boolean=} first .
  */
 app.TagInput.prototype.insertTag_ = function(tagEl, first) {
   var displayStyle = this.inputEl.style.display;
@@ -254,7 +254,7 @@ app.TagInput.prototype.insertTag_ = function(tagEl, first) {
 
   this.reposition();
   this.inputEl.style.display = displayStyle;
-  goog.Timer.callOnce(function() { this.inputEl.value = '' }, null, this);
+  goog.Timer.callOnce(function() { this.inputEl.value = '' }, undefined, this);
 };
 
 app.TagInput.prototype.calcInputWidth_ = function() {
@@ -292,8 +292,11 @@ app.TagInput.prototype.getLastTag_ = function() {
   return this.getPreviousFocusable_(this.inputEl);
 };
 
+/**
+ * @param {goog.events.Event} e .
+ */
 app.TagInput.prototype.handleWrapClick = function(e) {
-  var tagEl = this.findTagFromEventTarget_(e.target);
+  var tagEl = this.findTagFromEventTarget_(/** @type {Element} */(e.target));
   if (tagEl) {
     this.removeTag_(tagEl);
     e.preventDefault();
@@ -302,6 +305,10 @@ app.TagInput.prototype.handleWrapClick = function(e) {
   }
 };
 
+/**
+ * @private
+ * @param {Element} et .
+ */
 app.TagInput.prototype.findTagFromEventTarget_ = function(et) {
   return goog.dom.getAncestor(et, app.TagInput.isTagEl_);
 };

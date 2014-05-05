@@ -27,7 +27,7 @@ app.List.prototype.search = function(url) {
  * @param {goog.Uri} url .
  */
 app.List.createData = function(url, rowCountPerPage) {
-  var data = new app.list.Data(url, rowCountPerPage); // Url to request remote JSON
+  var data = new app.list.Data(url.toString(), rowCountPerPage); // Url to request remote JSON
                                                  // Must be 20 because of Yahoo.
   data.setObjectNameTotalInJson('ResultSet.@attributes.totalResultsAvailable');
   data.setObjectNameRowsInJson('ResultSet.Result.Item');
@@ -42,7 +42,7 @@ app.List.createData = function(url, rowCountPerPage) {
  * @param {number} index .
  * @param {Function=} opt_renderer .
  * @param {goog.dom.DomHelper=} opt_domHelper .
- * @extends {goog.ui.Component}
+ * @extends {goog.ui.List.Item}
  */
 app.List.Item = function(index, opt_renderer, opt_domHelper) {
   goog.base(this, index, app.soy.row.renderContent, opt_domHelper);
@@ -52,7 +52,8 @@ goog.inherits(app.List.Item, goog.ui.List.Item);
 
 /** @inheritDoc */
 app.List.Item.prototype.createDom = function() {
-  var element = goog.soy.renderAsFragment(app.soy.row.createDom);
+  var element =
+      /** @type {Element} */(goog.soy.renderAsFragment(app.soy.row.createDom));
   var dh = this.getDomHelper();
   this.setElementInternal(element);
   // element.setAttribute('index', this.index_);
@@ -62,11 +63,12 @@ app.List.Item.prototype.createDom = function() {
 
 /**
  * @param {string} url .
+ * @param {number} rowCountPerPage .
  * @param {number=} opt_totalRowCount .
  * @param {boolean=} opt_keepTotalUptodate .
  * @param {goog.net.XhrManager=} opt_xhrManager .
  * @constructor
- * @extends {goog.events.EventTarget}
+ * @extends {goog.ui.list.Data}
  */
 app.list.Data = function(url, rowCountPerPage,
     opt_totalRowCount, opt_keepTotalUptodate, opt_xhrManager) {
@@ -81,6 +83,7 @@ app.list.Data = function(url, rowCountPerPage,
 };
 goog.inherits(app.list.Data, goog.ui.list.Data);
 
+/** @inheritDoc */
 app.list.Data.prototype.buildUrl = function(from, count) {
   var url = goog.Uri.parse(this.url_);
 

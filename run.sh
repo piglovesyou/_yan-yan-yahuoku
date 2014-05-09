@@ -58,7 +58,7 @@ setup_plovr() {
 setup_closurelibrary() {
     rm -rf ${CLOSURELIBRARY_DIR}
     mkdir -p $LIBS_DIR
-    (cd ${LIBS_DIR} && svn co ${CLOSURELIBRARY_REMOTE_DIR} closure-library)
+    (cd ${LIBS_DIR} && svn co -r 2519 ${CLOSURELIBRARY_REMOTE_DIR} closure-library)
 }
 
 setup_closurestylesheets() {

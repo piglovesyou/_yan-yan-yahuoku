@@ -14,6 +14,7 @@ var yahooGet = Q.denodeify(yahoo.get);
 router.get('/', index);
 router.get('/search', asYahooRequest('search'));
 router.get('/categoryLeaf', asYahooRequest('categoryLeaf'));
+router.get('/auctionItem', asYahooRequest('auctionItem'));
 
 
 

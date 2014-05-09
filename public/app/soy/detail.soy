@@ -1,4 +1,21 @@
-{namespace app.soy}
+{namespace app.soy.detail}
+
+
+
+
+
+
+
+
+
+
+/**
+ *
+ */
+{template .renderContent}
+  {call .detailImages data="all" /}
+  
+{/template}
 
 
 
@@ -258,3 +275,87 @@
 {template .price}
   {round($price)}円 // formatNumberWithComma
 {/template}
+
+
+
+
+
+
+
+
+
+/***/
+{template .soyweb}
+  {call .renderContent data="[
+
+
+
+'AuctionID':'m117732000',
+'CategoryID':'2084250330,
+'CategoryPath':'オークション > おもちゃ、ゲーム > プラモデル > 戦車、軍用車両 > 対空戦車（AAT）,
+'Title':'グンゼ/エレール 【絶版】 1/35 サウジ軍 AMX30AA対空戦車,
+'Seller':{
+  'Id':'b25237,
+  'Rating':{
+    'Point':'1428,
+    'TotalGoodRating':'1440,
+    'TotalBadRating':'12,
+    'IsSuspended':'false,
+    'IsDeleted':'false'},
+  'ItemListURL':'http://auctions.yahooapis.jp/AuctionWebService/V2/sellingList?sellerID=b25237,
+  'RatingURL':'http://auctions.yahooapis.jp/AuctionWebService/V1/ShowRating?id=b25237'},
+'AuctionItemUrl':'http://page10.auctions.yahoo.co.jp/jp/auction/m117732000,
+'Img':{
+  'Image1':'http://auctions.c.yimg.jp/img371.auctions.yahoo.co.jp/users/4/7/4/8/b25237-img600x451-1393140808qyew9u62079.jpg,
+  'Image2':'http://auctions.c.yimg.jp/img371.auctions.yahoo.co.jp/users/4/7/4/8/b25237-img600x450-1393140808ncjvej62079.jpg,
+  'Image3':'http://auctions.c.yimg.jp/img371.auctions.yahoo.co.jp/users/4/7/4/8/b25237-img600x450-1393140808lzmky862079.jpg'},
+'Initprice':'2540.00,
+'Price':'2540.00,
+'Quantity':'1,
+'Bids':'0,
+'HighestBidders':{
+  '@attributes':{'totalHighestBidders':'0'},
+  'IsMore':'false'},
+'ItemStatus':{'Condition':'used'},
+'ItemReturnable':{'Allowed':'false'},
+'StartTime':'2014-05-06T09:37:42+09:00,
+'EndTime':'2014-05-06T22:37:16+09:00,
+'TaxRate':'0,
+'IsBidCreditRestrictions':'true,
+'IsBidderRestrictions':'true,
+'IsBidderRatioRestrictions':'true,
+'IsEarlyClosing':'true,
+'IsAutomaticExtension':'true,
+'IsOffer':'false,
+'IsCharity':'false,
+'Option':{'EasyPaymentIcon':'http://i.yimg.jp/images/pay/icon_s16.gif'},
+'Description':' <DIV>○お譲りする商品は、グンゼ/エレール 【絶版】 1/35 サウジ軍 AMX30AAで対空戦車です。   <DIV>  <DIV>○現在、入手困難なキットです。</DIV>  <DIV>  <DIV>○戦車兵フィギュア2体が付属します。</DIV></DIV></DIV>○年数を経た中古品です。<BR>○中古商品ですので、ノークレーム＆ノーリターンでお願い致します。</DIV>  <DIV>○落札後、当方連絡から２日以内のご連絡をお待ちしています。<BR>○また、個人出品のため、発送は３～４日間要する場合がありますのでご理解頂きたくお願い致します。</DIV>  <DIV></DIV>  <DIV>&nbsp;</DIV>  <DIV>  <DIV>○発送を催促する方は、入札をご遠慮下さい。</DIV></DIV>  <DIV></DIV>  <DIV></DIV> ,
+'Payment':{'EasyPayment':{'IsCreditCard':'true,
+  'IsNetBank':'true'}
+  ,'Bank':{'@attributes':{'totalBankMethodAvailable':'2'}
+  ,'Method':['三井住友,
+  'ゆうちょ']}},
+'BlindBusiness':'impossible,
+'SevenElevenReceive':'impossible,
+'ChargeForShipping':'winner,
+'Location':'東京都,
+'IsWorldwide':'false,
+'ShipTime':'after,
+'Shipping':{
+  '@attributes':{'totalShippingMethodAvailable':'2'},
+  'Method':[{'Name':'はこBOON,
+  'PriceURL':'https://www.takuhai.jp/html/titai_08.html'},
+  {'Name':'定形外（６００円）'}]},
+'BaggageInfo':{'Size':'－,
+  'Weight':'－'},
+'IsAdult':'false,
+'CharityOption':{'Proportion':'0'},
+'AnsweredQAndANum':'0'
+
+
+
+
+  ]"}
+  {/call}
+{/template}
+

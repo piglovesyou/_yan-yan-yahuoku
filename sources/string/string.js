@@ -24,8 +24,8 @@ module.exports.toDecimal = toDecimal;
 function renderPrice(escapedString) {
   var value = +escapedString;
   if (!goog.isNumber(value) || isNaN(value)) return null;
-  return toDecimal(Math.floor(value)) + '円';
-};
+  return toDecimal(Math.floor(value));
+}
 
 
 /**
@@ -36,7 +36,7 @@ function createAuctionItemLink(escapedUrl) {
   // var uri = new goog.Uri.parse(App.getInstance().getAffiliateBase());
   // uri.getQueryData().add('vc_url', escapedUrl);
   // return uri.toString();
-};
+}
 
 
 /**
@@ -60,7 +60,7 @@ function renderDate(escapedString) {
     dateFormatter_ = new goog.i18n.DateTimeFormat('M月 d日 H時 m分');
   }
   return dateFormatter_.format(new Date(escapedString));
-};
+}
 
 
 /**
@@ -70,7 +70,7 @@ function renderDate(escapedString) {
  */
 function renderBoolean(escapedString) {
   return escapedString == 'true' ? 'あり' : 'なし';
-};
+}
 
 
 /**
@@ -84,7 +84,7 @@ function renderItemCondition(escapedString) {
     case 'other': return 'その他';
   }
   return '';
-};
+}
 
 
 /**
@@ -111,7 +111,7 @@ function renderEndDate(escapedString) {
   } else {
     return app.string.renderDate(escapedString);
   }
-};
+}
 
 
 /**
@@ -124,7 +124,7 @@ function getCategoryNameByPath(path) {
     return arr[arr.length - 1];
   }
   return '';
-};
+}
 
 
 /**
@@ -135,5 +135,5 @@ function toDecimal(num) {
   var formatter = numberFormatter_ || (numberFormatter_ =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL));
   return formatter.format(num);
-};
+}
 

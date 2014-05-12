@@ -12,9 +12,9 @@ var yahooGet = Q.denodeify(yahoo.get);
 
 
 router.get('/', index);
-router.get('/search', asYahooRequest('search'));
-router.get('/categoryLeaf', asYahooRequest('categoryLeaf'));
-router.get('/auctionItem', asYahooRequest('auctionItem'));
+router.get('/search', asYahooRequest('search', itemsResolver));
+router.get('/categoryLeaf', asYahooRequest('categoryLeaf', itemsResolver));
+router.get('/auctionItem', asYahooRequest('auctionItem', detailResolver));
 
 
 
@@ -22,11 +22,11 @@ function index(req, res) {
   res.send('respond with a resource');
 }
 
-function asYahooRequest(yahooPath) {
+function asYahooRequest(yahooPath, resolver) {
   return function(req, res) {
     yahooGet(yahooPath, req.query)
     .then(JSON.parse)
-    .then(resolveDisplayValue)
+    .then(resolver)
     .then(function(json) {
       res.status(200);
       res.contentType('application/json; charset=utf-8');
@@ -39,7 +39,17 @@ function asYahooRequest(yahooPath) {
   }
 }
 
-function resolveDisplayValue(json) {
+function detailResolver(json) {
+  var detail = goog.getObjectByName('ResultSet.Result', json);
+  detail.StartTime = string.renderDate(detail.StartTime);
+  detail.EndTime = string.renderEndDate(detail.EndTime);
+  detail.Initprice = string.renderPrice(detail.Initprice);
+  detail.Price = string.renderPrice(detail.Price);
+  detail.Bidorbuy = string.renderPrice(detail.Bidorbuy);
+  return json;
+}
+
+function itemsResolver(json) {
   // TODO: Add properties by using "string" utility.
   var items = goog.getObjectByName('ResultSet.Result.Item', json);
   if (items) {

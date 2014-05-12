@@ -31,7 +31,6 @@ app.Detail.prototype.request = function(id) {
 
   eh.listen(this.xhr_, goog.net.EventType.SUCCESS, function(e) {
     var json = e.target.getResponseJson();
-    console.log(json);
     if (!json) return;
     var auctionItem = goog.getObjectByName('ResultSet.Result', json);
     if (!auctionItem) return;
@@ -40,26 +39,15 @@ app.Detail.prototype.request = function(id) {
   this.xhr_.send(url, 'GET');
 };
 
+
 /**
- * @param {ObjectInterface.Detail} data Json data of auction item.
+ * Do I wand goog.string.format?
+ * @param {Object} data Json data of auction item.
  */
 app.Detail.prototype.renderContent = function(data) {
   goog.soy.renderElement(this.getContentElement(),
-      app.soy.detail.renderContent,
-      /** @type {ObjectInterface.Detail} */(data));
+      app.soy.detail.renderContent, data);
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /** @inheritDoc */
@@ -69,6 +57,7 @@ app.Detail.prototype.decorateInternal = function(element) {
 };
 
 
+/** @inheritDoc */
 app.Detail.prototype.getContentElement = function() {
   return this.contentEl;
 };

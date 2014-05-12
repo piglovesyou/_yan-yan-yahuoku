@@ -10,35 +10,34 @@
 
 
 /**
- *
+ * @param Description
  */
 {template .renderContent}
   {call .detailImages data="all" /}
-  
+  <div class="detail-description-container">
+    <p>{$Description|noAutoescape}</p>
+  </div>
+  {call .detailItemLinkParagraph data="all" /}
+  {call .detailPrimaryTable data="all" /}
+  {call .detailSubTable data="all" /}
+  {call .paymentTable data="all" /}
+  {call .sendDetailTable data="all" /}
+  {call .shippingTable data="all" /}
+  {call .detailItemLinkParagraph data="all" /}
 {/template}
 
 
-
 /**
- * @param images Array.
+ * @param Img Array.
  */
 {template .detailImages}
   //TODO: Write CSS.
   <div class="detail-images" style="text-align:center">
-    {foreach $key in keys($images)}
-      <img src="{$images[$key]}" />
+    {foreach $key in keys($Img)}
+      <img src="{$Img[$key]}" />
     {/foreach}
   </div>
 {/template}
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -55,27 +54,21 @@
 {/template}
 
 
-/**
- * @param href
- * @param title
- */
+/***/
 {template .detailItemLinkParagraph}
   <p class="detail-item-link">
-    {call .detailItemLink}
-      {param href: $href /}
-      {param title: $title /}
-    {/call}
+    {call .detailItemLink data="all" /}
   </p>
 {/template}
 
 
 /**
- * @param href
- * @param title
+ * @param AuctionItemUrl
+ * @param Title
  */
 {template .detailItemLink}
-  <a href="{$href}" target="_blank">
-    {$title}
+  <a href="{$AuctionItemUrl}" target="_blank">
+    {$Title}
     <span class="i i-text">o</span>
   </a>
 {/template}
@@ -83,33 +76,33 @@
 
 /**
  * TODO: Implement.
- * @param price
- * @param bidorbuy
- * @param endTime
- * @param bids
+ * @param Price
+ * @param? Bidorbuy
+ * @param EndTime
+ * @param? Bids
  */
 {template .detailPrimaryTable}
   <table class="table table-hover">
     <tbody>
       <tr>
       	<th>現在の価格</th>
-      	<td>{call .price}{param price: $price /}{/call}</td>
+      	<td>{call .price}{param value: $Price /}{/call}</td>
       </tr>
-      {if isNonnull($bidorbuy)}
+      {if isNonnull($Bidorbuy)}
         <tr>
           <th>即決価格</th>
-      	<td>{call .price}{param price: $bidorbuy /}{/call}</td>
+      	<td>{call .price}{param value: $Bidorbuy /}{/call}</td>
         </tr>
       {/if}
       <tr>
       	<th>残り時間</th>
         // TODO: app.string.renderEndDate $endTime
-      	<td>{$endTime}</td>
+      	<td>{$EndTime}</td>
       </tr>
-      {if isNonnull($bids)}
+      {if isNonnull($Bids)}
         <tr>
           <th>入札件数</th>
-          <td>{$bids}</td>
+          <td>{$Bids}</td>
         </tr>
       {/if}
     </tbody>
@@ -118,69 +111,70 @@
 
 
 /**
- * @param quantity
- * @param initPrice
- * @param startTime
- * @param endTime
- * @param isEarlyClosing
- * @param isAutomaticExtension
- * @param itemStatus
- * @param itemReturnable
+ * @param Quantity
+ * @param InitPrice
+ * @param StartTime
+ * @param EndTime
+ * @param IsEarlyClosing
+ * @param IsAutomaticExtension
+ * @param ItemStatus
+ * @param ItemReturnable
  */
 {template .detailSubTable}
   <table class="table table-hover table-condensed">
     <tbody>
       <tr>
         <th>個数</th>
-        <td>{$quantity}</td>
+        <td>{$Quantity}</td>
       </tr>
-      {if isNonnull($initPrice)}
+      {if isNonnull($InitPrice)}
         <tr>
           <th>開始時の価格</th>
-          <td>aaaaaa {$initPrice}{$initPrice}/*app.string.renderPrice*/</td>
+          <td>{$InitPrice}</td>
         </tr>
       {/if}
       <tr>
         <th>開始日時</th>
-        <td>{$startTime}</td> //app.string.renderDate
+        <td>{$StartTime}</td>
       </tr>
       <tr>
         <th>終了日時</th>
-        <td>{$endTime}</td> // app.string.renderDate
+        <td>{$EndTime}</td>
       </tr>
       <tr>
         <th>早期終了</th>
-        <td>{$isEarlyClosing}</td> // app.string.renderBoolean
+        <td>{$IsEarlyClosing}</td>
       </tr>
       <tr>
         <th>自動延長</th>
-        <td>{$isAutomaticExtension}</td> // app.string.renderBoolean
+        <td>{$IsAutomaticExtension}</td>
       </tr>
-      {if isNonnull($itemStatus)}
+      {if isNonnull($ItemStatus)}
         <tr>
           <th>商品の状態</th>
-          <td>{$itemStatus}</td> // app.string.renderItemCondition
+          <td>{$ItemStatus}</td>
         </tr>
       {/if}
-      {if isNonnull($itemReturnable)}
+      {if isNonnull($ItemReturnable)}
         <tr>
           <th>返品の可否</th>
-          <td>{$itemReturnable['Allowed']}</td> // app.string.renderBoolean
+          <td>{$ItemReturnable['Allowed']}</td>
         </tr>
       {/if}
     </tbody>
   </table>
 {/template}
 
+
 /**
- * @param easyPayment
- * @param bank
+ * @param EasyPayment
+ * @param Bank
  */
 {template .paymentTable}
 
-  {let $useEasyPament: isNonnull($easyPayment) /}
-  {let $totalBankMethodAvailable: isNonnull($bank) and $bank['@attributes']['totalBankMethodAvailable'] /}
-  {let $useBank: isNonnull($bank) and $totalBankMethodAvailable > 0 /}
+  {let $useEasyPament: isNonnull($EasyPayment) /}
+  {let $totalBankMethodAvailable: isNonnull($Bank) and $Bank['@attributes']['totalBankMethodAvailable'] /}
+  {let $useBank: isNonnull($Bank) and $totalBankMethodAvailable > 0 /}
 
   {if $useEasyPament or $useBank}
     <table class="table table-bordered table-condensed">
@@ -190,8 +184,8 @@
             <th rowspan="2">決済方法</th>
             <td colspan="2">
               Yahoo!簡単決済
-              {if $easyPayment['IsCreditCard']}<br /> - クレジットカード決済{/if}
-              {if $easyPayment['IsNetBank']}<br /> - 銀行ネット決済{/if}
+              {if $EasyPayment['IsCreditCard']}<br /> - クレジットカード決済{/if}
+              {if $EasyPayment['IsNetBank']}<br /> - 銀行ネット決済{/if}
             </td>
           </tr>
         {/if}
@@ -204,7 +198,7 @@
               		<tr>
                     <th>対応できる銀行</th>
                     <td>
-                      {foreach $b in $bank['Method']}
+                      {foreach $b in $Bank['Method']}
                         {if isFirst($b)}
                           {$b}
                         {else}
@@ -223,10 +217,11 @@
   {/if}
 {/template}
 
+
 /**
- * @param chargeForShipping
- * @param location
- * @param isWorldwide
+ * @param ChargeForShipping
+ * @param Location
+ * @param IsWorldwide
  */
 {template .sendDetailTable}
   <table class="table table-bordered table-condensed">
@@ -234,46 +229,48 @@
       <tr>
       	<th>送料負担</th>
       	<td>
-          {if $chargeForShipping == 'winner'}
+          {if $ChargeForShipping == 'winner'}
             落札者
           {else}
             出品者
           {/if}
         </td>
       </tr>
-      {if isNonnull($location)}
+      {if isNonnull($Location)}
         <tr>
           <th>商品発送元地域</th>
-          <td>{$location}</td>
+          <td>{$Location}</td>
         </tr>
       {/if}
       <tr>
       	<th>海外発送</th>
-      	<td>{if isNonnull($isWorldwide)}可{else}不可{/if}</td>
+      	<td>{if isNonnull($IsWorldwide)}可{else}不可{/if}</td>
       </tr>
     </tbody>
   </table>
 {/template}
 
+
 /**
- * @param shippingMethodName
+ * @param ShippingMethodName
  */
 {template .shippingTable}
   <table class="table table-bordered table-condensed">
   	<tbody>
   		<tr>
-  			<th>ohh. 配送方法</th>
-  			<td>{$shippingMethodName}</td>
+  			<th>配送方法</th>
+  			<td>{$ShippingMethodName}</td>
   		</tr>
   	</tbody>
   </table>
 {/template}
 
+
 /**
- * @param price
+ * @param value
  */
 {template .price}
-  {round($price)}円 // formatNumberWithComma
+  {$value}円 // formatNumberWithComma
 {/template}
 
 
@@ -287,75 +284,87 @@
 /***/
 {template .soyweb}
   {call .renderContent data="[
-
-
-
-'AuctionID':'m117732000',
-'CategoryID':'2084250330,
-'CategoryPath':'オークション > おもちゃ、ゲーム > プラモデル > 戦車、軍用車両 > 対空戦車（AAT）,
-'Title':'グンゼ/エレール 【絶版】 1/35 サウジ軍 AMX30AA対空戦車,
-'Seller':{
-  'Id':'b25237,
-  'Rating':{
-    'Point':'1428,
-    'TotalGoodRating':'1440,
-    'TotalBadRating':'12,
-    'IsSuspended':'false,
-    'IsDeleted':'false'},
-  'ItemListURL':'http://auctions.yahooapis.jp/AuctionWebService/V2/sellingList?sellerID=b25237,
-  'RatingURL':'http://auctions.yahooapis.jp/AuctionWebService/V1/ShowRating?id=b25237'},
-'AuctionItemUrl':'http://page10.auctions.yahoo.co.jp/jp/auction/m117732000,
-'Img':{
-  'Image1':'http://auctions.c.yimg.jp/img371.auctions.yahoo.co.jp/users/4/7/4/8/b25237-img600x451-1393140808qyew9u62079.jpg,
-  'Image2':'http://auctions.c.yimg.jp/img371.auctions.yahoo.co.jp/users/4/7/4/8/b25237-img600x450-1393140808ncjvej62079.jpg,
-  'Image3':'http://auctions.c.yimg.jp/img371.auctions.yahoo.co.jp/users/4/7/4/8/b25237-img600x450-1393140808lzmky862079.jpg'},
-'Initprice':'2540.00,
-'Price':'2540.00,
-'Quantity':'1,
-'Bids':'0,
-'HighestBidders':{
-  '@attributes':{'totalHighestBidders':'0'},
-  'IsMore':'false'},
-'ItemStatus':{'Condition':'used'},
-'ItemReturnable':{'Allowed':'false'},
-'StartTime':'2014-05-06T09:37:42+09:00,
-'EndTime':'2014-05-06T22:37:16+09:00,
-'TaxRate':'0,
-'IsBidCreditRestrictions':'true,
-'IsBidderRestrictions':'true,
-'IsBidderRatioRestrictions':'true,
-'IsEarlyClosing':'true,
-'IsAutomaticExtension':'true,
-'IsOffer':'false,
-'IsCharity':'false,
-'Option':{'EasyPaymentIcon':'http://i.yimg.jp/images/pay/icon_s16.gif'},
-'Description':' <DIV>○お譲りする商品は、グンゼ/エレール 【絶版】 1/35 サウジ軍 AMX30AAで対空戦車です。   <DIV>  <DIV>○現在、入手困難なキットです。</DIV>  <DIV>  <DIV>○戦車兵フィギュア2体が付属します。</DIV></DIV></DIV>○年数を経た中古品です。<BR>○中古商品ですので、ノークレーム＆ノーリターンでお願い致します。</DIV>  <DIV>○落札後、当方連絡から２日以内のご連絡をお待ちしています。<BR>○また、個人出品のため、発送は３～４日間要する場合がありますのでご理解頂きたくお願い致します。</DIV>  <DIV></DIV>  <DIV>&nbsp;</DIV>  <DIV>  <DIV>○発送を催促する方は、入札をご遠慮下さい。</DIV></DIV>  <DIV></DIV>  <DIV></DIV> ,
-'Payment':{'EasyPayment':{'IsCreditCard':'true,
-  'IsNetBank':'true'}
-  ,'Bank':{'@attributes':{'totalBankMethodAvailable':'2'}
-  ,'Method':['三井住友,
-  'ゆうちょ']}},
-'BlindBusiness':'impossible,
-'SevenElevenReceive':'impossible,
-'ChargeForShipping':'winner,
-'Location':'東京都,
-'IsWorldwide':'false,
-'ShipTime':'after,
-'Shipping':{
-  '@attributes':{'totalShippingMethodAvailable':'2'},
-  'Method':[{'Name':'はこBOON,
-  'PriceURL':'https://www.takuhai.jp/html/titai_08.html'},
-  {'Name':'定形外（６００円）'}]},
-'BaggageInfo':{'Size':'－,
-  'Weight':'－'},
-'IsAdult':'false,
-'CharityOption':{'Proportion':'0'},
-'AnsweredQAndANum':'0'
-
-
-
-
-  ]"}
+            'AuctionID': 'm117732000',
+            'CategoryID': '2084250330',
+            'CategoryPath': 'オークション > おもちゃ、ゲーム > プラモデル > 戦車、軍用車両 > 対空戦車（AAT）',
+            'Title': 'title title title title ',
+            'Seller': [
+                'Id': 'b25237',
+                'Rating': [
+                    'Point': '1428',
+                    'TotalGoodRating': '1440',
+                    'TotalBadRating': '12',
+                    'IsSuspended': 'false',
+                    'IsDeleted': 'false',
+                ],
+                'ItemListURL': 'http://auctions.yahooapis.jp/AuctionWebService/V2/sellingList?sellerID=b25237',
+                'RatingURL': 'http://auctions.yahooapis.jp/AuctionWebService/V1/ShowRating?id=b25237',
+            ],
+            'AuctionItemUrl': 'http://page10.auctions.yahoo.co.jp/jp/auction/m117732000',
+            'Img': [
+                'Image1': 'http://auctions.c.yimg.jp/img371.auctions.yahoo.co.jp/users/4/7/4/8/b25237-img600x451-1393140808qyew9u62079.jpg',
+                'Image2': 'http://auctions.c.yimg.jp/img371.auctions.yahoo.co.jp/users/4/7/4/8/b25237-img600x450-1393140808ncjvej62079.jpg',
+                'Image3': 'http://auctions.c.yimg.jp/img371.auctions.yahoo.co.jp/users/4/7/4/8/b25237-img600x450-1393140808lzmky862079.jpg',
+            ],
+            'Initprice': '2540.00',
+            'Price': '2540.00',
+            'Quantity': '1',
+            'Bids': '0',
+            'HighestBidders': quoteKeysIfJs([
+                '@attributes': [ 'totalHighestBidders': '0', ],
+                'IsMore': 'false',
+            ]),
+            'ItemStatus': [ 'Condition': 'used', ],
+            'ItemReturnable': [ 'Allowed': 'false', ],
+            'StartTime': '2014-05-06T09:37:42+09:00',
+            'EndTime': '2014-05-06T22:37:16+09:00',
+            'TaxRate': '0',
+            'IsBidCreditRestrictions': 'true',
+            'IsBidderRestrictions': 'true',
+            'IsBidderRatioRestrictions': 'true',
+            'IsEarlyClosing': 'true',
+            'IsAutomaticExtension': 'true',
+            'IsOffer': 'false',
+            'IsCharity': 'false',
+            'Option': [ 'EasyPaymentIcon': 'http://i.yimg.jp/images/pay/icon_s16.gif', ],
+            'Description': 'des<b>crip</b>tion...',
+            'Payment': [
+                'EasyPayment': [
+                    'IsCreditCard': 'true',
+                    'IsNetBank': 'true',
+                ],
+                'Bank': quoteKeysIfJs([
+                    '@attributes': [ 'totalBankMethodAvailable': '2', ],
+                    'Method': quoteKeysIfJs([
+                        '0': 'xxx',
+                        '1': 'yyy',
+                    ]),
+                ]),
+            ],
+            'BlindBusiness': 'impossible',
+            'SevenElevenReceive': 'impossible',
+            'ChargeForShipping': 'winner',
+            'Location': 'xxx',
+            'IsWorldwide': 'false',
+            'ShipTime': 'after',
+            'Shipping': quoteKeysIfJs([
+                '@attributes': [ 'totalShippingMethodAvailable': '2', ],
+                'Method': quoteKeysIfJs([
+                    '0': [
+                        'Name': 'zzzzz',
+                        'PriceURL': 'https://www.takuhai.jp/html/titai_08.html',
+                    ],
+                    '1': [ 'Name': 'oo', ],
+                ]),
+            ]),
+            'BaggageInfo': [
+                'Size': '－',
+                'Weight': '－',
+            ],
+            'IsAdult': 'false',
+            'CharityOption': [ 'Proportion': '0', ],
+            'AnsweredQAndANum': '0',
+        ]"}
   {/call}
 {/template}
 

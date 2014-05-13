@@ -57,7 +57,7 @@ app.Detail.prototype.renderContent = function(data) {
 /** @inheritDoc */
 app.Detail.prototype.decorateInternal = function(element) {
   goog.base(this, 'decorateInternal', element);
-  this.contentEl = this.getElementByClass('main-detail-content');
+  this.contentEl = this.getElementByClass('pane-detail-content');
 };
 
 

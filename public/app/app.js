@@ -16,10 +16,10 @@ app.App = function() {
 
   var list = new app.List;
   list.search(taginput.buildUrl());
-  list.decorate(goog.dom.getElementByClass('main-list'));
+  list.decorate(goog.dom.getElementByClass('pane-list'));
 
   var detail = new app.Detail;
-  detail.decorate(goog.dom.getElementByClass('main-detail'));
+  detail.decorate(goog.dom.getElementByClass('pane-detail'));
 
   goog.events.listen(taginput, app.TagInput.EventType.TAG_UPDATE, function(e) {
     list.search(taginput.buildUrl());

@@ -4,14 +4,14 @@
 /**
  */
 {template .createDom}
-  <div class="pure-g main-list-item goog-list-item"></div>
+  <div class="pure-g pane-list-item goog-list-item"></div>
 {/template}
 
 /**
  * @param Image
  */
 {template .renderContent}
-  <div class="pure-u-6-24 main-list-item-image">
+  <div class="pure-u-6-24 pane-list-item-image">
     <img src="{$Image}" />
   </div>
   <div class="pure-u-18-24">
@@ -27,8 +27,8 @@
  * @param Option
  */
 {template .detail}
-  <div class="main-list-item-title">{$Title}</div>
-  <div class="main-list-item-description">
+  <div class="pane-list-item-title">{$Title}</div>
+  <div class="pane-list-item-description">
     <strong>{$CurrentPrice}</strong>
     {if isNonnull($Bids) and $Bids > 0}
       {sp}|{sp}入札 {$Bids}

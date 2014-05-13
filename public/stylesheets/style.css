@@ -60,18 +60,18 @@ h1 {
   border-bottom: 1px #ccc solid;
 }
 
-.header-input {
+.tag-input {
   padding: .8em  0 .8em 1.3em;
   border-bottom: 1px #e9e9e9 solid;
 }
 .header-toolbar-rightcontent,
-.header-input-rightcontent {
+.tag-input-rightcontent {
   float: right;
 }
-.header-input-leftcontent {
+.tag-input-leftcontent {
   overflow: hidden;
 }
-.header-input-rightcontent {
+.tag-input-rightcontent {
   font-size: 85%;
   color: #777;
   padding: .4em .5em .4em 0;
@@ -79,7 +79,7 @@ h1 {
   text-align: right;
 }
 
-.header-input-textbox {
+.tag-input-textbox {
   resize: none;
   border: none;
   outline: none;
@@ -172,10 +172,10 @@ h1 {
 .button-tag:active { border-color: transparent }
 
 .button-tag,
-.header-input-textbox {
+.tag-input-textbox {
   font-size: 85%;
 }
-.header-input-textbox {
+.tag-input-textbox {
   padding: .4em .5em .4em 0;
 }
 .button-tag-remove {

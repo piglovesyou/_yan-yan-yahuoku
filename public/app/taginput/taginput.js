@@ -83,9 +83,9 @@ app.TagInput.prototype.createDom = function() {
 app.TagInput.prototype.decorateInternal = function(element) {
   goog.base(this, 'decorateInternal', element);
 
-  this.inputEl = this.getElementByClass('header-input-textbox');
-  this.wrapEl = this.getElementByClass('header-input-leftcontent');
-  this.rightEl = this.getElementByClass('header-input-rightcontent');
+  this.inputEl = this.getElementByClass('tag-input-textbox');
+  this.wrapEl = this.getElementByClass('tag-input-leftcontent');
+  this.rightEl = this.getElementByClass('tag-input-rightcontent');
 };
 
 

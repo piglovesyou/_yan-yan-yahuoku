@@ -12,7 +12,7 @@ goog.require('app.Detail');
  */
 app.App = function() {
   var taginput = new app.TagInput;
-  taginput.decorate(goog.dom.getElementByClass('header-input'));
+  taginput.decorate(goog.dom.getElementByClass('tag-input'));
 
   var list = new app.List;
   list.search(taginput.buildUrl());

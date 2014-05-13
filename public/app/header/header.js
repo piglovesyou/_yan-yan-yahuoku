@@ -15,19 +15,15 @@ app.Header = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
 
   this.tabs = new app.header.Tabs;
+  this.addChild(this.tabs);
 };
 goog.inherits(app.Header, goog.ui.Component);
 
 
 /** @inheritDoc */
-app.Header.prototype.createDom = function() {
-  goog.base(this, 'createDom');
-};
-
-
-/** @inheritDoc */
 app.Header.prototype.decorateInternal = function(element) {
   goog.base(this, 'decorateInternal', element);
+  this.tabs.decorateInternal(this.tabsEl);
 };
 
 

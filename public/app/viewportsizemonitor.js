@@ -1,6 +1,6 @@
 
-goog.provide('app.dom.ViewportSizeMonitor');
-goog.provide('app.dom.ViewportSizeMonitor.EventType');
+goog.provide('app.ViewportSizeMonitor');
+goog.provide('app.ViewportSizeMonitor.EventType');
 
 goog.require('goog.Timer');
 goog.require('goog.dom.ViewportSizeMonitor');
@@ -12,7 +12,7 @@ goog.require('goog.events.EventType');
  * @constructor
  * @extends {goog.dom.ViewportSizeMonitor}
  */
-app.dom.ViewportSizeMonitor = function() {
+app.ViewportSizeMonitor = function() {
   goog.base(this, window);
 
   /**
@@ -31,14 +31,14 @@ app.dom.ViewportSizeMonitor = function() {
       .listen(this.timer_, goog.Timer.TICK, this.handleResizeTimerTick_)
       .listen(this, goog.events.EventType.RESIZE, this.handleViewportResize_);
 };
-goog.inherits(app.dom.ViewportSizeMonitor, goog.dom.ViewportSizeMonitor);
-goog.addSingletonGetter(app.dom.ViewportSizeMonitor);
+goog.inherits(app.ViewportSizeMonitor, goog.dom.ViewportSizeMonitor);
+goog.addSingletonGetter(app.ViewportSizeMonitor);
 
 
 /**
  * @enum {string}
  */
-app.dom.ViewportSizeMonitor.EventType = {
+app.ViewportSizeMonitor.EventType = {
   DELAYED_RESIZE: 'delayedreisze'
 };
 
@@ -47,7 +47,7 @@ app.dom.ViewportSizeMonitor.EventType = {
  * @private
  * @param {goog.events.Event} e An event provided by ViewportSizeMonitor.
  */
-app.dom.ViewportSizeMonitor.prototype.handleViewportResize_ = function(e) {
+app.ViewportSizeMonitor.prototype.handleViewportResize_ = function(e) {
   if (this.timer_.enabled) {
     this.timer_.stop();
   }
@@ -59,14 +59,14 @@ app.dom.ViewportSizeMonitor.prototype.handleViewportResize_ = function(e) {
  * @private
  * @param {goog.events.Event} e A tick event.
  */
-app.dom.ViewportSizeMonitor.prototype.handleResizeTimerTick_ = function(e) {
+app.ViewportSizeMonitor.prototype.handleResizeTimerTick_ = function(e) {
   this.timer_.stop();
-  this.dispatchEvent(app.dom.ViewportSizeMonitor.EventType.DELAYED_RESIZE);
+  this.dispatchEvent(app.ViewportSizeMonitor.EventType.DELAYED_RESIZE);
 };
 
 
 /** @inheritDoc */
-app.dom.ViewportSizeMonitor.prototype.disposeInternal = function() {
+app.ViewportSizeMonitor.prototype.disposeInternal = function() {
   if (this.eh_) {
     this.eh_.dispose();
     this.eh_ = null;

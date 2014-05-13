@@ -4,6 +4,8 @@ goog.provide('app.header.Tab');
 goog.require('app.events.EventCenter');
 goog.require('goog.asserts');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.Tooltip');
+goog.require('app.Frame');
 
 
 /**
@@ -24,15 +26,19 @@ goog.inherits(app.header.Tab, goog.ui.Component);
  */
 app.header.Tab.EventType = {
   SELECT: 'select',
-  DELETE: 'delete'
+  DELETE: 'delete',
+  DELEGATE_RENDER_FRAME: 'delegateappendframeelement'
 };
 
 
 app.header.Tab.prototype.createFrame_ = function() {
   goog.asserts.assert(!this.frame_, 'A frame already exists.');
-  this.frame_ = new app.ui.Frame(this.getId(), this.getDomHelper());
+  this.frame_ = new app.Frame(this.getId(), this.getDomHelper());
   this.addChild(this.frame_);
-  this.frame_.render(App.getInstance().getFrameContainerElement());
+  this.dispatchEvent({
+    type: app.header.Tab.EventType.DELEGATE_RENDER_FRAME,
+    render: goog.bind(this.frame_.render, this.frame_)
+  });
 };
 
 

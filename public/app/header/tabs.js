@@ -2,12 +2,14 @@
 goog.provide('app.header.Tabs');
 
 goog.require('app.Model');
+goog.require('app.ViewportSizeMonitor');
 goog.require('app.events.EventCenter');
 goog.require('app.header.Tab');
 goog.require('app.header.TabAdder');
 goog.require('goog.asserts');
 goog.require('goog.fx.DragListGroup');
 goog.require('goog.ui.Component');
+goog.require('app.string');
 
 
 /**
@@ -27,9 +29,9 @@ app.header.Tabs.prototype.enterDocument = function() {
   this.adder_.enterDocument();
 
   this.getHandler()
-      .listen(this, app.ui.Tab.EventType.SELECT, this.handleTabSelected_)
-      .listen(this, app.ui.Tab.EventType.DELETE, this.handleTabDelBtnClicked_)
-      .listen(this, app.ui.TabAdder.EventType.CLICK, this.handleAdderClicked_)
+      .listen(this, app.header.Tab.EventType.SELECT, this.handleTabSelected_)
+      .listen(this, app.header.Tab.EventType.DELETE, this.handleTabDelBtnClicked_)
+      .listen(this, app.header.TabAdder.EventType.CLICK, this.handleAdderClicked_)
       .listen(app.model, app.events.EventType.AUTH_STATE_CHANGED,
               this.handleAuthorized_);
 };
@@ -57,7 +59,7 @@ app.header.Tabs.prototype.handleUnauthorized_ = function(e) { };
  */
 app.header.Tabs.prototype.handleTabSelected_ = function(e) {
   var oldTab = this.currSelectedTab_;
-  var newTab = /** @type {?app.ui.Tab} */(e.target);
+  var newTab = /** @type {?app.header.Tab} */(e.target);
   if (!newTab || oldTab.getId() == newTab.getId()) return;
 
   oldTab.processSelected(false);
@@ -104,40 +106,41 @@ app.header.Tabs.prototype.handleAdderClicked_ = function(e) {
 
 /** @inheritDoc */
 app.header.Tabs.prototype.decorateInternal = function(element) {
+  goog.base(this, 'decorateInternal', element);
   var dh = this.getDomHelper();
 
-  var tabAdder = this.adder_ = new app.ui.TabAdder(dh);
+  var tabAdder = this.adder_ = new app.header.TabAdder(dh);
   // We don't deal with it as a child. Only tabs are.
   tabAdder.setParentEventTarget(this);
   tabAdder.createDom();
-  dh.append(element, tabAdder.getElement());
+  dh.insertSiblingAfter(tabAdder.getElement(), element);
 
   var tabIds = app.model.getTabIds();
   goog.asserts.assert(tabIds, 'We have to have tab ids.');
 
-  // Element to decorate must be only 1.
-  var tabElms = dh.getChildren(this.contentElement_);
-  goog.asserts.assert(tabIds.length >= tabElms.length,
-                      'Too many tab elements.');
+  // // Element to decorate must be only 1.
+  // var tabElms = dh.getChildren(this.getElement());
+  // goog.asserts.assert(tabIds.length >= tabElms.length,
+  //                     'Too many tab elements.');
 
   goog.array.forEach(tabIds, function(tabId, index) {
-    var tab = new app.ui.Tab(tabId, dh);
+    var tab = new app.header.Tab(tabId, dh);
 
-    var tabElm = tabElms[index];
-    if (tabElm) {
-      var canDecorate = tab.canDecorate(tabElm);
-      goog.asserts.assert(canDecorate, 'cannot decorate');
-      tab.decorateInternal(tabElm);
-    } else {
-      tab.createDom();
-      tabElm = tab.getElement();
-      dh.append(this.getContentElement(), tab.getElement());
-    }
+    // var tabElm = tabElms[index];
+    // if (tabElm) {
+    //   var canDecorate = tab.canDecorate(tabElm);
+    //   goog.asserts.assert(canDecorate, 'cannot decorate');
+    //   tab.decorateInternal(tabElm);
+    // } else {
+
+    tab.createDom();
+    var tabElm = tab.getElement();
+    dh.append(this.getContentElement(), tab.getElement());
+    // }
     this.addChildAt(tab, index);
 
-    if (goog.dom.classes.has(tabElm, 'selected')) {
-      goog.asserts.assert(!this.currSelectedTab_,
-                          'Two or more selected tab element.');
+    if (index == 0) {
+      goog.dom.classes.add(tab.getElement(), 'selected');
       this.currSelectedTab_ = tab;
     }
   }, this);
@@ -149,12 +152,12 @@ app.header.Tabs.prototype.decorateInternal = function(element) {
 
 /**
  * @private
- * @return {app.ui.Tab} An inserted new tab.
+ * @return {app.header.Tab} An inserted new tab.
  */
 app.header.Tabs.prototype.insertNewTab_ = function() {
   var dh = this.getDomHelper();
   var lastIndex = this.getLastTabIndex_();
-  var tab = new app.ui.Tab(
+  var tab = new app.header.Tab(
     goog.ui.IdGenerator.getInstance().getNextUniqueId(), dh);
   this.addChildAt(tab, lastIndex + 1);
   app.model.setTabIds(this.getTabIds());
@@ -170,7 +173,7 @@ app.header.Tabs.prototype.insertNewTab_ = function() {
 
 
 /**
- * @type {app.ui.TabAdder}
+ * @type {app.header.TabAdder}
  */
 app.header.Tabs.prototype.adder_;
 
@@ -198,7 +201,7 @@ app.header.Tabs.prototype.repositionAdder_ = function() {
 app.header.Tabs.prototype.getTabIds = function() {
   var ids = [];
   this.forEachChild(function(child) {
-    if (child instanceof app.ui.Tab) ids.push(child.getId());
+    if (child instanceof app.header.Tab) ids.push(child.getId());
   });
   return ids;
 };
@@ -206,13 +209,13 @@ app.header.Tabs.prototype.getTabIds = function() {
 
 /**
  * @private
- * @return {app.ui.Tab} The right side tab.
+ * @return {app.header.Tab} The right side tab.
  */
 app.header.Tabs.prototype.getLastTab_ = function() {
   var tab;
   goog.array.findRight(this.getChildIds(), function(id) {
     var child = this.getChild(id);
-    if (child && child instanceof app.ui.Tab) {
+    if (child && child instanceof app.header.Tab) {
       tab = child;
       return true;
     }
@@ -232,7 +235,7 @@ app.header.Tabs.prototype.getLastTabIndex_ = function() {
   var index;
   goog.array.findRight(this.getChildIds(), function(id, i) {
     var child = this.getChild(id);
-    if (child && child instanceof app.ui.Tab) {
+    if (child && child instanceof app.header.Tab) {
       index = i;
       return true;
     }
@@ -244,13 +247,13 @@ app.header.Tabs.prototype.getLastTabIndex_ = function() {
 
 
 /**
- * @type {?app.ui.Tab}
+ * @type {?app.header.Tab}
  */
 app.header.Tabs.prototype.currSelectedTab_;
 
 
 /**
- * @return {?app.ui.Tab} A selected tab instance.
+ * @return {?app.header.Tab} A selected tab instance.
  */
 app.header.Tabs.prototype.getCurrSelectedTab = function() {
   return this.currSelectedTab_;
@@ -270,16 +273,10 @@ app.header.Tabs.prototype.draggingClassName_ = 'tab-dragging';
 app.header.Tabs.prototype.dragListGroup_;
 
 
-/**
- * @type {Element}
- */
-app.header.Tabs.prototype.contentElement_;
-
-
-/** @inheritDoc */
-app.header.Tabs.prototype.getContentElement = function() {
-  return this.contentElement_;
-};
+// /** @inheritDoc */
+// app.header.Tabs.prototype.getContentElement = function() {
+//   return this.contentElement_;
+// };
 
 
 /**
@@ -292,12 +289,12 @@ app.header.Tabs.prototype.setupDragListGroup_ = function() {
   this.dragListGroup_ = new goog.fx.DragListGroup;
   // this.dragListGroup_.setDragItemHandleHoverClass('yeah', 'ohh');
   this.dragListGroup_.setDraggerElClass(this.draggingClassName_);
-  this.dragListGroup_.addDragList(this.contentElement_,
+  this.dragListGroup_.addDragList(this.getElement(),
                                   goog.fx.DragListDirection.RIGHT);
   var styleSheetEl;
   this.getHandler()
-    .listen(app.dom.ViewportSizeMonitor.getInstance(),
-          app.dom.ViewportSizeMonitor.EventType.DELAYED_RESIZE, function(e) {
+    .listen(app.ViewportSizeMonitor.getInstance(),
+          app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, function(e) {
             this.repositionAdder_();
           })
     .listen(this.dragListGroup_, 'beforedragstart', function(e) {
@@ -318,7 +315,7 @@ app.header.Tabs.prototype.setupDragListGroup_ = function() {
 /**
  * @private
  * @param {Element} element A tab element.
- * @return {app.ui.Tab} A tab instance.
+ * @return {app.header.Tab} A tab instance.
  */
 app.header.Tabs.prototype.findChildByElement_ = function(element) {
   var child;
@@ -330,7 +327,7 @@ app.header.Tabs.prototype.findChildByElement_ = function(element) {
     }
     return false;
   }, this);
-  return /** @type {app.ui.Tab} */(child);
+  return /** @type {app.header.Tab} */(child);
 };
 
 
@@ -350,9 +347,8 @@ app.header.Tabs.prototype.createFixTabWidthStylesheet_ = function(width) {
 /** @inheritDoc */
 app.header.Tabs.prototype.canDecorate = function(element) {
   var dh = this.getDomHelper();
-  var content = dh.getElementByClass('tabs-content', element);
+  var content = dh.getElementByClass('header-tabs-content', element);
   if (content) {
-    this.contentElement_ = content;
     this.setElementInternal(element);
     return true;
   }
@@ -366,7 +362,6 @@ app.header.Tabs.prototype.disposeInternal = function() {
     this.adder_.dispose();
     this.adder_ = null;
   }
-  this.contentElement_ = null;
   goog.base(this, 'disposeInternal');
 };
 

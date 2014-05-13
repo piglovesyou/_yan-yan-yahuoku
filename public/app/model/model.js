@@ -22,6 +22,14 @@ app.Model = function() {
       new goog.storage.mechanism.HTML5SessionStorage());
   this.localStore_ = new goog.storage.CollectableStorage(
       new goog.storage.mechanism.HTML5LocalStorage());
+
+  // Init model
+  var tabIds = this.getTabIds();
+  if (!tabIds) {
+    var tabId = goog.ui.IdGenerator.getInstance().getNextUniqueId();
+    this.setTabIds([tabId]);
+    this.setTabQuery(tabId, this.createEmptyTab());
+  }
 };
 goog.inherits(app.Model, goog.events.EventTarget);
 goog.addSingletonGetter(app.Model);

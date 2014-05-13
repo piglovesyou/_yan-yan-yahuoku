@@ -220,3 +220,30 @@ h1 {
   color: white;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+.detail-images img {
+  max-width: 100%;
+  vertical-align: bottom;
+}
+.detail-description-container {
+  padding: 1em 2em 5em;
+}
+.detail-description-container .pure-table {
+  width: 100%;
+  border: none;
+  margin-bottom: 1em;
+}
+.detail-description-container .pure-table th {
+  width: 30%;
+}

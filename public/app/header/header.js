@@ -1,6 +1,7 @@
 
 goog.provide('app.Header');
 
+goog.require('app.header.Tabs');
 goog.require('goog.ui.Component');
 
 
@@ -12,6 +13,8 @@ goog.require('goog.ui.Component');
  */
 app.Header = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
+
+  this.tabs = new app.header.Tabs;
 };
 goog.inherits(app.Header, goog.ui.Component);
 

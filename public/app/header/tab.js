@@ -1,34 +1,34 @@
 
-goog.provide('app.ui.Tab');
+goog.provide('app.header.Tab');
 
 goog.require('app.events.EventCenter');
-goog.require('app.string');
 goog.require('goog.asserts');
 goog.require('goog.ui.Component');
 
 
 /**
+ * @param {string} id .
  * @param {goog.dom.DomHelper=} opt_domHelper
  * @constructor
  * @extends {goog.ui.Component}
  */
-app.ui.Tab = function(id, opt_domHelper) {
+app.header.Tab = function(id, opt_domHelper) {
   goog.base(this, opt_domHelper);
   this.setId(id);
 };
-goog.inherits(app.ui.Tab, goog.ui.Component);
+goog.inherits(app.header.Tab, goog.ui.Component);
 
 
 /**
  * @enum {string}
  */
-app.ui.Tab.EventType = {
+app.header.Tab.EventType = {
   SELECT: 'select',
   DELETE: 'delete'
 };
 
 
-app.ui.Tab.prototype.createFrame_ = function() {
+app.header.Tab.prototype.createFrame_ = function() {
   goog.asserts.assert(!this.frame_, 'A frame already exists.');
   this.frame_ = new app.ui.Frame(this.getId(), this.getDomHelper());
   this.addChild(this.frame_);
@@ -37,7 +37,7 @@ app.ui.Tab.prototype.createFrame_ = function() {
 
 
 /** @inheritDoc */
-app.ui.Tab.prototype.enterDocument = function() {
+app.header.Tab.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.getHandler()
       .listen(app.Model.getInstance(), app.Model.EventType.UPDATE_TABQUERY, function(e) {
@@ -47,31 +47,31 @@ app.ui.Tab.prototype.enterDocument = function() {
         e.stopPropagation();
       })
       .listen(this.delBtnElement_, goog.events.EventType.CLICK, function(e) {
-        this.dispatchEvent(app.ui.Tab.EventType.DELETE);
+        this.dispatchEvent(app.header.Tab.EventType.DELETE);
       });
   this.renderContent_();
   if (this.isSelected()) this.createFrame_();
 };
 
 
-app.ui.Tab.prototype.getThousandRows = function() {
+app.header.Tab.prototype.getThousandRows = function() {
   return this.frame_.getContainer().getThousandRows();
 };
 
 
 /** @inheritDoc */
-app.ui.Tab.prototype.exitDocument = function() {
+app.header.Tab.prototype.exitDocument = function() {
   this.unrenderContent_();
   goog.base(this, 'exitDocument');
 };
 
 
-app.ui.Tab.prototype.unrenderContent_ = function() {
+app.header.Tab.prototype.unrenderContent_ = function() {
   app.model.deleteTabQuery(this.getId());
 };
 
 
-app.ui.Tab.prototype.renderContent_ = function() {
+app.header.Tab.prototype.renderContent_ = function() {
   var data = app.model.getTabQuery(this.getId());
 
   if (!data) app.model.setTabQuery(this.getId(), data = app.model.createEmptyTab());
@@ -92,10 +92,10 @@ app.ui.Tab.prototype.renderContent_ = function() {
 /**
  * @type {?goog.ui.Tooltip}
  */
-app.ui.Tab.prototype.tooltip_;
+app.header.Tab.prototype.tooltip_;
 
 
-app.ui.Tab.prototype.setTooltip_ = function(text) {
+app.header.Tab.prototype.setTooltip_ = function(text) {
   if (!this.tooltip_) {
     this.tooltip_ = new goog.ui.Tooltip(this.getElement(), null, this.getDomHelper());
     this.tooltip_.className += ' label';
@@ -107,21 +107,21 @@ app.ui.Tab.prototype.setTooltip_ = function(text) {
 /**
  * @type {Element}
  */
-app.ui.Tab.prototype.contentElement_;
+app.header.Tab.prototype.contentElement_;
 
 
 /**
  * @type {Element}
  */
-app.ui.Tab.prototype.delBtnElement_;
+app.header.Tab.prototype.delBtnElement_;
 
 
-app.ui.Tab.prototype.isSelected = function() {
+app.header.Tab.prototype.isSelected = function() {
   return this.getParent().getCurrSelectedTab().getId() == this.getId();
 };
 
 
-app.ui.Tab.prototype.processSelected = function(select) {
+app.header.Tab.prototype.processSelected = function(select) {
   goog.dom.classes.enable(this.getElement(), 'selected', select);
   if (select && !this.frame_) {
     this.createFrame_(); // It has 'selected' className on rendering.
@@ -131,20 +131,20 @@ app.ui.Tab.prototype.processSelected = function(select) {
 };
 
 
-app.ui.Tab.prototype.dispatchSelect = function() {
-  this.dispatchEvent(app.ui.Tab.EventType.SELECT);
+app.header.Tab.prototype.dispatchSelect = function() {
+  this.dispatchEvent(app.header.Tab.EventType.SELECT);
 };
 
 
 /** @inheritDoc */
-app.ui.Tab.prototype.decorateInternal = function(element) {
+app.header.Tab.prototype.decorateInternal = function(element) {
   this.setElementInternal(element);
   goog.style.setUnselectable(element, true, true);
 };
 
 
 /** @inheritDoc */
-app.ui.Tab.prototype.createDom = function() {
+app.header.Tab.prototype.createDom = function() {
   var dh = this.getDomHelper();
   var element = dh.createDom('div', 'tab',
       this.delBtnElement_ = dh.createDom('a', {
@@ -156,7 +156,7 @@ app.ui.Tab.prototype.createDom = function() {
 
 
 /** @inheritDoc */
-app.ui.Tab.prototype.canDecorate = function(element) {
+app.header.Tab.prototype.canDecorate = function(element) {
   if (element) {
     var dh = this.getDomHelper();
     var delButtn = dh.getElementByClass('del-btn', element);
@@ -170,7 +170,7 @@ app.ui.Tab.prototype.canDecorate = function(element) {
 
 
 /** @inheritDoc */
-app.ui.Tab.prototype.disposeInternal = function() {
+app.header.Tab.prototype.disposeInternal = function() {
   if (this.tooltip_) {
     this.tooltip_.dispose();
     this.tooltip_ = null;

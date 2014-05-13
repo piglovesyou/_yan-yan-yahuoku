@@ -1,7 +1,6 @@
 
 goog.require('app.App');
-goog.require('app.taginput');
 
 
 
-new app.App;
+new app.App(document.body);

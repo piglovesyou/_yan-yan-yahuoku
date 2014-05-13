@@ -34,6 +34,10 @@ app.header.Tabs.prototype.enterDocument = function() {
       .listen(this, app.header.TabAdder.EventType.CLICK, this.handleAdderClicked_)
       .listen(app.model, app.events.EventType.AUTH_STATE_CHANGED,
               this.handleAuthorized_);
+
+  this.getHandler().listen(this, app.header.Tab.EventType.DELEGATE_RENDER_FRAME, function () {
+    console.log('yeah..');
+  })
 };
 
 

@@ -17,6 +17,9 @@ app.Detail = function(opt_domHelper) {
 };
 goog.inherits(app.Detail, goog.ui.Component);
 
+/**
+ * @param {string} id AuctionID
+ */
 app.Detail.prototype.request = function(id) {
   if (this.xhr_) this.xhr_.dispose();
   var eh = this.getHandler();
@@ -46,7 +49,8 @@ app.Detail.prototype.request = function(id) {
  */
 app.Detail.prototype.renderContent = function(data) {
   goog.soy.renderElement(this.getContentElement(),
-      app.soy.detail.renderContent, data);
+      app.soy.detail.renderContent,
+      /** @type {ObjectInterface.Item} */(data));
 };
 
 

@@ -55,9 +55,9 @@ function itemsResolver(json) {
   if (items) {
     _(items).each(function(i) {
       if (i.CurrentPrice)
-          i.displayCurrentPrice = string.renderPrice(i.CurrentPrice);
+          i.CurrentPrice = string.renderPrice(i.CurrentPrice);
       if (i.EndTime) // Use "moment"
-          i.displayEndTime = string.renderEndDate(i.EndTime);
+          i.EndTime = string.renderEndDate(i.EndTime);
     });
   }
   return json;

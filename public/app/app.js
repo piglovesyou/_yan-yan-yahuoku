@@ -27,8 +27,7 @@ app.App = function() {
   goog.events.listen(list, goog.ui.list.EventType.UPDATE_TOTAL,
       taginput.updateRightContent, false, taginput);
   goog.events.listen(list, goog.ui.list.EventType.CLICKROW, function(e) {
-    var row = /** @type {ObjectInterface.Category} */(e.data);
-    console.log(row.AuctionID);
+    var row = /** @type {ObjectInterface.Item} */(e.data);
     detail.request(row.AuctionID);
   });
 

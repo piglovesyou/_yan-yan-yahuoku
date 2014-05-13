@@ -20,8 +20,8 @@
 {/template}
 
 /**
- * @param displayCurrentPrice
- * @param displayEndTime
+ * @param CurrentPrice
+ * @param EndTime
  * @param Title
  * @param Bids
  * @param Option
@@ -29,11 +29,11 @@
 {template .detail}
   <div class="main-list-item-title">{$Title}</div>
   <div class="main-list-item-description">
-    <strong>{$displayCurrentPrice}</strong>
+    <strong>{$CurrentPrice}</strong>
     {if isNonnull($Bids) and $Bids > 0}
       {sp}|{sp}入札 {$Bids}
     {/if}
-    {sp}|{sp}{$displayEndTime}{sp}
+    {sp}|{sp}{$EndTime}{sp}
     {foreach $key in ['EasyPaymentIcon', 'FeaturedIcon', 'GiftIcon']}
       {if $Option[$key]}
         <img src="{$Option[$key]}" alt="" />

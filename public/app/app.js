@@ -4,6 +4,7 @@ goog.provide('app.App');
 goog.require('app.List');
 goog.require('app.TagInput');
 goog.require('app.Detail');
+goog.require('app.Header');
 
 
 
@@ -11,6 +12,12 @@ goog.require('app.Detail');
  * @constructor
  */
 app.App = function() {
+
+  var header = new app.Header;
+  header.decorate(goog.dom.getElementByClass('header'));
+
+
+
   var taginput = new app.TagInput;
   taginput.decorate(goog.dom.getElementByClass('tag-input'));
 

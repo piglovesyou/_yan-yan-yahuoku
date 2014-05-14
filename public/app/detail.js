@@ -73,7 +73,9 @@ app.Detail.prototype.getContentElement = function() {
 
 /** @inheritDoc */
 app.Detail.prototype.createDom = function() {
-  goog.base(this, 'createDom');
+  this.setElementInternal(goog.soy.renderAsFragment(
+      app.soy.detail.createDom));
+  this.contentEl = this.getElementByClass('pane-detail-content');
 };
 
 /** @inheritDoc */

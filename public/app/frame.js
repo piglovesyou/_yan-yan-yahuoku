@@ -31,6 +31,16 @@ goog.inherits(app.Frame, goog.ui.Component);
 app.Frame.prototype.createDom = function() {
   goog.base(this, 'createDom');
   goog.dom.classes.add(this.getElement(), 'frame');
+
+  this.taginput.createDom();
+  this.list.createDom();
+  this.detail.createDom();
+  this.splitpane.createDom();
+
+  var dh = this.getDomHelper();
+  dh.append(this.getElement(),
+      this.taginput.getElement(),
+      this.splitpane.getElement())
 };
 
 

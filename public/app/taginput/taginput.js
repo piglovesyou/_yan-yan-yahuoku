@@ -75,7 +75,9 @@ app.TagInput.prototype.collectTagEls_ = function() {
 
 /** @inheritDoc */
 app.TagInput.prototype.createDom = function() {
-  goog.base(this, 'createDom');
+  this.setElementInternal(
+    goog.soy.renderAsFragment(app.soy.taginput.createDom));
+  this.decorateInternal(this.getElement());
 };
 
 

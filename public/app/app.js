@@ -1,11 +1,11 @@
 
 goog.provide('app.App');
 
-goog.require('goog.ui.Component');
-goog.require('app.List');
-goog.require('app.TagInput');
 goog.require('app.Detail');
 goog.require('app.Header');
+goog.require('app.List');
+goog.require('app.TagInput');
+goog.require('goog.ui.Component');
 
 
 
@@ -48,6 +48,7 @@ app.App = function(rootEl) {
 goog.inherits(app.App, goog.ui.Component);
 
 
+/** @inheritDoc */
 app.App.prototype.decorateInternal = function(element) {
   goog.base(this, 'decorateInternal', element);
 
@@ -57,11 +58,24 @@ app.App.prototype.decorateInternal = function(element) {
   goog.asserts.assert(this.bodyEl);
 };
 
+/** @inheritDoc */
 app.App.prototype.enterDocument = function() {
   var eh = this.getHandler();
-  eh.listen(this, app.header.Tab.EventType.DELEGATE_RENDER_FRAME, function (e) {
-    e.render(this.bodyEl);
-  }, false, this)
+
+  eh.listen(this, app.header.Tab.EventType.DELEGATE_RENDER_FRAME, function(e) {
+    var frame = /** @type {app.Frame} */(e.frame);
+    frame.render(this.bodyEl);
+  }, false, this);
 
   goog.base(this, 'enterDocument');
-}
+
+  // this.adjustSize();
+};
+
+// /***/
+// app.App.prototype.adjustSize = function() {
+//   var s = app.ViewportSizeMonitor.getInstance().getSize();
+//   // TODO*
+//   console.log(s.height);
+// };
+

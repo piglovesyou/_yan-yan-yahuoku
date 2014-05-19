@@ -30,9 +30,9 @@ app.Header.prototype.decorateInternal = function(element) {
 app.Header.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   var eh = this.getHandler();
-  eh.listen(this, app.header.Tab.EventType.DELEGATE_RENDER_FRAME, function () {
-    console.log('yeah..');
-  })
+  // eh.listen(this, app.header.Tab.EventType.DELEGATE_RENDER_FRAME, function () {
+  //   console.log('yeah..');
+  // })
 };
 
 

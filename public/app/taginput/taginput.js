@@ -16,16 +16,21 @@ goog.require('goog.events.KeyHandler');
 goog.require('goog.structs.Set');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+goog.require('app.ViewportSizeMonitor');
+
 
 
 
 /**
  * @constructor
+ * @param {string} id .
  * @param {goog.dom.DomHelper=} opt_domHelper .
  * @extends {goog.ui.Component}
  */
-app.TagInput = function(opt_domHelper) {
+app.TagInput = function(id, opt_domHelper) {
   goog.base(this, opt_domHelper);
+
+  this.id = id;
 };
 goog.inherits(app.TagInput, goog.ui.Component);
 
@@ -113,10 +118,16 @@ app.TagInput.prototype.enterDocument = function() {
       goog.ui.ac.AutoComplete.EventType.UPDATE, this.handleSuggestUpdate);
   eh.listen(this.suggest,
       app.taginput.Suggest.InputHandler.EventType.KEY, this.handleInputKey);
+  eh.listen(app.ViewportSizeMonitor.getInstance(),
+          app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, this.reposition)
 
   // tags
   goog.array.forEach(this.collectTagEls_(), this.attachKeyEventOnTag_, this);
 
+  // append tags stored in localStorage.
+  this.deployTags();
+
+  // setup children and reposition inputEl
   goog.base(this, 'enterDocument');
   this.reposition();
 };
@@ -128,12 +139,10 @@ app.TagInput.prototype.handleSuggestUpdate = function(e) {
   if (e.row) {
     // Append category tag.
     this.updateCategoryTag_(/** @type {ObjectInterface.Category} */(e.row));
-    this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
   } else if (this.inputEl.value) {
     // Append token tag.
     this.insertTagEl_(
         goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'value': this.inputEl.value }));
-    this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
   }
 };
 
@@ -146,6 +155,8 @@ app.TagInput.prototype.updateCategoryTag_ = function(row) {
   if (oldTag) goog.dom.removeNode(oldTag);
   this.insertTagEl_(
       goog.soy.renderAsFragment(app.soy.taginput.categoryTag, row), true);
+
+  this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
 };
 
 
@@ -277,6 +288,8 @@ app.TagInput.prototype.insertTagEl_ = function(el, first) {
   this.reposition();
   this.inputEl.style.display = displayStyle;
   goog.Timer.callOnce(function() { this.inputEl.value = '' }, undefined, this);
+
+  this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
 };
 
 /**
@@ -328,7 +341,6 @@ app.TagInput.prototype.handleWrapClick = function(e) {
     this.removeTag_(tagEl);
     e.preventDefault();
     this.reposition();
-    this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
   }
 };
 
@@ -349,4 +361,22 @@ app.TagInput.prototype.updateRightContent = function(data) {
   goog.soy.renderElement(this.rightEl,
       app.soy.taginput.rightContent, data);
   this.reposition();
+};
+
+app.TagInput.prototype.deployTags = function() {
+  var data = app.model.getTabQuery(this.id);
+  console.log(data, '--');
+
+  if (data.category) {
+    this.insertTagEl_(
+        goog.soy.renderAsFragment(app.soy.taginput.categoryTag,
+          data.category), true);
+  }
+
+  if (data.query) {
+    goog.array.forEach(data.query, function(q) {
+      this.insertTagEl_(
+          goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'value': q }));
+    }, this);
+  }
 };

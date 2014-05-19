@@ -16,7 +16,9 @@ app.Frame = function(id, opt_domHelper) {
 
   this.id = id;
 
-  this.taginput = new app.TagInput;
+  // console.log(app.model.getTabQuery(id));
+
+  this.taginput = new app.TagInput(id);
   this.addChild(this.taginput);
 
   this.splitpane = new goog.ui.SplitPane(

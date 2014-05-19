@@ -21,6 +21,10 @@
 
 
 
+html, body {
+  min-width: 100%;
+  min-height: 100%;
+}
 
 
 html, button, input, select, textarea,
@@ -178,7 +182,8 @@ h1 {
 .tag-input-textbox {
   padding: .4em .5em .4em 0;
 }
-.button-tag-remove {
+
+.button-remove {
   font-family: sans-serif;
   margin: .2em;
   border-radius: .6em;
@@ -187,11 +192,11 @@ h1 {
   min-width: 1.2em;
   line-height: 1.2em;
 }
-.button-tag-remove:hover {
+.button-remove:hover {
   background: #888;
   color: #fcfcfc;
 }
-.button-tag-remove:active {
+.button-remove:active {
   background: #444;
 }
 

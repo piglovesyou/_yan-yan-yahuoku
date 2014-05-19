@@ -53,3 +53,7 @@ ObjectInterface.Detail.prototype.Shipping;
 ObjectInterface.Detail.prototype.ItemStatus;
 ObjectInterface.Detail.prototype.Condition;
 
+/** @constructor */
+ObjectInterface.TabQuery = function() {};
+ObjectInterface.TabQuery.prototype.query;
+ObjectInterface.TabQuery.prototype.category;

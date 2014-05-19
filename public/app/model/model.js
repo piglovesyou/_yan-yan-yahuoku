@@ -131,7 +131,7 @@ app.Model.prototype.setTabIds = function(ids) {
 
 /**
  * @param {string} tabId .
- * @return {?Object} Query and category data.
+ * @return {ObjectInterface.TabQuery} Query and category data.
  */
 app.Model.prototype.getTabQuery = function(tabId) {
   var data = this.localStore_.get(app.Model.KeyPrefix.TAB_ + tabId);
@@ -154,16 +154,15 @@ app.Model.prototype.deleteTabQuery = function(tabId) {
 
 /**
  * @param {string} tabId .
- * @param {Object} data Query and category data.
+ * @param {ObjectInterface.TabQuery} data Query and category data.
  */
 app.Model.prototype.setTabQuery = function(tabId, data) {
   var ref;
-  goog.asserts.assert(
-      goog.isString(data['query']) &&
-      goog.isObject(ref = data['category']) &&
-      (goog.isString(ref['CategoryId']) || goog.isNumber(ref['CategoryId'])) &&
-      goog.isString(ref['CategoryPath']),
-      'Wrong data to store');
+
+  goog.asserts.assert(data.query || data.category);
+  if (data.query)
+    goog.asserts.assert(goog.array.every(data.query, goog.isString));
+
   this.localStore_.set(app.Model.KeyPrefix.TAB_ + tabId, data);
   this.dispatchEvent({
     type: app.Model.EventType.UPDATE_TABQUERY,
@@ -273,12 +272,9 @@ app.Model.prototype.createEmptyTab = function() {
     '牡蠣',
     'たらば'
   ];
+  var query = defaults[Math.floor(Math.random() * defaults.length)];
   return {
-    'query': defaults[Math.floor(Math.random() * defaults.length)],
-    'category': {
-      'CategoryId': 0,
-      'CategoryPath': ''
-    }
+    'query': [query]
   };
 };
 

@@ -298,9 +298,7 @@ app.header.Tabs.prototype.setupDragListGroup_ = function() {
   var styleSheetEl;
   this.getHandler()
     .listen(app.ViewportSizeMonitor.getInstance(),
-          app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, function(e) {
-            this.repositionAdder_();
-          })
+          app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, this.repositionAdder_)
     .listen(this.dragListGroup_, 'beforedragstart', function(e) {
       styleSheetEl =
         this.createFixTabWidthStylesheet_(e.currDragItem.offsetWidth);

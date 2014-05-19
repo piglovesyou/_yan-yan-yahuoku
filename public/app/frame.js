@@ -29,6 +29,14 @@ app.Frame = function(id, opt_domHelper) {
 goog.inherits(app.Frame, goog.ui.Component);
 
 
+/**
+ * @enum {string}
+ */
+app.Frame.EventType = {
+  DELEGATE_ADJUST_HEIGHT: 'dlgtadjsthit'
+};
+
+
 /** @inheritDoc */
 app.Frame.prototype.createDom = function() {
   goog.base(this, 'createDom');
@@ -60,6 +68,12 @@ app.Frame.prototype.enterDocument = function() {
     var row = /** @type {ObjectInterface.Item} */(e.data);
     this.detail.request(row.AuctionID);
   })
+  .listen(app.ViewportSizeMonitor.getInstance(),
+    app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, function (e) {
+    this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);
+  });
+
+  this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);
 };
 
 

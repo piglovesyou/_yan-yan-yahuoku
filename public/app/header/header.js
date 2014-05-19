@@ -30,9 +30,17 @@ app.Header.prototype.decorateInternal = function(element) {
 app.Header.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   var eh = this.getHandler();
-  // eh.listen(this, app.header.Tab.EventType.DELEGATE_RENDER_FRAME, function () {
-  //   console.log('yeah..');
-  // })
+  eh.listen(this, app.Frame.EventType.DELEGATE_ADJUST_HEIGHT, function (e) {
+    var frame = /** @type {app.Frame} */(e.target);
+    var viewport = app.ViewportSizeMonitor.getInstance();
+    var headerEl = this.getElement();
+    var taginputEl = frame.taginput.getElement();
+    var splitpaneEl = frame.splitpane.getElement();
+    goog.style.setHeight(splitpaneEl,
+        viewport.getSize().height -
+        goog.style.getBorderBoxSize(headerEl).height - 
+        goog.style.getBorderBoxSize(taginputEl).height);
+  });
 };
 
 

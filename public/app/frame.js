@@ -74,6 +74,8 @@ app.Frame.prototype.enterDocument = function() {
   });
 
   this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);
+
+  this.list.search(this.taginput.buildUrl());
 };
 
 

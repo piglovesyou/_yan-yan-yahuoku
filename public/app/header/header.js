@@ -28,7 +28,6 @@ app.Header.prototype.decorateInternal = function(element) {
 
 /** @inheritDoc */
 app.Header.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
   var eh = this.getHandler();
   eh.listen(this, app.Frame.EventType.DELEGATE_ADJUST_HEIGHT, function (e) {
     var frame = /** @type {app.Frame} */(e.target);
@@ -41,6 +40,8 @@ app.Header.prototype.enterDocument = function() {
         goog.style.getBorderBoxSize(headerEl).height - 
         goog.style.getBorderBoxSize(taginputEl).height);
   });
+
+  goog.base(this, 'enterDocument');
 };
 
 

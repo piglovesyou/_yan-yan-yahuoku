@@ -1,0 +1,29 @@
+{namespace app.soy.tab}
+
+
+/***/
+{template .createDom}
+  <li>
+  </li>
+{/template}
+
+
+/**
+ * @param query
+ * @param category
+ */
+{template .renderContent}
+  <a href="#"
+    {if $category} title="{$category.CategoryPath}"{/if}
+  >
+    {if $query}
+      {foreach $q in $query}
+        {$q}
+        {if not isLast($q)}, {/if}
+      {/foreach}
+    {else}
+      {$category.CategoryName}
+    {/if}
+    <span class="button-remove">×</span>
+  </a>
+{/template}

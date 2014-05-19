@@ -96,6 +96,14 @@ h1 {
 
 
 
+.goog-splitpane-first-container,
+.goog-splitpane-second-container,
+.goog-list {
+  height: 100% !important;
+}
+.goog-list {
+  overflow: auto;
+}
 
 .pane {
   overflow: hidden;

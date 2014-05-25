@@ -152,11 +152,9 @@ app.TagInput.prototype.handleSuggestUpdate = function(e) {
  */
 app.TagInput.prototype.updateCategoryTag_ = function(row) {
   var oldTag = this.getElementByClass('button-tag-category');
-  if (oldTag) goog.dom.removeNode(oldTag);
+  if (oldTag) this.removeTag_(oldTag, true);
   this.insertTagEl_(
       goog.soy.renderAsFragment(app.soy.taginput.categoryTag, row), true);
-
-  this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
 };
 
 
@@ -255,11 +253,17 @@ app.TagInput.prototype.focusNext_ = function(el) {
   return false;
 };
 
-app.TagInput.prototype.removeTag_ = function(el) {
+/**
+ * @param {Element} el .
+ * @param {boolean} opt_suppressEvent .
+ */
+app.TagInput.prototype.removeTag_ = function(el, opt_suppressEvent) {
   if (el.tagName == goog.dom.TagName.INPUT) return;
   if (el.eh) el.eh.dispose();
   goog.dom.removeNode(el);
-  this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
+  if (!opt_suppressEvent) {
+    this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
+  }
 };
 
 app.TagInput.prototype.onFocusableBlur_ = function(e) {

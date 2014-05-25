@@ -100,6 +100,15 @@ h1 {
 .goog-splitpane-second-container {
   height: 100% !important;
 }
+.goog-splitpane-handle {
+  min-height: 100%;
+}
+.goog-splitpane-handle:hover {
+  background: lightgray;
+}
+.goog-splitpane-handle:active {
+  background: red;
+}
 
 .pane {
   overflow: hidden;
@@ -139,6 +148,10 @@ h1 {
 }
 .pane-list-item-description > img {
   vertical-align: middle;
+}
+
+.pane-detail {
+  overflow: auto;
 }
 
 .pane-detail .pure-table {

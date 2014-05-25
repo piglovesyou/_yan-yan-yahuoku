@@ -199,7 +199,7 @@ h1 {
 
 .button-remove {
   font-family: sans-serif;
-  margin: .2em;
+  margin: .2em .2em .2em .4em;
   border-radius: .6em;
   display: inline-block;
   min-height: 1.2em;
@@ -281,5 +281,26 @@ h1 {
   cursor: pointer;
 }
 .tab-adder:active {
-  color: #333;
+  color: #000;
 }
+
+.tab-dragging {
+  background: #eee;  
+  list-style: none;
+  z-index: 9999;
+  box-sizing: border-box;
+}
+.tab-dragging a {
+  display: inline-block;
+  padding: 5px 20px;
+  border: 1px solid transparent;
+  border-left: 0;
+  border-right: 0;
+  color: #777;
+  line-height: 1.5em;
+  text-decoration: none;
+}
+.pure-menu-selected.tab-dragging a {
+  color: #000;
+}
+

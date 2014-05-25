@@ -292,20 +292,20 @@ app.header.Tabs.prototype.setupDragListGroup_ = function() {
     this.dragListGroup_.dispose();
   }
   this.dragListGroup_ = new goog.fx.DragListGroup;
-  // this.dragListGroup_.setDragItemHandleHoverClass('yeah', 'ohh');
   this.dragListGroup_.setDraggerElClass(this.draggingClassName_);
   this.dragListGroup_.addDragList(this.getElement(),
                                   goog.fx.DragListDirection.RIGHT);
+
   var styleSheetEl;
   this.getHandler()
     .listen(app.ViewportSizeMonitor.getInstance(),
           app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, this.repositionAdder_)
     .listen(this.dragListGroup_, 'beforedragstart', function(e) {
-      styleSheetEl =
-        this.createFixTabWidthStylesheet_(e.currDragItem.offsetWidth);
+      // styleSheetEl =
+      //   this.createFixTabWidthStylesheet_(e.currDragItem.offsetWidth);
     })
     .listen(this.dragListGroup_, 'dragend', function(e) {
-      goog.style.uninstallStyles(styleSheetEl);
+      // goog.style.uninstallStyles(styleSheetEl);
 
       // Becuase of dragListGroup, tab cannot listen click event by itself.
       // So, we take care of it by here.

@@ -4,6 +4,7 @@ goog.provide('app.header.TabAdder');
 goog.require('app.events.EventCenter');
 goog.require('goog.asserts');
 goog.require('goog.ui.Component');
+goog.require('app.soy.tabadder');
 
 
 /**
@@ -46,6 +47,6 @@ app.header.TabAdder.prototype.enterDocument = function() {
 /** @inheritDoc */
 app.header.TabAdder.prototype.createDom = function() {
   var dh = this.getDomHelper();
-  var element = dh.createDom('div', 'tab-adder');
-  this.setElementInternal(element);
+  this.setElementInternal(
+      goog.soy.renderAsFragment(app.soy.tabadder.createDom));
 };

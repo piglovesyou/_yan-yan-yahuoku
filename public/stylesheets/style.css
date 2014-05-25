@@ -205,6 +205,7 @@ h1 {
   min-height: 1.2em;
   min-width: 1.2em;
   line-height: 1.2em;
+  text-align: center;
 }
 .button-remove:hover {
   background: #888;
@@ -274,4 +275,11 @@ h1 {
 
 .tab-adder {
   position: absolute;
+  padding: 5px;
+  line-height: 1.5em;
+  color: #777;
+  cursor: pointer;
+}
+.tab-adder:active {
+  color: #333;
 }

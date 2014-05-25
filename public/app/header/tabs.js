@@ -37,7 +37,9 @@ app.header.Tabs.prototype.enterDocument = function() {
 
   this.getHandler().listen(this, app.header.Tab.EventType.DELEGATE_RENDER_FRAME, function () {
     console.log('yeah..');
-  })
+  });
+
+  this.repositionAdder_();
 };
 
 
@@ -149,7 +151,6 @@ app.header.Tabs.prototype.decorateInternal = function(element) {
     }
   }, this);
 
-  this.repositionAdder_();
   this.setupDragListGroup_();
 };
 

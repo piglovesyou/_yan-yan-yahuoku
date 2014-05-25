@@ -103,11 +103,8 @@ app.header.Tab.prototype.renderContent_ = function() {
   // goog.dom.setTextContent(this.getContentElement(), result);
   // if (data['query'] || category) this.setTooltip_(result);
 
-  var content = goog.soy.renderAsFragment(
+  goog.soy.renderElement(this.getElement(),
       app.soy.tab.renderContent, data);
-  goog.dom.insertChildAt(this.getElement(), content, 0);
-  console.log(this.getElement());
-
 };
 
 

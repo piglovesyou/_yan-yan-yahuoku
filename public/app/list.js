@@ -16,6 +16,13 @@ app.List = function() {
 };
 goog.inherits(app.List, goog.ui.List);
 
+/** @inheritDoc */
+app.List.prototype.createDom = function() {
+  goog.base(this, 'createDom');
+  goog.dom.classes.add(this.getElement(), 'pane-list');
+  goog.dom.classes.add(this.getElement(), 'goog-splitpane-first-container');
+};
+
 /**
  * @param {goog.Uri} url .
  */

@@ -71,6 +71,7 @@ app.Frame.prototype.enterDocument = function() {
   .listen(app.ViewportSizeMonitor.getInstance(),
     app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, function (e) {
     this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);
+    this.splitpane.setFirstComponentSize();
   });
 
   this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);

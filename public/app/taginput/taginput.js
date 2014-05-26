@@ -2,6 +2,7 @@
 goog.provide('app.TagInput');
 goog.provide('app.taginput');
 
+goog.require('app.ViewportSizeMonitor');
 goog.require('app.soy.taginput');
 goog.require('app.taginput.Suggest');
 goog.require('goog.Timer');
@@ -16,7 +17,6 @@ goog.require('goog.events.KeyHandler');
 goog.require('goog.structs.Set');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
-goog.require('app.ViewportSizeMonitor');
 
 
 
@@ -47,15 +47,10 @@ app.TagInput.EventType = {
 app.TagInput.prototype.buildUrl = function() {
   var dh = this.getDomHelper();
 
-  var tagEls = this.collectTagEls_();
-
-  var datasetList = goog.array.map(tagEls,
-      /** @type {function ((Element|null), number, ?): ?|null} */
-      (goog.dom.dataset.getAll));
-
   var url = new goog.Uri;
   var q = url.getQueryData();
-  goog.array.forEach(datasetList, function(dataset) {
+
+  this.forEachTagDataset_(function(dataset) {
     q.add(dataset['type'], dataset['value']);
   });
 
@@ -67,6 +62,36 @@ app.TagInput.prototype.buildUrl = function() {
   }
 
   return url;
+};
+
+/**
+ * @return {ObjectInterface.TabQuery} .
+ */
+app.TagInput.prototype.getInputs = function() {
+  var rv = {};
+  this.forEachTagDataset_(function(dataset) {
+    if (dataset['type'] == 'category') {
+      goog.asserts.assert(!rv[dataset['type']]);
+      rv[dataset['type']] = dataset['value'];
+    } else {
+      if (!rv[dataset['type']]) {
+        rv[dataset['type']] = [];
+      }
+      rv[dataset['type']].push(dataset['value']);
+    }
+  });
+  return /** @type {ObjectInterface.TabQuery} */(rv);
+};
+
+/**
+ * @param {function(Object, number, Array)} fn .
+ */
+app.TagInput.prototype.forEachTagDataset_ = function(fn) {
+  var tagEls = this.collectTagEls_();
+  var datasetList = goog.array.map(tagEls,
+      /** @type {function ((Element|null), number, ?): ?|null} */
+      (goog.dom.dataset.getAll));
+  goog.array.forEach(datasetList, fn);
 };
 
 /**
@@ -119,7 +144,7 @@ app.TagInput.prototype.enterDocument = function() {
   eh.listen(this.suggest,
       app.taginput.Suggest.InputHandler.EventType.KEY, this.handleInputKey);
   eh.listen(app.ViewportSizeMonitor.getInstance(),
-          app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, this.reposition)
+          app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, this.reposition);
 
   // tags
   goog.array.forEach(this.collectTagEls_(), this.attachKeyEventOnTag_, this);
@@ -369,6 +394,10 @@ app.TagInput.prototype.updateRightContent = function(data) {
 
 app.TagInput.prototype.deployTags = function() {
   var data = app.model.getTabQuery(this.id);
+
+  if (!data) {
+    app.model.setTabQuery(this.getId(), data = app.model.createEmptyTab());
+  } 
 
   if (data.category) {
     this.insertTagEl_(

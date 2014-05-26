@@ -44,6 +44,7 @@
 /**
  * @param CategoryName
  * @param CategoryId
+ * @param CategoryPath
  */
 {template .categoryTag}
   {call .tagBase}
@@ -51,7 +52,9 @@
     {param value: $CategoryId /}
     {param label: '[カテゴリ] ' + $CategoryName /}
     {param className: 'button-tag-category pure-button-primary' /}
-    // {param extraDataset: [ ['category-id', $CategoryId] ] /}
+    {param extraDataset: [
+      ['category-path', $CategoryPath],
+    ] /}
   {/call}
 {/template}
 
@@ -62,7 +65,7 @@
  * @param value
  * @param label
  * @param type
- * param extraDataset [ ['key', 'value'] ]
+ * @param extraDataset [ ['key', 'value'] ]
  */
 {template .tagBase}
   <a tabindex="0"
@@ -71,11 +74,11 @@
      href="#"
      data-type="{$type}"
      data-value="{$value}"
-     // {if $extraDataset}
-     //    {foreach $pair in $extraDataset}
-     //      data-{$pair[0]}="{$pair[1]}"
-     //    {/foreach}
-     // {/if}
+     {if $extraDataset}
+        {foreach $pair in $extraDataset}
+          data-{$pair[0]}="{$pair[1]}"
+        {/foreach}
+     {/if}
   >
       {$label}
     <span class="button-remove">×</span>

@@ -10,13 +10,12 @@
 
 /**
  * @param query
- * @param category
+ * @param CategoryPath
  */
 {template .renderContent}
 
-  {let $path: $category?.CategoryPath /}
   {let $text}
-    {if $query or $path}
+    {if $query or $CategoryPath}
       {if $query}
         {foreach $q in $query}
           {$q}
@@ -24,17 +23,15 @@
         {/foreach}
       {/if}
 
-      {if $query and $path}({/if}
-      {$path?:''}
-      {if $query and $path}){/if}
+      {if $query and $CategoryPath}({/if}
+      {$CategoryPath?:''}
+      {if $query and $CategoryPath}){/if}
     {else}
       (空)
     {/if}
   {/let}
 
-  <a href="javascript:void(0)"
-    {if $category} title="{$text}"{/if}
-  >
+  <a href="javascript:void(0)" title="{$text}">
     {$text}
     <span class="button-remove">×</span>
   </a>

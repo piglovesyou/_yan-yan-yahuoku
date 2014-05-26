@@ -49,18 +49,17 @@ app.header.Tab.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.getHandler()
       .listen(this, app.TagInput.EventType.TAG_UPDATE, function (e) {
-        // TODO: setTabQuery!!!!!!!!!!!!
-        console.log(e);
-        // app.model.setTabQuery()
-      })
-      .listen(app.Model.getInstance(), app.Model.EventType.UPDATE_TABQUERY, function(e) {
-        this.renderContent_();
+        var data = e.target.getInputs();
+        console.log(data);
+        this.renderContent_(data);
       })
       .listen(this.getElement(), goog.events.EventType.CLICK, function(e) {
         if (this.isDelBtnFromEventTarget(e.target))
           this.dispatchEvent(app.header.Tab.EventType.DELETE);
       });
-  this.renderContent_();
+
+  // this.renderContent_();
+
   if (this.isSelected()) {
     this.processSelected(true);
   }
@@ -90,22 +89,7 @@ app.header.Tab.prototype.unrenderContent_ = function() {
 };
 
 
-app.header.Tab.prototype.renderContent_ = function() {
-  var data = app.model.getTabQuery(this.getId());
-
-  if (!data) app.model.setTabQuery(this.getId(), data = app.model.createEmptyTab());
-
-  // var query = data.query;
-  // var category = app.string.getCategoryNameByPath(data.category.CategoryPath);
-  // if (!query) {
-  //   query = category ? '全ての商品' : '(キーワードを入力してください)';
-  // }
-  // category = (!category || category == 'オークション') ?
-  //     '' : '[' + category + ']';
-  // var result = query + ' ' + category;
-  // goog.dom.setTextContent(this.getContentElement(), result);
-  // if (data['query'] || category) this.setTooltip_(result);
-
+app.header.Tab.prototype.renderContent_ = function(data) {
   goog.soy.renderElement(this.getElement(),
       app.soy.tab.renderContent, data);
 };

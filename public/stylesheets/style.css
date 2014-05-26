@@ -279,6 +279,8 @@ h1 {
   line-height: 1.5em;
   color: #777;
   cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .tab-adder:active {
   color: #000;
@@ -304,6 +306,13 @@ h1 {
   color: #000;
 }
 
+.header-tabs li {
+  -webkit-user-select: none;
+  user-select: none;
+}
+.header-tabs li:only-child .button-remove {
+  display: none;
+}
 .header-tabs li a {
   cursor: col-resize;
 }

@@ -108,6 +108,16 @@ app.Model.KeyPrefix = {
 };
 
 
+app.Model.prototype.generateUniqueTabId = function() {
+  var id;
+  var currIds = this.getTabIds();
+  do
+    id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
+  while (goog.array.contains(currIds, id))
+  return id;
+}
+
+
 /**
  * @return {?Array} .
  */

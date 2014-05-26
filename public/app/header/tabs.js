@@ -10,6 +10,7 @@ goog.require('goog.asserts');
 goog.require('goog.fx.DragListGroup');
 goog.require('goog.ui.Component');
 goog.require('app.string');
+goog.require('app.util');
 
 
 /**
@@ -88,7 +89,7 @@ app.header.Tabs.prototype.exitDocument = function() {
  */
 app.header.Tabs.prototype.handleTabDelBtnClicked_ = function(e) {
   var child = e.target;
-  var index = app.ui.util.getChildIndex(this, child);
+  var index = app.util.getChildIndex(this, child);
   (this.getChildAt(index + 1) || this.getChildAt(index - 1)).dispatchSelect();
 
   this.removeChild(child, true).dispose();
@@ -159,8 +160,7 @@ app.header.Tabs.prototype.decorateInternal = function(element) {
 app.header.Tabs.prototype.insertNewTab_ = function() {
   var dh = this.getDomHelper();
   var lastIndex = this.getLastTabIndex_();
-  var tab = new app.header.Tab(
-    goog.ui.IdGenerator.getInstance().getNextUniqueId(), dh);
+  var tab = new app.header.Tab(app.model.generateUniqueTabId(), dh);
   this.addChildAt(tab, lastIndex + 1);
   app.model.setTabIds(this.getTabIds());
   tab.createDom();

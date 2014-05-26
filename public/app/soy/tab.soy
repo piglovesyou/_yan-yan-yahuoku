@@ -13,17 +13,29 @@
  * @param category
  */
 {template .renderContent}
-  <a href="javascript:void(0)"
-    {if $category} title="{$category.CategoryPath}"{/if}
-  >
-    {if $query}
-      {foreach $q in $query}
-        {$q}
-        {if not isLast($q)}, {/if}
-      {/foreach}
+
+  {let $path: $category?.CategoryPath /}
+  {let $text}
+    {if $query or $path}
+      {if $query}
+        {foreach $q in $query}
+          {$q}
+          {if not isLast($q)}, {/if}
+        {/foreach}
+      {/if}
+
+      {if $query and $path}({/if}
+      {$path?:''}
+      {if $query and $path}){/if}
     {else}
-      {$category.CategoryName}
+      (空)
     {/if}
+  {/let}
+
+  <a href="javascript:void(0)"
+    {if $category} title="{$text}"{/if}
+  >
+    {$text}
     <span class="button-remove">×</span>
   </a>
 {/template}

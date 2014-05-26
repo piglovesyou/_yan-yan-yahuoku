@@ -40,7 +40,7 @@ app.Frame.EventType = {
 /** @inheritDoc */
 app.Frame.prototype.createDom = function() {
   goog.base(this, 'createDom');
-  goog.dom.classes.add(this.getElement(), 'frame');
+  goog.dom.classes.add(this.getElement(), 'frame app-frame-selected');
 
   this.taginput.createDom();
   this.list.createDom();

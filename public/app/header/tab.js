@@ -48,6 +48,11 @@ app.header.Tab.prototype.createFrame_ = function() {
 app.header.Tab.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.getHandler()
+      .listen(this, app.TagInput.EventType.TAG_UPDATE, function (e) {
+        // TODO: setTabQuery!!!!!!!!!!!!
+        console.log(e);
+        // app.model.setTabQuery()
+      })
       .listen(app.Model.getInstance(), app.Model.EventType.UPDATE_TABQUERY, function(e) {
         this.renderContent_();
       })
@@ -56,7 +61,9 @@ app.header.Tab.prototype.enterDocument = function() {
           this.dispatchEvent(app.header.Tab.EventType.DELETE);
       });
   this.renderContent_();
-  if (this.isSelected()) this.createFrame_();
+  if (this.isSelected()) {
+    this.processSelected(true);
+  }
 };
 
 
@@ -142,7 +149,7 @@ app.header.Tab.prototype.processSelected = function(select) {
     this.createFrame_(); // It has 'selected' className on rendering.
     return;
   }
-  goog.dom.classes.enable(this.frame_.getElement(), 'pure-menu-selected', select);
+  goog.dom.classes.enable(this.frame_.getElement(), 'app-frame-selected', select);
 };
 
 

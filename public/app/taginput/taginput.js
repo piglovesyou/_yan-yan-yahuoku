@@ -369,7 +369,6 @@ app.TagInput.prototype.updateRightContent = function(data) {
 
 app.TagInput.prototype.deployTags = function() {
   var data = app.model.getTabQuery(this.id);
-  console.log(data, '--');
 
   if (data.category) {
     this.insertTagEl_(

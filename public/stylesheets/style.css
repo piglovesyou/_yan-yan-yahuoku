@@ -314,6 +314,16 @@ h1 {
   display: none;
 }
 .header-tabs li a {
+  max-width: 8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   cursor: col-resize;
 }
 
+.body .frame {
+  display: none;
+}
+.body .app-frame-selected {
+  display: block;
+}

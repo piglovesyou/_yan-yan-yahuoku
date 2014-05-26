@@ -35,9 +35,7 @@ app.header.Tabs.prototype.enterDocument = function() {
       .listen(app.model, app.events.EventType.AUTH_STATE_CHANGED,
               this.handleAuthorized_);
 
-  this.getHandler().listen(this, app.header.Tab.EventType.DELEGATE_RENDER_FRAME, function () {
-    console.log('yeah..');
-  });
+  this.setupDragListGroup_();
 
   this.repositionAdder_();
 };
@@ -151,7 +149,6 @@ app.header.Tabs.prototype.decorateInternal = function(element) {
     }
   }, this);
 
-  this.setupDragListGroup_();
 };
 
 
@@ -301,6 +298,11 @@ app.header.Tabs.prototype.setupDragListGroup_ = function() {
     .listen(app.ViewportSizeMonitor.getInstance(),
           app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, this.repositionAdder_)
     .listen(this.dragListGroup_, 'beforedragstart', function(e) {
+      var et = /** @type {Element} */(e.event && e.event.target);
+      if (et && app.dom.getAncestorFromEventTargetByClass(this.getElement(), 'button-remove', et)) {
+        return false;
+      }
+      return true;
       // styleSheetEl =
       //   this.createFixTabWidthStylesheet_(e.currDragItem.offsetWidth);
     })
@@ -367,9 +369,6 @@ app.header.Tabs.prototype.disposeInternal = function() {
   }
   goog.base(this, 'disposeInternal');
 };
-
-
-
 
 
 

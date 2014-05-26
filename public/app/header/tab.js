@@ -51,10 +51,6 @@ app.header.Tab.prototype.enterDocument = function() {
       .listen(app.Model.getInstance(), app.Model.EventType.UPDATE_TABQUERY, function(e) {
         this.renderContent_();
       })
-      .listen(this.getElement(), goog.events.EventType.MOUSEDOWN, function(e) {
-        if (this.isDelBtnFromEventTarget(e.target))
-          e.stopPropagation();
-      })
       .listen(this.getElement(), goog.events.EventType.CLICK, function(e) {
         if (this.isDelBtnFromEventTarget(e.target))
           this.dispatchEvent(app.header.Tab.EventType.DELETE);

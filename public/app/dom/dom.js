@@ -9,7 +9,10 @@ goog.provide('app.dom');
  * @return {?Element} .
  */
 app.dom.getAncestorFromEventTargetByClass = function(end, hookCssName, et) {
-  while (et && et != end && !goog.dom.classes.has(et, hookCssName)) {
+  while (et && !goog.dom.classes.has(et, hookCssName)) {
+    if (et == end) {
+      return null;
+    }
     et = /** @type {Element} */(et.parentNode);
   }
   return et;
@@ -23,7 +26,10 @@ app.dom.getAncestorFromEventTargetByClass = function(end, hookCssName, et) {
  * @return {?Element} .
  */
 app.dom.getAncestorFromEventTargetByTagName = function(end, nodeName, et) {
-  while (et && et != end && et.nodeName != nodeName) {
+  while (et && et.nodeName != nodeName) {
+    if (et == end) {
+      return null;
+    }
     et = /** @type {Element} */(et.parentNode);
   }
   return et;

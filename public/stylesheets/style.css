@@ -304,3 +304,7 @@ h1 {
   color: #000;
 }
 
+.header-tabs li a {
+  cursor: col-resize;
+}
+

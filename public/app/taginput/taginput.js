@@ -51,7 +51,14 @@ app.TagInput.prototype.buildUrl = function() {
   var q = url.getQueryData();
 
   this.forEachTagDataset_(function(dataset) {
-    q.add(dataset['type'], dataset['value']);
+    switch(dataset['type']) {
+      case 'category':
+        q.add(dataset['type'], dataset['categoryId']);
+        break;
+      case 'query':
+        q.add(dataset['type'], dataset['queryValue']);
+        break;
+    }
   });
 
   if (q.containsKey('query')) {
@@ -70,15 +77,9 @@ app.TagInput.prototype.buildUrl = function() {
 app.TagInput.prototype.getInputs = function() {
   var rv = {};
   this.forEachTagDataset_(function(dataset) {
-    if (dataset['type'] == 'category') {
-      goog.asserts.assert(!rv[dataset['type']]);
-      rv[dataset['type']] = dataset['value'];
-    } else {
-      if (!rv[dataset['type']]) {
-        rv[dataset['type']] = [];
-      }
-      rv[dataset['type']].push(dataset['value']);
-    }
+    goog.object.forEach(dataset, function(v, k) {
+      (rv[k] || (rv[k] = [])).push(v);
+    });
   });
   return /** @type {ObjectInterface.TabQuery} */(rv);
 };

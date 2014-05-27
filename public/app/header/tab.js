@@ -50,15 +50,12 @@ app.header.Tab.prototype.enterDocument = function() {
   this.getHandler()
       .listen(this, app.TagInput.EventType.TAG_UPDATE, function (e) {
         var data = e.target.getInputs();
-        console.log(data);
         this.renderContent_(data);
       })
       .listen(this.getElement(), goog.events.EventType.CLICK, function(e) {
         if (this.isDelBtnFromEventTarget(e.target))
           this.dispatchEvent(app.header.Tab.EventType.DELETE);
       });
-
-  // this.renderContent_();
 
   if (this.isSelected()) {
     this.processSelected(true);

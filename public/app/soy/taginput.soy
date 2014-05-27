@@ -38,6 +38,9 @@
   {call .tagBase data="all"}
     {param type: 'query' /}
     {param label: $value /}
+    {param extraDataset: [
+      ['query-value', $value],
+    ] /}
   {/call}
 {/template}
 
@@ -53,7 +56,9 @@
     {param label: '[カテゴリ] ' + $CategoryName /}
     {param className: 'button-tag-category pure-button-primary' /}
     {param extraDataset: [
+      ['category-id', $CategoryId],
       ['category-path', $CategoryPath],
+      ['category-name', $CategoryName],
     ] /}
   {/call}
 {/template}
@@ -62,7 +67,6 @@
 
 /**
  * @param? className
- * @param value
  * @param label
  * @param type
  * @param extraDataset [ ['key', 'value'] ]
@@ -73,7 +77,6 @@
      class="button-tag pure-button pure-button-disabled{$className ? ' ' + $className : ''}"
      href="#"
      data-type="{$type}"
-     data-value="{$value}"
      {if $extraDataset}
         {foreach $pair in $extraDataset}
           data-{$pair[0]}="{$pair[1]}"

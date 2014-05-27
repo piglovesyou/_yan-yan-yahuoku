@@ -30,11 +30,11 @@ app.header.Tabs.prototype.enterDocument = function() {
   this.adder_.enterDocument();
 
   this.getHandler()
-      .listen(this, app.header.Tab.EventType.SELECT, this.handleTabSelected_)
-      .listen(this, app.header.Tab.EventType.DELETE, this.handleTabDelBtnClicked_)
-      .listen(this, app.header.TabAdder.EventType.CLICK, this.handleAdderClicked_)
-      .listen(app.model, app.events.EventType.AUTH_STATE_CHANGED,
-              this.handleAuthorized_);
+    .listen(this, app.header.Tab.EventType.SELECT, this.handleTabSelected_)
+    .listen(this, app.header.Tab.EventType.DELETE, this.handleTabDelBtnClicked_)
+    .listen(this, app.header.TabAdder.EventType.CLICK, this.handleAdderClicked_)
+    .listen(this, app.TagInput.EventType.TAG_UPDATE, this.repositionAdder_)
+    .listen(app.model, app.events.EventType.AUTH_STATE_CHANGED, this.handleAuthorized_);
 
   this.setupDragListGroup_();
 

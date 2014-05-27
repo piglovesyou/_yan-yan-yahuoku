@@ -9,30 +9,30 @@
 
 
 /**
- * @param query
- * @param CategoryPath
+ * @param queryValue []
+ * @param categoryPath []
+ * @param categoryName []
  */
 {template .renderContent}
-
-  {let $text}
-    {if $query or $CategoryPath}
-      {if $query}
-        {foreach $q in $query}
-          {$q}
-          {if not isLast($q)}, {/if}
-        {/foreach}
-      {/if}
-
-      {if $query and $CategoryPath}({/if}
-      {$CategoryPath?:''}
-      {if $query and $CategoryPath}){/if}
-    {else}
-      (空)
+  {let $q}
+    {if $queryValue}
+      {foreach $q in $queryValue}
+        {$q}
+        {if not isLast($q)}, {/if}
+      {/foreach}
     {/if}
   {/let}
 
-  <a href="javascript:void(0)" title="{$text}">
-    {$text}
+  <a href="javascript:void(0)" title="
+    {$q?:''}
+    {if $q and $categoryPath}{sp}({/if}
+    {$categoryPath?[0]?:''}
+    {if $q and $categoryPath}){/if}
+  ">
+    {$q?:''}
+    {if $q and $categoryName}{sp}({/if}
+    {$categoryName?[0]?:''}
+    {if $q and $categoryName}){/if}
     <span class="button-remove">×</span>
   </a>
 {/template}

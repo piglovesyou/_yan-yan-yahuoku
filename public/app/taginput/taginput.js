@@ -196,7 +196,7 @@ app.TagInput.prototype.updateCategoryTag_ = function(row) {
   // Update model
   var data = app.model.getTabQuery(this.getId());
   data.category = row;
-  app.model.getTabQuery(this.getId(), data);
+  app.model.setTabQuery(this.getId(), data);
 
   this.insertTagEl_(
       goog.soy.renderAsFragment(app.soy.taginput.categoryTag, row), true);

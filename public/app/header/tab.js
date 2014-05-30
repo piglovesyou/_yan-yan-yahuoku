@@ -48,10 +48,7 @@ app.header.Tab.prototype.createFrame_ = function() {
 app.header.Tab.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.getHandler()
-      .listen(this, app.TagInput.EventType.TAG_UPDATE, function (e) {
-        var data = app.model.getTabQuery(this.getId());
-        this.renderContent_(data);
-      })
+      .listen(this, app.TagInput.EventType.TAG_UPDATE, this.renderContent_)
       .listen(this.getElement(), goog.events.EventType.CLICK, function(e) {
         if (this.isDelBtnFromEventTarget(e.target))
           this.dispatchEvent(app.header.Tab.EventType.DELETE);
@@ -59,6 +56,8 @@ app.header.Tab.prototype.enterDocument = function() {
 
   if (this.isSelected()) {
     this.processSelected(true);
+  } else {
+    this.renderContent_();
   }
 };
 
@@ -86,7 +85,8 @@ app.header.Tab.prototype.unrenderContent_ = function() {
 };
 
 
-app.header.Tab.prototype.renderContent_ = function(data) {
+app.header.Tab.prototype.renderContent_ = function() {
+  var data = app.model.getTabQuery(this.getId());
   goog.soy.renderElement(this.getElement(),
       app.soy.tab.renderContent, data);
 };

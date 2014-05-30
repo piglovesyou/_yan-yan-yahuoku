@@ -88,13 +88,20 @@ app.Frame.prototype.buildUrl = function() {
   var data = app.model.getTabQuery(this.getId());
   var url = new goog.Uri;
   var q = url.getQueryData();
+
+  // Append params
   if (data.category) {
     q.add('category', data.category.CategoryId);
   }
   if (data.query) {
     q.add('query', data.query.join(' '));
+  }
+
+  // Set path 
+  if (data.query && !goog.array.isEmpty(data.query)) {
     url.setPath('/auction/search');
   } else {
+    
     url.setPath('/auction/categoryLeaf');
   }
   return url;

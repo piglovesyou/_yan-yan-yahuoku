@@ -45,7 +45,7 @@
 /**
  * @param CategoryName
  * @param CategoryId
- * param CategoryPath
+ * @param CategoryPath
  */
 {template .categoryTag}
   {call .tagBase}
@@ -53,6 +53,7 @@
     {param id: $CategoryId /}
     {param label: '[カテゴリ] ' + $CategoryName /}
     {param className: 'button-tag-category pure-button-primary' /}
+    {param description: $CategoryPath /}
   {/call}
 {/template}
 
@@ -61,6 +62,7 @@
 /**
  * @param? className
  * @param label
+ * @param? description
  * @param type
  * @param id
  */
@@ -71,6 +73,7 @@
      href="#"
      data-type="{$type}"
      data-id="{$id}"
+     {if $description} title="{$description}"{/if}
   >
       {$label}
     <span class="button-remove">×</span>

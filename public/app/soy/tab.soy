@@ -13,6 +13,7 @@
  * @param category
  */
 {template .renderContent}
+
   {let $q}
     {if $query}
       {foreach $q in $query}
@@ -22,16 +23,23 @@
     {/if}
   {/let}
 
-  <a href="javascript:void(0)" title="
+  {let $safe_label}
+    {if $q}
+      {$q}
+    {elseif $category}
+      {sp}[{$category.CategoryName}]
+    {/if}
+  {/let}
+
+  {let $safe_description}
     {$q?:''}
-    {if $q and $category?.CategoryPath}{sp}({/if}
-    {$category?.CategoryPath?[0]?:''}
-    {if $q and $category?.CategoryPath}){/if}
-  ">
-    {$q?:''}
-    {if $q and $category?.CategoryName}{sp}({/if}
-    {$category?.CategoryName?[0]?:''}
-    {if $q and $category?.CategoryName}){/if}
-    <span class="button-remove">×</span>
+    {if $category}
+      {sp}[{$category.CategoryPath}]
+    {/if}
+  {/let}
+
+  <a href="javascript:void(0)" title="{$safe_description|noAutoescape}">
+    {$safe_label|noAutoescape}
   </a>
+  <span class="button-remove">×</span>
 {/template}

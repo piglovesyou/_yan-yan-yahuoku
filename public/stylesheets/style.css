@@ -198,6 +198,9 @@ h1 {
 }
 
 .button-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
   font-family: sans-serif;
   margin: .2em .2em .2em .4em;
   border-radius: .6em;
@@ -206,6 +209,7 @@ h1 {
   min-width: 1.2em;
   line-height: 1.2em;
   text-align: center;
+  color: #777;
 }
 .button-remove:hover {
   background: #888;
@@ -275,7 +279,8 @@ h1 {
 
 .tab-adder {
   position: absolute;
-  padding: 5px;
+  top: 1.5em !important;
+  padding: 6px;
   line-height: 1.5em;
   color: #777;
   cursor: pointer;
@@ -291,6 +296,9 @@ h1 {
   list-style: none;
   z-index: 9999;
   box-sizing: border-box;
+}
+.tab-dragging .button-remove {
+  display: none;
 }
 .tab-dragging a {
   display: inline-block;
@@ -309,16 +317,20 @@ h1 {
 .header-tabs li {
   -webkit-user-select: none;
   user-select: none;
+  white-space: nowrap;
 }
 .header-tabs li:only-child .button-remove {
   display: none;
 }
 .header-tabs li a {
+  display: inline-block;
   max-width: 8em;
+  padding-right: 30px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: col-resize;
+  vertical-align: middle;
 }
 
 .body .frame {

@@ -14,15 +14,13 @@ goog.require('goog.ui.SplitPane');
 app.Frame = function(id, opt_domHelper) {
   goog.base(this, opt_domHelper);
 
-  this.id = id;
-
-  // console.log(app.model.getTabQuery(id));
+  this.setId(id);
 
   this.taginput = new app.TagInput(id);
   this.addChild(this.taginput);
 
   this.splitpane = new goog.ui.SplitPane(
-      this.list = new app.List,
+      this.list = new app.List(id),
       this.detail = new app.Detail);
   this.addChild(this.splitpane);
 };
@@ -59,9 +57,7 @@ app.Frame.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   var eh = this.getHandler();
   
-  eh.listen(this, app.TagInput.EventType.TAG_UPDATE, function(e) {
-    this.list.search(this.taginput.buildUrl());
-  })
+  eh.listen(this, app.TagInput.EventType.TAG_UPDATE, this.updateList_)
   .listen(this, goog.ui.list.EventType.UPDATE_TOTAL,
     this.taginput.updateRightContent, false, this.taginput)
   .listen(this, goog.ui.list.EventType.CLICKROW, function(e) {
@@ -76,7 +72,32 @@ app.Frame.prototype.enterDocument = function() {
 
   this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);
 
-  this.list.search(this.taginput.buildUrl());
+  this.updateList_();
+};
+
+
+app.Frame.prototype.updateList_ = function() {
+  this.list.search(this.buildUrl());
+};
+
+
+/**
+ * @return {goog.Uri} .
+ */
+app.Frame.prototype.buildUrl = function() {
+  var data = app.model.getTabQuery(this.getId());
+  var url = new goog.Uri;
+  var q = url.getQueryData();
+  if (data.category) {
+    q.add('category', data.category.CategoryId);
+  }
+  if (data.query) {
+    q.add('query', data.query.join(' '));
+    url.setPath('/auction/search');
+  } else {
+    url.setPath('/auction/categoryLeaf');
+  }
+  return url;
 };
 
 

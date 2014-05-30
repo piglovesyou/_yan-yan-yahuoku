@@ -41,36 +41,36 @@ app.TagInput.EventType = {
   TAG_UPDATE: 'tagupdate'
 };
 
-/**
- * @return {goog.Uri} .
- */
-app.TagInput.prototype.buildUrl = function() {
-  var dh = this.getDomHelper();
-
-  var url = new goog.Uri;
-  var q = url.getQueryData();
-
-  // TODO: Do not use dataset. Use model directory.
-  this.forEachTagDataset_(function(dataset) {
-    // switch(dataset['type']) {
-    //   case 'category':
-    //     q.add(dataset['type'], dataset['categoryId']);
-    //     break;
-    //   case 'query':
-    //     q.add(dataset['type'], dataset['query']);
-    //     break;
-    // }
-  });
-
-  if (q.containsKey('query')) {
-    q.set('query', q.getValues('query').join(' '));
-    url.setPath('/auction/search');
-  } else {
-    url.setPath('/auction/categoryLeaf');
-  }
-
-  return url;
-};
+// /**
+//  * @return {goog.Uri} .
+//  */
+// app.TagInput.prototype.buildUrl = function() {
+//   var dh = this.getDomHelper();
+// 
+//   var url = new goog.Uri;
+//   var q = url.getQueryData();
+// 
+//   // TODO: Do not use dataset. Use model directory.
+//   this.forEachTagDataset_(function(dataset) {
+//     // switch(dataset['type']) {
+//     //   case 'category':
+//     //     q.add(dataset['type'], dataset['categoryId']);
+//     //     break;
+//     //   case 'query':
+//     //     q.add(dataset['type'], dataset['query']);
+//     //     break;
+//     // }
+//   });
+// 
+//   if (q.containsKey('query')) {
+//     q.set('query', q.getValues('query').join(' '));
+//     url.setPath('/auction/search');
+//   } else {
+//     url.setPath('/auction/categoryLeaf');
+//   }
+// 
+//   return url;
+// };
 
 /**
  * @return {ObjectInterface.TabQuery} .
@@ -171,7 +171,11 @@ app.TagInput.prototype.handleSuggestUpdate = function(e) {
   } else if (queryValue = this.inputEl.value) {
     // Update model
     var data = app.model.getTabQuery(this.getId());
-    if (!data.query || goog.array.contains(data.query, queryValue)) return;
+    if (!data.query) {}
+    else if (goog.array.contains(data.query, queryValue)) {
+      this.inputEl.value = '';
+      return;
+    } 
     (data.query || (data.query = [])).push(queryValue);
     app.model.setTabQuery(this.getId(), data);
 
@@ -304,10 +308,10 @@ app.TagInput.prototype.removeTag_ = function(el, opt_suppressEvent) {
   
   // Update model
   var data = app.model.getTabQuery(this.getId());
-  var tagId = data['id'];
-  var tagType = data['type'];
-  goog.asserts.assert(tagId, tagType);
   var dataset = goog.dom.dataset.getAll(el);
+  var tagId = dataset['id'];
+  var tagType = dataset['type'];
+  goog.asserts.assert(tagId, tagType);
   switch(tagType) {
     case 'category':
       delete data.category;

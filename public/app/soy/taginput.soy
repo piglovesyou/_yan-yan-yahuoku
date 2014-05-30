@@ -32,34 +32,27 @@
 {/template}
 
 /**
- * @param value
+ * @param queryValue
  */
 {template .tokenTag}
   {call .tagBase data="all"}
     {param type: 'query' /}
-    {param label: $value /}
-    {param extraDataset: [
-      ['query-value', $value],
-    ] /}
+    {param id: $queryValue /}
+    {param label: $queryValue /}
   {/call}
 {/template}
 
 /**
  * @param CategoryName
  * @param CategoryId
- * @param CategoryPath
+ * param CategoryPath
  */
 {template .categoryTag}
   {call .tagBase}
     {param type: 'category' /}
-    {param value: $CategoryId /}
+    {param id: $CategoryId /}
     {param label: '[カテゴリ] ' + $CategoryName /}
     {param className: 'button-tag-category pure-button-primary' /}
-    {param extraDataset: [
-      ['category-id', $CategoryId],
-      ['category-path', $CategoryPath],
-      ['category-name', $CategoryName],
-    ] /}
   {/call}
 {/template}
 
@@ -69,7 +62,7 @@
  * @param? className
  * @param label
  * @param type
- * @param extraDataset [ ['key', 'value'] ]
+ * @param id
  */
 {template .tagBase}
   <a tabindex="0"
@@ -77,11 +70,7 @@
      class="button-tag pure-button pure-button-disabled{$className ? ' ' + $className : ''}"
      href="#"
      data-type="{$type}"
-     {if $extraDataset}
-        {foreach $pair in $extraDataset}
-          data-{$pair[0]}="{$pair[1]}"
-        {/foreach}
-     {/if}
+     data-id="{$id}"
   >
       {$label}
     <span class="button-remove">×</span>

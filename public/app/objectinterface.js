@@ -55,8 +55,7 @@ ObjectInterface.Detail.prototype.Condition;
 
 /** @constructor */
 ObjectInterface.TabQuery = function() {};
-ObjectInterface.TabQuery.prototype.type;
-ObjectInterface.TabQuery.prototype.queryValue;
-ObjectInterface.TabQuery.prototype.categoryId;
-ObjectInterface.TabQuery.prototype.categoryPath;
-ObjectInterface.TabQuery.prototype.categoryName;
+/** @type {Array.<string>} */
+ObjectInterface.TabQuery.prototype.query;
+/** @type {ObjectInterface.Category} */
+ObjectInterface.TabQuery.prototype.category;

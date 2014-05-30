@@ -30,7 +30,7 @@ goog.require('goog.ui.Component');
 app.TagInput = function(id, opt_domHelper) {
   goog.base(this, opt_domHelper);
 
-  this.id = id;
+  this.setId(id);
 };
 goog.inherits(app.TagInput, goog.ui.Component);
 
@@ -50,15 +50,16 @@ app.TagInput.prototype.buildUrl = function() {
   var url = new goog.Uri;
   var q = url.getQueryData();
 
+  // TODO: Do not use dataset. Use model directory.
   this.forEachTagDataset_(function(dataset) {
-    switch(dataset['type']) {
-      case 'category':
-        q.add(dataset['type'], dataset['categoryId']);
-        break;
-      case 'query':
-        q.add(dataset['type'], dataset['queryValue']);
-        break;
-    }
+    // switch(dataset['type']) {
+    //   case 'category':
+    //     q.add(dataset['type'], dataset['categoryId']);
+    //     break;
+    //   case 'query':
+    //     q.add(dataset['type'], dataset['query']);
+    //     break;
+    // }
   });
 
   if (q.containsKey('query')) {
@@ -151,7 +152,7 @@ app.TagInput.prototype.enterDocument = function() {
   goog.array.forEach(this.collectTagEls_(), this.attachKeyEventOnTag_, this);
 
   // append tags stored in localStorage.
-  this.deployTags();
+  this.deployTags_();
 
   // setup children and reposition inputEl
   goog.base(this, 'enterDocument');
@@ -162,13 +163,21 @@ app.TagInput.prototype.enterDocument = function() {
  * @param {goog.events.Event} e .
  */
 app.TagInput.prototype.handleSuggestUpdate = function(e) {
+  var queryValue;
   if (e.row) {
     // Append category tag.
     this.updateCategoryTag_(/** @type {ObjectInterface.Category} */(e.row));
-  } else if (this.inputEl.value) {
+
+  } else if (queryValue = this.inputEl.value) {
+    // Update model
+    var data = app.model.getTabQuery(this.getId());
+    if (!data.query || goog.array.contains(data.query, queryValue)) return;
+    (data.query || (data.query = [])).push(queryValue);
+    app.model.setTabQuery(this.getId(), data);
+
     // Append token tag.
     this.insertTagEl_(
-        goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'value': this.inputEl.value }));
+        goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'queryValue': queryValue }));
   }
 };
 
@@ -179,6 +188,12 @@ app.TagInput.prototype.handleSuggestUpdate = function(e) {
 app.TagInput.prototype.updateCategoryTag_ = function(row) {
   var oldTag = this.getElementByClass('button-tag-category');
   if (oldTag) this.removeTag_(oldTag, true);
+
+  // Update model
+  var data = app.model.getTabQuery(this.getId());
+  data.category = row;
+  app.model.getTabQuery(this.getId(), data);
+
   this.insertTagEl_(
       goog.soy.renderAsFragment(app.soy.taginput.categoryTag, row), true);
 };
@@ -286,6 +301,22 @@ app.TagInput.prototype.focusNext_ = function(el) {
 app.TagInput.prototype.removeTag_ = function(el, opt_suppressEvent) {
   if (el.tagName == goog.dom.TagName.INPUT) return;
   if (el.eh) el.eh.dispose();
+  
+  // Update model
+  var data = app.model.getTabQuery(this.getId());
+  var tagId = data['id'];
+  var tagType = data['type'];
+  goog.asserts.assert(tagId, tagType);
+  var dataset = goog.dom.dataset.getAll(el);
+  switch(tagType) {
+    case 'category':
+      delete data.category;
+    case 'query':
+      goog.array.remove(data.query, tagId)
+  }
+  app.model.setTabQuery(this.getId(), data)
+
+  // Remove dom
   goog.dom.removeNode(el);
   if (!opt_suppressEvent) {
     this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
@@ -393,8 +424,8 @@ app.TagInput.prototype.updateRightContent = function(data) {
   this.reposition();
 };
 
-app.TagInput.prototype.deployTags = function() {
-  var data = app.model.getTabQuery(this.id);
+app.TagInput.prototype.deployTags_ = function() {
+  var data = app.model.getTabQuery(this.getId());
 
   if (!data) {
     app.model.setTabQuery(this.getId(), data = app.model.createEmptyTab());
@@ -409,7 +440,8 @@ app.TagInput.prototype.deployTags = function() {
   if (data.query) {
     goog.array.forEach(data.query, function(q) {
       this.insertTagEl_(
-          goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'value': q }));
+          goog.soy.renderAsFragment(app.soy.taginput.tokenTag,
+            { 'queryValue': q }));
     }, this);
   }
 };

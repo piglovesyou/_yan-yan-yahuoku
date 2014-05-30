@@ -275,7 +275,7 @@ app.Model.prototype.getDetailPaneWidth = function(tabId) {
 
 
 /**
- * @return {Object} .
+ * @return {ObjectInterface.TabQuery} .
  */
 app.Model.prototype.createEmptyTab = function() {
   var defaults = [

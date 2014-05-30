@@ -9,14 +9,13 @@
 
 
 /**
- * @param queryValue []
- * @param categoryPath []
- * @param categoryName []
+ * @param query []
+ * @param category
  */
 {template .renderContent}
   {let $q}
-    {if $queryValue}
-      {foreach $q in $queryValue}
+    {if $query}
+      {foreach $q in $query}
         {$q}
         {if not isLast($q)}, {/if}
       {/foreach}
@@ -25,14 +24,14 @@
 
   <a href="javascript:void(0)" title="
     {$q?:''}
-    {if $q and $categoryPath}{sp}({/if}
-    {$categoryPath?[0]?:''}
-    {if $q and $categoryPath}){/if}
+    {if $q and $category?.CategoryPath}{sp}({/if}
+    {$category?.CategoryPath?[0]?:''}
+    {if $q and $category?.CategoryPath}){/if}
   ">
     {$q?:''}
-    {if $q and $categoryName}{sp}({/if}
-    {$categoryName?[0]?:''}
-    {if $q and $categoryName}){/if}
+    {if $q and $category?.CategoryName}{sp}({/if}
+    {$category?.CategoryName?[0]?:''}
+    {if $q and $category?.CategoryName}){/if}
     <span class="button-remove">×</span>
   </a>
 {/template}

@@ -49,7 +49,8 @@ app.header.Tab.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   this.getHandler()
       .listen(this, app.TagInput.EventType.TAG_UPDATE, function (e) {
-        var data = e.target.getInputs();
+        var data = app.model.getTabQuery(this.getId());
+        console.log(data);
         this.renderContent_(data);
       })
       .listen(this.getElement(), goog.events.EventType.CLICK, function(e) {

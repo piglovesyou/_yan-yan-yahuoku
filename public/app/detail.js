@@ -48,6 +48,7 @@ app.Detail.prototype.request = function(id) {
  * @param {Object} data Json data of auction item.
  */
 app.Detail.prototype.renderContent = function(data) {
+  this.getElement().scrollTop = 0;
   goog.soy.renderElement(this.getContentElement(),
       app.soy.detail.renderContent,
       /** @type {ObjectInterface.Item} */(data));

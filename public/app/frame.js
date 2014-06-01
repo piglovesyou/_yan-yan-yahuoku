@@ -22,6 +22,7 @@ app.Frame = function(id, opt_domHelper) {
   this.splitpane = new goog.ui.SplitPane(
       this.list = new app.List(id),
       this.detail = new app.Detail);
+  this.splitpane.setHandleSize(8);
   this.addChild(this.splitpane);
 };
 goog.inherits(app.Frame, goog.ui.Component);

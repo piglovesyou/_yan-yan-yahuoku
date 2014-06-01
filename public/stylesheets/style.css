@@ -175,7 +175,6 @@ h1 {
 
 
 
-
 /* tag  */
 .button-tag {
   opacity: 1 !important;
@@ -198,9 +197,6 @@ h1 {
 }
 
 .button-remove {
-  position: absolute;
-  top: 6px;
-  right: 6px;
   font-family: sans-serif;
   margin: .2em .2em .2em .4em;
   border-radius: .6em;
@@ -210,6 +206,7 @@ h1 {
   line-height: 1.2em;
   text-align: center;
   color: #777;
+  cursor: pointer;
 }
 .button-remove:hover {
   background: #888;
@@ -256,21 +253,30 @@ h1 {
 
 
 
-.detail-images img {
+.detail-images img,
+.detail-description img {
+  width: auto !important;
+  height: auto !important;
   max-width: 100%;
   vertical-align: bottom;
 }
-.detail-description-container {
+.detail-description {
   padding: 1em 1.8em 5em;
 }
-.detail-description-container .pure-table {
+.detail-description * {
+  width: auto !important;
+  height: auto !important;
+}
+
+.pane-detail .pure-table {
   width: 100%;
   border: none;
   margin-bottom: 1em;
 }
-.detail-description-container .pure-table th {
+.pane-detail .pure-table th {
   width: 30%;
 }
+
 
 
 
@@ -331,6 +337,12 @@ h1 {
   white-space: nowrap;
   cursor: col-resize;
   vertical-align: middle;
+}
+
+.header-tabs li .button-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
 }
 
 .body .frame {

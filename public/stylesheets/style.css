@@ -81,7 +81,7 @@ h1 {
   overflow: hidden;
 }
 .tag-input-rightcontent {
-  font-size: 85%;
+  /* font-size: 85%; */
   color: #777;
   padding: .4em .5em .4em 0;
   /* width: 8em; */

@@ -53,7 +53,32 @@ app.Detail.prototype.renderContent = function(data) {
   goog.soy.renderElement(this.getContentElement(),
       app.soy.detail.renderContent,
       /** @type {ObjectInterface.Item} */(data));
+
   this.adjustBodyHeight();
+  this.afterImageLoad_(this.adjustBodyHeight, this);
+};
+
+
+/**
+ * @private
+ * @param {Function} fn .
+ * @param {Object} context .
+ */
+app.Detail.prototype.afterImageLoad_ = function(fn, context) {
+  var dh = this.getDomHelper();
+  var eh = this.getHandler();
+  var imgEls = dh.getElementsByTagNameAndClass('img',
+      null, this.getContentElement());
+  if (!goog.array.isEmpty(imgEls)) {
+    var len = imgEls.length;
+    goog.array.forEach(imgEls, function(imgEl) {
+      eh.listenOnce(imgEl, goog.events.EventType.LOAD, function() {
+        if (!--len) {
+          fn.call(context);
+        }
+      });
+    });
+  }
 };
 
 

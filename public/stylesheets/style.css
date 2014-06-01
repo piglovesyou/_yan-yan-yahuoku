@@ -151,6 +151,8 @@ h1 {
 }
 
 .pane-detail {
+}
+.pane-detail .detail-body {
   overflow: auto;
 }
 

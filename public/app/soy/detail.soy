@@ -19,18 +19,22 @@
  * @param Description
  */
 {template .renderContent}
-  {call .detailItemLinkParagraph data="all" /}
-  {call .detailImages data="all" /}
-  <div class="detail-description">
-    {$Description|noAutoescape}
+  <div class="detail-header">
+    {call .detailItemLinkParagraph data="all" /}
   </div>
-  {call .detailItemLinkParagraph data="all" /}
-  {call .detailPrimaryTable data="all" /}
-  {call .detailSubTable data="all" /}
-  {call .paymentTable data="all" /}
-  {call .sendDetailTable data="all" /}
-  {call .shippingTable data="all" /}
-  {call .detailItemLinkParagraph data="all" /}
+  <div class="detail-body">
+    {call .detailImages data="all" /}
+    <div class="detail-description">
+      {$Description|noAutoescape}
+    </div>
+    {call .detailItemLinkParagraph data="all" /}
+    {call .detailPrimaryTable data="all" /}
+    {call .detailSubTable data="all" /}
+    {call .paymentTable data="all" /}
+    {call .sendDetailTable data="all" /}
+    {call .shippingTable data="all" /}
+    {call .detailItemLinkParagraph data="all" /}
+  </div>
 {/template}
 
 

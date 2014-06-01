@@ -39,6 +39,7 @@ app.Detail.prototype.request = function(id) {
     if (!auctionItem) return;
     this.renderContent(auctionItem);
   });
+
   this.xhr_.send(url, 'GET');
 };
 
@@ -52,49 +53,29 @@ app.Detail.prototype.renderContent = function(data) {
   goog.soy.renderElement(this.getContentElement(),
       app.soy.detail.renderContent,
       /** @type {ObjectInterface.Item} */(data));
+  this.adjustBodyHeight();
 };
-
-
-/** @inheritDoc */
-app.Detail.prototype.decorateInternal = function(element) {
-  goog.base(this, 'decorateInternal', element);
-  this.contentEl = this.getElementByClass('pane-detail-content');
-};
-
-
-/** @inheritDoc */
-app.Detail.prototype.getContentElement = function() {
-  return this.contentEl;
-};
-
-
-
-
 
 
 /** @inheritDoc */
 app.Detail.prototype.createDom = function() {
   this.setElementInternal(goog.soy.renderAsFragment(
       app.soy.detail.createDom));
-  this.contentEl = this.getElementByClass('pane-detail-content');
 };
 
-/** @inheritDoc */
-app.Detail.prototype.canDecorate = function(element) {
-  if (element) {
-    return true;
+
+/**
+ * @private
+ */
+app.Detail.prototype.adjustBodyHeight = function() {
+  var dh = this.getDomHelper();
+  var bodyEl = dh.getElementByClass('detail-body');
+  if (bodyEl) {
+    var outerSize = goog.style.getContentBoxSize(this.getElement());
+    goog.style.setBorderBoxSize(bodyEl,
+        new goog.math.Size(outerSize.width,
+          outerSize.height - bodyEl.offsetTop));
+    goog.style.setWidth(bodyEl, '');
   }
-  return false;
 };
 
-
-/** @inheritDoc */
-app.Detail.prototype.enterDocument = function() {
-  goog.base(this, 'enterDocument');
-};
-
-
-/** @inheritDoc */
-app.Detail.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
-};

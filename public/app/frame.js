@@ -69,7 +69,10 @@ app.Frame.prototype.enterDocument = function() {
     app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, function (e) {
     this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);
     this.splitpane.setFirstComponentSize();
-  });
+    this.detail.adjustBodyHeight();
+  })
+  .listen(this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END,
+      this.detail.adjustBodyHeight, false, this.detail);
 
   this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);
 

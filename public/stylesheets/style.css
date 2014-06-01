@@ -44,6 +44,10 @@ html, button, input, select, textarea,
 .pure-table-simple tr:last-child th {
   border-bottom: none;
 }
+.pure-button-primary,
+a.pure-button-primary {
+  background-color: #ff1e18;
+}
 
 
 
@@ -198,6 +202,12 @@ h1 {
   padding: .4em .5em .4em 0;
 }
 
+.pure-button-primary .button-remove {
+  color: white;
+}
+.pure-button-primary:hover .button-remove {
+}
+
 .button-remove {
   font-family: sans-serif;
   margin: .2em .2em .2em .4em;
@@ -327,6 +337,10 @@ h1 {
   user-select: none;
   white-space: nowrap;
 }
+.header-tabs li:hover,
+.header-tabs li a:hover {
+  background: #eee;
+}
 .header-tabs li:only-child .button-remove {
   display: none;
 }
@@ -341,6 +355,22 @@ h1 {
   vertical-align: middle;
 }
 
+.pure-menu .pure-menu-selected,
+.pure-menu .pure-menu-selected a,
+.pure-menu .pure-menu-selected a:hover {
+  background: #b3b3b3;
+}
+.pure-menu .pure-menu-selected a {
+  color: white;
+}
+.pure-menu li .button-remove {
+  visibility: hidden;
+  /* color: white; */
+}
+.pure-menu li:hover .button-remove {
+  visibility: visible;
+}
+
 .header-tabs li .button-remove {
   position: absolute;
   top: 6px;
@@ -353,3 +383,7 @@ h1 {
 .body .app-frame-selected {
   display: block;
 }
+
+
+/* yahoo color #ff1e18 */
+

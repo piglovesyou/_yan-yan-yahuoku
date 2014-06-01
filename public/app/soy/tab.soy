@@ -14,6 +14,8 @@
  */
 {template .renderContent}
 
+  {let $altText: '（キーワードを入力）' /}
+
   {let $q}
     {if $query}
       {foreach $q in $query}
@@ -28,6 +30,8 @@
       {$q}
     {elseif $category}
       {sp}[{$category.CategoryName}]
+    {else}
+      {$altText}
     {/if}
   {/let}
 
@@ -35,6 +39,9 @@
     {$q?:''}
     {if $category}
       {sp}[{$category.CategoryPath}]
+    {/if}
+    {if not $q and not $category}
+      {$altText}
     {/if}
   {/let}
 

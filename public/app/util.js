@@ -1,6 +1,8 @@
 
 goog.provide('app.util');
 
+goog.require('app.header.Tab');
+
 
 app.util = {};
 
@@ -32,12 +34,12 @@ app.util.getTabId = function(component) {
 
 /**
  * @param {goog.ui.Component} component
- * @return {?app.ui.Tab}
+ * @return {?app.header.Tab}
  */
 app.util.getTab = function(component) {
-  while (component && !(component instanceof app.ui.Tab)) {
+  while (component && !(component instanceof app.header.Tab)) {
     component = component.getParent();
   }
-  goog.asserts.assertInstanceof(component, app.ui.Tab, 'Couldn\'t get frame instance. ');
+  goog.asserts.assertInstanceof(component, app.header.Tab, 'Couldn\'t get frame instance. ');
   return component;
 };

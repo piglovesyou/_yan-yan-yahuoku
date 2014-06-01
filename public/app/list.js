@@ -10,11 +10,9 @@ goog.require('goog.ui.list.Data');
 /**
  * @constructor
  * @extends {goog.ui.List}
- * @param {string} id .
  */
-app.List = function(id) {
+app.List = function() {
   goog.base(this, app.List.Item, 20, null);
-  this.setId(id);
 };
 goog.inherits(app.List, goog.ui.List);
 

@@ -84,14 +84,12 @@ app.Detail.prototype.afterImageLoad_ = function(fn, context) {
 
 /** @inheritDoc */
 app.Detail.prototype.createDom = function() {
-  this.setElementInternal(goog.soy.renderAsFragment(
-      app.soy.detail.createDom));
+  this.setElementInternal(/**@type{Element}*/(goog.soy.renderAsFragment(
+      app.soy.detail.createDom)));
 };
 
 
-/**
- * @private
- */
+/***/
 app.Detail.prototype.adjustBodyHeight = function() {
   var dh = this.getDomHelper();
   var bodyEl = dh.getElementByClass('detail-body');

@@ -11,14 +11,12 @@ goog.require('goog.ui.Tooltip');
 
 
 /**
- * @param {string} id .
  * @param {goog.dom.DomHelper=} opt_domHelper
  * @constructor
  * @extends {goog.ui.Component}
  */
 app.header.Tab = function(id, opt_domHelper) {
   goog.base(this, opt_domHelper);
-  this.setId(id);
 };
 goog.inherits(app.header.Tab, goog.ui.Component);
 
@@ -35,7 +33,7 @@ app.header.Tab.EventType = {
 
 app.header.Tab.prototype.createFrame_ = function() {
   goog.asserts.assert(!this.frame_, 'A frame already exists.');
-  this.frame_ = new app.Frame(this.getId(), this.getDomHelper());
+  this.frame_ = new app.Frame(this.getDomHelper());
   this.addChild(this.frame_);
   this.dispatchEvent({
     type: app.header.Tab.EventType.DELEGATE_RENDER_FRAME,
@@ -65,11 +63,6 @@ app.header.Tab.prototype.enterDocument = function() {
 app.header.Tab.prototype.isDelBtnFromEventTarget = function(et) {
   return !!app.dom.getAncestorFromEventTargetByClass(
       this.getElement(), 'button-remove', et);
-};
-
-
-app.header.Tab.prototype.getThousandRows = function() {
-  return this.frame_.getContainer().getThousandRows();
 };
 
 
@@ -148,30 +141,9 @@ app.header.Tab.prototype.decorateInternal = function(element) {
 
 /** @inheritDoc */
 app.header.Tab.prototype.createDom = function() {
-  // var dh = this.getDomHelper();
-  // var element = dh.createDom('div', 'tab',
-  //     this.delBtnElement_ = dh.createDom('a', {
-  //       'href': 'javascript:void(0)',
-  //       'className': 'i del-btn'
-  //     }, '×'));
-  // this.setElementInternal(element);
-  this.setElementInternal(goog.soy.renderAsFragment(
-      app.soy.tab.createDom));
+  this.setElementInternal(/**@type{Element}*/(goog.soy.renderAsFragment(
+      app.soy.tab.createDom)));
 };
-
-
-// /** @inheritDoc */
-// app.header.Tab.prototype.canDecorate = function(element) {
-//   if (element) {
-//     var dh = this.getDomHelper();
-//     var delButtn = dh.getElementByClass('del-btn', element);
-//     if (delButtn) {
-//       this.delBtnElement_ = delButtn;
-//       return true;
-//     }
-//   }
-//   return false;
-// };
 
 
 /** @inheritDoc */

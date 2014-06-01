@@ -26,17 +26,6 @@ app.string.renderPrice = function(escapedString) {
 
 
 /**
- * @param {string} escapedUrl .
- * @return {string} .
- */
-app.string.createAuctionItemLink = function(escapedUrl) {
-  var uri = new goog.Uri.parse(App.getInstance().getAffiliateBase());
-  uri.getQueryData().add('vc_url', escapedUrl);
-  return uri.toString();
-};
-
-
-/**
  * @type {goog.i18n.DateTimeFormat}
  */
 app.string.dateFormatter_;

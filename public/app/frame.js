@@ -7,24 +7,21 @@ goog.require('goog.ui.SplitPane');
 
 /**
  * @constructor
- * @param {string} id .
  * @param {goog.dom.DomHelper=} opt_domHelper .
  * @extends {goog.ui.Component}
  */
-app.Frame = function(id, opt_domHelper) {
+app.Frame = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
 
-  this.setId(id);
-
-  this.taginput = new app.TagInput(id);
+  this.taginput = new app.TagInput;
   this.addChild(this.taginput);
 
   this.splitpane = new goog.ui.SplitPane(
-      this.list = new app.List(id),
-      this.detail = new app.Detail);
+      this.list = new app.List,
+      this.detail = new app.Detail,
+      goog.ui.SplitPane.Orientation.HORIZONTAL);
   this.splitpane.setHandleSize(8);
 
-  this.splitpane.setId('splitpane-' + this.getId());
   this.addChild(this.splitpane);
 };
 goog.inherits(app.Frame, goog.ui.Component);
@@ -49,9 +46,9 @@ app.Frame.prototype.createDom = function() {
   this.splitpane.createDom();
 
   var dh = this.getDomHelper();
-  dh.append(this.getElement(),
+  dh.append(/** @type {!Node} */(this.getElement()),
       this.taginput.getElement(),
-      this.splitpane.getElement())
+      this.splitpane.getElement());
 };
 
 
@@ -59,7 +56,7 @@ app.Frame.prototype.createDom = function() {
 app.Frame.prototype.enterDocument = function() {
   goog.base(this, 'enterDocument');
   var eh = this.getHandler();
-  
+
   eh.listen(this, app.TagInput.EventType.TAG_UPDATE, this.updateList_)
   .listen(this, goog.ui.list.EventType.UPDATE_TOTAL,
     this.taginput.updateRightContent, false, this.taginput)
@@ -68,7 +65,7 @@ app.Frame.prototype.enterDocument = function() {
     this.detail.request(row.AuctionID);
   })
   .listen(app.ViewportSizeMonitor.getInstance(),
-    app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, function (e) {
+    app.ViewportSizeMonitor.EventType.DELAYED_RESIZE, function(e) {
     this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);
     this.splitpane.setFirstComponentSize();
     this.detail.adjustBodyHeight();
@@ -82,6 +79,7 @@ app.Frame.prototype.enterDocument = function() {
 };
 
 
+/** @private */
 app.Frame.prototype.updateList_ = function() {
   this.list.search(this.buildUrl());
 };
@@ -91,7 +89,7 @@ app.Frame.prototype.updateList_ = function() {
  * @return {goog.Uri} .
  */
 app.Frame.prototype.buildUrl = function() {
-  var data = app.model.getTabQuery(this.getId());
+  var data = app.model.getTabQuery(app.util.getTabId(this));
   var url = new goog.Uri;
   var q = url.getQueryData();
 
@@ -103,11 +101,11 @@ app.Frame.prototype.buildUrl = function() {
     q.add('query', data.query.join(' '));
   }
 
-  // Set path 
+  // Set path
   if (data.query && !goog.array.isEmpty(data.query)) {
     url.setPath('/auction/search');
   } else {
-    
+
     url.setPath('/auction/categoryLeaf');
   }
   return url;

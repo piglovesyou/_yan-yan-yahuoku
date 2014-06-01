@@ -23,14 +23,11 @@ goog.require('goog.ui.Component');
 
 /**
  * @constructor
- * @param {string} id .
  * @param {goog.dom.DomHelper=} opt_domHelper .
  * @extends {goog.ui.Component}
  */
-app.TagInput = function(id, opt_domHelper) {
+app.TagInput = function(opt_domHelper) {
   goog.base(this, opt_domHelper);
-
-  this.setId(id);
 };
 goog.inherits(app.TagInput, goog.ui.Component);
 
@@ -76,13 +73,13 @@ app.TagInput.EventType = {
  * @return {ObjectInterface.TabQuery} .
  */
 app.TagInput.prototype.getInputs = function() {
-  var rv = {};
+  var rv = /** @type {!ObjectInterface.TabQuery} */({});
   this.forEachTagDataset_(function(dataset) {
     goog.object.forEach(dataset, function(v, k) {
       (rv[k] || (rv[k] = [])).push(v);
     });
   });
-  return /** @type {ObjectInterface.TabQuery} */(rv);
+  return rv;
 };
 
 /**
@@ -108,7 +105,7 @@ app.TagInput.prototype.collectTagEls_ = function() {
 /** @inheritDoc */
 app.TagInput.prototype.createDom = function() {
   this.setElementInternal(
-    goog.soy.renderAsFragment(app.soy.taginput.createDom));
+    /**@type{Element}*/(goog.soy.renderAsFragment(app.soy.taginput.createDom)));
   this.decorateInternal(this.getElement());
 };
 
@@ -170,18 +167,18 @@ app.TagInput.prototype.handleSuggestUpdate = function(e) {
 
   } else if (queryValue = this.inputEl.value) {
     // Update model
-    var data = app.model.getTabQuery(this.getId());
+    var data = app.model.getTabQuery(app.util.getTabId(this));
     if (!data.query) {}
     else if (goog.array.contains(data.query, queryValue)) {
       this.inputEl.value = '';
       return;
     } 
     (data.query || (data.query = [])).push(queryValue);
-    app.model.setTabQuery(this.getId(), data);
+    app.model.setTabQuery(app.util.getTabId(this), data);
 
     // Append token tag.
     this.insertTagEl_(
-        goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'queryValue': queryValue }));
+        /**@type{Element}*/(goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'queryValue': queryValue })));
   }
 };
 
@@ -194,12 +191,12 @@ app.TagInput.prototype.updateCategoryTag_ = function(row) {
   if (oldTag) this.removeTag_(oldTag, true);
 
   // Update model
-  var data = app.model.getTabQuery(this.getId());
+  var data = app.model.getTabQuery(app.util.getTabId(this));
   data.category = row;
-  app.model.setTabQuery(this.getId(), data);
+  app.model.setTabQuery(app.util.getTabId(this), data);
 
   this.insertTagEl_(
-      goog.soy.renderAsFragment(app.soy.taginput.categoryTag, row), true);
+      /**@type{Element}*/(goog.soy.renderAsFragment(app.soy.taginput.categoryTag, row)), true);
 };
 
 
@@ -300,14 +297,14 @@ app.TagInput.prototype.focusNext_ = function(el) {
 
 /**
  * @param {Element} el .
- * @param {boolean} opt_suppressEvent .
+ * @param {boolean=} opt_suppressEvent .
  */
 app.TagInput.prototype.removeTag_ = function(el, opt_suppressEvent) {
   if (el.tagName == goog.dom.TagName.INPUT) return;
   if (el.eh) el.eh.dispose();
   
   // Update model
-  var data = app.model.getTabQuery(this.getId());
+  var data = app.model.getTabQuery(app.util.getTabId(this));
   var dataset = goog.dom.dataset.getAll(el);
   var tagId = dataset['id'];
   var tagType = dataset['type'];
@@ -318,7 +315,7 @@ app.TagInput.prototype.removeTag_ = function(el, opt_suppressEvent) {
     case 'query':
       goog.array.remove(data.query, tagId)
   }
-  app.model.setTabQuery(this.getId(), data)
+  app.model.setTabQuery(app.util.getTabId(this), data);
 
   // Remove dom
   goog.dom.removeNode(el);
@@ -335,7 +332,7 @@ app.TagInput.prototype.onFocusableBlur_ = function(e) {
 
 /**
  * @private
- * @param {Node} el .
+ * @param {Element} el .
  * @param {boolean=} first .
  */
 app.TagInput.prototype.insertTagEl_ = function(el, first) {
@@ -429,23 +426,23 @@ app.TagInput.prototype.updateRightContent = function(data) {
 };
 
 app.TagInput.prototype.deployTags_ = function() {
-  var data = app.model.getTabQuery(this.getId());
+  var data = app.model.getTabQuery(app.util.getTabId(this));
 
   if (!data) {
-    app.model.setTabQuery(this.getId(), data = app.model.createEmptyTab());
+    app.model.setTabQuery(app.util.getTabId(this), data = app.model.createEmptyTab());
   } 
 
   if (data.category) {
     this.insertTagEl_(
-        goog.soy.renderAsFragment(app.soy.taginput.categoryTag,
-          data.category), true);
+        /**@type{Element}*/(goog.soy.renderAsFragment(app.soy.taginput.categoryTag,
+          data.category)), true);
   }
 
   if (data.query) {
     goog.array.forEach(data.query, function(q) {
       this.insertTagEl_(
-          goog.soy.renderAsFragment(app.soy.taginput.tokenTag,
-            { 'queryValue': q }));
+          /**@type{Element}*/(goog.soy.renderAsFragment(app.soy.taginput.tokenTag,
+            { 'queryValue': q })));
     }, this);
   }
 };

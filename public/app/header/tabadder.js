@@ -31,7 +31,7 @@ app.header.TabAdder.prototype.isVisible_ = true;
 
 app.header.TabAdder.prototype.setVisible = function(show) {
   if (this.isVisible_ == show) return;
-  goog.style.showElement(this.getElement(), this.isVisible_ = show);
+  goog.style.setElementShown(this.getElement(), this.isVisible_ = show);
 };
 
 
@@ -47,6 +47,6 @@ app.header.TabAdder.prototype.enterDocument = function() {
 /** @inheritDoc */
 app.header.TabAdder.prototype.createDom = function() {
   var dh = this.getDomHelper();
-  this.setElementInternal(
-      goog.soy.renderAsFragment(app.soy.tabadder.createDom));
+  this.setElementInternal(/**@type{Element}*/
+      (goog.soy.renderAsFragment(app.soy.tabadder.createDom)));
 };

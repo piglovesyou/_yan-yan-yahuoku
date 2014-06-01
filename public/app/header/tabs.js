@@ -88,7 +88,7 @@ app.header.Tabs.prototype.exitDocument = function() {
  * @param {goog.events.Event} e A delete event provided by Tab.
  */
 app.header.Tabs.prototype.handleTabDelBtnClicked_ = function(e) {
-  var child = e.target;
+  var child = /** @type {app.header.Tab} */(e.target);
   var index = app.util.getChildIndex(this, child);
   (this.getChildAt(index + 1) || this.getChildAt(index - 1)).dispatchSelect();
 
@@ -140,7 +140,7 @@ app.header.Tabs.prototype.decorateInternal = function(element) {
 
     tab.createDom();
     var tabElm = tab.getElement();
-    dh.append(this.getContentElement(), tab.getElement());
+    dh.append(/**@type{!Node}*/(this.getContentElement()), tab.getElement());
     // }
     this.addChildAt(tab, index);
 

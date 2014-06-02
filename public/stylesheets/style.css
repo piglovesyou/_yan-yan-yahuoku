@@ -108,10 +108,10 @@ h1 {
   min-height: 100%;
 }
 .goog-splitpane-handle:hover {
-  background: lightgray;
+  background: #eee;
 }
 .goog-splitpane-handle:active {
-  background: red;
+  background: #b3b3b3;
 }
 
 .pane {

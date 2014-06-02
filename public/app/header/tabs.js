@@ -190,7 +190,7 @@ app.header.Tabs.prototype.repositionAdder_ = function() {
   }
   this.adder_.setVisible(true);
 
-  var lastEl = this.getLastTab_().getElement();
+  var lastEl = goog.dom.getLastElementChild(this.getContentElement());
   var pos = goog.style.getPageOffset(lastEl);
   goog.style.setPageOffset(this.adder_.getElement(),
       pos.x + lastEl.offsetWidth, pos.y + 1);
@@ -206,25 +206,6 @@ app.header.Tabs.prototype.getTabIds = function() {
     if (child instanceof app.header.Tab) ids.push(child.getId());
   });
   return ids;
-};
-
-
-/**
- * @private
- * @return {app.header.Tab} The right side tab.
- */
-app.header.Tabs.prototype.getLastTab_ = function() {
-  var tab;
-  goog.array.findRight(this.getChildIds(), function(id) {
-    var child = this.getChild(id);
-    if (child && child instanceof app.header.Tab) {
-      tab = child;
-      return true;
-    }
-    return false;
-  }, this);
-  goog.asserts.assert(tab, 'Must be a tab');
-  return tab;
 };
 
 

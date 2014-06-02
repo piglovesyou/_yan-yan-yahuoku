@@ -106,6 +106,7 @@ h1 {
 }
 .goog-splitpane-handle {
   min-height: 100%;
+  cursor: col-resize;
 }
 .goog-splitpane-handle:hover {
   background: #eee;
@@ -243,6 +244,7 @@ h1 {
 
 .ac-renderer {
   position: absolute;
+  z-index: 9999;
 }
 .ac-renderer .pure-menu-heading .right {
   color: #a9a9a9;
@@ -254,8 +256,11 @@ h1 {
   color: #a9a9a9;
   margin: 0 .6em;
 }
-.ac-renderer .ac-active a {
+.ac-renderer .ac-active,
+.ac-renderer .ac-active a,
+.ac-renderer .ac-active a:hover {
   background: #ff1e18; /* same as primary-button */
+  cursor: pointer;
 }
 .ac-renderer .ac-active a,
 .ac-renderer .ac-active a .mute {

@@ -65,7 +65,8 @@ app.taginput.Suggest.CustomRenderer.prototype.render =
     // var li = app.ui.category.Suggest.CustomRenderer.createLi
     // (renderer, data, token, dh, false, false);
     var li = dh.createDom('li', {
-      id: row.data['CategoryId']
+      id: row.data['CategoryId'],
+      className: 'ac-row'
     },
       dh.createDom('a', {
         // 'href': 'javascript:void 0'

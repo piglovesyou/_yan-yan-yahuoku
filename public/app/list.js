@@ -72,6 +72,14 @@ app.List.Item.prototype.createDom = function() {
 };
 
 
+/** @inheritDoc */
+app.List.Item.prototype.renderContent = function(data) {
+  goog.dom.classes.enable(this.getElement(),
+      'pane-list-item-selected', data['isSelected']);
+  goog.base(this, 'renderContent', data);
+};
+
+
 
 /**
  * @param {string|goog.Uri} url .

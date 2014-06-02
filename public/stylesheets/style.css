@@ -111,7 +111,7 @@ h1 {
   background: #eee;
 }
 .goog-splitpane-handle:active {
-  background: #b3b3b3;
+  background: #bbb;
 }
 
 .pane {
@@ -130,6 +130,14 @@ h1 {
 }
 .pane-list-item:hover {
   background: #eee;
+}
+.pane-list-item-selected,
+.pane-list-item-selected:hover {
+  background: #bbb;
+}
+.pane-list-item-selected *,
+.pane-list-item-selected:hover * {
+  /* color: white; */
 }
 
 .pane-list-item-image {
@@ -198,6 +206,7 @@ h1 {
 .tag-input-textbox {
   font-size: 85%;
 }
+
 .tag-input-textbox {
   padding: .4em .5em .4em 0;
 }
@@ -246,7 +255,7 @@ h1 {
   margin: 0 .6em;
 }
 .ac-renderer .ac-active a {
-  background: #0078e7; /* same as primary-button */
+  background: #ff1e18; /* same as primary-button */
 }
 .ac-renderer .ac-active a,
 .ac-renderer .ac-active a .mute {
@@ -358,10 +367,10 @@ h1 {
 .pure-menu .pure-menu-selected,
 .pure-menu .pure-menu-selected a,
 .pure-menu .pure-menu-selected a:hover {
-  background: #b3b3b3;
+  background: #bbb;
 }
 .pure-menu .pure-menu-selected a {
-  color: white;
+  /* color: white; */
 }
 .pure-menu li .button-remove {
   visibility: hidden;

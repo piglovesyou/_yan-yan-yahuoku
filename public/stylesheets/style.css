@@ -163,6 +163,11 @@ h1 {
 .pane-list-item-description > img {
   vertical-align: middle;
 }
+.pane-list-emptymessage {
+  padding: .8em 1.4em;
+  font-size: 200%;
+  color: #ccc;
+}
 
 .pane-detail {
 }
@@ -313,7 +318,6 @@ h1 {
 
 .tab-adder {
   position: absolute;
-  top: 1.5em !important;
   padding: 6px;
   line-height: 1.5em;
   color: #777;

@@ -5,6 +5,7 @@ goog.provide('app.list.Data');
 goog.require('app.soy.item');
 goog.require('goog.ui.List');
 goog.require('goog.ui.list.Data');
+goog.require('app.soy.list');
 
 
 /**
@@ -16,13 +17,6 @@ app.List = function() {
 };
 goog.inherits(app.List, goog.ui.List);
 
-/** @inheritDoc */
-app.List.prototype.createDom = function() {
-  goog.base(this, 'createDom');
-  goog.dom.classes.add(this.getElement(), 'pane-list');
-  goog.dom.classes.add(this.getElement(), 'goog-splitpane-first-container');
-};
-
 /**
  * @param {goog.Uri} url .
  */
@@ -31,6 +25,22 @@ app.List.prototype.search = function(url) {
   if (this.isInDocument()) {
     this.redraw();
   }
+};
+
+/** @inheritDoc */
+app.List.prototype.createDom = function() {
+  goog.base(this, 'createDom');
+  goog.dom.classes.add(this.getElement(),
+      'pane-list goog-splitpane-first-container');
+  this.getElement().appendChild(this.messageEl_ = 
+      goog.soy.renderAsFragment(app.soy.list.message));
+};
+
+/** @inheritDoc */
+app.List.prototype.handleTotalUpdate = function(e) {
+  goog.base(this, 'handleTotalUpdate', e);
+  var data = /** @type {app.List.Data} */(e.target);
+  goog.style.setElementShown(this.messageEl_, data.getTotal() == 0)
 };
 
 /**

@@ -53,6 +53,13 @@ function itemsResolver(json) {
   // TODO: Add properties by using "string" utility.
   var items = goog.getObjectByName('ResultSet.Result.Item', json);
   if (items) {
+
+    if (!_.isArray(items)) {
+      // XXX: Fuck yahoo it returns an object when a result total is 1.
+      var Result = goog.getObjectByName('ResultSet.Result', json);
+      items = Result.Item = [items];
+    }
+
     _(items).each(function(i) {
       if (i.CurrentPrice)
           i.CurrentPrice = string.renderPrice(i.CurrentPrice);

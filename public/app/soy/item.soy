@@ -29,7 +29,7 @@
 {template .detail}
   <div class="pane-list-item-title">{$Title}</div>
   <div class="pane-list-item-description">
-    <strong>{$CurrentPrice}</strong>
+    <strong>{$CurrentPrice}円</strong>
     {if isNonnull($Bids) and $Bids > 0}
       {sp}|{sp}入札 {$Bids}
     {/if}

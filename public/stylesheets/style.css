@@ -112,7 +112,7 @@ h1 {
   background: #eee;
 }
 .goog-splitpane-handle:active {
-  background: #bbb;
+  background: #cfcfcf;
 }
 
 .pane {
@@ -135,7 +135,7 @@ h1 {
 }
 .pane-list-item-selected,
 .pane-list-item-selected:hover {
-  background: #bbb;
+  background: #cfcfcf;
 }
 .pane-list-item-selected *,
 .pane-list-item-selected:hover * {
@@ -324,6 +324,7 @@ h1 {
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
+  z-index: 9999;
 }
 .tab-adder:active {
   color: #000;
@@ -378,7 +379,7 @@ h1 {
 .pure-menu .pure-menu-selected,
 .pure-menu .pure-menu-selected a,
 .pure-menu .pure-menu-selected a:hover {
-  background: #bbb;
+  background: #cfcfcf;
 }
 .pure-menu .pure-menu-selected a {
   /* color: white; */

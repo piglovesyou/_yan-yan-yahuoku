@@ -184,7 +184,7 @@ app.header.Tabs.prototype.adder_;
  * @private
  */
 app.header.Tabs.prototype.repositionAdder_ = function() {
-  if (this.getChildCount() >= 5) {
+  if (this.getChildCount() >= 20) {
     this.adder_.setVisible(false);
     return;
   }

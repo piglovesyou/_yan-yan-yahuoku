@@ -62,6 +62,7 @@ app.Frame.prototype.enterDocument = function() {
     this.taginput.updateRightContent, false, this.taginput)
   .listen(this, goog.ui.list.EventType.CLICKROW, function(e) {
     var row = /** @type {ObjectInterface.Item} */(e.data);
+    if (!row) return; // A row cannot arrived yet.
     this.detail.request(row.AuctionID);
   })
   .listen(app.ViewportSizeMonitor.getInstance(),

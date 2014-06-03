@@ -92,7 +92,7 @@ app.Detail.prototype.createDom = function() {
 /***/
 app.Detail.prototype.adjustBodyHeight = function() {
   var dh = this.getDomHelper();
-  var bodyEl = dh.getElementByClass('detail-body');
+  var bodyEl = this.getElementByClass('detail-body');
   if (bodyEl) {
     var outerSize = goog.style.getContentBoxSize(this.getElement());
     goog.style.setBorderBoxSize(bodyEl,

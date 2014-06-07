@@ -1,4 +1,5 @@
 
+var querystring = require('querystring');
 var express = require('express');
 var router = express.Router();
 var Q = require('q');
@@ -9,6 +10,7 @@ var _ = require('underscore');
 
 var yahooGet = Q.denodeify(yahoo.get);
 
+var AFFILIATE_BASE = require('secret-strings').AUC_PRO.AFFILIATE_BASE;
 
 
 router.get('/', index);
@@ -41,12 +43,20 @@ function asYahooRequest(yahooPath, resolver) {
 
 function detailResolver(json) {
   var detail = goog.getObjectByName('ResultSet.Result', json);
+
+  detail.AuctionItemUrl = makeAffiliateLink(detail.AuctionItemUrl);
   detail.StartTime = string.renderDate(detail.StartTime);
   detail.EndTime = string.renderEndDate(detail.EndTime);
   detail.Initprice = string.renderPrice(detail.Initprice);
   detail.Price = string.renderPrice(detail.Price);
   detail.Bidorbuy = string.renderPrice(detail.Bidorbuy);
+
   return json;
+}
+
+function makeAffiliateLink(itemUrl) {
+  return AFFILIATE_BASE +
+      '&vc_url=' + querystring.escape(itemUrl);
 }
 
 function itemsResolver(json) {

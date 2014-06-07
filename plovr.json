@@ -1,6 +1,6 @@
 {
   "id": "yan-yan-yahuoku",
-  "debug": true,
+  // "debug": true,
   // "closure-library": "./libs/closure-library/closure/goog",
   "paths": [
 	  "../closure-list/piglovesyou",

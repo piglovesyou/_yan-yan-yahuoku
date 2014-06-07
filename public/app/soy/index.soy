@@ -3,7 +3,9 @@
 {namespace app.soy}
 
 
-/***/
+/**
+ * @param? isProduction
+ */
 {template .index}
 <!DOCTYPE HTML>
 <html lang="en">
@@ -45,8 +47,11 @@
 
 
 
-  <script src="http://10.0.1.10:9810/compile?id=yan-yan-yahuoku&mode=WHITESPACE"></script>
-<!-- <script src="http://localhost:9810/compile?id=yan-yan-yahuoku"></script> -->
+  {if $isProduction}
+    <script src="/javascripts/main-min.js"></script>
+  {else}
+    <script src="http://10.0.1.10:9810/compile?id=yan-yan-yahuoku&mode=WHITESPACE"></script>
+  {/if}
 
 
   // <!--script type="text/javascript">

@@ -405,6 +405,13 @@ h1 {
   display: block;
 }
 
+.yahoo-credit {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+}
+
 
 /* yahoo color #ff1e18 */
 

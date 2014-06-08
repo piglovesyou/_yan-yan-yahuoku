@@ -26,7 +26,7 @@ app.Model = function() {
   // Init model
   var tabIds = this.getTabIds();
   if (!tabIds) {
-    var tabId = goog.ui.IdGenerator.getInstance().getNextUniqueId();
+    var tabId = this.generateUniqueTabId();
     this.setTabIds([tabId]);
     this.setTabQuery(tabId, this.createEmptyTab());
   }
@@ -93,9 +93,10 @@ app.Model.KeyPrefix = {
 app.Model.prototype.generateUniqueTabId = function() {
   var id;
   var currIds = this.getTabIds();
-  do
+  do {
     id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
-  while (goog.array.contains(currIds, id))
+    if (!currIds) return id;
+  } while (goog.array.contains(currIds, id))
   return id;
 }
 

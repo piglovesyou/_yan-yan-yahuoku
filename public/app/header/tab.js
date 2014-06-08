@@ -17,6 +17,7 @@ goog.require('goog.ui.Tooltip');
  */
 app.header.Tab = function(id, opt_domHelper) {
   goog.base(this, opt_domHelper);
+  this.setId(id);
 };
 goog.inherits(app.header.Tab, goog.ui.Component);
 

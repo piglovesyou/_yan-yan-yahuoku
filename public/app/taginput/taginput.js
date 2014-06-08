@@ -415,9 +415,7 @@ app.TagInput.prototype.updateRightContent = function(data) {
 app.TagInput.prototype.deployTags_ = function() {
   var data = app.model.getTabQuery(app.util.getTabId(this));
 
-  if (!data) {
-    app.model.setTabQuery(app.util.getTabId(this), data = app.model.createEmptyTab());
-  }
+  goog.asserts.assert(data);
 
   if (data.category) {
     this.insertTagEl_(

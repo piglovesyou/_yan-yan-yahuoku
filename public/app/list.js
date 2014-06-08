@@ -39,7 +39,7 @@ app.List.prototype.createDom = function() {
 /** @inheritDoc */
 app.List.prototype.handleTotalUpdate = function(e) {
   goog.base(this, 'handleTotalUpdate', e);
-  var data = /** @type {app.List.Data} */(e.target);
+  var data = /** @type {app.list.Data} */(e.target);
   goog.style.setElementShown(this.messageEl_, data.getTotal() == 0)
 };
 

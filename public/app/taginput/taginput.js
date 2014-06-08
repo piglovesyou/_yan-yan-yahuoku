@@ -38,37 +38,6 @@ app.TagInput.EventType = {
   TAG_UPDATE: 'tagupdate'
 };
 
-// /**
-//  * @return {goog.Uri} .
-//  */
-// app.TagInput.prototype.buildUrl = function() {
-//   var dh = this.getDomHelper();
-// 
-//   var url = new goog.Uri;
-//   var q = url.getQueryData();
-// 
-//   // TODO: Do not use dataset. Use model directory.
-//   this.forEachTagDataset_(function(dataset) {
-//     // switch(dataset['type']) {
-//     //   case 'category':
-//     //     q.add(dataset['type'], dataset['categoryId']);
-//     //     break;
-//     //   case 'query':
-//     //     q.add(dataset['type'], dataset['query']);
-//     //     break;
-//     // }
-//   });
-// 
-//   if (q.containsKey('query')) {
-//     q.set('query', q.getValues('query').join(' '));
-//     url.setPath('/auction/search');
-//   } else {
-//     url.setPath('/auction/categoryLeaf');
-//   }
-// 
-//   return url;
-// };
-
 /**
  * @return {ObjectInterface.TabQuery} .
  */
@@ -83,6 +52,7 @@ app.TagInput.prototype.getInputs = function() {
 };
 
 /**
+ * @private
  * @param {function(Object, number, Array)} fn .
  */
 app.TagInput.prototype.forEachTagDataset_ = function(fn) {
@@ -172,13 +142,14 @@ app.TagInput.prototype.handleSuggestUpdate = function(e) {
     else if (goog.array.contains(data.query, queryValue)) {
       this.inputEl.value = '';
       return;
-    } 
+    }
     (data.query || (data.query = [])).push(queryValue);
     app.model.setTabQuery(app.util.getTabId(this), data);
 
     // Append token tag.
     this.insertTagEl_(
-        /**@type{Element}*/(goog.soy.renderAsFragment(app.soy.taginput.tokenTag, { 'queryValue': queryValue })));
+        /**@type{Element}*/(goog.soy.renderAsFragment(
+          app.soy.taginput.tokenTag, { queryValue: queryValue })));
   }
 };
 
@@ -196,7 +167,8 @@ app.TagInput.prototype.updateCategoryTag_ = function(row) {
   app.model.setTabQuery(app.util.getTabId(this), data);
 
   this.insertTagEl_(
-      /**@type{Element}*/(goog.soy.renderAsFragment(app.soy.taginput.categoryTag, row)), true);
+      /**@type{Element}*/(goog.soy.renderAsFragment(
+        app.soy.taginput.categoryTag, row)), true);
 };
 
 
@@ -277,6 +249,11 @@ app.TagInput.prototype.handleTagKey = function(e) {
   }
 };
 
+/**
+ * @private
+ * @param {Element} el .
+ * @return {boolean} .
+ */
 app.TagInput.prototype.focusPrevious_ = function(el) {
   var sibling = this.getPreviousFocusable_(el);
   if (sibling) {
@@ -286,6 +263,11 @@ app.TagInput.prototype.focusPrevious_ = function(el) {
   return false;
 };
 
+/**
+ * @private
+ * @param {Element} el .
+ * @return {boolean} .
+ */
 app.TagInput.prototype.focusNext_ = function(el) {
   var sibling = this.getNextFocusable_(el);
   if (sibling) {
@@ -296,24 +278,25 @@ app.TagInput.prototype.focusNext_ = function(el) {
 };
 
 /**
+ * @private
  * @param {Element} el .
  * @param {boolean=} opt_suppressEvent .
  */
 app.TagInput.prototype.removeTag_ = function(el, opt_suppressEvent) {
   if (el.tagName == goog.dom.TagName.INPUT) return;
   if (el.eh) el.eh.dispose();
-  
+
   // Update model
   var data = app.model.getTabQuery(app.util.getTabId(this));
   var dataset = goog.dom.dataset.getAll(el);
   var tagId = dataset['id'];
   var tagType = dataset['type'];
   goog.asserts.assert(tagId, tagType);
-  switch(tagType) {
+  switch (tagType) {
     case 'category':
       delete data.category;
     case 'query':
-      goog.array.remove(data.query, tagId)
+      goog.array.remove(data.query, tagId);
   }
   app.model.setTabQuery(app.util.getTabId(this), data);
 
@@ -324,6 +307,10 @@ app.TagInput.prototype.removeTag_ = function(el, opt_suppressEvent) {
   }
 };
 
+/**
+ * @private
+ * @param {goog.events.Event} e .
+ */
 app.TagInput.prototype.onFocusableBlur_ = function(e) {
   goog.asserts.assert(e.target);
   e.target.eh.dispose();
@@ -430,7 +417,7 @@ app.TagInput.prototype.deployTags_ = function() {
 
   if (!data) {
     app.model.setTabQuery(app.util.getTabId(this), data = app.model.createEmptyTab());
-  } 
+  }
 
   if (data.category) {
     this.insertTagEl_(
@@ -442,7 +429,7 @@ app.TagInput.prototype.deployTags_ = function() {
     goog.array.forEach(data.query, function(q) {
       this.insertTagEl_(
           /**@type{Element}*/(goog.soy.renderAsFragment(app.soy.taginput.tokenTag,
-            { 'queryValue': q })));
+            { queryValue: q })));
     }, this);
   }
 };

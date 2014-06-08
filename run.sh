@@ -131,9 +131,10 @@ case $1 in
         cleanup_lib
         setup_plovr
         setup_closurelibrary
+        setup_solr
         # setup_closurestylesheets
-        setup_closuretemplates
-        setup_closurecompiler
+        # setup_closuretemplates
+        # setup_closurecompiler
         ;;
     cleanup_lib) cleanup_lib;;
     setup_plovr) setup_plovr;;

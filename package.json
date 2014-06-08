@@ -20,6 +20,7 @@
     "static-favicon": "~1.0.2",
     "stylus": "*",
     "underscore": "*",
-    "xml2json": "*"
+    "xml2json": "*",
+    "closure": "*"
   }
 }

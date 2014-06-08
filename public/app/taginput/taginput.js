@@ -417,6 +417,12 @@ app.TagInput.prototype.deployTags_ = function() {
 
   goog.asserts.assert(data);
 
+  if (!data.category && (!data.query || goog.array.isEmpty(data.query))) {
+    // Tab needs an event to renderContent.
+    this.dispatchEvent(app.TagInput.EventType.TAG_UPDATE);
+    return;
+  }
+
   if (data.category) {
     this.insertTagEl_(
         /**@type{Element}*/(goog.soy.renderAsFragment(app.soy.taginput.categoryTag,

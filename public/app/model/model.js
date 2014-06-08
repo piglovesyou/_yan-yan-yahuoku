@@ -23,16 +23,30 @@ app.Model = function() {
   this.localStore_ = new goog.storage.CollectableStorage(
       new goog.storage.mechanism.HTML5LocalStorage());
 
-  // Init model
   var tabIds = this.getTabIds();
-  if (!tabIds) {
+
+  // Init model
+  if (!tabIds || goog.array.isEmpty(tabIds)) {
     var tabId = this.generateUniqueTabId();
     this.setTabIds([tabId]);
     this.setTabQuery(tabId, this.createEmptyTab());
   }
+
+  // Cleanup old data
+  goog.Timer.callOnce(function() {
+    for (var k in goog.global.localStorage)
+      if (!goog.string.startsWith(k, app.Model.VERSION))
+        delete goog.global.localStorage[k];
+  }, 1000, this);
 };
 goog.inherits(app.Model, goog.events.EventTarget);
 goog.addSingletonGetter(app.Model);
+
+
+/**
+ * @type {string}
+ */
+app.Model.VERSION = 'v2:';
 
 
 /**
@@ -57,7 +71,17 @@ app.Model.ExpireTime = {
  * @enum {string}
  */
 app.Model.Key = {
-  TAB_IDS: 'tab:ids'
+  TAB_IDS: app.Model.VERSION + 'tab:ids'
+};
+
+
+/**
+ * @enum {string}
+ */
+app.Model.KeyPrefix = {
+  TAB_: app.Model.VERSION + 'tab:'
+  // _DETAILPANEWIDTH_: ':detailpanewidth',
+  // _ISGRID_: ':isGrid:'
 };
 
 
@@ -78,27 +102,15 @@ app.Model.prototype.getLifeTime_ = function(baseTime) {
 };
 
 
-/**
- * @enum {string}
- */
-app.Model.KeyPrefix = {
-  AUCTION_ITEM_: 'auctionitem:',
-  TAB_: 'tab:',
-  // DETAILTITLEFIXEDSTATE_: 'detailtitlefixedstate:',
-  _DETAILPANEWIDTH_: ':detailpanewidth',
-  _ISGRID_: ':isGrid:'
-};
-
-
 app.Model.prototype.generateUniqueTabId = function() {
   var id;
   var currIds = this.getTabIds();
   do {
     id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
     if (!currIds) return id;
-  } while (goog.array.contains(currIds, id))
+  } while (goog.array.contains(currIds, id));
   return id;
-}
+};
 
 
 /**
@@ -170,7 +182,7 @@ app.Model.prototype.setTabQuery = function(tabId, data) {
 app.Model.prototype.createEmptyTab = function() {
   var defaults = [
     '牡蠣',
-    'たらば'
+    'はまぐり'
   ];
   var query = defaults[Math.floor(Math.random() * defaults.length)];
   return /** @type {ObjectInterface.TabQuery} */({

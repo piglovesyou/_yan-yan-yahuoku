@@ -160,7 +160,10 @@ app.header.Tabs.prototype.decorateInternal = function(element) {
 app.header.Tabs.prototype.insertNewTab_ = function() {
   var dh = this.getDomHelper();
   var lastIndex = this.getLastTabIndex_();
-  var tab = new app.header.Tab(app.model.generateUniqueTabId(), dh);
+
+  var id = app.model.generateUniqueTabId();
+  app.model.setTabQuery(id, app.model.createEmptyTab());
+  var tab = new app.header.Tab(id, dh);
   this.addChildAt(tab, lastIndex + 1);
   app.model.setTabIds(this.getTabIds());
   tab.createDom();

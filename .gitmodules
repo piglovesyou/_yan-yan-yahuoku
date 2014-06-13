@@ -4,9 +4,3 @@
 [submodule "public/closure-thirdparty/closure-thousandrows"]
 	path = public/closure-thirdparty/closure-thousandrows
 	url = git://github.com/piglovesyou/closure-thousandrows.git
-[submodule "soy-functions"]
-	path = soy-functions
-	url = https://github.com/piglovesyou/soy-functions.git
-[submodule "public/closure-thirdparty/closure-list"]
-	path = public/closure-thirdparty/closure-list
-	url = git@github.com:piglovesyou/closure-list.git

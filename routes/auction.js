@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 var Q = require('q');
 var yahoo = require('../sources/net/yahoo');
-var outError = require('../sources/promise/promise');
+var outError = require('../sources/promise/promise').outError;
 var string = require('../sources/string/string');
 var _ = require('underscore');
 

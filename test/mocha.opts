@@ -1,0 +1,5 @@
+--ui bdd
+--reporter spec
+--compilers coffee:coffee-script
+--async-only
+--timeout 3000

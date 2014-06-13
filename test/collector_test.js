@@ -6,24 +6,40 @@ goog.require('goog.asserts');
 
 
 
-var amazon = require('../sources/collector/amazon');
-var params = {
-  token: '地獄',
-  category: 'book'
-};
 
 
+
+describe('Yahoo Collector', function() {
+  testCollector('../sources/collector/yahoo')
+});
 
 describe('Amazon Collector', function() {
-  return it('collects some items by searching "地獄"', function(done) {
-    amazon
-    .collect(params)
-    .then(verifyTotalAndItems)
-    .then(done);
-  });
+  testCollector('../sources/collector/amazon');
 });
 
 
+
+function testCollector(module) {
+
+  var collector = require(module);
+  var params = {
+    token: '地獄',
+    category: 'book'
+  };
+
+  return it('collects some items by searching "地獄"', function(done) {
+    collector
+    .collect(params)
+    .then(verifyTotalAndItems)
+    .fail(outError)
+    .then(done)
+  });
+
+}
+
+function outError(e) {
+  throw new Error(e);
+}
 
 function verifyTotalAndItems(result) {
   goog.asserts.assertNumber(result.total);

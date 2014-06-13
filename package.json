@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "apac": "0.0.14",
     "body-parser": "~1.0.2",
+    "closure": "*",
     "connect-redis": "*",
     "cookie-parser": "~1.0.1",
     "express": "*",
@@ -20,7 +22,6 @@
     "static-favicon": "~1.0.2",
     "stylus": "*",
     "underscore": "*",
-    "xml2json": "*",
-    "closure": "*"
+    "xml2json": "*"
   }
 }

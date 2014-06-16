@@ -2,7 +2,7 @@
 --reporter spec
 --compilers coffee:coffee-script
 --async-only
---timeout 3000
+--timeout 4000
 --bail
 --growl
 --colors

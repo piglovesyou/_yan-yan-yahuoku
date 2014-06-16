@@ -35,8 +35,8 @@ function Yahoo(params) {
 };
 goog.inherits(Yahoo, CollectorBase);
 
-Yahoo.prototype.request = function(category, token, page) {
-  var endpoint = token && goog.isString(token) ?
+Yahoo.prototype.request = function(page) {
+  var endpoint = this.token && goog.isString(this.token) ?
     'search' : 'categoryLeaf';
 
   return yahooGet(endpoint, {

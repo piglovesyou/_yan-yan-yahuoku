@@ -30,7 +30,7 @@ function testCollector(module) {
     count: 25
   };
 
-  return it('collects some items by searching "地獄"', function(done) {
+  return it('collects some items by searching "健康"', function(done) {
     collector
     .collect(params)
     .then(verifyTotalAndItems)

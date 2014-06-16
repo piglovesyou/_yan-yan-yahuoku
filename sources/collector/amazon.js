@@ -43,11 +43,11 @@ goog.inherits(Amazon, CollectorBase);
 //       this.category, this.token, this.getPage(), this.offset, this.count);
 // };
 
-Amazon.prototype.request = function(category, token, page) {
+Amazon.prototype.request = function(page) {
   var d = Q.defer();
   opHelper.execute('ItemSearch', {
-    'SearchIndex': category ? getSearchIndex(category) : 'All',
-    'Keywords': token,
+    'SearchIndex': this.category ? getSearchIndex(this.category) : 'All',
+    'Keywords': this.token,
     'ResponseGroup': 'ItemAttributes,Offers',
     'ItemPage': page
   }, function(result) {

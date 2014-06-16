@@ -12,36 +12,34 @@ function CollectorBase(params) {
   this.maxPage = Number.MAX_VALUE;
 }
 
-CollectorBase.prototype.generatePromise = goog.abstractMethod;
-
 CollectorBase.prototype.request = goog.abstractMethod;
 
 CollectorBase.prototype.generatePromise = function() {
-  return this.persistentRequest({},
-      this.category, this.token, this.getPage(), this.offset, this.count);
+  return this.persistentRequest({}, this.getPage());
 };
 
 CollectorBase.prototype.getPage = function() {
   return Math.floor(this.offset / this.perPage + 1);
 };
 
-CollectorBase.prototype.persistentRequest = function(result, category, token, page, offset, count) {
-  return this.request(category, token, page)
+CollectorBase.prototype.persistentRequest = function(result, page) {
+
+  return this.request(page)
   .then((function(r) {
 
     var isFirst = this.getPage() == page;
     if (isFirst) {
       result.total = r.total;
-      result.items = r.items.slice(Math.max(offset - page * this.perPage));
+      result.items = r.items.slice(Math.max(this.offset - page * this.perPage));
     } else {
-      result.items = result.items.concat(r.items).slice(0, count);
+      result.items = result.items.concat(r.items).slice(0, this.count);
     }
 
     var len = result.items.length;
-    if (count > len &&
-        r.total > offset + len &&
+    if (this.count > len &&
+        r.total > this.offset + len &&
         ++page <= this.maxPage) {
-      return this.persistentRequest.call(this, result, category, token, page, offset, count);
+      return this.persistentRequest.call(this, result, page);
     } else {
       return result;
     }

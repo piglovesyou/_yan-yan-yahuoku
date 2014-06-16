@@ -10,9 +10,9 @@ goog.require('goog.asserts');
 
 
 
-// describe('Yahoo Collector', function() {
-//   testCollector('../sources/collector/yahoo')
-// });
+describe('Yahoo Collector', function() {
+  testCollector('../sources/collector/yahoo')
+});
 
 describe('Amazon Collector', function() {
   testCollector('../sources/collector/amazon');

@@ -38,10 +38,10 @@ function Amazon(params) {
 }
 goog.inherits(Amazon, CollectorBase);
 
-Amazon.prototype.generatePromise = function() {
-  return this.persistentRequest({},
-      this.category, this.token, this.getPage(), this.offset, this.count);
-};
+// Amazon.prototype.generatePromise = function() {
+//   return this.persistentRequest({},
+//       this.category, this.token, this.getPage(), this.offset, this.count);
+// };
 
 Amazon.prototype.request = function(category, token, page) {
   var d = Q.defer();

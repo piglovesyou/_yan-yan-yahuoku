@@ -9,12 +9,17 @@ function CollectorBase(params) {
   this.count = params.count;
 
   this.perPage;
-  this.maxPage;
+  this.maxPage = Number.MAX_VALUE;
 }
 
 CollectorBase.prototype.generatePromise = goog.abstractMethod;
 
 CollectorBase.prototype.request = goog.abstractMethod;
+
+CollectorBase.prototype.generatePromise = function() {
+  return this.persistentRequest({},
+      this.category, this.token, this.getPage(), this.offset, this.count);
+};
 
 CollectorBase.prototype.getPage = function() {
   return Math.floor(this.offset / this.perPage + 1);

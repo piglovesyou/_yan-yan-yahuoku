@@ -28,18 +28,21 @@ function collect(params) {
   return collector.generatePromise();
 }
 
-function Yahoo(params) { goog.base(this, params) }
+function Yahoo(params) {
+  goog.base(this, params) 
+
+  this.perPage = 20;
+};
 goog.inherits(Yahoo, CollectorBase);
 
-var PERPAGE = 20;
-
-Yahoo.prototype.generatePromise = function() {
-  var endpoint = this.token && goog.isString(this.token) ?
+Yahoo.prototype.request = function(category, token, page) {
+  var endpoint = token && goog.isString(token) ?
     'search' : 'categoryLeaf';
 
   return yahooGet(endpoint, {
     'query': this.token,
-    'category': null
+    'category': null,
+    'page': page
   })
   .then(JSON.parse)
   .then(buildResult);

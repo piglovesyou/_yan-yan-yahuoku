@@ -61,13 +61,12 @@ app.List.createData = function(url, rowCountPerPage) {
 
 /**
  * @constructor
- * @param {number} index .
  * @param {Function=} opt_renderer .
  * @param {goog.dom.DomHelper=} opt_domHelper .
  * @extends {goog.ui.List.Item}
  */
-app.List.Item = function(index, opt_renderer, opt_domHelper) {
-  goog.base(this, index, app.soy.item.renderContent, opt_domHelper);
+app.List.Item = function(opt_renderer, opt_domHelper) {
+  goog.base(this, app.soy.item.renderContent, opt_domHelper);
 };
 goog.inherits(app.List.Item, goog.ui.List.Item);
 

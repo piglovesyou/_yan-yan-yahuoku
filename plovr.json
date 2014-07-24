@@ -10,6 +10,7 @@
   "inputs": "./public/javascripts/main.js",
   "mode": "ADVANCED",
   "level": "VERBOSE",
+  "output-wrapper": "(function(){%output%})()",
   "externs": [
     "./public/app/objectinterface.js"
   ],

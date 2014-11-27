@@ -205,9 +205,9 @@ app.TagInput.prototype.reposition = function() {
  */
 app.TagInput.prototype.attachKeyEventOnTag_ = function(el) {
   if (el.eh) el.eh.dispose();
-  (el.eh = new goog.events.EventHandler)
+  (el.eh = new goog.events.EventHandler(this))
     .listen(new goog.events.KeyHandler(el),
-        goog.events.KeyHandler.EventType.KEY, this.handleTagKey, false, this);
+        goog.events.KeyHandler.EventType.KEY, this.handleTagKey, false);
 };
 
 /**

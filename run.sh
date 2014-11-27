@@ -145,26 +145,9 @@ case $1 in
 
     solr) solr;;
 
-    # sass) sass --watch public/sass/main.sass:public/stylesheets/main.css;;
-
     serve) java -jar ${PLOVR_JAR_PATH} serve plovr.json;;
 
     serve_playground) java -jar ${PLOVR_JAR_PATH} serve playground_plovr.json;;
-
-    all)
-        # redis-server redis/redis.conf
-        ./run.sh soyweb &
-        # ./run.sh sass &
-        ./run.sh serve &
-        # java -jar libs/selenium-server/selenium-server-standalone-2.32.0.jar &
-        ;;
-
-    killall)
-        # pidof redis | xargs kill -9
-        # pidof mongo | xargs kill -9
-        # pidof ruby | xargs kill -9
-        pidof java | xargs kill -9
-        ;;
 
     *) echo -e $USAGE_TEXT;;
 

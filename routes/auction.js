@@ -65,11 +65,11 @@ function mergeItemsResponse(results) {
   var dest = results[0];
   var destMeta = goog.getObjectByName('ResultSet.@attributes', results[0]);
   var destResult = goog.getObjectByName('ResultSet.Result', results[0]);
-  destMeta.totalResultsReturned = +destMeta.totalResultsReturned;
+  // destMeta.totalResultsReturned = +destMeta.totalResultsReturned;
   for (var i = 1; i < results.length; i++) {
     var meta = goog.getObjectByName('ResultSet.@attributes', results[i]);
     var items = goog.getObjectByName('ResultSet.Result.Item', results[i]);
-    destMeta.totalResultsReturned += +meta.totalResultsReturned;
+    // destMeta.totalResultsReturned += +meta.totalResultsReturned;
     destResult.Item = destResult.Item.concat(items);
   }
   return dest;

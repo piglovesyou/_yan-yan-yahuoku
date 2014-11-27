@@ -59,7 +59,7 @@ app.Frame.prototype.enterDocument = function() {
 
   eh.listen(this, app.TagInput.EventType.TAG_UPDATE, this.updateList_)
   .listen(this, goog.ui.list.EventType.UPDATE_TOTAL,
-    this.taginput.updateRightContent, false, this.taginput)
+    goog.bind(this.taginput.updateRightContent, this.taginput), false)
   .listen(this, goog.ui.list.EventType.CLICKROW, function(e) {
     var row = /** @type {ObjectInterface.Item} */(e.data);
     if (!row) return; // A row cannot arrived yet.

@@ -2,7 +2,6 @@
 var querystring = require('querystring');
 var path = require('path');
 var express = require('express');
-var router = express.Router();
 var Q = require('q');
 var yahoo = require('../sources/net/yahoo');
 var outError = require('../sources/promise/promise').outError;
@@ -14,11 +13,11 @@ var yahooGet = Q.denodeify(yahoo.get);
 var AFFILIATE_BASE = require('secret-strings').AUC_PRO.AFFILIATE_BASE;
 
 
-
-router.get('/', index);
-router.get('/search', handleItemsRequest);
-router.get('/categoryLeaf', handleItemsRequest);
-router.get('/auctionItem', handleDetailRequest);
+module.exports = {};
+module.exports['/'] = index;
+module.exports['/search'] = handleItemsRequest;
+module.exports['/categoryLeaf'] = handleItemsRequest;
+module.exports['/auctionItem'] = handleDetailRequest;
 
 
 
@@ -27,11 +26,11 @@ function handleDetailRequest(req, res) {
   .then(JSON.parse)
   .then(detailResolver)
   .then(getJsonResponseStep(res))
-  .catch(getErrorResponseStep(res));
+  .catch (getErrorResponseStep(res));
 }
 
 function getJsonResponseStep(res) {
-  return function (json) {
+  return function(json) {
     res.status(200);
     res.contentType('application/json; charset=utf-8');
     res.send(json);
@@ -39,7 +38,7 @@ function getJsonResponseStep(res) {
 }
 
 function getErrorResponseStep(res) {
-  return function (err) {
+  return function(err) {
     outError(err);
     res.send({});
   }
@@ -59,7 +58,7 @@ function handleItemsRequest(req, res) {
     .then(itemsResolver);
   })).then(mergeItemsResponse)
   .then(getJsonResponseStep(res))
-  .catch(getErrorResponseStep(res));
+  .catch (getErrorResponseStep(res));
 }
 
 function mergeItemsResponse(results) {
@@ -151,4 +150,3 @@ function itemsResolver(json) {
   return json;
 }
 
-module.exports = router;

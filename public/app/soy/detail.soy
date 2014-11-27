@@ -6,7 +6,7 @@
 
 
 /***/
-{template .createDom}
+{template .createDom autoescape="strict" kind="html"}
   <div class="pane-detail goog-splitpane-second-container">
     <div class="pane-detail-content"></div>
   </div>
@@ -18,14 +18,14 @@
 /**
  * @param Description
  */
-{template .renderContent}
+{template .renderContent autoescape="strict" kind="html"}
   <div class="detail-header">
     {call .detailItemLinkParagraph data="all" /}
   </div>
   <div class="detail-body">
     {call .detailImages data="all" /}
     <div class="detail-description">
-      {$Description|noAutoescape}
+      {$Description}
     </div>
     {call .detailItemLinkParagraph data="all" /}
     {call .detailPrimaryTable data="all" /}
@@ -41,7 +41,7 @@
 /**
  * @param Img Array.
  */
-{template .detailImages}
+{template .detailImages autoescape="strict" kind="html"}
   //TODO: Write CSS.
   <div class="detail-images" style="text-align:center">
     {foreach $key in keys($Img)}
@@ -53,7 +53,7 @@
 
 /**
  */
-{template .detailTitle}
+{template .detailTitle autoescape="strict" kind="html"}
   <h5 class="detail-title" style="display:none">
     <div class="detail-title-buttons"></div>
     <div class="detail-title-inner"></div>
@@ -62,7 +62,7 @@
 
 
 /***/
-{template .detailItemLinkParagraph}
+{template .detailItemLinkParagraph autoescape="strict" kind="html"}
   <p class="detail-item-link">
     {call .detailItemLink data="all" /}
   </p>
@@ -73,7 +73,7 @@
  * @param AuctionItemUrl
  * @param Title
  */
-{template .detailItemLink}
+{template .detailItemLink autoescape="strict" kind="html"}
   <a href="{$AuctionItemUrl}" target="_blank">
     {$Title}
     <span class="i i-text">o</span>
@@ -88,7 +88,7 @@
  * @param EndTime
  * @param? Bids
  */
-{template .detailPrimaryTable}
+{template .detailPrimaryTable autoescape="strict" kind="html"}
   <table class="pure-table pure-table-horizontal">
     <tbody>
       <tr>
@@ -127,7 +127,7 @@
  * @param ItemStatus
  * @param ItemReturnable
  */
-{template .detailSubTable}
+{template .detailSubTable autoescape="strict" kind="html"}
   <table class="pure-table pure-table-horizontal">
     <tbody>
       <tr>
@@ -177,7 +177,7 @@
  * @param EasyPayment
  * @param Bank
  */
-{template .paymentTable}
+{template .paymentTable autoescape="strict" kind="html"}
 
   {let $useEasyPament: isNonnull($EasyPayment) /}
   {let $totalBankMethodAvailable: isNonnull($Bank) and $Bank['@attributes']['totalBankMethodAvailable'] /}
@@ -230,7 +230,7 @@
  * @param Location
  * @param IsWorldwide
  */
-{template .sendDetailTable}
+{template .sendDetailTable autoescape="strict" kind="html"}
   <table class="pure-table pure-table-horizontal">
     <tbody>
       <tr>
@@ -261,7 +261,7 @@
 /**
  * @param Shipping
  */
-{template .shippingTable}
+{template .shippingTable autoescape="strict" kind="html"}
   {if $Shipping and length($Shipping['Method'])}
     <table class="pure-table pure-table-horizontal">
       <tbody>
@@ -287,7 +287,7 @@
 /**
  * @param value
  */
-{template .price}
+{template .price autoescape="strict" kind="html"}
   {$value}円 // formatNumberWithComma
 {/template}
 
@@ -295,7 +295,7 @@
 /**
  * @param value
  */
-{template .supportOrNot}
+{template .supportOrNot autoescape="strict" kind="html"}
   {$value ? 'あり' : 'なし'}
 {/template}
 
@@ -303,7 +303,7 @@
 /**
  * @param Condition
  */
-{template .itemCondition}
+{template .itemCondition autoescape="strict" kind="html"}
   {if $Condition == 'new'}
     新品
   {elseif $Condition == 'used'}

@@ -6,7 +6,7 @@
 /**
  * @param? isProduction
  */
-{template .index}
+{template .index autoescape="strict" kind="html"}
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -74,7 +74,7 @@
 
 
 /***/
-{template .googleAnalytics}
+{template .googleAnalytics autoescape="strict" kind="html"}
 
 {literal}
 <script>

@@ -3,14 +3,14 @@
 
 /**
  */
-{template .createDom}
+{template .createDom autoescape="strict" kind="html"}
   <div class="pure-g pane-list-item goog-list-item"></div>
 {/template}
 
 /**
  * @param Image
  */
-{template .renderContent}
+{template .renderContent autoescape="strict" kind="html"}
   <div class="pure-u-6-24 pane-list-item-image">
     <img src="{$Image}" />
   </div>
@@ -26,7 +26,7 @@
  * @param Bids
  * @param Option
  */
-{template .detail}
+{template .detail autoescape="strict" kind="html"}
   <div class="pane-list-item-title">{$Title}</div>
   <div class="pane-list-item-description">
     <strong>{$CurrentPrice}円</strong>

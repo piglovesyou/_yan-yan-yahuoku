@@ -3,7 +3,7 @@
 
 
 /***/
-{template .createDom}
+{template .createDom autoescape="strict" kind="html"}
   <div class="tag-input">
     <div class="tag-input-rightcontent">
       yeah right content
@@ -28,7 +28,7 @@
 /**
  * @param queryValue
  */
-{template .tokenTag}
+{template .tokenTag autoescape="strict" kind="html"}
   {call .tagBase data="all"}
     {param type: 'query' /}
     {param id: $queryValue /}
@@ -41,7 +41,7 @@
  * @param CategoryId
  * @param CategoryPath
  */
-{template .categoryTag}
+{template .categoryTag autoescape="strict" kind="html"}
   {call .tagBase}
     {param type: 'category' /}
     {param id: $CategoryId /}
@@ -60,7 +60,7 @@
  * @param type
  * @param id
  */
-{template .tagBase}
+{template .tagBase autoescape="strict" kind="html"}
   <a tabindex="0"
      // onFocus="return onTagFocus(this)"
      class="button-tag pure-button pure-button-disabled{$className ? ' ' + $className : ''}"
@@ -79,6 +79,6 @@
 /**
  * @param total
  */
-{template .rightContent}
+{template .rightContent autoescape="strict" kind="html"}
   {$total}件を表示
 {/template}

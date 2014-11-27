@@ -2,7 +2,7 @@
 
 
 /***/
-{template .createDom}
+{template .createDom autoescape="strict" kind="html"}
   <li>
   </li>
 {/template}
@@ -12,11 +12,11 @@
  * @param query []
  * @param category
  */
-{template .renderContent}
+{template .renderContent autoescape="strict" kind="html"}
 
   {let $altText: '（キーワードを入力）' /}
 
-  {let $q}
+  {let $q kind="text"}
     {if $query}
       {foreach $q in $query}
         {$q}
@@ -25,7 +25,7 @@
     {/if}
   {/let}
 
-  {let $safe_label}
+  {let $label kind="text"}
     {if $q}
       {$q}
     {elseif $category}
@@ -35,7 +35,7 @@
     {/if}
   {/let}
 
-  {let $safe_description}
+  {let $description kind="text"}
     {$q?:''}
     {if $category}
       {sp}[{$category.CategoryPath}]
@@ -45,8 +45,8 @@
     {/if}
   {/let}
 
-  <a href="javascript:void(0)" title="{$safe_description|noAutoescape}">
-    {$safe_label|noAutoescape}
+  <a href="javascript:void(0)" title="{$description}">
+    {$label}
   </a>
   <span class="button-remove">×</span>
 {/template}

@@ -7,7 +7,6 @@
 USAGE_TEXT="\n
     ---- Pass one of them ---- \n\n\
     setup\n\
-    setup_plovr\n\
     setup_closurelibrary\n\
     setup_closurestylesheets\n\
     setup_closuretemplates\n\
@@ -20,10 +19,7 @@ USAGE_TEXT="\n
 
 LIBS_DIR=libs/
 
-PLOVR_DIR=${LIBS_DIR}plovr/
-PLOVR_REMOTE_DIR=http://plovr.googlecode.com/files/
-PLOVR_JAR=plovr-81ed862.jar
-PLOVR_JAR_PATH=${PLOVR_DIR}${PLOVR_JAR}
+PLOVR_JAR_PATH=./node_modules/plovr/bin/plovr.jar
 
 CLOSURELIBRARY_DIR=${LIBS_DIR}closure-library/
 CLOSURELIBRARY_REMOTE_ZIP=https://github.com/google/closure-library/archive/master.zip
@@ -48,11 +44,6 @@ CLOSURECOMPILER_ZIP=compiler-latest.zip
 
 cleanup_lib() {
     mkdir ${LIBS_DIR} > /dev/null 2>&1
-}
-
-setup_plovr() {
-    rm -rf ${PLOVR_DIR}
-    wget -P ${PLOVR_DIR} ${PLOVR_REMOTE_DIR}${PLOVR_JAR}
 }
 
 setup_closurelibrary() {
@@ -129,7 +120,6 @@ case $1 in
 
     setup)
         cleanup_lib
-        setup_plovr
         setup_closurelibrary
         setup_solr
         # setup_closurestylesheets
@@ -137,12 +127,10 @@ case $1 in
         # setup_closurecompiler
         ;;
     cleanup_lib) cleanup_lib;;
-    setup_plovr) setup_plovr;;
     setup_closurelibrary) setup_closurelibrary;;
     setup_closurestylesheets) setup_closurestylesheets;;
     setup_closuretemplates) setup_closuretemplates;;
     setup_closurecompiler) setup_closurecompiler;;
-    setup_plovr) setup_plovr;;
     setup_solr) setup_solr;;
 
     soyweb) java -jar ${PLOVR_JAR_PATH} soyweb --dir ./public;;

@@ -50,6 +50,9 @@ app.Detail.prototype.request = function(id) {
  */
 app.Detail.prototype.renderContent = function(data) {
   this.getElement().scrollTop = 0;
+  data['Description'] = soydata.SanitizedHtml.from(
+      goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract(
+        goog.string.Const.from(data['Description']), data['Description']));
   goog.soy.renderElement(this.getContentElement(),
       app.soy.detail.renderContent,
       /** @type {ObjectInterface.Item} */(data));

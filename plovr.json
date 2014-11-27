@@ -10,9 +10,10 @@
   "inputs": "./public/javascripts/main.js",
   "mode": "ADVANCED",
   "level": "VERBOSE",
-  "output-wrapper": "(function(){%output%})()",
+  // "output-wrapper": "(function(){%output%})()",
   "externs": [
     "./public/app/objectinterface.js"
   ],
-  "output-file": "public/javascripts/main-min.js"
+  "output-file": "public/javascripts/main-min.js",
+  "pretty-print": true
 }

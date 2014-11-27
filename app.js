@@ -25,12 +25,12 @@ app.use(cookieParser());
 app.use(express.static(Path.join(__dirname, 'public')));
 
 // The app doesn't distinguish methods.
-mapRoute('/', require('./routes'));
 mapRoute('/auction', require('./routes/auction'));
+mapRoute('/', require('./routes'));
 
 function mapRoute(prefix, routes) {
   _.each(routes, function(handler, route) {
-    app.use(Path.resolve(prefix, route), handler);
+    app.get(Path.join(prefix, route), handler);
   });
 }
 
@@ -48,7 +48,7 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
-        res.render('error', {
+        res.json({
             message: err.message,
             error: err
         });

@@ -2,9 +2,9 @@
 goog.provide('app.List');
 
 goog.require('app.soy.item');
+goog.require('app.soy.list');
 goog.require('goog.ui.List');
 goog.require('goog.ui.list.Data');
-goog.require('app.soy.list');
 
 
 /**
@@ -31,7 +31,7 @@ app.List.prototype.createDom = function() {
   goog.base(this, 'createDom');
   goog.dom.classes.add(this.getElement(),
       'pane-list goog-splitpane-first-container');
-  this.getElement().appendChild(this.messageEl_ = 
+  this.getElement().appendChild(this.messageEl_ =
       goog.soy.renderAsFragment(app.soy.list.message));
 };
 
@@ -39,7 +39,7 @@ app.List.prototype.createDom = function() {
 app.List.prototype.handleTotalUpdate = function(e) {
   goog.base(this, 'handleTotalUpdate', e);
   var data = /** @type {goog.ui.list.Data} */(e.target);
-  goog.style.setElementShown(this.messageEl_, data.getTotal() == 0)
+  goog.style.setElementShown(this.messageEl_, data.getTotal() == 0);
 };
 
 /**
@@ -82,6 +82,7 @@ app.List.Item.prototype.createDom = function() {
 
 /** @inheritDoc */
 app.List.Item.prototype.renderContent = function(data) {
+  if (!this.isInDocument()) return;
   goog.dom.classes.enable(this.getElement(),
       'pane-list-item-selected', data['isSelected']);
   goog.base(this, 'renderContent', data);

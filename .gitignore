@@ -12,3 +12,4 @@ npm-debug.log
 /solr/collection1/data
 /logs
 /solr-webapp
+/public/app/soy/hs_err_pid*.log

@@ -8,7 +8,7 @@ goog.require('app.taginput.Suggest');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.dom.dataset');
 goog.require('goog.dom.selection');
 goog.require('goog.events');
@@ -58,7 +58,7 @@ app.TagInput.prototype.getInputs = function() {
 app.TagInput.prototype.forEachTagDataset_ = function(fn) {
   var tagEls = this.collectTagEls_();
   var datasetList = goog.array.map(tagEls,
-      /** @type {function ((Element|null), number, ?): ?|null} */
+      /** @type {function ((Element|null), number, ?): ?} */
       (goog.dom.dataset.getAll));
   goog.array.forEach(datasetList, fn);
 };
@@ -402,7 +402,7 @@ app.TagInput.prototype.findTagFromEventTarget_ = function(et) {
 };
 
 app.TagInput.isTagEl_ = function(node) {
-  return goog.dom.classes.has(node, 'button-tag');
+  return goog.dom.classlist.contains(node, 'button-tag');
 };
 
 app.TagInput.prototype.updateRightContent = function(data) {

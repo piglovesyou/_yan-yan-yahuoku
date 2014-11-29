@@ -145,7 +145,7 @@ app.header.Tabs.prototype.decorateInternal = function(element) {
     this.addChildAt(tab, index);
 
     if (index == 0) {
-      goog.dom.classes.add(tab.getElement(), 'selected');
+      goog.dom.classlist.add(tab.getElement(), 'selected');
       this.currSelectedTab_ = tab;
     }
   }, this);

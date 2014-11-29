@@ -47,6 +47,7 @@ app.Detail.prototype.request = function(id) {
 /**
  * Do I wand goog.string.format?
  * @param {Object} data Json data of auction item.
+ * @suppress {checkTypes}
  */
 app.Detail.prototype.renderContent = function(data) {
   this.getElement().scrollTop = 0;

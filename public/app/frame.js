@@ -38,7 +38,7 @@ app.Frame.EventType = {
 /** @inheritDoc */
 app.Frame.prototype.createDom = function() {
   goog.base(this, 'createDom');
-  goog.dom.classes.add(this.getElement(), 'frame app-frame-selected');
+  goog.dom.classlist.addAll(this.getElement(), ['frame', 'app-frame-selected']);
 
   this.taginput.createDom();
   this.list.createDom();
@@ -59,7 +59,7 @@ app.Frame.prototype.enterDocument = function() {
 
   eh.listen(this, app.TagInput.EventType.TAG_UPDATE, this.updateList_)
   .listen(this, goog.ui.list.EventType.UPDATE_TOTAL,
-    goog.bind(this.taginput.updateRightContent, this.taginput), false)
+    goog.bind(this.taginput.updateRightContent, this.taginput))
   .listen(this, goog.ui.list.EventType.CLICKROW, function(e) {
     var row = /** @type {ObjectInterface.Item} */(e.data);
     if (!row) return; // A row cannot arrived yet.
@@ -72,7 +72,7 @@ app.Frame.prototype.enterDocument = function() {
     this.detail.adjustBodyHeight();
   })
   .listen(this, goog.ui.SplitPane.EventType.HANDLE_DRAG_END,
-      this.detail.adjustBodyHeight, false, this.detail);
+      goog.bind(this.detail.adjustBodyHeight, this.detail));
 
   this.dispatchEvent(app.Frame.EventType.DELEGATE_ADJUST_HEIGHT);
 

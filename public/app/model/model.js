@@ -80,8 +80,6 @@ app.Model.Key = {
  */
 app.Model.KeyPrefix = {
   TAB_: app.Model.VERSION + 'tab:'
-  // _DETAILPANEWIDTH_: ':detailpanewidth',
-  // _ISGRID_: ':isGrid:'
 };
 
 
@@ -150,10 +148,6 @@ app.Model.prototype.getTabQuery = function(tabId) {
 app.Model.prototype.deleteTabQuery = function(tabId) {
   var storage = this.localStore_;
   storage.remove(app.Model.KeyPrefix.TAB_ + tabId);
-  storage.remove(app.Model.KeyPrefix.TAB_ +
-                 tabId + app.Model.KeyPrefix._DETAILPANEWIDTH_);
-  storage.remove(app.Model.KeyPrefix.TAB_ +
-                 tabId + app.Model.KeyPrefix._ISGRID_);
 };
 
 

@@ -29,8 +29,8 @@ app.List.prototype.search = function(url) {
 /** @inheritDoc */
 app.List.prototype.createDom = function() {
   goog.base(this, 'createDom');
-  goog.dom.classes.add(this.getElement(),
-      'pane-list goog-splitpane-first-container');
+  goog.dom.classlist.addAll(this.getElement(),
+      ['pane-list', 'goog-splitpane-first-container']);
   this.getElement().appendChild(this.messageEl_ =
       goog.soy.renderAsFragment(app.soy.list.message));
 };
@@ -83,7 +83,7 @@ app.List.Item.prototype.createDom = function() {
 /** @inheritDoc */
 app.List.Item.prototype.renderContent = function(data) {
   if (!this.isInDocument()) return;
-  goog.dom.classes.enable(this.getElement(),
+  goog.dom.classlist.enable(this.getElement(),
       'pane-list-item-selected', data['isSelected']);
   goog.base(this, 'renderContent', data);
 };

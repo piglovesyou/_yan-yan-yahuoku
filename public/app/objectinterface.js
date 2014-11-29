@@ -19,6 +19,7 @@ ObjectInterface.Category.prototype.Order;
 
 /** @constructor */
 ObjectInterface.Item = function() {};
+ObjectInterface.Item.prototype.Detail;
 ObjectInterface.Item.prototype.AuctionID;
 ObjectInterface.Item.prototype.Image;
 ObjectInterface.Item.prototype.CurrentPrice;

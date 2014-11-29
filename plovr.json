@@ -9,6 +9,7 @@
   ],
   "inputs": "./public/javascripts/main.js",
   "mode": "ADVANCED",
+  // "mode": "WHITESPACE",
   "level": "VERBOSE",
   // "output-wrapper": "(function(){%output%})()",
   "externs": [

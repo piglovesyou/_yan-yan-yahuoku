@@ -119,12 +119,12 @@ app.header.Tab.prototype.isSelected = function() {
 
 
 app.header.Tab.prototype.processSelected = function(select) {
-  goog.dom.classes.enable(this.getElement(), 'pure-menu-selected', select);
+  goog.dom.classlist.enable(this.getElement(), 'pure-menu-selected', select);
   if (select && !this.frame_) {
     this.createFrame_(); // It has 'selected' className on rendering.
     return;
   }
-  goog.dom.classes.enable(this.frame_.getElement(), 'app-frame-selected', select);
+  goog.dom.classlist.enable(this.frame_.getElement(), 'app-frame-selected', select);
 };
 
 

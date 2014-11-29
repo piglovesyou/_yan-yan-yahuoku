@@ -65,7 +65,7 @@ app.App.prototype.enterDocument = function() {
   eh.listen(this, app.header.Tab.EventType.DELEGATE_RENDER_FRAME, function(e) {
     var frame = /** @type {app.Frame} */(e.frame);
     frame.render(this.bodyEl);
-  }, false, this);
+  }, false);
 
   goog.base(this, 'enterDocument');
 

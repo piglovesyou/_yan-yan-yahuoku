@@ -4,14 +4,13 @@
   // "closure-library": "./libs/closure-library/closure/goog",
   "paths": [
 	  "../closure-list/piglovesyou",
-	  "./public/app",
-	  "./public/javascripts"
+	  "./public/app"
   ],
   "inputs": "./public/javascripts/main.js",
   "mode": "ADVANCED",
   // "mode": "WHITESPACE",
   "level": "VERBOSE",
-  // "output-wrapper": "(function(){%output%})()",
+  "output-wrapper": "(function(){%output%})();",
   "externs": [
     "./public/app/objectinterface.js"
   ],
